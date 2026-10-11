@@ -32,6 +32,8 @@ name: <community name as in packs/README.md>
 short_name: <what parents see, e.g. "Catholic">
 subtitle: <optional second line, e.g. "Sunni", or "">
 order: <position in the list of traditions>
+learns_to_act: exemplars         # exemplars | consideration | practice | mixed (packs/README.md, "Pack-level fields")
+match_exemplars_to_sex: false    # true if the tradition leans toward heroes of the child's own sex
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

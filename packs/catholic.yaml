@@ -3,6 +3,8 @@ name: Catholic
 short_name: "Catholic"
 subtitle: ""
 order: 3
+learns_to_act: exemplars          # The saints, with patron saints and confirmation names usually matched to the child.
+match_exemplars_to_sex: true
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

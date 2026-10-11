@@ -3,6 +3,8 @@ name: Mainline Protestant (United Methodist, Episcopal, ELCA, PCUSA)
 short_name: "Mainline Protestant"
 subtitle: "Methodist, Episcopal, Lutheran (ELCA), Presbyterian (PCUSA)"
 order: 4
+learns_to_act: mixed          # Bible stories alongside service projects and conscience.
+match_exemplars_to_sex: false
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

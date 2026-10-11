@@ -32,6 +32,8 @@ for (const pack of packs) {
         short_name: pack.short_name,
         subtitle: pack.subtitle || null,
         sort_order: pack.order,
+        learns_to_act: pack.learns_to_act,
+        match_exemplars_to_sex: pack.match_exemplars_to_sex,
         status: pack.status === "community-reviewed" ? "community_reviewed" : "draft_by_outsiders",
         label: pack.label,
         summary: pack.summary.trim(),

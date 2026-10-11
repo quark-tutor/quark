@@ -3,6 +3,8 @@ name: Jewish, Orthodox
 short_name: "Orthodox Jewish"
 subtitle: ""
 order: 8
+learns_to_act: practice          # Mitzvot practiced daily until they are habit; much schooling is separate for boys and girls.
+match_exemplars_to_sex: true
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

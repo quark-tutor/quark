@@ -1,11 +1,21 @@
 import { parse } from "yaml";
-import { LEAN_POINTS, LEANS, PERSPECTIVE, WHEN, type Lean, type Perspective, type When } from "./values.ts";
+import {
+  LEAN_POINTS,
+  LEANS,
+  LEARNS_TO_ACT,
+  PERSPECTIVE,
+  WHEN,
+  type Lean,
+  type LearnsToAct,
+  type Perspective,
+  type When,
+} from "./values.ts";
 
 // A starter values pack: a community's position on each of the 24 points, plus the setting a
 // family in that community would probably start from. Format: packs/DRAFTING-BRIEF.md.
 
-export { LEAN_POINTS, LEANS, PERSPECTIVE, WHEN } from "./values.ts";
-export type { Lean, Perspective, When } from "./values.ts";
+export { LEAN_POINTS, LEANS, LEARNS_TO_ACT, PERSPECTIVE, WHEN } from "./values.ts";
+export type { Lean, LearnsToAct, Perspective, When } from "./values.ts";
 
 export type EntryFields = {
   when: When;
@@ -30,6 +40,8 @@ export type Pack = {
   short_name: string; // what parents see: "Catholic"
   subtitle: string; // an optional second line: "Sunni"
   order: number; // position in the list of traditions
+  learns_to_act: LearnsToAct; // how a child in this tradition learns to act
+  match_exemplars_to_sex: boolean; // lean toward exemplars of the child's sex in stories
   status: string;
   label: string;
   version: number;
@@ -67,6 +79,8 @@ export function validatePack(pack: Pack): string[] {
   }
   if (typeof pack.subtitle !== "string") errors.push("subtitle must be text (it can be empty)");
   if (!Number.isInteger(pack.order)) errors.push("order must be a whole number");
+  if (!LEARNS_TO_ACT.includes(pack.learns_to_act)) errors.push(`learns_to_act must be one of ${LEARNS_TO_ACT.join(", ")}`);
+  if (typeof pack.match_exemplars_to_sex !== "boolean") errors.push("match_exemplars_to_sex must be true or false");
   if (pack.status !== "draft-by-outsiders" && pack.status !== "community-reviewed") {
     errors.push(`status must be draft-by-outsiders or community-reviewed`);
   }

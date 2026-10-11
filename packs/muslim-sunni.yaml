@@ -3,6 +3,8 @@ name: Muslim (Sunni mainstream)
 short_name: "Muslim"
 subtitle: "Sunni"
 order: 10
+learns_to_act: exemplars          # The sunnah, the Prophet's example, with the companions and the women of his household as models.
+match_exemplars_to_sex: true
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1
