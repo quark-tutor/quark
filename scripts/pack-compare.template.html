@@ -232,6 +232,16 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
 
     <main id="points"></main>
 
+    <section class="yours" id="export">
+      <h2>Bring these answers into Quark</h2>
+      <p class="hint">In Quark, open Our Family's Beliefs and choose "Bring those answers over". Then copy your answers here and paste them there.</p>
+      <div class="quick">
+        <button type="button" class="btn" id="copy-answers">Copy my answers</button>
+        <span class="hint" id="copy-note" aria-live="polite"></span>
+      </div>
+      <textarea id="copy-text" readonly hidden rows="5" style="width:100%;font:13px ui-monospace,monospace;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)"></textarea>
+    </section>
+
     <footer>
       The traditions' answers are drafts made from each tradition's own published documents, or from surveys where it has no official body, with sources on every card. Members of each tradition haven't reviewed them yet, and they describe official teaching, not what every family in a tradition believes. Your answers here are saved only in this browser.
     </footer>
@@ -250,20 +260,8 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
     { id: "never", label: "Don't bring it up" },
   ];
   const LEANS = [["progressive", "Progressive"], ["moderate", "Moderate"], ["conservative", "Conservative"], ["unset", "Rather not say"]];
-  const SHORT = {
-    "evangelical": ["Evangelical", "Including non-denominational and Southern Baptist"],
-    "nothing-in-particular": ["Nothing in particular", "Spiritual or not, without a religion"],
-    "catholic": ["Catholic", ""],
-    "mainline-protestant": ["Mainline Protestant", "Methodist, Episcopal, Lutheran (ELCA), Presbyterian (PCUSA)"],
-    "humanist": ["Atheist or agnostic", "Secular humanist"],
-    "black-protestant": ["Historically Black Protestant", "National Baptist, AME, COGIC"],
-    "jewish-reform": ["Reform Jewish", ""],
-    "jewish-orthodox": ["Orthodox Jewish", ""],
-    "latter-day-saint": ["Latter-day Saint", ""],
-    "muslim-sunni": ["Muslim", "Sunni"],
-  };
-  const shortName = (p) => (SHORT[p.pack] || [p.name])[0];
-  const subName = (p) => (SHORT[p.pack] || [, ""])[1];
+  const shortName = (p) => p.short_name || p.name;
+  const subName = (p) => p.subtitle || "";
   const KEY = "quark-pack-chooser";
 
   // mine[point] = { a: answer id, pack: slug the answer was taken from, or null if picked directly }
@@ -346,6 +344,24 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
       if (id) state.mine[pt.number] = { a: id, pack: p.pack };
     }
     go("list");
+  });
+
+  // Hand the answers to Quark's own page (/parent/beliefs), which reads this shape.
+  document.getElementById("copy-answers").addEventListener("click", async () => {
+    const text = JSON.stringify({ kind: "quark-beliefs", lean: state.lean, quick: state.quick || null, mine: state.mine });
+    const box = document.getElementById("copy-text");
+    const note = document.getElementById("copy-note");
+    box.value = text;
+    try {
+      await navigator.clipboard.writeText(text);
+      box.hidden = true;
+      note.textContent = `Copied ${answeredCount()} answers. Now paste them into Quark.`;
+    } catch {
+      box.hidden = false;
+      box.focus();
+      box.select();
+      note.textContent = "Couldn't copy automatically. Select everything in the box below and copy it.";
+    }
   });
 
   // List controls
