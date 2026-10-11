@@ -115,6 +115,8 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
 .btn.quiet { background: transparent; color: var(--accent); }
 .btn.warn { border-color: var(--flag); color: var(--flag); background: transparent; }
 .hint { color: var(--muted); font-size: 13px; margin: 0; }
+.acts { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px 20px; font-size: 14px; }
+.acts strong { display: block; }
 
 button.chip { cursor: pointer; }
 button.chip:hover { background: color-mix(in srgb, var(--c) 12%, transparent); }
@@ -232,6 +234,12 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
 
     <main id="points"></main>
 
+    <section class="ranking" aria-labelledby="acts-title">
+      <h2 id="acts-title">How each tradition teaches kids to act</h2>
+      <p>Traditions differ most here. In Quark this changes which stories and examples a lesson leans on, never how the tutor speaks to your kids. In Quark you can choose your own.</p>
+      <div class="acts" id="acts"></div>
+    </section>
+
     <section class="yours" id="export">
       <h2>Bring these answers into Quark</h2>
       <p class="hint">In Quark, open Our Family's Beliefs and choose "Bring those answers over". Then copy your answers here and paste them there.</p>
@@ -303,6 +311,18 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
   const answeredCount = () => points.filter((p) => state.mine[p.number]).length;
   const choose = (n, a, pack) => { state.mine[n] = { a, pack }; open.delete(n); save(); render(); };
   const clearPoint = (n) => { delete state.mine[n]; save(); render(); };
+
+  // How each tradition teaches kids to act (packs/README.md, "Pack-level fields"). Fixed per pack.
+  const LEARNS = {
+    exemplars: "By copying people who acted well",
+    consideration: "By noticing others and thinking first",
+    practice: "By practice, until it's a habit",
+    mixed: "A mix of these",
+  };
+  document.getElementById("acts").replaceChildren(...packs.map((p) =>
+    el("div", {}, el("strong", {}, shortName(p)),
+      LEARNS[p.learns_to_act] || "Not set",
+      p.match_exemplars_to_sex ? el("div", { class: "hint" }, "Starts with heroes of the child's own sex") : null)));
 
   // Screens
   function go(screen) {

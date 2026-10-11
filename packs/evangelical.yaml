@@ -3,6 +3,8 @@ name: Evangelical, including non-denominational (Southern Baptist as the concret
 short_name: "Evangelical"
 subtitle: "Including non-denominational and Southern Baptist"
 order: 1
+learns_to_act: exemplars          # Bible heroes and "What would Jesus do?"; many children's resources are written for boys or for girls.
+match_exemplars_to_sex: true
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

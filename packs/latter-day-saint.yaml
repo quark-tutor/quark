@@ -3,6 +3,8 @@ name: Latter-day Saint
 short_name: "Latter-day Saint"
 subtitle: ""
 order: 9
+learns_to_act: exemplars          # Scripture heroes and prophets; Primary, then separate young men's and young women's programs.
+match_exemplars_to_sex: true
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

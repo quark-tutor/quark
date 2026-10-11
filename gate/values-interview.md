@@ -35,6 +35,21 @@ Extra controls:
 - **"Not yet" asks for each child separately.** Different children are ready at different ages, so Asher and Rex can get different ages on the same point. A good tutor knows when each child is ready; for these points the guardians decide, and the tutor follows.
 - **Point 20** (violence and war): a second slider, "words only" to "period art is fine."
 
+## Part 2b: how the tutor conducts itself (3 minutes)
+
+The tutor's own behavior shapes the child's whether we like it or not (see "Conduct the tutor teaches" in `docs/12-teaching-that-tests-itself.md`). Most of that conduct is floor and is not asked. Four items vary by household and are asked here, each with fixed answers plus a free-text line, shown and compared the same way as the 24 points.
+
+| Question | Answers | Stored as |
+| --- | --- | --- |
+| Should the tutor make the child say an answer out loud before any hint? | Gentle reminder / Required / Off for this child | `conduct.speak_first` (per child) |
+| What counts as a crude question in your house? | Free text, one or two sentences | `conduct.crude_line` |
+| If a child is rude to the tutor, what should it do? | Quiet non-response / One-line correction | `conduct.rudeness` |
+| Should the tutor praise, and how? | None / Plain acknowledgement / Warm; plus words to use or avoid | `conduct.praise`, `conduct.praise_words` |
+
+Where guardians differ (Part 4), the gentler setting wins until they talk; until both have answered, the gentlest applies. Gentlest first: Off, Gentle reminder, Required; Quiet non-response, One-line correction; Warm, Plain acknowledgement, None (`lib/conduct.ts`). Free text is never ranked: where both parents describe what counts as crude, the tutor declines a question only when it fits both descriptions. The answers appear in the policy document as a short "Conduct" section after the 24 points, so the gate and the kid-facing prompts read the same thing.
+
+Conduct isn't one of the 24 points, so it has its own tables rather than `values_settings` rows: `guardian_conduct` (each guardian's answers) and `conduct_settings` (the family's, merged), keyed by the `conduct.*` names above. The same panel asks how the kids learn to act (`learns_to_act`, `match_exemplars_to_sex`, see `packs/README.md`); each answer follows the guardian's quick-start tradition until they choose. Where guardians differ, `learns_to_act` becomes `mixed`, and stories lean toward the child's own sex only if every guardian wants it.
+
 ## Part 3: what did we miss? (2 minutes)
 
 "Is there anything else you'd want Quark to handle carefully, or stay away from?" Free text, as many entries as they like. Each becomes a `blackballs` row with `topic` set, or a note the tutor treats as an extra point. This is how the 24 get corrected by real families.
@@ -43,10 +58,19 @@ Extra controls:
 
 Both sets of answers side by side, differences highlighted. Where they agree, the row is written. Where they differ, the point defaults to `parent_led` and is flagged in the digest until settled (founding rule 2). Either guardian can blackball any point from this screen. Nothing is written for a point until both have answered it or one has blackballed it.
 
+How it is built (`/parent/beliefs/compare`, merge in `lib/family-values.ts`):
+
+- **No save button.** After any guardian changes an answer, a conduct item or a blackball, the server re-merges every guardian's answers and rewrites the family's values in one transaction (`replace_family_values`). The family's values are always exactly what the two sets of answers say, never a stale copy.
+- **Only the server writes them.** Guardians can read `values_profiles`, `values_settings`, `child_point_ages` and `conduct_settings` but not write them, so neither can go around the merge rules.
+- **Agreement** means the same `when` and the same `perspective` (for "Not yet", the same choice of how to answer once ready). Each parent's "What would you actually say?" is kept. "Not yet" ages take the older age for each child. A point both took from the same tradition keeps it as `from_pack`.
+- **A difference** is written as `parent_led` with `disputed` set, and the parents' notes are left out until they agree.
+- **The "in your own words" answers** from both parents become `values_profiles.statement`, grouped under each question.
+- **Blackballs**: only the guardian who placed one can lift it, enforced by row-level security as well as the screen. A blackballed point is written as `never`.
+
 ## What comes out
 
-1. One `values_profiles` row, 24 `values_settings` rows, zero or more `blackballs`.
-2. **A policy document**, generated from those rows into plain English, one paragraph per point. This is what the gate model reads when it checks a card. Example paragraph:
+1. One `values_profiles` row, up to 24 `values_settings` rows (one per settled point), `child_point_ages` for the "Not yet" points, `conduct_settings` rows from Part 2b, zero or more `blackballs`.
+2. **A policy document**, generated from those rows into plain English, one paragraph per point (`lib/policy.ts`, stored in `values_profiles.policy_document`, shown to parents as "the rulebook" at `/parent/beliefs/rulebook`). It opens with the family's own words and how the kids learn to act, then the 24 points, then Conduct. A point not settled yet reads as parent-led. This is what the gate model reads when it checks a card. Example paragraph:
 
    > **Point 6, evolution.** Ask Mom or Dad first. If a card touches how living things changed over time, the tutor keeps to what's observable (fossils, how dogs were bred from wolves) and hands the origin of people to a parent: "That's a great one to ask Dad." The family's note: "We believe God made people. We're fine with the kids learning what scientists have found. We want to be the ones to talk about how those fit together."
 

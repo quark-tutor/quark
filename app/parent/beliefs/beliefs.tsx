@@ -15,7 +15,9 @@ import {
 } from "@/lib/beliefs";
 import * as actions from "./actions";
 import type { Result } from "./actions";
-import type { AnswerView, Answers, BeliefsData, EntryView, PackView, PointView, Words } from "./data";
+import { Blackball } from "./compare/blackball";
+import { ActsPanel, ConductPanel } from "./conduct";
+import type { AnswerView, Answers, BeliefsData, BlockView, EntryView, PackView, PointView, Words } from "./data";
 import styles from "./beliefs.module.css";
 
 const LEAN_LABELS: [LeanChoice, string][] = [
@@ -346,6 +348,9 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
             How this works
           </button>
         </p>
+        <p className={styles.fine}>
+          <Link href="/parent/beliefs/compare">Compare with the other parent and read the rulebook &rarr;</Link>
+        </p>
       </div>
 
       <section className={styles.panel} aria-labelledby="yours-title">
@@ -452,6 +457,7 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
                         Change
                       </button>
                     </div>
+                    <Blocks point={pt.number} blocks={initial.blocks} />
                   </div>
                 );
               }
@@ -459,6 +465,7 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
                 <OpenPoint
                   key={pt.number}
                   point={pt}
+                  blocks={initial.blocks}
                   mine={mine}
                   packs={shownPacks}
                   kids={children}
@@ -487,6 +494,10 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
         ))}
       </div>
 
+      <ConductPanel kids={children} initial={initial.conduct} save={(call) => run(call)} />
+
+      <ActsPanel initial={initial.acts} tradition={packById(quickPack)} save={(call) => run(call)} />
+
       <section className={cls(styles.panel, styles.words)}>
         <h2>Last: in your own words</h2>
         <p className={styles.fine}>
@@ -512,8 +523,8 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
       </section>
 
       <footer className={styles.footer}>
-        Your answers are saved as you go. The other parent can see them, and you&rsquo;ll compare answers together
-        before anything reaches your kids. The traditions&rsquo; answers are drafts made from each tradition&rsquo;s own
+        Your answers are saved as you go. The other parent can see them, and you&rsquo;ll{" "}
+        <Link href="/parent/beliefs/compare">compare answers together</Link> before anything reaches your kids. The traditions&rsquo; answers are drafts made from each tradition&rsquo;s own
         published documents, or from surveys where it has no official body, with sources on every card. Members of each
         tradition haven&rsquo;t reviewed them yet, and they describe official teaching, not what every family in a
         tradition believes.
@@ -565,8 +576,27 @@ function ClearAll({ onClear }: { onClear: () => void }) {
   );
 }
 
+// Who has blocked this subject, and the block / lift-my-block button. The blocks come from the
+// server on every refresh, so they are read from props, not kept in state.
+function Blocks({ point, blocks }: { point: number; blocks: BlockView[] }) {
+  const here = blocks.filter((b) => b.point === point);
+  const mine = here.find((b) => b.mine);
+  return (
+    <div className={styles.blockRow}>
+      {here.length ? (
+        <span className={styles.fine}>
+          <span className={cls(styles.chip, styles["a-never"])}>Blocked by {here.map((b) => b.by).join(" and ")}</span>{" "}
+          Quark won&rsquo;t bring this up, whatever either of you answers.
+        </span>
+      ) : null}
+      <Blackball point={point} mine={mine?.id ?? null} />
+    </div>
+  );
+}
+
 function OpenPoint({
   point,
+  blocks,
   mine,
   packs,
   kids,
@@ -580,6 +610,7 @@ function OpenPoint({
   onNote,
 }: {
   point: PointView;
+  blocks: BlockView[];
   mine: AnswerView | undefined;
   packs: PackView[];
   kids: BeliefsData["children"];
@@ -600,6 +631,7 @@ function OpenPoint({
         <h3>{point.name}</h3>
       </div>
       <p className={styles.kidq}>{point.question}</p>
+      <Blocks point={point.number} blocks={blocks} />
 
       <div className={styles.mine} role="group" aria-label={`Your answer on subject ${point.number}`}>
         <span className={styles.label}>Your answer</span>

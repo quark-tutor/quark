@@ -3,6 +3,8 @@ name: Nothing in particular
 short_name: "Nothing in particular"
 subtitle: "Spiritual or not, without a religion"
 order: 2
+learns_to_act: consideration          # No shared canon of heroes; parents mostly teach empathy and thinking it through.
+match_exemplars_to_sex: false
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

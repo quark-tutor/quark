@@ -144,6 +144,10 @@ create table values_settings (
 --   each guardian's own answers until the two compare (guardian_values, guardian_answers,
 --   guardian_answer_ages); "Not yet" ages per child (child_point_ages, superseding
 --   values_settings.from_age); values_settings.from_pack; and one values_pack_entries row per lean.
+-- Compare and conduct add, in supabase/migrations/20261012000000_compare_and_conduct.sql:
+--   conduct answers (guardian_conduct, conduct_settings); values_settings.disputed; how a child
+--   learns to act on packs, guardians and the profile; values_profiles.policy_document; family
+--   values writable only by the server (replace_family_values); blackballs lifted only by their placer.
 
 -- Any one guardian can place one. Only that guardian can lift it. Lifted rows stay for the audit.
 create table blackballs (

@@ -109,14 +109,18 @@ async function ParentHome() {
             </li>
           ))}
         </ul>
-        <Link href="/parent/beliefs" className={styles.button}>
-          {answeredBy.get(guardian.id) ? "Review your answers" : "Start"}
-        </Link>
+        <p className={styles.row}>
+          <Link href="/parent/beliefs" className={styles.button}>
+            {answeredBy.get(guardian.id) ? "Review your answers" : "Start"}
+          </Link>
+          <Link href="/parent/beliefs/compare">Compare answers</Link>
+          <Link href="/parent/beliefs/rulebook">Read the rulebook</Link>
+        </p>
       </section>
 
       <section className={styles.section}>
         <h2>Coming next</h2>
-        <p className={styles.muted}>Comparing answers, the test run, the weekly theme and the Sunday digest.</p>
+        <p className={styles.muted}>The test run, the weekly theme and the Sunday digest.</p>
       </section>
     </>
   );

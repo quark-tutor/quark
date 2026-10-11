@@ -3,6 +3,8 @@ name: Atheist, agnostic and secular humanist
 short_name: "Atheist or agnostic"
 subtitle: "Secular humanist"
 order: 5
+learns_to_act: consideration          # Reason and empathy rather than authority or heroes.
+match_exemplars_to_sex: false
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

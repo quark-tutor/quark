@@ -29,3 +29,14 @@ Add to this list, or pick one up and open a discussion.
 - [ ] Mock up the Wonder Wall home screen and the parent digest.
 - [ ] Define the content item format and the per-child profile.
 - [ ] Build a small prototype that runs one theme on a tablet.
+
+## Values interview: choices made while building compare and conduct
+
+Defaults picked so the build could go ahead. Each is one line to change; Brandon and June decide.
+
+- [ ] Which conduct setting is gentler? As built: no "say it out loud" before a hint is gentlest, then a gentle reminder, then required; quiet non-response is gentler than a one-line correction; warm praise is gentler than plain, and plain than none. An argument for the other way on rudeness: a calm correction may be kinder than being ignored.
+- [ ] Until both parents answer a conduct item, the gentlest setting applies. docs/12 warns against a tone becoming the default by accident; is "gentlest until you both answer" the right accident?
+- [ ] Where both parents choose "Not yet" with different ages, the older age wins per child. Should that count as a difference instead?
+- [ ] Where both parents agree on a subject, both of their "What would you actually say?" notes go to the tutor. Should one parent's note need the other's agreement?
+- [ ] Stories lean toward the child's own sex only if every guardian wants it; a difference in how kids learn to act becomes "a mix". Right defaults?
+- [ ] The pack-level fields (`learns_to_act`, `match_exemplars_to_sex`) in all ten packs are outsiders' first guesses, with a one-line reason beside each. They need the same community review as the 24 points.

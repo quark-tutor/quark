@@ -3,6 +3,8 @@ name: Jewish, Reform
 short_name: "Reform Jewish"
 subtitle: ""
 order: 7
+learns_to_act: consideration          # Ethical reasoning and repairing the world, with mitzvot as a choice.
+match_exemplars_to_sex: false
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1
