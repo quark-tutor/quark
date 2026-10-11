@@ -1,0 +1,663 @@
+pack: humanist
+name: Atheist, agnostic and secular humanist
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For families who are atheist, agnostic or secular humanist and want their
+  children to think for themselves, learn what others believe, and treat
+  believers with respect. Built from the American Humanist Association's
+  Humanist Manifesto III and board resolutions, Humanists International's
+  Amsterdam Declaration 2022 and its policy on education, and Pew Research
+  Center surveys of atheists and agnostics. There is no single governing body:
+  humanist documents describe principles, not a creed, so many points are
+  marked "no official position."
+sources:
+  - id: hm3
+    title: "Humanism and Its Aspirations: Humanist Manifesto III (2003), reprinted on TheHumanist.com"
+    publisher: American Humanist Association
+    url: https://thehumanist.com/?p=17886
+  - id: amsterdam
+    title: The Amsterdam Declaration 2022
+    publisher: Humanists International
+    url: https://humanists.international/what-is-humanism/the-amsterdam-declaration/
+  - id: hi-education
+    title: Education in Schools (General Assembly policy, Brussels, 2010)
+    publisher: Humanists International
+    url: https://humanists.international/policy/education-in-schools-2/
+  - id: hi-cse
+    title: "At UN, Humanists International underscores necessity of comprehensive sexuality education and condemns disinformation campaigns (11 October 2023)"
+    publisher: Humanists International
+    url: https://humanists.international/2023/10/at-un-humanists-international-underscores-necessity-of-comprehensive-sexuality-education-and-condemns-disinformation-campaigns/
+  - id: aha-human-rights
+    title: Resolution Affirming Human Rights for All (Resolution 2015-001)
+    publisher: American Humanist Association Board of Directors
+    url: https://americanhumanist.org/key-issues/statements-and-resolutions/humanrights/
+  - id: aha-islam
+    title: A Humanist Approach to Islam (board statement, 2014)
+    publisher: American Humanist Association Board of Directors
+    url: https://americanhumanist.org/news/a-humanist-approach-to-islam/
+  - id: aha-nonbeliever-bias
+    title: Resolution on Nonbeliever Bias (Resolution 2022-001)
+    publisher: American Humanist Association Board of Directors
+    url: https://americanhumanist.org/news/resolution-on-nonbeliever-bias/
+  - id: aha-global
+    title: Resolution on Global Community and International Affairs (Resolution 2008-001)
+    publisher: American Humanist Association Board of Directors
+    url: https://americanhumanist.org/news/resolution-on-global-community-international-affairs/
+  - id: aha-inequality
+    title: Resolution on Income and Wealth Inequality (Resolution 2020-003)
+    publisher: American Humanist Association Board of Directors
+    url: https://americanhumanist.org/news/resolution-on-income-and-wealth-inequality/
+  - id: aha-white-supremacy
+    title: Resolution on White Supremacy (Resolution 2019-002)
+    publisher: American Humanist Association Board of Directors
+    url: https://americanhumanist.org/news/resolution-on-white-supremacy/
+  - id: aha-trans
+    title: "American Humanists: The Moral Case for Trans Rights Continues (statement, 30 June 2026)"
+    publisher: American Humanist Association
+    url: https://americanhumanist.org/news/american-humanists-the-moral-case-for-trans-rights-continues/
+  - id: aha-marriage
+    title: AHA Applauds U.S. Supreme Court Decision for Marriage Equality (26 June 2015)
+    publisher: American Humanist Association (TheHumanist.com)
+    url: https://thehumanist.com/?p=12874
+  - id: aha-darwin
+    title: Humanists Applaud Darwin Day Resolutions Introduced in Congress (12 February 2020)
+    publisher: American Humanist Association
+    url: https://americanhumanist.org/press-releases/humanists-applaud-darwin-day-resolutions-introduced-in-congress/
+  - id: aha-gun-children
+    title: Resolution to Protect Children from Gun Violence in the United States (Resolution 2000-001)
+    publisher: American Humanist Association Board of Directors
+    url: https://americanhumanist.org/news/resolution-to-protect-children-from-gun-violence-in-the-united-states/
+  - id: pew-atheists
+    title: 8 facts about atheists (7 February 2024)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2024/02/07/8-facts-about-atheists/
+  - id: pew-nones-1
+    title: "Religious 'Nones' in America, chapter 1: Who are the 'nones'? (24 January 2024)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/who-are-the-nones-how-are-they-defined/
+  - id: pew-nones-4
+    title: "Religious 'Nones' in America, chapter 4: Are all 'nones' nonbelievers? (24 January 2024)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/are-all-nones-nonbelievers/
+  - id: pew-nones-6
+    title: "Religious 'Nones' in America, chapter 6: Are 'nones' hostile toward religion? (24 January 2024)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/are-nones-hostile-toward-religion/
+  - id: pew-nones-7
+    title: "Religious 'Nones' in America, chapter 7: How do 'nones' view science? (24 January 2024)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/how-do-nones-view-science/
+  - id: pew-nones-8
+    title: "Religious 'Nones' in America, chapter 8: How do 'nones' think about morality? (24 January 2024)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/how-do-nones-think-about-morality/
+  - id: pew-afterlife
+    title: Views on the afterlife (23 November 2021)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2021/11/23/views-on-the-afterlife/
+  - id: pew-parents
+    title: "70% of White evangelical parents say it's very important that their kids have similar religious beliefs to theirs (6 February 2023)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2023/02/06/70-of-white-evangelical-parents-say-its-very-important-that-their-kids-have-similar-religious-beliefs-to-theirs/
+  - id: pew-rls-atheist
+    title: "Religious Landscape Study 2023-24: Atheists"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religious-landscape-study/religious-family/atheist/
+  - id: pew-rls-agnostic
+    title: "Religious Landscape Study 2023-24: Agnostics"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religious-landscape-study/religious-family/agnostic/
+entries:
+  - point: 1
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Humanism is a way of living a good life without belief in God or the
+      supernatural. Atheists don't believe in a god; agnostics say we can't know.
+      Many people do believe in God, and humanists defend everyone's freedom to
+      believe or not.
+    source: "hm3, opening definition; aha-nonbeliever-bias; pew-atheists, fact 4; pew-nones-4, Beliefs about God; pew-rls-atheist; pew-rls-agnostic"
+    split: >
+      Atheists (about 5% of US adults; 77% believe in no God or higher power)
+      and agnostics (about 6%; 67% believe in God or some higher power) answer
+      this differently.
+    handoff: "Lots of people have different answers to that. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      Manifesto III calls humanism a philosophy "without supernaturalism." The
+      AHA affirms "every individual's right to worship or not as guided by
+      conscience." Humanists International's education policy wants children to
+      learn about religious and non-religious views and choose their own. Pew
+      finds only 8% of nonreligious parents say it is very important their kids
+      share their religious beliefs as adults.
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position on scripture. Humanists hold that knowledge comes
+      from observation and reasoning, and that their views are "not based on
+      revelations fixed for all time." So they don't treat any holy book as
+      revealed truth. Many people do, and humanists study these books as
+      important human writing.
+    source: "amsterdam, point 4; hm3, principle on knowledge; hi-education, lifestance education"
+    split: none
+    handoff: "People believe different things about that story. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Neither document speaks about scripture directly; this is inferred from
+      the principles on knowledge and revelation. Humanists International asks
+      that schools teach all lifestances "objectively" and help children form
+      their own responses.
+    needs_check: true
+
+  - point: 3
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Humanists don't believe in miracles, ghosts or answered prayer. They
+      sort what is real from what we wish or imagine, and meet the unknown with
+      openness rather than fear. Many people do pray and believe in miracles,
+      and that's their right.
+    source: "hm3, principles on knowledge and on nature; pew-atheists, fact 5; pew-nones-4"
+    split: >
+      Agnostics are more open than atheists: 60% of agnostics believe people
+      have a soul or spirit, against 31% of atheists.
+    handoff: "People believe different things about that. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      Manifesto III says we should tell what is real apart from how we
+      wish or imagine them, and meet the unknown without fear. Pew finds 98% of
+      atheists seldom or never pray, yet 79% feel a deep sense of wonder about
+      the universe several times a year or more.
+    needs_check: false
+
+  - point: 4
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Humanists don't believe any religion is true, but they defend everyone's
+      freedom to believe, practice or leave a faith. The AHA says opposing a
+      religious idea never means opposing religious people, and it rejects
+      prejudice against any faith.
+    source: "aha-islam; amsterdam, point 4; hi-education, lifestance education; pew-nones-6"
+    split: none
+    handoff: "Different families believe different things about that. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      The AHA sees no contradiction between rejecting religious beliefs and
+      opposing prejudice against believers, and warns that broad generalizations
+      hurt innocent people. The Amsterdam Declaration seeks cooperation with
+      people of other beliefs who share humanist values and says humanists do
+      not seek to impose their view on all humanity. Pew finds 62% of agnostics
+      agree religion gives people meaning and purpose.
+    needs_check: false
+
+  - point: 5
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Humanists look to science as the best way to learn about the world, so
+      they accept the scientific estimates: the Earth is about 4.5 billion years
+      old. Some religious families believe the Earth is much younger.
+    source: "hm3, principle on knowledge; aha-darwin"
+    split: none
+    handoff: "Scientists have a good answer to that. Ask Mom or Dad, and you can look it up together."
+    parent_note: >
+      Manifesto III calls science "the best method" for knowing the world. The
+      AHA opposes teaching creationism in public school science classes. The
+      tutor will still say, when it comes up, that some people believe
+      differently.
+    needs_check: false
+
+  - point: 6
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Humanists accept evolution, including human evolution: people are part
+      of nature and arose through "unguided evolutionary change." Some people
+      believe God created humans directly or guided evolution.
+    source: "hm3, principle on knowledge; aha-darwin"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The AHA runs the International Darwin Day Foundation and says "evolution
+      education matters today." Humans did not come from monkeys; humans and
+      other apes share common ancestors, which is a good way to answer the
+      question as kids usually ask it.
+    needs_check: false
+
+  - point: 7
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position on whether science and faith conflict. Humanists
+      trust science and reason to understand the world, and many people of
+      faith also accept science. The Amsterdam Declaration says science gives
+      the means while human values set the goals.
+    source: "hm3, principle on knowledge; amsterdam, point 2; pew-nones-7"
+    split: >
+      Atheists mostly say science can explain everything (about 80%); agnostics
+      are split (54%), with many saying some things science can't explain.
+    handoff: "People think about that in different ways. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      Pew finds 79% of atheists and 69% of agnostics say science does more good
+      than harm. Humanist documents prize free inquiry and critical scrutiny of
+      every idea, including their own.
+    needs_check: false
+
+  - point: 8
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Humanists support clear, scientific, age-appropriate education about the
+      body and how babies are made. The AHA affirms everyone's right to
+      "scientific and clear education on sexual conduct and contraception."
+    source: "aha-human-rights, Family Planning; hi-cse"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about. They'd love to tell you."
+    parent_note: >
+      The AHA calls sex education "the most fundamental guarantor" of health and
+      flourishing families. Humanists International defends comprehensive
+      sexuality education as a right. Neither says how much to tell a child at
+      which age, so you set the level of detail.
+    needs_check: false
+
+  - point: 9
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Humanists support same-sex couples and their families fully, including
+      the right to marry. Some religious families believe marriage is only
+      between a man and a woman.
+    source: "aha-marriage; aha-human-rights, Sexual Orientation and Gender Expression"
+    split: none
+    handoff: "Families come in lots of shapes. That's a great one to ask Mom or Dad about too."
+    parent_note: >
+      The AHA applauded the 2015 marriage-equality ruling and affirms each
+      person's right to the sexual orientation that fits them. The Amsterdam
+      Declaration rejects prejudice and affirms the dignity of every person.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-marriage"
+      moderate:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-marriage"
+      conservative:
+        position: >
+          Humanist teaching doesn't change with politics here. Conservative
+          atheists are a small minority (Pew), and no survey shows how they
+          frame this point, so the base setting is kept.
+        source: "aha-marriage; pew-nones-1"
+
+  - point: 10
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The AHA supports transgender people's dignity, autonomy and right to
+      self-determination, and affirms each person's right to the gender
+      expression that fits them. Many people, religious and not, see this
+      differently.
+    source: "aha-trans; aha-human-rights, Sexual Orientation and Gender Expression"
+    split: >
+      The AHA position is clear. Nonreligious families are not all of one mind,
+      and no Pew survey breaks out atheists and agnostics on this point.
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The AHA frames trans rights as a matter of "human dignity, autonomy, and
+      the right to self-determination," and has spoken up for trans children's
+      chance to play sports with friends. You choose how much detail fits your
+      child.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: >
+          Follows the AHA position. Most atheists (65%) and agnostics (56%) call
+          themselves liberal.
+        source: "aha-trans; pew-nones-1"
+      moderate:
+        perspective: several_fairly
+        position: >
+          Supports dignity and fair treatment for trans people, and presents
+          the different views people hold on transition fairly. Settings are a
+          suggestion; no survey breaks out moderate nonbelievers.
+        source: "aha-human-rights; pew-nones-1"
+      conservative:
+        when: parent_led
+        perspective: several_fairly
+        position: >
+          Treats everyone with dignity, and leaves gender identity and
+          transition to parents. Settings are a suggestion; no survey breaks
+          out conservative nonbelievers on this point.
+        source: "amsterdam, point 1; pew-nones-1"
+
+  - point: 11
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Humanists see families in many forms: what matters is love, care and
+      fairness, not one shape. Manifesto III says people "find meaning in
+      relationships" built on mutual care, without cruelty.
+    source: "hm3, principle on relationships; aha-human-rights, Family Planning"
+    split: none
+    handoff: "Every family is a bit different. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      No humanist document defines the family or rules on divorce. The AHA
+      calls raising a child a "most important, difficult, and rewarding
+      challenge" and notes that many children lack the love and care they
+      deserve.
+    needs_check: false
+
+  - point: 12
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Most humanists believe life ends at death and there is no afterlife; we
+      live on in memories and in what we did for others. Agnostics are less
+      sure. Many people believe in heaven or another life after death.
+    source: "hm3, principle on fulfillment; pew-afterlife; pew-nones-4"
+    split: >
+      Only 3% of atheists believe in heaven, against 26% of agnostics.
+    handoff: "People believe different things about that. It's a really good one to ask Mom or Dad about."
+    parent_note: >
+      Manifesto III finds "wonder and awe" even in "the inevitability and
+      finality of death," and says human culture gives comfort in hard times.
+      Many humanists tell children the person lives on in our memories and in
+      the good they did.
+    needs_check: false
+
+  - point: 13
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No specific statement on talking with children about a death. Humanist
+      documents say comfort comes from the people around us and the meaning of
+      our relationships.
+    source: "hm3, principles on fulfillment and relationships"
+    split: none
+    handoff: "That sounds really sad. Mom or Dad would want to hear about that. Let's go find them."
+    parent_note: >
+      Manifesto III says human culture offers comfort in hard times and that we
+      find meaning in relationships. A child who asks whether a death was their
+      fault needs a person, not a screen, so this point always goes to you.
+    needs_check: false
+
+  - point: 14
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Humanists support democracy, the rule of law and human rights, and see
+      taking part in democracy as a civic duty. No humanist document says one
+      party is good and another bad.
+    source: "hm3, principle on society; amsterdam, point 1"
+    split: none
+    handoff: "Grown-ups disagree about that a lot. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Manifesto III calls democratic participation a civic duty in an open,
+      secular society. The Amsterdam Declaration supports peace, democracy and
+      the rule of law, and free exchange of ideas.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          Most atheists (78%) and agnostics (71%) lean Democratic. Progressive
+          humanist families often link civic duty to the AHA's social justice
+          resolutions.
+        source: "pew-nones-1; aha-inequality"
+      moderate:
+        position: "Same as the base. Moderate nonbelievers are not broken out in Pew surveys."
+        source: "pew-nones-1"
+      conservative:
+        position: >
+          A minority of atheists and agnostics lean Republican. Conservative
+          humanist families may stress the individual freedom and personal
+          responsibility the Amsterdam Declaration also names.
+        source: "pew-nones-1; amsterdam, point 1"
+
+  - point: 15
+    when: from_age
+    from_age: 9
+    perspective: several_fairly
+    position: >
+      No official position on how to share the news with children. Humanists
+      favor peace, human rights and solving conflicts cooperatively rather than
+      by violence.
+    source: "amsterdam, point 1; hm3, principle on relationships; aha-global"
+    split: none
+    handoff: "That's a big question. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      The AHA supports the United Nations and international law, and condemns
+      using any creed or ideology to justify violence. When to start on the
+      news is your call; age 9 is only a starting suggestion.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-global"
+      moderate:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-global"
+      conservative:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-global"
+
+  - point: 16
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Humanists want to reduce suffering and unfairness and share resources
+      justly. The AHA says much poverty comes from unfair systems, not only
+      people's choices, and calls healthcare and childcare human rights.
+    source: "hm3, principle on society; aha-inequality"
+    split: none
+    handoff: "That's a really important question. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      Manifesto III calls for minimizing inequities and a "just distribution of
+      nature's resources." The AHA's 2020 resolution points to structural
+      causes such as discrimination, segregation and medical bills.
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: family_tradition
+        position: >
+          Follows the AHA resolution: poverty is largely shaped by unfair
+          systems, and society should fix them.
+        source: "aha-inequality; pew-nones-1"
+      moderate:
+        position: "Same as the base. Moderate nonbelievers are not broken out in Pew surveys."
+        source: "pew-nones-1"
+      conservative:
+        position: >
+          Shares the humanist duty to help others, and also stresses personal
+          effort and individual freedom. No survey breaks out conservative
+          nonbelievers on this point.
+        source: "amsterdam, point 1; pew-nones-1"
+
+  - point: 17
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No humanist document discusses Columbus or explorers. The AHA says
+      colonization caused harms to Black, Brown and Indigenous communities
+      that still continue, and supports historically accurate teaching.
+    source: "aha-white-supremacy"
+    split: none
+    handoff: "People tell that story in different ways. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The AHA's 2019 resolution says "colonization and oppression continue to
+      bleed resources and culture" from these communities and calls for
+      "historically-accurate curricula." Humanist principles favor showing the
+      evidence and letting children weigh it.
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: family_tradition
+        position: "Follows the AHA resolution: tells the story with its lasting harms to Indigenous peoples front and center."
+        source: "aha-white-supremacy; pew-nones-1"
+      moderate:
+        position: "Same as the base. Moderate nonbelievers are not broken out in Pew surveys."
+        source: "pew-nones-1"
+      conservative:
+        position: >
+          Teaches both the explorers' achievements and the harms to Indigenous
+          peoples, from the evidence. No survey breaks out conservative
+          nonbelievers on this point.
+        source: "hi-education, general principles; pew-nones-1"
+
+  - point: 18
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No humanist document discusses the founders directly. The AHA calls
+      racism systemic, links today's racial wealth gap to slavery and
+      segregation, and supports reparations and historically accurate teaching.
+    source: "aha-white-supremacy"
+    split: none
+    handoff: "That's a great question about history. Ask Mom or Dad, and you can learn more together."
+    parent_note: >
+      The answer to the child's question is a plain fact: yes, Washington
+      enslaved people. How to weigh the founders' achievements against that is
+      for your family. Humanist principles favor honest evidence over heroes or
+      villains.
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: family_tradition
+        position: "Follows the AHA resolution: slavery's lasting effects and systemic racism are central to the story."
+        source: "aha-white-supremacy; pew-nones-1"
+      moderate:
+        position: "Same as the base. Moderate nonbelievers are not broken out in Pew surveys."
+        source: "pew-nones-1"
+      conservative:
+        position: >
+          Teaches the founders' achievements alongside the plain facts of
+          slavery. No survey breaks out conservative nonbelievers on this point.
+        source: "hi-education, general principles; pew-nones-1"
+
+  - point: 19
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Humanists condemn using any creed or ideology, religious or not, to
+      justify violence, and defend everyone's freedom to believe or not. The
+      AHA warns against blaming whole religions for what some followers did.
+    source: "aha-global; aha-islam; aha-nonbeliever-bias"
+    split: none
+    handoff: "That's a big question about history. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      The AHA rejects "crusade" thinking that condemns a whole faith and says
+      broad generalizations harm innocent people. It also notes that in some
+      countries nonbelievers are still punished for their beliefs. Freedom of
+      belief protects everyone.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-islam"
+      moderate:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-islam"
+      conservative:
+        position: "Same as the base: humanist teaching doesn't change with politics on this point."
+        source: "aha-islam"
+
+  - point: 20
+    when: from_age
+    from_age: 9
+    perspective: several_fairly
+    position: >
+      No official position on how much violence to show children. Humanists
+      value peace and resolving conflict without violence, and want children
+      protected from harm.
+    source: "amsterdam, point 1; aha-global; aha-gun-children"
+    split: none
+    handoff: "That's an important question. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      Humanist documents set no rule on this. The AHA has called protecting
+      children from violence a top national priority. Age 9 is a starting
+      suggestion; you can move it.
+    needs_check: false
+
+  - point: 21
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: "No source found yet."
+    source: "hm3, principle on ethics (general only; no humanist statement on alcohol or drugs was found)"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      No humanist document found addresses alcohol, drugs, tobacco or
+      caffeine for children. Manifesto III grounds values in human needs
+      tested by experience, which suggests plain health facts.
+    needs_check: true
+
+  - point: 22
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official position on modesty, dress or body image. The AHA affirms
+      each person's right to the gender expression that fits them, and the
+      Amsterdam Declaration supports any source of joy "that harm no other."
+    source: "aha-human-rights, Sexual Orientation and Gender Expression; amsterdam, point 3"
+    split: none
+    handoff: "Every body is different. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      Nothing found speaks to body image directly. The Amsterdam Declaration
+      praises physical activity and personal growth; dress rules are for your
+      family to set.
+    needs_check: true
+
+  - point: 23
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: "No source found yet."
+    source: "amsterdam, point 2 (general only: technology should serve human well-being)"
+    split: none
+    handoff: "Every family has its own rules about that. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      No humanist document found addresses children's screens or games. The
+      Amsterdam Declaration says science and technology should serve human
+      well-being, "never callously or destructively."
+    needs_check: true
+
+  - point: 24
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Humanists believe a free person has duties to others, and that helping
+      people and working for a fairer society makes us happier too. Giving
+      comes from caring about others, not from religious duty.
+    source: "amsterdam, point 1; hm3, principle on society; pew-parents; pew-nones-8"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Manifesto III says working to benefit society maximizes individual
+      happiness. Pew finds 76% of nonreligious parents say it is very
+      important their kids grow up to help people in need, and 85% that they
+      accept people who are different. 97% of atheists say a person can be
+      moral without believing in God.
+    needs_check: false

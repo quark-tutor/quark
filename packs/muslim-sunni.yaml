@@ -1,0 +1,761 @@
+pack: muslim-sunni
+name: Muslim (Sunni mainstream)
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For Sunni Muslim families in the US who follow mainstream North American
+  scholarship. Built from Fiqh Council of North America fatwas and resolutions,
+  ISNA's published mission and statements, Yaqeen Institute papers, and the
+  2023 "Navigating Differences" statement signed by Fiqh Council and Yaqeen
+  scholars, with Pew Research Center's 2017 survey of US Muslims for practice
+  and political lean. US Islam has no single governing body, so most entries
+  cite named scholars rather than one official voice.
+
+sources:
+  - id: pew-2017
+    title: "U.S. Muslims Concerned About Their Place in Society, but Continue to Believe in the American Dream (full report, survey Jan 23-May 2, 2017)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/wp-content/uploads/sites/7/2017/07/U.S.-MUSLIMS-FULL-REPORT.pdf
+  - id: pew-2017-findings
+    title: "Findings from Pew Research Center's 2017 survey of U.S. Muslims"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2017/07/26/findings-from-pew-research-centers-2017-survey-of-us-muslims/
+  - id: navigating-differences
+    title: "Navigating Differences: Clarifying Sexual and Gender Ethics in Islam (May 23, 2023; signatories include FCNA members Muzammil Siddiqi, Jamal Badawi, Ihsan Bagby, Zulfiqar Ali Shah and Yaqeen's Omar Suleiman). Live site unreachable; read from the Internet Archive copy."
+    publisher: Navigating Differences (joint statement of North American Muslim scholars)
+    url: https://web.archive.org/web/2024/https://navigatingdifferences.com/clarifying-sexual-and-gender-ethics-in-islam/
+  - id: fcna-transgender
+    title: "What is Islam's Position on Transgenderism? (draft by Dr. Yasir Qadhi submitted to the Fiqh Council, May 2022)"
+    publisher: Fiqh Council of North America
+    url: https://fiqhcouncil.org/fatwa-regarding-transgenderism/
+  - id: fcna-nonmuslim
+    title: "Muslim/Non-Muslim Relations (Dr. Jamal Badawi, 2012)"
+    publisher: Fiqh Council of North America
+    url: https://fiqhcouncil.org/muslim-non-muslim-relations/
+  - id: fcna-loyal
+    title: "Being Faithful Muslims and Loyal Americans (resolution adopted at FCNA General Body Meeting, Sept 24-25, 2011)"
+    publisher: Fiqh Council of North America
+    url: https://fiqhcouncil.org/being-faithful-muslims-and-loyal-americans/
+  - id: fcna-marijuana
+    title: "On the Use of Marijuana (adopted Sept 2, 2018)"
+    publisher: Fiqh Council of North America
+    url: https://fiqhcouncil.org/on-the-use-of-marijuana/
+  - id: fcna-hair
+    title: "Does the Qur'an Tell Women to Cover their Hair? (Shaykh Mustafa Umar)"
+    publisher: Fiqh Council of North America
+    url: https://fiqhcouncil.org/does-the-quran-tell-women-to-cover-their-hair/
+  - id: fcna-cremation
+    title: "Statement Regarding Honoring the Bodies of the Deceased and Avoiding Cremation (Jan 6, 2021)"
+    publisher: Fiqh Council of North America
+    url: https://fiqhcouncil.org/statement-regarding-honoring-the-bodies-of-the-deceased-and-avoiding-cremation/
+  - id: fcna-encampments
+    title: "Statement on Student Encampments (May 4, 2024)"
+    publisher: Fiqh Council of North America
+    url: https://fiqhcouncil.org/statement-on-student-encampments/
+  - id: isna-mission
+    title: "Mission and Vision; Strategic Goals"
+    publisher: Islamic Society of North America
+    url: https://isna.net/mission-and-vision
+  - id: isna-interfaith
+    title: "Interfaith Relations"
+    publisher: Islamic Society of North America
+    url: https://isna.net/interfaith-relations
+  - id: isna-islamophobia-2025
+    title: "Statement for International Day to Combat Islamophobia (March 17, 2025)"
+    publisher: Islamic Society of North America
+    url: https://docs.google.com/document/d/17A2t-AGSkQ2ZC_IKr14Mkm61xpPiZOym
+  - id: isna-boulder-2021
+    title: "ISNA strongly condemns the shootings in Boulder, Colorado, and Atlanta, Georgia (March 23, 2021)"
+    publisher: Islamic Society of North America
+    url: https://docs.google.com/document/d/1FEp7iMKzu41MyHNDGzw973kpCP0fzWyD
+  - id: isna-gaza-2025
+    title: "ISNA Calls for Peace and Condemns Violence Against Medical Workers in Gaza (April 8, 2025)"
+    publisher: Islamic Society of North America
+    url: https://docs.google.com/document/d/1OYpbHHlTxQfdwVWSj6PUw9Ec2Z7L2bcP
+  - id: yaqeen-case-allah
+    title: "Does God Exist? The Case for Allah's Existence in the Quran and Sunnah (2017)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/the-case-for-allahs-existence-in-the-quran-and-sunnah
+  - id: yaqeen-storytelling
+    title: "The Unique Storytelling Style of the Qur'an (Mohammad Elshinawy, 2022)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/the-unique-storytelling-style-of-the-quran
+  - id: yaqeen-miracles
+    title: "Behold God's Power: The Prophet's Miracles (Mohammad Elshinawy, 2022)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/mohammad-elshinawy/behold-gods-power-the-prophets-miracles
+  - id: yaqeen-fate-nonmuslims
+    title: "The Fate of Non-Muslims: Perspectives on Salvation Outside of Islam (Jonathan Brown, 2018)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/the-fate-of-non-muslims-perspectives-on-salvation-outside-of-islam
+  - id: yaqeen-human-origins
+    title: "Human Origins - Part 1: Theological Conclusions and Empirical Limitations (Nazir Khan and Yasir Qadhi, 2018)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/human-origins-part-1-theological-conclusions-and-empirical-limitations
+  - id: yaqeen-evolution-collection
+    title: "Evolution in the Scales of Scripture (collection presenting three perspectives)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/series/collection-evolution-in-the-scales-of-scripture
+  - id: yaqeen-marriage-roles
+    title: "Marriage and Gender Roles in Islam: Beyond Rights and Duties (Tesneem Alkiek, 2025)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/marriage-and-gender-roles-in-islam-beyond-rights-and-duties
+  - id: yaqeen-divorce
+    title: "Can Muslim Women Divorce? (animation, 2019)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/yaqeen-institute/can-muslim-women-divorce-animation
+  - id: yaqeen-innocent-children
+    title: "What About The Innocent Children? (The Other Side: Barzakh and Beyond, Ep. 10, Omar Suleiman, 2025)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/watch/series/the-other-side-barzakh-and-beyond/what-about-the-innocent-children-the-other-side
+  - id: yaqeen-grief
+    title: "Coping with Grief: A Spiritual and Psychological Guide (Sarah Sultan and Najwa Awad, 2020)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/coping-with-grief-a-spiritual-and-psychological-guide
+  - id: yaqeen-2024-election
+    title: "American Muslims and the 2024 Election: Why American Muslims Are Rethinking Political Alliances (Osman Umarji and Youssef Chouhoud, 2024)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/post/american-muslims-and-the-2024-election-why-american-muslims-are-rethinking-political-alliances
+  - id: yaqeen-social-justice
+    title: "A Sacred Duty: Islam and Social Justice (Nazir Khan, 2020)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/a-sacred-duty-islam-and-social-justice
+  - id: yaqeen-colonized-mind
+    title: "All That We Lost: The Colonized Mind and the Decline of the Islamic Education System (Faisal Malik, 2019)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/the-colonized-mind-and-the-decline-of-the-islamic-education-system
+  - id: yaqeen-slavery
+    title: "Slavery and Islam: What is Slavery? (Jonathan Brown and Abdullah Hamid Ali, 2017)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/slavery-and-islam-what-is-slavery
+  - id: yaqeen-violence
+    title: "Is Islam a Violent Religion? Debunking the Myth (Nazir Khan, 2016)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/is-islam-a-violent-religion-debunking-the-myth
+  - id: yaqeen-islam-spread
+    title: "How Islam Spread Throughout the World (Hassam Munir, 2018)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/how-islam-spread-throughout-the-world
+  - id: yaqeen-drugs-alcohol
+    title: "How Do I Talk About Drugs and Alcohol (DoubleTake podcast S2E5, Jibran Khokhar, 2021)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/watch/series/doubletake-with-yaqeen-podcast/how-do-i-talk-about-drugs-and-alcohol-doubletake-podcast
+  - id: yaqeen-hijab
+    title: "Hijab: Spotlighting Servitude to God (Roohi Tahir, 2021)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/hijab-spotlighting-servitude-to-god
+  - id: yaqeen-tech
+    title: "Taking Account of Tech: Fulfilling Our Personhood in the Smartphone Era (Zara Khan, 2020)"
+    publisher: Yaqeen Institute for Islamic Research
+    url: https://yaqeeninstitute.org/read/paper/taking-account-of-tech-fulfilling-our-personhood-in-the-smartphone-era
+
+entries:
+  - point: 1
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      There is one God, Allah, the unique Creator. Belief in Him is described as
+      natural to every person (fitrah, Qur'an 30:30) and also supported by reason.
+      In Pew's 2017 survey, 85% of US Muslims said believing in God is essential
+      to being Muslim.
+    source: "yaqeen-case-allah; pew-2017, ch. 2 (what is essential to being Muslim); isna-interfaith"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Yaqeen's paper describes belief in God as the "natural disposition God
+      instilled in mankind," awakened by revelation and supported by arguments
+      from cause and design. It says that not seeing something does not show it
+      isn't there. Friends from other faiths can be met with respect; ISNA runs
+      dialogues with Catholic, Baptist, Protestant and Jewish groups.
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Qur'an is God's word. Its stories of the prophets, Noah among them, are
+      held to be true accounts. They are told mainly to teach lessons rather than
+      to record history for its own sake. Pew 2017 found 64% of US Muslims say
+      there is more than one true way to interpret Islam.
+    source: "yaqeen-storytelling; pew-2017, ch. 6 (interpreting Islam)"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Elshinawy (Yaqeen) says the Qur'an cites "only true stories" and is
+      "lesson-oriented". It often leaves out names, numbers and places so the
+      reader focuses on the lesson. Families who read the stories more
+      figuratively are a minority view and may want to adjust this entry.
+    needs_check: false
+
+  - point: 3
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Prayer (du'a) is heard by God, and miracles granted to prophets are
+      real events that happened by God's permission. No mainstream source was
+      found that speaks to ghosts.
+    source: "yaqeen-miracles"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Elshinawy's talk lists the Prophet's miracles: the splitting of the moon,
+      the Night Journey, water and food that multiplied, and prayers for rain
+      that were answered. He reasons that an all-powerful God can do what
+      people cannot. The pack has no sourced line yet on jinn or ghosts, which
+      many families will want to explain in their own words.
+    needs_check: true
+
+  - point: 4
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Islam teaches that it is the true religion. It also teaches respect,
+      kindness and justice toward people of every faith, and "no compulsion in
+      religion" (2:256). Jews and Christians, as People of the Book, hold a
+      special place. Scholars say only God judges any person's fate, and no one
+      should pass judgment on an individual.
+    source: "yaqeen-fate-nonmuslims, conclusion; fcna-nonmuslim; isna-interfaith; isna-islamophobia-2025"
+    split: >
+      Brown (Yaqeen) names three scholarly views on non-Muslims who heard
+      Islam accurately: only Islam saves (the view of nearly all scholars across
+      history), belief in God plus good deeds saves, and all revealed religions
+      are valid paths. Mainstream bodies hold the first.
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Badawi (FCNA) writes that "only Allah is the ultimate judge of any person's
+      theological correctness". He says peaceful coexistence and kindness are
+      the rule (Qur'an 60:8-9), and he prefers "non-Muslim" over "infidel".
+      Brown says people who never heard the message accurately are not held
+      accountable for it. He advises "trusting in God's total justice and
+      immense mercy". ISNA (2025) hopes for a world where "all individuals,
+      regardless of their faith, can live with dignity and respect". The teaching that rejecting Islam carries consequences in
+      the afterlife is in these sources for parents. The tutor does not say it to
+      children.
+    needs_check: false
+
+  - point: 5
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position was found on the age of the Earth. A Yaqeen paper
+      on God's existence gives the Big Bang estimate of 12 to 14 billion years
+      for the universe and does not dispute it. It treats a universe with a
+      beginning as pointing to a Creator.
+    source: "yaqeen-case-allah; yaqeen-human-origins"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Khan and Qadhi (Yaqeen) mention scientists' timelines of "millions of
+      years" without disputing them and do not state an age themselves. A
+      young-Earth view does not appear in the mainstream sources consulted.
+    needs_check: false
+
+  - point: 6
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Adam and Eve were created directly by God, and all humans descend from
+      them. Leading Yaqeen scholars say scripture does not rule out the
+      evolution of other living things, and that "Islam does not accept
+      evolution" is too simple a claim. Scholars disagree on how far evolution
+      can be accepted.
+    source: "yaqeen-human-origins; yaqeen-evolution-collection"
+    split: >
+      Three camps in Yaqeen's own collection: Khan and Qadhi (evolution of other
+      life is open to science, but Adam was created directly); Yazicioglu and
+      Bouguenaya (against accepting evolution as a whole); Jalajel (theology
+      does not rule out human evolution, through tawaqquf, or holding back
+      judgment).
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Khan and Qadhi call the Qur'an's account of Adam "patently explicit" and
+      reject the idea that humans descended from other species apart from Adam.
+      They say the evolution of other species is "active research" and leave it
+      open to science. They see evolutionary processes as working by God's will.
+    needs_check: false
+
+  - point: 7
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Science and faith are not in real conflict. Yaqeen scholars say the
+      sense that religion must defend itself against science comes from
+      misunderstanding how science works. They call for weighing scientific
+      claims carefully rather than rejecting or accepting them wholesale.
+    source: "yaqeen-evolution-collection; yaqeen-human-origins"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Khan and Qadhi ask for "a critical evaluation rather than ... either
+      blanket rejection or accommodation". They distinguish scientific findings
+      from philosophical naturalism, the view that nothing exists beyond
+      nature. Muslims can study science fully while believing it describes how
+      God's creation works.
+    needs_check: false
+
+  - point: 8
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Sexual relations belong only within marriage between a man and a woman.
+      No North American source was found on how or when to explain where
+      babies come from to young children.
+    source: "navigating-differences, 'Islam's Position on Sexuality and Gender'"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The Navigating Differences statement affirms that marriage is the place
+      for intimacy and stresses each person's right to privacy. The safety floor
+      still applies: body safety and telling a trusted adult are always taught.
+      This entry needs a source on age-appropriate teaching from a member of
+      the community.
+    needs_check: true
+
+  - point: 9
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Mainstream North American scholars teach that marriage is only between a
+      man and a woman and that same-sex relations are forbidden. They also
+      teach that feelings are not sinful, that people's privacy must be
+      respected, and that those who believe differently have the right to live
+      in peace and free from abuse.
+    source: "navigating-differences; fcna-transgender; pew-2017, ch. 4 (homosexuality)"
+    split: >
+      Scholars versus members. The scholars' statement treats this as fixed
+      teaching. In Pew 2017, 52% of US Muslims said homosexuality should be
+      accepted by society and 33% said it should be discouraged, up from 27%
+      accepting in 2007.
+    handoff: "Families come in different shapes. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The statement says "peaceful coexistence does not necessitate agreement"
+      and acknowledges others' "constitutional right to live in peace and free
+      from abuse". The FCNA text says "we treat all people as humans and give
+      them the respect and dignity they deserve". It says disapproving of an
+      act is not hating the person. Kindness to classmates and their families
+      fits the teaching.
+    needs_check: true
+    by_lean:
+      progressive:
+        when: anytime
+        perspective: several_fairly
+        position: >
+          Many US Muslims, especially younger and US-born ones, accept gay
+          neighbours and classmates socially while their own scholars keep
+          the traditional teaching on marriage. Pew found 60% of Muslim
+          Millennials and 63% of college graduates said homosexuality should
+          be accepted. Pew gives no breakdown by party within US Muslims.
+        source: "pew-2017, ch. 4 (homosexuality acceptance by group)"
+      moderate: {}
+      conservative:
+        when: parent_led
+        perspective: family_tradition
+        position: >
+          Families who follow the scholars' statement closely prefer to explain
+          this at home. Among US Muslims who say religion is very important to
+          them, 47% said homosexuality should be accepted (Pew 2017). The
+          scholars' statement also objects to schools teaching these topics
+          without parents' consent.
+        source: "pew-2017, ch. 4; navigating-differences, opening section"
+
+  - point: 10
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Mainstream scholars teach that God created people male and female, and
+      that medical procedures to change the sex of a healthy person are not
+      allowed. Treatment for people born intersex is allowed. Feelings of
+      gender dysphoria are not sinful if not acted upon, and no one is less of a
+      believer for having them.
+    source: "fcna-transgender; navigating-differences, 'Islam's Position on Sexuality and Gender'"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The FCNA text says there is "no stigma that attaches to anyone because of
+      a desire beyond his or her control". It also treats dressing as the
+      opposite sex on purpose as forbidden. Both texts separate feelings from
+      actions and from identity. The statement asks Muslims to coexist
+      peacefully with people who disagree.
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          No survey found that breaks down US Muslim views on gender identity by
+          political lean. Progressive-leaning families may want the tutor to say
+          that other people see this differently while keeping the
+          conversation at home.
+        source: "pew-2017, ch. 4 (ideology shares only)"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Families who follow the scholars' statement closely keep this at home
+          and in the tradition's terms. The statement objects to schools
+          teaching these topics without parents' consent.
+        source: "navigating-differences, opening section"
+
+  - point: 11
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Marriage is a sacred trust and a source of companionship and peace. Divorce
+      is allowed. Wives as well as husbands can end a marriage, and a father
+      must support his children whoever has custody. There is no single
+      required household pattern.
+    source: "yaqeen-marriage-roles; yaqeen-divorce"
+    split: none
+    handoff: "Every family is a little different. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Alkiek (Yaqeen) quotes "The best of you are those who are best to their
+      families" and says couples part, if they must, kindly. She points to the
+      Prophet doing household work. The divorce animation describes talaq
+      (started by the husband), khul (started by the wife) and divorce granted
+      by a judge when a husband causes harm.
+    needs_check: false
+
+  - point: 12
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      After death the soul enters the barzakh, a waiting state, until the Day
+      of Resurrection, when God judges each person with justice and mercy. Children
+      who die are taught to be cared for in Paradise and reunited with their
+      parents. The body is treated with honour and buried, not cremated.
+    source: "yaqeen-innocent-children; fcna-cremation; yaqeen-fate-nonmuslims"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Suleiman (Yaqeen) teaches that children in the barzakh are in the care of
+      Prophet Ibrahim and "there are no orphans in the barzakh". He says a child
+      holds on to its parents until they enter Paradise together. The FCNA
+      describes the body as "the vessel of our soul", honoured as if alive. The
+      teaching on judgment and Hell is for parents to share as they choose. The
+      tutor does not raise it.
+    needs_check: false
+
+  - point: 13
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Grief is natural and allowed. Families meet loss with patience, prayer and remembrance of God, and they lean on
+      family and community. With children, they listen, answer honestly and
+      gently, and link the loss to hope in God.
+    source: "yaqeen-grief"
+    split: none
+    handoff: "It's okay to feel sad. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      Sultan and Awad (Yaqeen) advise asking what the child already knows,
+      letting the child lead, and saying "I don't know" when that's true. They
+      say "If they cry, let them." They suggest explaining the janazah (funeral),
+      making du'a for the person, and hoping to meet again in Paradise.
+      Children often show grief through behaviour rather than words. The source
+      does not address pets.
+    needs_check: false
+
+  - point: 14
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      The Fiqh Council sees no basic conflict between Islam and the US
+      Constitution. It calls democracy compatible with shura (consultation), and
+      it encourages Muslims to take part in civic life and dissent only peacefully
+      and lawfully. Taking part in democratic processes is one of ISNA's stated
+      goals. Neither body endorses a party.
+    source: "fcna-loyal; isna-mission, Strategic Goals"
+    split: none
+    handoff: "People who love their country disagree about this. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The FCNA resolution urges "objective, peaceful and respectful dialogue".
+      It says Muslims "integrate positively in the society" without losing
+      their identity, and it names anti-Muslim and antisemitic discrimination as
+      forms of racism. Pew 2017: 66% of US Muslims were Democrats or leaned
+      Democratic, 13% Republican, and 20% other or independent. Yaqeen's 2024
+      survey (not representative) found many moving away from both parties.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: >
+          Most US Muslims have leaned Democratic (Pew 2017: 66%), and 30%
+          called themselves liberal. The teaching itself does not change with
+          politics.
+        source: "pew-2017, ch. 4 (party and ideology)"
+      moderate:
+        position: >
+          Pew 2017 found 39% of US Muslims called themselves moderate. Yaqeen's
+          2024 survey found many unhappy with both parties. The teaching does
+          not change with politics.
+        source: "pew-2017, ch. 4; yaqeen-2024-election"
+      conservative:
+        position: >
+          21% of US Muslims called themselves conservative (Pew 2017), and some
+          are drawn to Republicans on family and school issues. The teaching
+          does not change with politics.
+        source: "pew-2017, ch. 4; yaqeen-2024-election"
+
+  - point: 15
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      ISNA calls for peace, justice and protection of all civilians in
+      conflicts. The Fiqh Council supports lawful, peaceful protest. On
+      Israel and Palestine, both bodies have issued strong statements in
+      support of Palestinians. ISNA also condemns attacks on people of any
+      background in the US.
+    source: "isna-gaza-2025; fcna-encampments; isna-boulder-2021; yaqeen-2024-election"
+    split: none
+    handoff: "That's a big one. Let's ask Mom or Dad about it together."
+    parent_note: >
+      ISNA (April 2025) asked for "protecting all individuals, regardless of
+      their background, during conflicts". The FCNA (May 2024) urged students
+      to advocate "within the bounds of the law". ISNA's 2021 statement quoted
+      the Qur'an: whoever saves a life, "it will be as if they saved all of
+      humanity". In Yaqeen's 2024 survey, 90.5% rated Palestine policy very
+      important. Many families will want to handle this at home.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          No survey found showing different framing of news and wars by
+          political lean among US Muslims; concern for Gaza spans the community.
+        source: "yaqeen-2024-election"
+      moderate: {}
+      conservative:
+        position: >
+          No survey found showing different framing of news and wars by
+          political lean among US Muslims; concern for Gaza spans the community.
+        source: "yaqeen-2024-election"
+
+  - point: 16
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Caring for the poor is central to Islam. Zakat, 2.5% of a qualifying
+      Muslim's assets given to the poor and needy, is an obligation. Extra
+      charity (sadaqah) is encouraged and may go to people of any faith.
+      Scholars teach that fixing unjust systems matters as well as giving.
+    source: "yaqeen-social-justice; pew-2017, ch. 2 (essential to being Muslim)"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Khan (Yaqeen): "Proximity to God requires proximity to the poor." He cites
+      the Prophet: "Donate in charity to people of all faiths." Pew 2017: 69% of
+      US Muslims said working for justice and equality is essential to being
+      Muslim, and 67% preferred a bigger government with more services.
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          Most US Muslims (67%, Pew 2017) prefer a bigger government that
+          offers more services, alongside personal zakat.
+        source: "pew-2017, ch. 4 (size of government)"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          A minority (25% overall, 32% of US-born, Pew 2017) prefer a smaller
+          government. These families tend to stress zakat, charity and community
+          institutions.
+        source: "pew-2017, ch. 4 (size of government)"
+
+  - point: 17
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position was found on Columbus or the European colonization
+      of the Americas. Yaqeen papers are strongly critical of European
+      colonialism in Muslim lands. They describe it as turning exchange into
+      "dominance and imposition".
+    source: "yaqeen-colonized-mind"
+    split: none
+    handoff: "People tell this story in different ways. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Malik (Yaqeen) says colonial rule damaged schools and centres of
+      learning in Muslim societies. No mainstream North American Muslim source
+      on the Americas was found. A community reviewer should supply one.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No source found that shows the teaching changes with political lean."
+        source: "yaqeen-colonized-mind"
+      moderate: {}
+      conservative:
+        position: "No source found that shows the teaching changes with political lean."
+        source: "yaqeen-colonized-mind"
+
+  - point: 18
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Yaqeen scholars describe American chattel slavery as America's "original
+      sin". They say Islamic law limited slavery, protected slaves from harm and
+      encouraged freeing them, and they call modern exploitation reprehensible.
+      No official statement on the US founders was found.
+    source: "yaqeen-slavery"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Brown and Ali (Yaqeen) describe Islamic rules that let slaves buy their
+      freedom and freed a mother and child on the owner's death. They say the
+      word "slavery" covers very different systems. Their writing on this has
+      been debated, and families may prefer their own framing.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No source found that shows the teaching changes with political lean."
+        source: "yaqeen-slavery"
+      moderate: {}
+      conservative:
+        position: "No source found that shows the teaching changes with political lean."
+        source: "yaqeen-slavery"
+
+  - point: 19
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Islam forbids forcing faith on anyone and forbids fighting people only
+      because they are not Muslim. War is allowed only in self-defence or to
+      defend the oppressed, and civilians must be protected. Scholars say
+      violence is often a misuse of religion for political ends, in any faith
+      or none.
+    source: "fcna-nonmuslim; yaqeen-violence; yaqeen-islam-spread"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Badawi (FCNA): "There is no verse in the Qur'an that condones fighting any
+      peaceful non-Muslim on the sole ground" of belief. Munir (Yaqeen) rejects
+      "spread by the sword". He grants that some forced conversions happened
+      and calls them "in blatant violation of clear Islamic directives". Khan
+      (Yaqeen) quotes 5:32: killing one soul is like killing all humanity.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "No source found that shows the teaching changes with political lean."
+        source: "yaqeen-violence"
+      moderate: {}
+      conservative:
+        position: "No source found that shows the teaching changes with political lean."
+        source: "yaqeen-violence"
+
+  - point: 20
+    when: from_age
+    from_age: 10
+    perspective: several_fairly
+    position: >
+      No official position was found on how much war or violence to show
+      children. A Yaqeen paper raises concern about violent, game-like media
+      shaping how a young mind understands death, war and other people.
+    source: "yaqeen-tech; yaqeen-violence"
+    split: none
+    handoff: "That's a heavy one. Let's ask Mom or Dad about it together."
+    parent_note: >
+      Zara Khan (Yaqeen) asks: "what are the effects of gamification on a
+      developing psyche?" Nazir Khan (Yaqeen) quotes Gregory Stanton:
+      "Denial of the humanity of others is the step that permits killing with
+      impunity." Teaching children to see every
+      victim as human fits the tradition. The age of 10 is a suggestion, not
+      from a source.
+    needs_check: true
+
+  - point: 21
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Alcohol and anything that intoxicates is forbidden ("every intoxicant is
+      khamr and every khamr is haram"). That includes recreational marijuana,
+      though some non-intoxicating medical uses are allowed. Vaping and smoking
+      are discouraged as harmful. No ruling on caffeine was found.
+    source: "fcna-marijuana; yaqeen-drugs-alcohol"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Khokhar (Yaqeen) advises a warm but firm relationship and starting
+      conversations early, since vaping can begin around age 8. He says "just
+      say no does not work" and suggests talking through pros and cons, often
+      side by side, as in the car. His summary is "population level prohibition,
+      but individual level compassion." He adds that a substance being legal
+      does not change its religious ruling.
+    needs_check: false
+
+  - point: 22
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Modesty (haya) is asked of both men and women. A Fiqh Council article
+      holds that covering the hair in public is obligatory for Muslim women. A
+      person's worth comes from character and devotion to God, not looks or
+      beauty standards.
+    source: "yaqeen-hijab; fcna-hair; pew-2017, ch. 2 (dressing modestly) and ch. 6 (hijab)"
+    split: >
+      Practice varies: Pew 2017 found about four in ten US Muslim women always
+      wear hijab in public, and 44% of US Muslims said dressing modestly is
+      essential to being Muslim.
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Tahir (Yaqeen) writes that modesty "is not intended to suppress or
+      marginalize women" and criticises judging women who struggle with hijab.
+      She quotes "Allah is Beautiful, He loves beauty." Neither source gives an
+      age when covering begins, so families set that themselves. The tutor
+      never comments on a child's body.
+    needs_check: false
+
+  - point: 23
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No formal ruling was found. A Yaqeen paper takes a cautious view: for now,
+      smartphones, social media and the internet do more harm than good. Parents
+      should set deliberate usage plans together, without guilt or panic.
+    source: "yaqeen-tech"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Zara Khan cites American Academy of Pediatrics concerns about sleep,
+      attention, learning, obesity and depression. She notes that children are
+      heavily targeted by advertising. Her aim is "to fall out of love with
+      these things," not to destroy devices. She suggests families and
+      communities agree on shared norms.
+    needs_check: false
+
+  - point: 24
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Every Muslim with enough savings gives zakat, 2.5% of their assets to the
+      poor and needy, and giving more (sadaqah) is encouraged, to people of any
+      faith. Giving to the poor stands beside prayer as a core duty.
+    source: "yaqeen-social-justice; pew-2017-findings"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Khan (Yaqeen) calls prayer and giving to the poor the two basic duties of
+      believers. He cites the Prophet sponsoring a Jewish household. A child's
+      question about why the family gives can open a talk about zakat at
+      Ramadan; Pew found about 80% of US Muslims fast during Ramadan.
+    needs_check: false

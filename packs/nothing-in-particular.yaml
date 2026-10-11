@@ -1,0 +1,613 @@
+pack: nothing-in-particular
+name: Nothing in particular
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For families who, when asked their religion, say "nothing in particular": most believe in God
+  or some higher power, rarely attend services, and want their kids taught decency without
+  doctrine. This group has no official body, so every position here is survey-based, mainly from
+  Pew Research Center's 2023-24 Religious Landscape Study and its 2024 report on religious "nones",
+  with Pew, Gallup and YouGov data on parents and on party differences where those exist.
+sources:
+  - id: pew-rls-nip
+    title: "Religious Landscape Study 2023-24: Religious family profile, Nothing in particular"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religious-landscape-study/religious-family/nothing-in-particular/
+  - id: pew-rls-beliefs
+    title: "Religious Landscape Study: Religious and spiritual beliefs (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religious-and-spiritual-beliefs/
+  - id: pew-rls-bible
+    title: "Religious Landscape Study: Importance of religion and the Bible (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/importance-of-religion-and-the-bible/
+  - id: pew-rls-science
+    title: "Religious Landscape Study: Religion and views of science (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-and-views-of-science/
+  - id: pew-rls-lgbtq
+    title: "Religious Landscape Study: Religion and views on LGBTQ issues and abortion (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-and-views-on-lgbtq-issues-and-abortion/
+  - id: pew-rls-gender-parenting
+    title: "Religious Landscape Study: Religion and views on gender, parenting and workforce participation (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-and-views-on-gender-parenting-and-workforce-participation/
+  - id: pew-rls-government
+    title: "Religious Landscape Study: Religion and views on the role of government (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-and-views-on-the-role-of-government/
+  - id: pew-rls-child-rearing
+    title: "Religious Landscape Study: Religion, fertility and child-rearing (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-fertility-and-child-rearing/
+  - id: pew-rls-switching
+    title: "Religious Landscape Study: Religious switching (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religious-switching/
+  - id: pew-nones-2024
+    title: "Religious 'Nones' in America: Who They Are and What They Believe (Jan. 24, 2024), overview"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/religious-nones-in-america-who-they-are-and-what-they-believe/
+  - id: pew-nones-2024-ch4
+    title: "Religious 'Nones' in America, chapter 4: Are all 'nones' nonbelievers?"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/are-all-nones-nonbelievers/
+  - id: pew-nones-2024-ch5
+    title: "Religious 'Nones' in America, chapter 5: Are 'nones' spiritual instead of religious?"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/are-nones-spiritual-instead-of-religious/
+  - id: pew-nones-2024-ch6
+    title: "Religious 'Nones' in America, chapter 6: Are 'nones' hostile toward religion?"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/are-nones-hostile-toward-religion/
+  - id: pew-nones-2024-ch7
+    title: "Religious 'Nones' in America, chapter 7: How do 'nones' view science?"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/how-do-nones-view-science/
+  - id: pew-nones-2024-ch8
+    title: "Religious 'Nones' in America, chapter 8: How do 'nones' think about morality?"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2024/01/24/how-do-nones-think-about-morality/
+  - id: pew-afterlife-2021
+    title: "Few Americans Blame God or Say Faith Has Been Shaken Amid Pandemic, Other Tragedies, section 2: Views on the afterlife (Nov. 23, 2021)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2021/11/23/views-on-the-afterlife/
+  - id: pew-trans-2022
+    title: "Attitudes about transgender issues vary widely among Christians, religious 'nones' in U.S. (July 7, 2022)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2022/07/07/attitudes-about-transgender-issues-vary-widely-among-christians-religious-nones-in-u-s/
+  - id: pew-trans-2025
+    title: "Americans have grown more supportive of restrictions for trans people in recent years (Feb. 26, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2025/02/26/americans-have-grown-more-supportive-of-restrictions-for-trans-people-in-recent-years/
+  - id: gallup-lgbtq-2026
+    title: "U.S. Support for LGBTQ+ Issues Remains Down From Peak (June 3, 2026)"
+    publisher: Gallup
+    url: https://news.gallup.com/poll/710810/support-lgbtq-issues-remains-down-peak.aspx
+  - id: pew-teaching-children-2014
+    title: "Teaching the Children: Sharp Ideological Differences, Some Common Ground (Sept. 18, 2014)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/politics/2014/09/18/teaching-the-children-sharp-ideological-differences-some-common-ground/
+  - id: pew-parenting-2023
+    title: "Parenting in America Today (Jan. 24, 2023)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/social-trends/2023/01/24/parenting-in-america-today/
+  - id: pew-screens-2025
+    title: "How Parents Manage Screen Time for Kids (Oct. 8, 2025)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/internet/2025/10/08/how-parents-manage-screen-time-for-kids/
+  - id: pew-partisan-hostility-2022
+    title: "As Partisan Hostility Grows, Signs of Frustration With the Two-Party System (Aug. 9, 2022)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/politics/2022/08/09/as-partisan-hostility-grows-signs-of-frustration-with-the-two-party-system/
+  - id: pew-rich-poor-2017
+    title: "Why people are rich and poor: Republicans and Democrats have very different views (May 2, 2017)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/politics/2017/05/02/why-people-are-rich-and-poor-republicans-and-democrats-have-very-different-views/
+  - id: yougov-columbus-2024
+    title: "More Americans support federal observance of Indigenous Peoples' Day than of Columbus Day (Oct. 12, 2024)"
+    publisher: YouGov
+    url: https://yougov.com/en-us/articles/50682-more-americans-support-federal-observance-of-indigenous-peoples-day-than-columbus-day
+  - id: pew-racial-history-2021
+    title: "Deep Divisions in Americans' Views of Nation's Racial History - and How To Address It (Aug. 12, 2021)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/politics/2021/08/12/deep-divisions-in-americans-views-of-nations-racial-history-and-how-to-address-it/
+entries:
+  - point: 1
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). Most in this group believe in God or a universal spirit
+      (70%), but most of those are not absolutely certain (44% not certain, 26% certain); 29% do not
+      believe. Religion is very important to 7%, and 85% seldom or never attend services.
+    source: "pew-rls-nip, Belief in God / Importance of religion / Attendance; pew-rls-beliefs, belief in God or a universal spirit (69%); pew-nones-2024-ch4, belief in God or a higher power (83%); pew-nones-2024-ch8, moral without God (83%); pew-rls-switching, raised in a religion"
+    split: "Believers in God or a higher power, mostly unsure of the details (about 7 in 10) and non-believers (about 3 in 10)."
+    handoff: "People believe lots of different things about God. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      Pew's figures describe belief without a set doctrine: most in this group believe in some God
+      or higher power (83% in Pew's 2023 nones survey), many grew up in a religion (20% of all U.S.
+      adults were raised in one and are now unaffiliated), and 82-83% say a person can be moral without
+      believing in God. A plain answer: "Lots of people believe in God, and people picture God in
+      different ways. Some people don't believe. Here's what I think..."
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position; no survey found on how this group reads scripture stories as history or
+      story. The nearest data: 10% of the religiously unaffiliated say the Bible is very or extremely
+      important in their lives, and Pew says that share comes almost entirely from "nothing in
+      particular" adults.
+    source: "pew-rls-bible, Importance of the Bible; pew-rls-nip, Importance of religion; pew-rls-child-rearing, parents' religious activities with children"
+    split: "Unknown; no survey splits this group on scripture as history versus story."
+    handoff: "Some people read that story as history and some read it as a teaching story. Ask Mom or Dad what they think!"
+    parent_note: >
+      No survey tells us how families like yours read Bible stories; Pew finds just 9% of
+      unaffiliated parents send their child to a religious education program. A neutral approach is to
+      share the story, say that some people believe it happened just as told and others read it as a
+      story with a lesson, and add what scientists or historians have found where that applies.
+    needs_check: true
+
+  - point: 3
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). Most in this group believe humans have a soul or spirit
+      (79%) and that there is something spiritual beyond the natural world (about two-thirds). Prayer is
+      occasional: 17% pray daily, 21% weekly or monthly, 61% seldom or never.
+    source: "pew-rls-beliefs, souls and something spiritual beyond the natural world; pew-rls-nip, Prayer; pew-nones-2024-ch5, spiritual experiences"
+    split: "Spiritual believers (most) and skeptics (a sizeable minority)."
+    handoff: "People have lots of different ideas about prayer and spirits. That's a fun one to talk over with Mom or Dad."
+    parent_note: >
+      Pew finds most of this group describe themselves as spiritual, and among all "nones" 54%
+      sometimes do things to connect with something bigger than themselves. You can say: "Some people
+      pray and feel it helps. Some don't. Scientists study what we can measure; lots of people believe
+      there's more than that."
+    needs_check: false
+
+  - point: 4
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position; no survey found on whether this group sees other religions as true or
+      mistaken. The nearest data: 62% of agnostics and "nothing in particular" adults agree religion
+      helps society by giving people meaning and purpose, while most "nones" also say religion can
+      cause division.
+    source: "pew-nones-2024-ch6, meaning and purpose (62%); pew-teaching-children-2014, religiously unaffiliated and tolerance"
+    split: none
+    handoff: "People from different religions believe different things about that. It's a good one to ask Mom or Dad."
+    parent_note: >
+      This group has no religion of its own to rank others against. Pew's 2014 study found the
+      religiously unaffiliated were more likely than the affiliated to rank tolerance among the most
+      important things to teach children. A fitting answer: "Your friend's family believes different
+      things than we do, and that's okay. We can be curious about what they believe."
+    needs_check: true
+
+  - point: 5
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position; no survey found on this group's view of the age of the Earth. The nearest
+      data is on human origins: 53% say humans evolved with no role for God, 29% evolved with God
+      guiding or allowing it, and 16% say humans have existed in their present form since the beginning.
+    source: "pew-rls-nip, Evolution"
+    split: "Most accept the scientific account; about 1 in 6 hold that humans have always existed in their present form."
+    handoff: "Scientists say the Earth is about 4.5 billion years old. Some families believe something different, so ask Mom or Dad what they think too."
+    parent_note: >
+      Most families in this group accept the scientific timeline, so the tutor states the science
+      (about 4.5 billion years) and mentions that some people believe differently. No survey asks
+      this group about the Earth's age directly, so check this fits your family.
+    needs_check: true
+
+  - point: 6
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). 82% say humans evolved over time: 53% through natural
+      selection with no role for God, 29% with God guiding or allowing it. 16% say humans have existed
+      in their present form since the beginning of time.
+    source: "pew-rls-nip, Evolution"
+    split: "Evolution without God (about half), evolution guided or allowed by God (about 3 in 10), humans unchanged since the beginning (about 1 in 6)."
+    handoff: "Scientists have learned a lot about how living things change over time. Some people also believe God had a part in it. Ask Mom or Dad what they think!"
+    parent_note: >
+      Answer to "Did people come from monkeys?": "Not from monkeys that are alive today. Scientists
+      found that people and apes share ancestors from long, long ago." Many in this group also believe
+      God had a hand in it; both views are common here.
+    needs_check: false
+
+  - point: 7
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). 64% of this group say religion and science are mostly in
+      conflict, yet about 7 in 10 believe in God or a universal spirit, and 31% say science can explain
+      everything. Most hold both science and some faith at once.
+    source: "pew-rls-science, conflict (64%); pew-rls-beliefs, belief in God (69%); pew-nones-2024-ch7, science can explain everything (31%)"
+    split: "Those who see faith and science as conflicting (most) and those who see them as compatible."
+    handoff: "Lots of people believe in God and love dinosaurs and science too. What do you think? Ask Mom or Dad what they believe."
+    parent_note: >
+      Your group is split on this in an unusual way: most say science and religion clash, but most
+      also believe in God. A good answer for a child: "Yes, lots of people believe in God and also
+      know dinosaurs lived millions of years ago. Some people see a clash, and some don't."
+    needs_check: false
+
+  - point: 8
+    when: parent_led
+    from_age: null
+    perspective: omitted
+    position: >
+      No official position; no survey found on how this group teaches young children where babies
+      come from.
+    source: "pew-parenting-2023, no question on this topic"
+    split: "Unknown."
+    handoff: "That's a really good question for Mom or Dad. They'd love to talk about it with you."
+    parent_note: >
+      No survey covers this. Parent-led is a cautious default for a 6-to-12 range; many families answer
+      simply ("A baby grows in a special place inside the mother called the uterus") and add detail as
+      kids grow. Body-part names and body safety stay on the safety floor and are always taught.
+    needs_check: true
+
+  - point: 9
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). 84% of this group favor same-sex marriage and 82% say
+      homosexuality should be accepted; 15% oppose same-sex marriage.
+    source: "pew-rls-nip, Same-sex marriage / Homosexuality"
+    split: "Strong majority accepting (over 8 in 10); minority opposed (about 1 in 6)."
+    handoff: "Families come in lots of shapes. If you want to know more, Mom or Dad would love to talk about it."
+    parent_note: >
+      Most families in this group would simply say: "Sam has two dads who love him. Some families have
+      a mom and a dad, some have two moms or two dads, some have one parent." Pew has no figures
+      for this group by party, so the lean variants below rely on national party data.
+    needs_check: true
+    by_lean:
+      progressive:
+        when: anytime
+        perspective: several_fairly
+        position: "Survey-based: nationally 87% of Democrats favor same-sex marriage and 81% say gay or lesbian relations are morally acceptable. Not broken out for this group."
+        source: "gallup-lgbtq-2026, by party; pew-rls-nip, Same-sex marriage"
+      moderate:
+        position: "Survey-based: nationally 67% of independents favor same-sex marriage. This group is 45% moderate and 84% in favor overall, so the base settings fit."
+        source: "gallup-lgbtq-2026, by party; pew-rls-nip, Political ideology"
+      conservative:
+        when: parent_led
+        perspective: family_tradition
+        position: "Survey-based: nationally 37% of Republicans favor same-sex marriage and 35% say gay or lesbian relations are morally acceptable. Not broken out for this group."
+        source: "gallup-lgbtq-2026, by party"
+        handoff: "Families come in lots of shapes. That's a good one to talk about with Mom or Dad."
+
+  - point: 10
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position; no survey found for this group alone. Among all religiously unaffiliated
+      adults, 58% say a person's gender can differ from their sex at birth, and 58% call greater
+      acceptance of transgender people a change for the better while 22% call it a change for the worse.
+    source: "pew-trans-2022, religiously unaffiliated (58%); pew-rls-lgbtq, acceptance of transgender people"
+    split: "Most unaffiliated lean accepting; a substantial minority disagree. Figures are for all 'nones', not this subgroup."
+    handoff: "People have different ideas about that. It's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The unaffiliated figures include atheists and agnostics, who lean more accepting than this
+      group may. Pew says 8 in 10 unaffiliated Americans say religion has no influence on their
+      views of gender. Parent-led is a cautious starting point; change it if your family is settled on this.
+    needs_check: true
+    by_lean:
+      progressive:
+        when: anytime
+        perspective: several_fairly
+        position: "Survey-based: nationally 60% of Democrats say changing one's gender is morally acceptable, and 35% favor banning gender-transition care for minors. Not broken out for this group."
+        source: "gallup-lgbtq-2026, by party; pew-trans-2025, by party"
+        handoff: "Some people feel they're a different gender than people thought when they were born. Mom or Dad can tell you more."
+      moderate:
+        position: "Survey-based: nationally 42% of independents say changing one's gender is morally acceptable. Base settings kept."
+        source: "gallup-lgbtq-2026, by party"
+      conservative:
+        when: parent_led
+        perspective: family_tradition
+        position: "Survey-based: nationally 5% of Republicans say changing one's gender is morally acceptable, and 79% favor banning gender-transition care for minors. Not broken out for this group."
+        source: "gallup-lgbtq-2026, by party; pew-trans-2025, by party"
+
+  - point: 11
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). Families in this group take many shapes: 40% of adults are
+      married, 18% live with a partner, 11% are divorced or separated, and 27% have never married.
+      Among all unaffiliated, 47% say children with two parents do better when one stays home.
+    source: "pew-rls-nip, Marital status; pew-rls-gender-parenting, one parent at home (47%)"
+    split: none
+    handoff: "Families look different in lots of homes. If you want to talk about it, Mom or Dad are great people to ask."
+    parent_note: >
+      Families in this group take many shapes, so a matter-of-fact answer
+      fits: "Some kids live with both parents, some with one, some go between two homes. What makes a
+      family is people who love and look after each other."
+    needs_check: false
+
+  - point: 12
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). About half believe in heaven (47%) and about a third in
+      hell (35%); 79% believe people have a soul or spirit. In 2021, 62% said everything in life happens
+      for a reason.
+    source: "pew-rls-nip, Heaven / Hell; pew-rls-beliefs, souls (79%); pew-afterlife-2021, everything happens for a reason (62%)"
+    split: "Roughly even between those who believe in heaven and those who do not."
+    handoff: "People believe different things about what happens after we die. That's a good one to talk about with Mom or Dad."
+    parent_note: >
+      Your group is split about evenly on heaven, and most believe in a soul. Honest answers that fit
+      many families here: "Nobody knows for sure. Some people believe Grandpa's spirit is in heaven.
+      We remember him and the love stays with us."
+    needs_check: false
+
+  - point: 13
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official position; no survey found on how this group talks with children about a death in
+      the family or a pet.
+    source: "pew-afterlife-2021, no question on this topic"
+    split: "Unknown."
+    handoff: "It's not your fault. Feeling sad is okay. Let's tell Mom or Dad how you're feeling. They'd want to know."
+    parent_note: >
+      No survey covers this. Parent-led because a real death is personal; the tutor can still tell a
+      child it is not their fault and that sad feelings are normal, then hand off. See point 12 for
+      what families in this group commonly believe about an afterlife.
+    needs_check: true
+
+  - point: 14
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). This group leans Democratic but is mixed: 53% Democrat or
+      lean Democrat, 39% Republican or lean Republican, 9% no lean. 45% call themselves moderate, 31%
+      liberal, 19% conservative.
+    source: "pew-rls-nip, Party affiliation / Political ideology"
+    split: "Democratic-leaning majority and a large Republican-leaning minority; many moderates."
+    handoff: "People in both parties want good things for the country; they disagree about how. Ask Mom or Dad what they think!"
+    parent_note: >
+      With a politically mixed group, the tutor explains how voting and government work and never
+      says a party is good or bad. Pew finds large shares of each party now see the other as immoral
+      (72% of Republicans about Democrats, 63% of Democrats about Republicans); the tutor won't echo that.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No survey found for this group by lean. Base settings kept: the tutor explains how government works without ranking parties."
+        source: "pew-rls-nip, Party affiliation; pew-partisan-hostility-2022"
+      moderate:
+        position: "No survey found for this group by lean. Base settings kept."
+        source: "pew-rls-nip, Political ideology"
+      conservative:
+        position: "No survey found for this group by lean. Base settings kept: the tutor explains how government works without ranking parties."
+        source: "pew-rls-nip, Party affiliation; pew-partisan-hostility-2022"
+
+  - point: 15
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position; no survey found on how this group handles current wars, elections or news
+      with children. Nationally, parents' top worry for their kids is anxiety or depression (40%
+      extremely or very worried).
+    source: "pew-parenting-2023, parents' worries"
+    split: "Unknown."
+    handoff: "That's a big question, and it's a good one to talk about with Mom or Dad. They can help you understand it."
+    parent_note: >
+      No survey covers this for your group. Parent-led is a cautious default so news that might
+      frighten a child reaches them through you. You can change it to let the tutor explain plain,
+      calm facts (for example, how an election works) from an age you choose.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No survey found for this group by lean. Base settings kept."
+        source: "pew-parenting-2023"
+      moderate:
+        position: "No survey found for this group by lean. Base settings kept."
+        source: "pew-parenting-2023"
+      conservative:
+        position: "No survey found for this group by lean. Base settings kept."
+        source: "pew-parenting-2023"
+
+  - point: 16
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based). 57% of this group say the government should do more to
+      help people in need, 22% about the right amount, 20% less.
+    source: "pew-rls-nip, Government assistance; pew-rls-government, religiously unaffiliated (60%)"
+    split: "Majority favoring more help; a substantial minority favoring the same or less."
+    handoff: "People become homeless for lots of reasons, and people have different ideas about how to help. Ask Mom or Dad what they think."
+    parent_note: >
+      A balanced answer: "Some people lose a job, get sick, or don't have family to help. People
+      disagree on how much is about hard choices and how much is about bad luck, and on who should
+      help." The lean variants below use national party data.
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: "Survey-based: nationally 71% of Democrats say people are poor mainly because of circumstances beyond their control; 19% say lack of effort. Not broken out for this group."
+        source: "pew-rich-poor-2017, by party"
+      moderate:
+        position: "No survey found for moderates in this group. Base settings kept."
+        source: "pew-rls-nip, Government assistance"
+      conservative:
+        perspective: several_fairly
+        position: "Survey-based: nationally 56% of Republicans say people are poor mainly because of lack of effort; 32% say circumstances beyond their control. Not broken out for this group."
+        source: "pew-rich-poor-2017, by party"
+
+  - point: 17
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position; no survey found for this group. Nationally, 44% of adults approve of
+      celebrating Columbus Day and a majority approve of celebrating Indigenous Peoples' Day.
+    source: "yougov-columbus-2024, overall"
+    split: "Unknown for this group; nationally divided along party lines."
+    handoff: "Columbus was a brave sailor, and his trip also brought great harm to people already living here. People still talk about how to remember him. Ask Mom or Dad what they think!"
+    parent_note: >
+      No survey covers your group. Both facts are standard history: Columbus's voyages were
+      remarkable, and they led to great suffering for Native peoples. The lean variants below use
+      national party data.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "Survey-based: nationally 72% of Democrats approve of celebrating Indigenous Peoples' Day, and 70% see Indigenous people's impact on the U.S. as mostly positive. Not broken out for this group."
+        source: "yougov-columbus-2024, by party"
+      moderate:
+        position: "No survey found for moderates in this group. Base settings kept."
+        source: "yougov-columbus-2024"
+      conservative:
+        perspective: several_fairly
+        position: "Survey-based: nationally 40% of Republicans approve of celebrating Indigenous Peoples' Day, and 38% see Indigenous people's impact as both positive and negative. Not broken out for this group."
+        source: "yougov-columbus-2024, by party"
+
+  - point: 18
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position; no survey found for this group. Nationally, 53% of adults say more
+      attention to the history of slavery and racism is good for society, 26% bad, 21% neither.
+    source: "pew-racial-history-2021, overall"
+    split: "Unknown for this group; nationally divided along party lines."
+    handoff: "Yes, George Washington owned enslaved people. That was wrong, and he also did important things for the country. Mom or Dad can talk with you more about it."
+    parent_note: >
+      Washington's slave ownership is a plain fact the tutor states. Families differ in how much to
+      dwell on it. The lean variants use national party data, not data for your group.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "Survey-based: nationally 78% of Democrats say more attention to the history of slavery and racism is good for society. Not broken out for this group."
+        source: "pew-racial-history-2021, by party"
+      moderate:
+        position: "No survey found for moderates in this group. Base settings kept."
+        source: "pew-racial-history-2021"
+      conservative:
+        perspective: several_fairly
+        position: "Survey-based: nationally 25% of Republicans say more attention to this history is good for society, 46% bad, 29% neither. Not broken out for this group."
+        source: "pew-racial-history-2021, by party"
+
+  - point: 19
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position (survey-based, all "nones"). About 8 in 10 "nones" agree religion causes
+      division and intolerance, while 62% of agnostics and "nothing in particular" adults agree it gives
+      people meaning and purpose.
+    source: "pew-nones-2024-ch6, division and intolerance / meaning and purpose (62%)"
+    split: "Most see both harms and goods in religion; figures on division are for all 'nones'."
+    handoff: "People have fought about lots of things in history, including religion. People of many faiths have also worked for peace. Ask Mom or Dad what they think!"
+    parent_note: >
+      Families in this group commonly see religion as doing both good and harm. The tutor tells
+      these histories fairly, without singling out any one faith as the bad guys.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No survey found for this group by lean. Base settings kept."
+        source: "pew-nones-2024-ch6"
+      moderate:
+        position: "No survey found for this group by lean. Base settings kept."
+        source: "pew-nones-2024-ch6"
+      conservative:
+        position: "No survey found for this group by lean. Base settings kept."
+        source: "pew-nones-2024-ch6"
+
+  - point: 20
+    when: from_age
+    from_age: 10
+    perspective: several_fairly
+    position: >
+      No official position; no survey found on how this group handles violence and war in learning
+      material for children.
+    source: "pew-parenting-2023, no question on this topic"
+    split: "Unknown."
+    handoff: "That's a serious part of history. Mom or Dad can help you learn about it in a way that feels right."
+    parent_note: >
+      No survey covers this. Age 10 is a suggested starting point for factual, non-graphic accounts
+      of events like the Holocaust; before then the tutor hands off. Adjust to your children.
+    needs_check: true
+
+  - point: 21
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official position; no survey found on this group's teaching about alcohol, drugs, tobacco or
+      caffeine. Nationally, Pew notes drugs and alcohol rank below mental health and bullying among
+      parents' worries.
+    source: "pew-parenting-2023, parents' worries"
+    split: "Unknown."
+    handoff: "Those are grown-up drinks, and bodies that are still growing need different things. Ask Mom or Dad about your family's rules."
+    parent_note: >
+      No religious rule applies for most families here, so this follows your own household rules.
+      The tutor gives plain health facts and points to you on family rules.
+    needs_check: true
+
+  - point: 22
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official position; no survey found on this group's views of body image, modesty or dress for
+      children.
+    source: "pew-parenting-2023, no question on this topic"
+    split: "Unknown."
+    handoff: "Bodies come in lots of healthy shapes and sizes. If you're worried, Mom or Dad are great people to talk to."
+    parent_note: >
+      No survey covers this. Dress rules follow your household. The tutor never comments on a
+      child's size and points body worries to you; Pew finds 40% of parents are extremely or very worried about
+      their kids' anxiety or depression.
+    needs_check: true
+
+  - point: 23
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official position; no survey found for this group. Among all U.S. parents of kids 12 and
+      under, 68% think children should be at least 12 before getting their own smartphone, and 80%
+      say the harms of social media outweigh its benefits.
+    source: "pew-screens-2025, appropriate age / social media harms"
+    split: "Unknown for this group."
+    handoff: "Every family has its own rules about screens. Ask Mom or Dad about yours."
+    parent_note: >
+      Figures are for all U.S. parents, not this group. Pew found 42% of parents say they could do
+      better at managing screen time, and 39% think they are stricter than other parents they know.
+    needs_check: true
+
+  - point: 24
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official position; no survey found for this group. Among all U.S. parents, about 9 in 10 say
+      it is very important their children become financially independent, and 40% say helping others
+      in need is extremely important.
+    source: "pew-parenting-2023, what parents want for their children"
+    split: "Unknown for this group."
+    handoff: "Every family decides about money in its own way. That's a good one to ask Mom or Dad about."
+    parent_note: >
+      Figures are for all U.S. parents. Only 8% of religiously unaffiliated parents say it is very
+      important their children share their religious beliefs, so giving here is usually framed as
+      decency and helping others, not religious duty.
+    needs_check: true

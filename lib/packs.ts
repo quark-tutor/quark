@@ -118,7 +118,10 @@ export function validatePack(pack: Pack): string[] {
       if (!LEAN_POINTS.includes(e.point)) errors.push(`${where}: by_lean is only for points ${LEAN_POINTS.join(", ")}`);
       for (const [lean, override] of Object.entries(e.by_lean)) {
         if (!LEANS.includes(lean as Lean)) errors.push(`${where}: unknown lean "${lean}"`);
-        else if (override) checkFields(`${where} (${lean})`, { ...override, when: override.when ?? e.when }, false);
+        else if (override) {
+          const from_age = "from_age" in override ? override.from_age : e.from_age;
+          checkFields(`${where} (${lean})`, { ...override, when: override.when ?? e.when, from_age }, false);
+        }
       }
     } else if (LEAN_POINTS.includes(e.point)) {
       errors.push(`${where}: missing by_lean`);
