@@ -102,6 +102,32 @@ details[open] summary { margin-bottom: 6px; }
 .hidden-note { color: var(--muted); font-size: 14px; }
 footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch; }
 @media (prefers-reduced-motion: no-preference) { .bar span { transition: width 200ms ease; } }
+
+.yours { margin-top: 24px; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: flex; flex-direction: column; gap: 12px; }
+.progress-row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.progress-row h2 { font-size: 1.05rem; }
+.progress-count { font-variant-numeric: tabular-nums; font-weight: 700; }
+.progress { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.progress span { display: block; height: 100%; background: var(--accent); }
+.quick { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.quick select { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; max-width: 100%; }
+.btn { border: 1.5px solid var(--accent); border-radius: 999px; padding: 6px 14px; background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.btn.quiet { background: transparent; color: var(--accent); }
+.btn.warn { border-color: var(--flag); color: var(--flag); background: transparent; }
+.hint { color: var(--muted); font-size: 13px; margin: 0; }
+
+button.chip { cursor: pointer; }
+button.chip:hover { background: color-mix(in srgb, var(--c) 12%, transparent); }
+button.chip[aria-pressed="true"] { background: var(--c); color: var(--bg); }
+button.chip[aria-pressed="true"]::before { background: var(--bg); }
+.card.chosen { border-color: var(--c, var(--accent)); box-shadow: inset 0 0 0 1px var(--c, var(--accent)); }
+.use-hint { font-size: 12px; color: var(--muted); }
+
+.point.done { margin-top: 10px; }
+.done-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.done-row .num { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; }
+.done-row .name { font-weight: 700; flex: 1 1 200px; min-width: 0; }
+.done-row .from { color: var(--muted); font-size: 13px; }
 </style>
 
 <div class="wrap">
@@ -123,6 +149,21 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
     </div>
   </div>
 
+  <section class="yours" aria-labelledby="yours-title">
+    <div class="progress-row">
+      <h2 id="yours-title">Your answers</h2>
+      <span class="progress-count" id="progress-count"></span>
+    </div>
+    <div class="progress"><span id="progress-bar"></span></div>
+    <div class="quick">
+      <label for="quick-pack" class="label">Quick start</label>
+      <select id="quick-pack"></select>
+      <button type="button" class="btn" id="quick-fill">Fill the rest</button>
+      <button type="button" class="btn warn" id="clear-all">Clear all</button>
+    </div>
+    <p class="hint">Under each point, tap the answer you'd give, or tap a pack's answer on its card to take that pack's answer and wording. Answered points fold up; tap Change to reopen one. Quick start fills only the points you haven't answered.</p>
+  </section>
+
   <section class="ranking" aria-live="polite">
     <h2>How the packs match you</h2>
     <p id="rank-note"></p>
@@ -132,7 +173,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
   <main id="points"></main>
 
   <footer>
-    Drafted from each community's own published documents, or from surveys where a community has no official body, with sources on every card. These are drafts by outsiders, not yet reviewed by members of each community, and they record official teaching, not what every family in it believes. Tap a pack's name in the ranking to hide or show its cards. Your answers on this page are saved only in this browser.
+    Drafted from each community's own published documents, or from surveys where a community has no official body, with sources on every card. These are drafts by outsiders, not yet reviewed by members of each community, and they record official teaching, not what every family in it believes. Your answers on this page are saved only in this browser.
   </footer>
 </div>
 
@@ -150,9 +191,12 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
   const LEANS = [["progressive", "Progressive"], ["moderate", "Moderate"], ["conservative", "Conservative"]];
   const KEY = "quark-pack-chooser";
 
-  let state = { lean: "moderate", mine: {}, hidden: [], diffOnly: false };
+  // mine[point] = { a: answer id, pack: slug the answer was taken from, or null if picked directly }
+  let state = { lean: "moderate", mine: {}, hidden: [], diffOnly: false, quick: "" };
   try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch {}
+  for (const [k, v] of Object.entries(state.mine)) if (typeof v === "string") state.mine[k] = { a: v, pack: null };
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  const open = new Set(); // answered points reopened with Change; not saved
 
   const el = (tag, attrs = {}, ...kids) => {
     const n = document.createElement(tag);
@@ -176,15 +220,16 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
     if (e.when === "from_age") return "later";
     return e.perspective === "family_tradition" ? "ours" : "fair";
   };
-  const answerLabel = (e) => {
-    const id = answerOf(e);
+  const labelOf = (id, e) => {
     const a = ANSWERS.find((x) => x.id === id);
-    return id === "later" && e.from_age ? `Not yet: from about ${e.from_age}` : a ? a.label : "No answer";
+    return id === "later" && e && e.from_age ? `Not yet: from about ${e.from_age}` : a ? a.label : "No answer";
   };
-  const chip = (e) => el("span", { class: `chip a-${answerOf(e)}` }, answerLabel(e));
+  const packBySlug = (slug) => packs.find((p) => p.pack === slug);
   const visible = () => packs.filter((p) => !state.hidden.includes(p.pack));
+  const choose = (n, a, pack) => { state.mine[n] = { a, pack }; open.delete(n); save(); render(); };
+  const clearPoint = (n) => { delete state.mine[n]; save(); render(); };
 
-  // Header bits
+  // Header controls
   document.getElementById("draft-note").textContent =
     `${packs.length} packs, all marked "draft by outsiders" until members of each community review them.`;
   const leanBox = document.getElementById("lean");
@@ -196,6 +241,32 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
   const diff = document.getElementById("diff-only");
   diff.addEventListener("change", () => { state.diffOnly = diff.checked; save(); render(); });
 
+  const quick = document.getElementById("quick-pack");
+  for (const p of packs) quick.append(el("option", { value: p.pack }, p.name));
+  if (state.quick && packBySlug(state.quick)) quick.value = state.quick;
+  quick.addEventListener("change", () => { state.quick = quick.value; save(); });
+  document.getElementById("quick-fill").addEventListener("click", () => {
+    const p = packBySlug(quick.value);
+    for (const pt of points) {
+      if (state.mine[pt.number]) continue;
+      const id = answerOf(entryFor(p, pt.number));
+      if (id) state.mine[pt.number] = { a: id, pack: p.pack };
+    }
+    save(); render();
+  });
+  const clearBtn = document.getElementById("clear-all");
+  let clearArmed = false;
+  clearBtn.addEventListener("click", () => {
+    if (!clearArmed) {
+      clearArmed = true;
+      clearBtn.textContent = "Tap again to clear all 24";
+      setTimeout(() => { clearArmed = false; clearBtn.textContent = "Clear all"; }, 4000);
+      return;
+    }
+    clearArmed = false; clearBtn.textContent = "Clear all";
+    state.mine = {}; open.clear(); save(); render();
+  });
+
   function sourceLinks(pack, e) {
     const ids = String(e.source || "").match(/[a-z0-9][a-z0-9._-]*/gi) || [];
     const found = (pack.sources || []).filter((s) => ids.includes(s.id));
@@ -203,18 +274,22 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
     return found.flatMap((s, i) => [i ? "; " : "", el("a", { href: s.url, target: "_blank", rel: "noopener" }, s.title)]);
   }
 
+  function renderProgress() {
+    const n = points.filter((p) => state.mine[p.number]).length;
+    document.getElementById("progress-count").textContent = `${n} of ${points.length} chosen`;
+    document.getElementById("progress-bar").style.width = `${(n / points.length) * 100}%`;
+  }
+
   function renderRanking() {
     const answered = points.filter((p) => state.mine[p.number]);
-    const note = document.getElementById("rank-note");
-    note.textContent = answered.length
+    document.getElementById("rank-note").textContent = answered.length
       ? `Out of the ${answered.length} point${answered.length === 1 ? "" : "s"} you've answered, with a ${state.lean} lean.`
       : "Tap your own answer under any point below. The packs will rank here by how many of your answers they share.";
     const scored = packs.map((p) => ({
       p,
-      score: answered.filter((pt) => answerOf(entryFor(p, pt.number)) === state.mine[pt.number]).length,
+      score: answered.filter((pt) => answerOf(entryFor(p, pt.number)) === state.mine[pt.number].a).length,
     })).sort((a, b) => b.score - a.score);
-    const box = document.getElementById("ranks");
-    box.replaceChildren(...scored.map(({ p, score }) => {
+    document.getElementById("ranks").replaceChildren(...scored.map(({ p, score }) => {
       const pct = answered.length ? Math.round((score / answered.length) * 100) : 0;
       const shown = !state.hidden.includes(p.pack);
       return el("div", { class: "rank" },
@@ -225,6 +300,54 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
     }));
   }
 
+  function renderPoint(pt, entries) {
+    const mine = state.mine[pt.number];
+    const head = el("div", { class: "point-head" }, el("span", { class: "num" }, `${pt.number}`), el("h3", {}, pt.name));
+
+    if (mine && !open.has(pt.number)) {
+      const src = mine.pack ? packBySlug(mine.pack) : null;
+      const e = src ? entryFor(src, pt.number) : null;
+      return el("div", { class: "point done", id: `p${pt.number}` },
+        el("div", { class: "done-row" },
+          el("span", { class: "num" }, `${pt.number}`),
+          el("span", { class: "name" }, pt.name),
+          el("span", { class: `chip a-${mine.a}` }, labelOf(mine.a, e)),
+          el("span", { class: "from" }, src ? `from ${src.name.replace(/\s*\(.*\)$/, "")}` : "your own pick"),
+          el("button", { type: "button", class: "btn quiet", onclick: () => { open.add(pt.number); render(); } }, "Change")));
+    }
+
+    const mineRow = el("div", { class: "mine", role: "group", "aria-label": `Your answer on point ${pt.number}` },
+      el("span", { class: "label" }, "Your answer"),
+      ANSWERS.map((a) => el("button", { type: "button", class: `a-${a.id}`, "aria-pressed": String(!!mine && mine.a === a.id && !mine.pack),
+        onclick: () => (mine && mine.a === a.id && !mine.pack ? clearPoint(pt.number) : choose(pt.number, a.id, null)) }, a.label)),
+      mine ? el("button", { type: "button", class: "btn quiet", onclick: () => { open.delete(pt.number); render(); } }, "Done") : null);
+
+    const cards = el("div", { class: "cards" }, entries.map(([p, e]) => {
+      if (!e) return el("div", { class: "card" }, el("strong", {}, p.name), el("span", { class: "meta" }, "No entry for this point."));
+      const id = answerOf(e);
+      const chosen = !!mine && mine.pack === p.pack;
+      const match = !!mine && mine.a === id;
+      return el("article", { class: `card a-${id}${chosen ? " chosen" : match ? " match" : ""}` },
+        el("div", { class: "card-head" }, el("strong", {}, p.name),
+          chosen ? el("span", { class: "tick" }, "Your pick") : match ? el("span", { class: "tick" }, "Matches you") : null),
+        el("div", {},
+          el("button", { type: "button", class: `chip a-${id}`, "aria-pressed": String(chosen),
+            title: chosen ? "Tap to undo" : "Use this pack's answer for this point",
+            onclick: () => (chosen ? clearPoint(pt.number) : choose(pt.number, id, p.pack)) }, labelOf(id, e)),
+          chosen ? null : el("span", { class: "use-hint" }, " tap to use")),
+        el("p", { class: "position" }, e.position || ""),
+        e.split && e.split !== "none" ? el("div", { class: "meta" }, el("strong", {}, "Split: "), e.split) : null,
+        e.needs_check ? el("div", { class: "flag" }, "Needs checking: the drafter wasn't sure of this one.") : null,
+        el("details", {},
+          el("summary", {}, "What the child hears, notes for parents, sources"),
+          el("div", { class: "meta" }, el("strong", {}, "Hand-off: "), e.handoff || "None"),
+          e.parent_note ? el("div", { class: "meta" }, el("strong", {}, "For parents: "), e.parent_note) : null,
+          el("div", { class: "meta" }, el("strong", {}, "Sources: "), sourceLinks(p, e))));
+    }));
+
+    return el("div", { class: "point", id: `p${pt.number}` }, head, el("p", { class: "kidq" }, pt.question), mineRow, cards);
+  }
+
   function renderPoints() {
     const main = document.getElementById("points");
     main.replaceChildren();
@@ -233,37 +356,14 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
     for (const pt of points) {
       const entries = shownPacks.map((p) => [p, entryFor(p, pt.number)]);
       const kinds = new Set(entries.map(([, e]) => answerOf(e)));
-      if (state.diffOnly && kinds.size < 2) continue;
+      if (state.diffOnly && kinds.size < 2 && !state.mine[pt.number]) continue;
       count++;
       if (pt.area !== area) {
         area = pt.area;
         section = el("section", { class: "area" }, el("h2", {}, area));
         main.append(section);
       }
-      const mine = state.mine[pt.number];
-      const mineRow = el("div", { class: "mine", role: "group", "aria-label": `Your answer on point ${pt.number}` },
-        el("span", { class: "label" }, "Your answer"),
-        ANSWERS.map((a) => el("button", { type: "button", class: `a-${a.id}`, "aria-pressed": String(mine === a.id),
-          onclick: () => { if (state.mine[pt.number] === a.id) delete state.mine[pt.number]; else state.mine[pt.number] = a.id; save(); render(); } }, a.label)));
-      const cards = el("div", { class: "cards" }, entries.map(([p, e]) => {
-        if (!e) return el("div", { class: "card" }, el("strong", {}, p.name), el("span", { class: "meta" }, "No entry for this point."));
-        const match = mine && answerOf(e) === mine;
-        return el("article", { class: `card${match ? " match" : ""}` },
-          el("div", { class: "card-head" }, el("strong", {}, p.name), match ? el("span", { class: "tick" }, "Matches you") : null),
-          el("div", {}, chip(e)),
-          el("p", { class: "position" }, e.position || ""),
-          e.split && e.split !== "none" ? el("div", { class: "meta" }, el("strong", {}, "Split: "), e.split) : null,
-          e.needs_check ? el("div", { class: "flag" }, "Needs checking: the drafter wasn't sure of this one.") : null,
-          el("details", {},
-            el("summary", {}, "What the child hears, notes for parents, sources"),
-            el("div", { class: "meta" }, el("strong", {}, "Hand-off: "), e.handoff || "None"),
-            e.parent_note ? el("div", { class: "meta" }, el("strong", {}, "For parents: "), e.parent_note) : null,
-            el("div", { class: "meta" }, el("strong", {}, "Sources: "), sourceLinks(p, e))));
-      }));
-      section.append(el("div", { class: "point", id: `p${pt.number}` },
-        el("div", { class: "point-head" }, el("span", { class: "num" }, `${pt.number}`), el("h3", {}, pt.name)),
-        el("p", { class: "kidq" }, pt.question),
-        mineRow, cards));
+      section.append(renderPoint(pt, entries));
     }
     if (!count) main.append(el("p", { class: "hidden-note" }, "Every shown pack gives the same answer on every point. Show more packs, or untick the filter."));
   }
@@ -271,6 +371,7 @@ footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch
   function render() {
     for (const b of leanBox.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.lean === state.lean));
     diff.checked = state.diffOnly;
+    renderProgress();
     renderRanking();
     renderPoints();
   }

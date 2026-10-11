@@ -4,7 +4,7 @@ How a family's beliefs become rows in the database and then a policy the gate ca
 
 ## Part 1: starting point (3 minutes)
 
-1. **Pick a pack**, or start blank. The pack pre-fills every answer below. → `values_profiles.pack_id`
+1. **Pick a starting pack**, or start blank. It is a quick start, not a commitment: the pack fills every point you haven't answered, and each point can later take its answer from any pack. → `values_profiles.pack_id`
 2. **Political lean**: progressive, moderate, conservative, or "I'd rather not say." → `values_profiles.political_lean`. Together with the pack it pre-fills the answers on points 9, 10 and 14–19 from the pack's variant for that lean. After that, only the answers count: the lean is never a separate instruction to the tutor, and changing it later re-fills only the points you haven't edited.
 3. **In your own words.** Three prompts, a sentence or two each. → `values_profiles.statement`. This text goes into every card-writing prompt.
    - What do you most want your kids to understand about the world?
@@ -13,7 +13,7 @@ How a family's beliefs become rows in the database and then a policy the gate ca
 
 ## Part 2: the 24 points (15 minutes)
 
-One screen per point, showing the kid's question from `packs/README.md`. The same five answers every time, plus a free-text box.
+Every point shows the kid's question, the same five answers, a free-text box, and each pack's answer for that point side by side (as in the pack chooser, `scripts/pack-compare.mts`). A guardian can tap one of the five answers, or tap a pack's answer to take that pack's answer and wording for this point only, so a family can mix packs point by point. Which pack an answer came from is stored (`values_settings.from_pack`). An answered point folds to one line with a Change button, so the unanswered ones stand out, and a progress count shows how many of the 24 are done. Guardians are expected to go back and forth.
 
 | If your child asked this... | `when` | `perspective` |
 | --- | --- | --- |
