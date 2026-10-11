@@ -29,6 +29,9 @@ Write exactly one file, `packs/<slug>.yaml`, valid YAML, with all 24 points in o
 ```yaml
 pack: <slug>
 name: <community name as in packs/README.md>
+short_name: <what parents see, e.g. "Catholic">
+subtitle: <optional second line, e.g. "Sunni", or "">
+order: <position in the list of traditions>
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

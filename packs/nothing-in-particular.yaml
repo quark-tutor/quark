@@ -1,5 +1,8 @@
 pack: nothing-in-particular
 name: Nothing in particular
+short_name: "Nothing in particular"
+subtitle: "Spiritual or not, without a religion"
+order: 2
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

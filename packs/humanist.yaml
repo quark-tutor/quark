@@ -1,5 +1,8 @@
 pack: humanist
 name: Atheist, agnostic and secular humanist
+short_name: "Atheist or agnostic"
+subtitle: "Secular humanist"
+order: 5
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

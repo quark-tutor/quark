@@ -1,5 +1,8 @@
 pack: latter-day-saint
 name: Latter-day Saint
+short_name: "Latter-day Saint"
+subtitle: ""
+order: 9
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

@@ -1,5 +1,8 @@
 pack: muslim-sunni
 name: Muslim (Sunni mainstream)
+short_name: "Muslim"
+subtitle: "Sunni"
+order: 10
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

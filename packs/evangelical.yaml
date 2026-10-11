@@ -1,5 +1,8 @@
 pack: evangelical
 name: Evangelical, including non-denominational (Southern Baptist as the concrete case)
+short_name: "Evangelical"
+subtitle: "Including non-denominational and Southern Baptist"
+order: 1
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

@@ -1,5 +1,8 @@
 pack: black-protestant
 name: Historically Black Protestant (National Baptist, AME, COGIC)
+short_name: "Historically Black Protestant"
+subtitle: "National Baptist, AME, COGIC"
+order: 6
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

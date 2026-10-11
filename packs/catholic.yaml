@@ -1,5 +1,8 @@
 pack: catholic
 name: Catholic
+short_name: "Catholic"
+subtitle: ""
+order: 3
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1

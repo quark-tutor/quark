@@ -23,28 +23,11 @@ const points = [...seed.matchAll(/^\s*\((\d+),'((?:[^']|'')*)','((?:[^']|'')*)',
 }));
 if (points.length !== 24) throw new Error(`Expected 24 points in the seed, found ${points.length}`);
 
-// Same order as packs/README.md.
-const ORDER = [
-  "evangelical",
-  "nothing-in-particular",
-  "catholic",
-  "mainline-protestant",
-  "humanist",
-  "black-protestant",
-  "jewish-reform",
-  "jewish-orthodox",
-  "latter-day-saint",
-  "muslim-sunni",
-];
+// In the order each pack sets (its order field).
 const packs = readdirSync(packDir)
   .filter((f) => f.endsWith(".yaml"))
   .map((f) => parse(readFileSync(join(packDir, f), "utf8")))
-  .sort((a, b) => rank(a.pack) - rank(b.pack));
-
-function rank(slug: string) {
-  const i = ORDER.indexOf(slug);
-  return i === -1 ? ORDER.length : i;
-}
+  .sort((a, b) => a.order - b.order);
 
 const data = JSON.stringify({ points, packs }).replace(/</g, "\\u003c");
 const template = readFileSync(join(import.meta.dirname, "pack-compare.template.html"), "utf8");

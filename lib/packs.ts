@@ -1,17 +1,11 @@
 import { parse } from "yaml";
+import { LEAN_POINTS, LEANS, PERSPECTIVE, WHEN, type Lean, type Perspective, type When } from "./values.ts";
 
 // A starter values pack: a community's position on each of the 24 points, plus the setting a
 // family in that community would probably start from. Format: packs/DRAFTING-BRIEF.md.
 
-export const WHEN = ["anytime", "from_age", "parent_led", "never"] as const;
-export const PERSPECTIVE = ["family_tradition", "several_fairly", "omitted"] as const;
-export const LEANS = ["progressive", "moderate", "conservative"] as const;
-// The points whose pre-filled answer depends on the family's political lean.
-export const LEAN_POINTS = [9, 10, 14, 15, 16, 17, 18, 19];
-
-export type When = (typeof WHEN)[number];
-export type Perspective = (typeof PERSPECTIVE)[number];
-export type Lean = (typeof LEANS)[number];
+export { LEAN_POINTS, LEANS, PERSPECTIVE, WHEN } from "./values.ts";
+export type { Lean, Perspective, When } from "./values.ts";
 
 export type EntryFields = {
   when: When;
@@ -33,6 +27,9 @@ export type PackEntry = EntryFields & {
 export type Pack = {
   pack: string;
   name: string;
+  short_name: string; // what parents see: "Catholic"
+  subtitle: string; // an optional second line: "Sunni"
+  order: number; // position in the list of traditions
   status: string;
   label: string;
   version: number;
@@ -65,9 +62,11 @@ export function entryForLean(entry: PackEntry, lean: Lean | "unset"): EntryField
 export function validatePack(pack: Pack): string[] {
   const errors: string[] = [];
   if (!pack || typeof pack !== "object") return ["not a YAML mapping"];
-  for (const key of ["pack", "name", "status", "label", "summary"] as const) {
+  for (const key of ["pack", "name", "short_name", "status", "label", "summary"] as const) {
     if (typeof pack[key] !== "string" || !pack[key].trim()) errors.push(`missing ${key}`);
   }
+  if (typeof pack.subtitle !== "string") errors.push("subtitle must be text (it can be empty)");
+  if (!Number.isInteger(pack.order)) errors.push("order must be a whole number");
   if (pack.status !== "draft-by-outsiders" && pack.status !== "community-reviewed") {
     errors.push(`status must be draft-by-outsiders or community-reviewed`);
   }

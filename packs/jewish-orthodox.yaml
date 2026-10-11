@@ -1,5 +1,8 @@
 pack: jewish-orthodox
 name: Jewish, Orthodox
+short_name: "Orthodox Jewish"
+subtitle: ""
+order: 8
 status: draft-by-outsiders
 label: "Draft by outsiders. Awaiting review by members of this community."
 version: 1
