@@ -2,7 +2,7 @@
 // Guardians get Supabase Auth accounts here, since sign-ups are off in the app.
 // Safe to run again: it matches the family by name, guardians by email, children by nickname.
 //
-//   node --env-file=.env.local scripts/seed-family.ts scripts/family.local.json
+//   node --env-file=.env.local scripts/seed-family.mts scripts/family.local.json
 //
 // Copy scripts/family.example.json to scripts/family.local.json first (it's gitignored).
 // Children: nickname, birth month, sex, reading level, interests only. Never a full name,
@@ -24,7 +24,7 @@ type Seed = {
 };
 
 const file = process.argv[2];
-if (!file) throw new Error("Usage: node --env-file=.env.local scripts/seed-family.ts <family.json>");
+if (!file) throw new Error("Usage: node --env-file=.env.local scripts/seed-family.mts <family.json>");
 const seed: Seed = JSON.parse(readFileSync(file, "utf8"));
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
