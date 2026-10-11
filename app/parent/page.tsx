@@ -1,3 +1,4 @@
+import { connection } from "next/server";
 import { Suspense } from "react";
 import { requireGuardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
@@ -22,6 +23,7 @@ export default function ParentPage() {
 }
 
 async function ParentHome() {
+  await connection(); // ages are computed from today's date, per request
   const guardian = await requireGuardian();
   if (!guardian) {
     return <p>This account isn&rsquo;t set up as a guardian. Ask whoever runs Quark to add you.</p>;
