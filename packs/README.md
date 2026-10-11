@@ -63,7 +63,7 @@ Nine communities, chosen by how many US families each pack would serve (Pew Rese
 
 Hindu, Buddhist, Eastern Orthodox and Pentecostal (about 1% each) wait for a community volunteer. Communities outside the US are welcome from the start; the list above only reflects where the first family lives.
 
-**Politics is a separate dial, not a pack.** Progressive and conservative aren't communities in the way the nine above are. They cut across every one of them: there are progressive Catholics and conservative Catholics, and the same for the "nothing in particular" group. So a family picks a belief pack and then sets a political lean separately. The lean mainly changes points 14 to 19 (politics, current events and how history is framed) and the perspective on points 9 and 10. In the pack format, that's a `political_lean` field on the family profile, not a value inside the pack.
+**Politics is a separate dial, not a pack.** Progressive and conservative aren't communities in the way the nine above are. They cut across every one of them: there are progressive Catholics and conservative Catholics, and the same for the "nothing in particular" group. So a family picks a belief pack and then sets a political lean separately. The lean mainly changes points 14 to 19 (politics, current events and how history is framed) and the perspective on points 9 and 10. The family's lean is a `political_lean` field on its profile. Each pack carries a variant per lean for those eight points (see `by_lean` below), and the interview uses it to pre-fill the family's answers. After that the lean has no separate effect: the answers are what the tutor follows.
 
 ### Drafting rules
 
@@ -99,6 +99,23 @@ handoff: "That's a great one to ask Mom or Dad about."
 parent_note: >
   Talking points for the digest, drawn from the same source,
   so the parent can answer in their own tradition's words.
+```
+
+For points 9, 10 and 14–19, an entry may add `by_lean`, overriding any of the fields above for each lean. A lean with no override uses the base entry.
+
+```yaml
+point: 17                        # Explorers and colonization
+when: anytime
+perspective: several_fairly
+position: >
+  Placeholder for the base position.
+by_lean:
+  progressive:
+    perspective: several_fairly
+    position: Placeholder for how progressive members of this community frame it.
+  conservative:
+    perspective: family_tradition
+    position: Placeholder for how conservative members of this community frame it.
 ```
 
 Packs live in this folder, one file per pack (`catholic.yaml`, `nothing-in-particular.yaml`, and so on). Propose changes by pull request. To endorse a pack as a member of its community, open an issue using the "Pack endorsement" template.

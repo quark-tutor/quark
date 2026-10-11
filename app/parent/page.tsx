@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { ageFrom } from "@/lib/beliefs";
 import { requireGuardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
 import { forgetDevice, signOut } from "./actions";
@@ -30,7 +32,7 @@ async function ParentHome() {
   }
 
   const supabase = await createClient();
-  const [family, guardians, kids, devices] = await Promise.all([
+  const [family, guardians, kids, devices, answers] = await Promise.all([
     supabase.from("families").select("name, timezone").single(),
     supabase.from("guardians").select("id, display_name").eq("active", true).order("created_at"),
     supabase.from("children").select("id, nickname, birth_month").order("birth_month"),
@@ -39,8 +41,9 @@ async function ParentHome() {
       .select("id, child_id, created_at, last_seen")
       .is("revoked_at", null)
       .order("created_at"),
+    supabase.from("guardian_answers").select("guardian_id"),
   ]);
-  for (const result of [family, guardians, kids, devices]) if (result.error) throw result.error;
+  for (const result of [family, guardians, kids, devices, answers]) if (result.error) throw result.error;
 
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const when = (iso: string | null) =>
@@ -48,6 +51,8 @@ async function ParentHome() {
   const children = kids.data ?? [];
   const nickname = new Map(children.map((k) => [k.id, k.nickname]));
   const paired = devices.data ?? [];
+  const answeredBy = new Map<string, number>();
+  for (const a of answers.data ?? []) answeredBy.set(a.guardian_id, (answeredBy.get(a.guardian_id) ?? 0) + 1);
 
   return (
     <>
@@ -93,16 +98,26 @@ async function ParentHome() {
       </section>
 
       <section className={styles.section}>
+        <h2>Our Family&rsquo;s Beliefs</h2>
+        <p className={styles.muted}>
+          How Quark handles 24 sensitive subjects. Each parent answers on their own, then you compare.
+        </p>
+        <ul className={styles.list}>
+          {(guardians.data ?? []).map((g) => (
+            <li key={g.id}>
+              {g.display_name}: {answeredBy.get(g.id) ?? 0} of 24 answered
+            </li>
+          ))}
+        </ul>
+        <Link href="/parent/beliefs" className={styles.button}>
+          {answeredBy.get(guardian.id) ? "Review your answers" : "Start"}
+        </Link>
+      </section>
+
+      <section className={styles.section}>
         <h2>Coming next</h2>
-        <p className={styles.muted}>The values interview, the weekly theme and the Sunday digest.</p>
+        <p className={styles.muted}>Comparing answers, the test run, the weekly theme and the Sunday digest.</p>
       </section>
     </>
   );
-}
-
-// birth_month is the first of the month, e.g. "2017-03-01".
-function ageFrom(birthMonth: string): number {
-  const [year, month] = birthMonth.split("-").map(Number);
-  const now = new Date();
-  return now.getFullYear() - year - (now.getMonth() + 1 < month ? 1 : 0);
 }

@@ -1,0 +1,688 @@
+pack: latter-day-saint
+name: Latter-day Saint
+short_name: "Latter-day Saint"
+subtitle: ""
+order: 9
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For families who belong to The Church of Jesus Christ of Latter-day Saints.
+  Built from the Church's own published sources: the Articles of Faith, "The Family:
+  A Proclamation to the World", the General Handbook (chapter 38), Gospel Topics pages
+  and essays, For the Strength of Youth, and First Presidency statements on human origins.
+  Pew Research Center's 2026 report on Latter-day Saints is used for practice and
+  political lean, where the Church takes no position.
+sources:
+  - id: aof
+    title: The Articles of Faith
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/scriptures/pgp/a-of-f/1?lang=eng
+  - id: proclamation
+    title: "The Family: A Proclamation to the World (1995)"
+    publisher: First Presidency and Council of the Twelve Apostles
+    url: https://www.churchofjesuschrist.org/study/scriptures/the-family-a-proclamation-to-the-world/the-family-a-proclamation-to-the-world?lang=eng
+  - id: handbook-38
+    title: "General Handbook, chapter 38: Church Policies and Guidelines"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/general-handbook/38-church-policies-and-guidelines?lang=eng
+  - id: fp-1909
+    title: "The Origin of Man (First Presidency, November 1909), reprinted in Ensign, February 2002"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/ensign/2002/02/the-origin-of-man?lang=eng
+  - id: ch-evolution
+    title: "Organic Evolution, Church History Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://churchofjesuschrist.org/study/history/topics/organic-evolution?lang=eng
+  - id: fp-1978
+    title: "God's Love for All Mankind (First Presidency, February 15, 1978), quoted in R. Lanier Britsch, \"What is the relationship of the Church to the non-Christian religions of the world?\", Ensign, January 1988"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://churchofjesuschrist.org/ensign/1988/01/i-have-a-question/what-is-the-relationship-of-the-church-of-jesus-christ-of-latter-day-saints-to-the-non-christian-religions-of-the-world?lang=eng
+  - id: cfm-2026
+    title: "Come, Follow Me for Home and Church: Old Testament 2026, February 9-15 (Genesis 6-11; Moses 8)"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/come-follow-me-for-home-and-church-old-testament-2026/07?lang=eng
+  - id: gt-prayer
+    title: "Prayer, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/prayer?lang=eng
+  - id: gt-miracles
+    title: "Miracles, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/miracles?lang=eng
+  - id: gt-plan
+    title: "Plan of Salvation, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/plan-of-salvation?lang=eng
+  - id: gt-spirit-world
+    title: "Spirit World, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/spirit-world?lang=eng
+  - id: gt-death
+    title: "Death, Physical, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/death-physical?lang=eng
+  - id: gt-ssa
+    title: "Same-Sex Attraction, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/same-sex-attraction?lang=eng
+  - id: gt-transgender
+    title: "Transgender, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/transgender?lang=eng
+  - id: gt-divorce
+    title: "Divorce, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/divorce?lang=eng
+  - id: gt-wow
+    title: "Word of Wisdom, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/word-of-wisdom?lang=eng
+  - id: gt-war
+    title: "War, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/war?lang=eng
+  - id: gt-tithing
+    title: "Tithing, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/tithing?lang=eng
+  - id: gt-fast
+    title: "Fasting and Fast Offerings, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/fasting-and-fast-offerings?lang=eng
+  - id: gt-self-reliance
+    title: "Self-Reliance, Gospel Topics"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics/self-reliance?lang=eng
+  - id: gte-race
+    title: "Race and the Priesthood, Gospel Topics Essays"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics-essays/race-and-the-priesthood?lang=eng
+  - id: gte-violence
+    title: "Peace and Violence among 19th-Century Latter-day Saints, Gospel Topics Essays"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/gospel-topics-essays/peace-and-violence-among-19th-century-latter-day-saints?lang=eng
+  - id: fsy-05
+    title: "For the Strength of Youth: A Guide for Making Choices, 5. Walk in God's light"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/for-the-strength-of-youth/05-walk-in-gods-light?lang=eng
+  - id: fsy-06
+    title: "For the Strength of Youth: A Guide for Making Choices, 6. Love God, love your neighbor"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/for-the-strength-of-youth/06-love-god-love-your-neighbor?lang=eng
+  - id: fsy-10
+    title: "For the Strength of Youth: A Guide for Making Choices, 10. Your body is sacred"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/manual/for-the-strength-of-youth/10-your-body-is-sacred?lang=eng
+  - id: bom-1ne13
+    title: "Book of Mormon, 1 Nephi 13 (with chapter heading)"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/scriptures/bofm/1-ne/13?lang=eng
+  - id: dc-77
+    title: "Doctrine and Covenants, section 77"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/scriptures/dc-testament/dc/77?lang=eng
+  - id: ensign-grief
+    title: "Coping with Grief, Ensign, March 2018"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/ensign/2018/03/coping-with-grief?lang=eng
+  - id: ensign-chastity
+    title: "Matthew O. Richardson, Teaching Chastity and Virtue, Ensign, October 2012"
+    publisher: The Church of Jesus Christ of Latter-day Saints
+    url: https://www.churchofjesuschrist.org/study/ensign/2012/10/teaching-chastity-and-virtue?lang=eng
+  - id: newsroom-neutrality
+    title: "Political Neutrality and Participation (official statement)"
+    publisher: Church Newsroom, The Church of Jesus Christ of Latter-day Saints
+    url: https://newsroom.churchofjesuschrist.org/official-statement/political-neutrality
+  - id: pew-2026
+    title: "Tradition and Change Among Latter-day Saints in the U.S. (Evans and Leppert, September 22, 2026; data from the 2023-24 Religious Landscape Study)"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/wp-content/uploads/sites/20/2026/09/PR_26.09.22_lds_report.pdf
+entries:
+  - point: 1
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches belief in God the Eternal Father, His Son Jesus Christ, and
+      the Holy Ghost. It also teaches that every person is a spirit son or daughter of
+      the same Heavenly Father, and that people of every faith are brothers and sisters.
+    source: "aof, article 1; fp-1978, paragraphs 1 and 6; pew-2026, p. 10"
+    split: none
+    handoff: "That's a wonderful question to talk about with Mom or Dad."
+    parent_note: >
+      Articles of Faith 1 is a short starting point. For "why does my friend go to a
+      different church?", the 1978 First Presidency statement calls all men and women
+      "brothers and sisters" and "literal spirit children of an Eternal Father", and
+      Article of Faith 11 says we "allow all men the same privilege" of worship.
+      Pew (2026) found 76% of Latter-day Saints believe in God with absolute certainty.
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Latter-day Saints believe the Bible is the word of God "as far as it is translated
+      correctly", and that the Book of Mormon is also the word of God. Church lesson
+      materials teach the Flood as a real act of God with lessons for today.
+    source: "aof, article 8; cfm-2026, Genesis 6-11 and Moses 8"
+    split: none
+    handoff: "Good thinking! Ask Mom or Dad how our family reads that story."
+    parent_note: >
+      The 2026 Come, Follow Me lesson calls the Flood "an act of God's mercy" and
+      suggests acting out the ark story or drawing a rainbow with younger children.
+      Article of Faith 8 gives the family's frame for reading the Bible alongside the
+      Book of Mormon.
+    needs_check: false
+
+  - point: 3
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that Heavenly Father always hears prayers and answers "in His
+      own time and according to His will", sometimes through the Holy Ghost, life's
+      circumstances or other people. A miracle is "an extraordinary event caused by the
+      power of God", and faith is needed for miracles.
+    source: "gt-prayer; gt-miracles; handbook-38, 38.6.12; gt-spirit-world"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Prayer is directed to Heavenly Father in the name of Jesus Christ. On "are ghosts
+      real?": the Church teaches that spirits live on after death in the spirit world,
+      and the Handbook (38.6.12) counsels members not to take part in occult activity
+      or focus on such darkness. How to talk about scary stories is a family call.
+    needs_check: false
+
+  - point: 4
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that great religious leaders and philosophers, such as Muhammad
+      and Confucius, "received a portion of God's light", and that members should
+      respect other faiths. It also teaches that the restored gospel is the only way to
+      a fullness of joy, and that everyone who did not receive it in this life will have
+      the chance in the life to come.
+    source: "fp-1978, paragraphs 2, 4, 5; gt-spirit-world; aof, article 11; fsy-06"
+    split: none
+    handoff: "That's a kind question. Let's ask Mom or Dad to talk about it with you."
+    parent_note: >
+      The 1978 First Presidency statement speaks of "special love and concern for the
+      eternal welfare of all men and women, regardless of religious belief". The Spirit
+      World page teaches that the gospel is preached to all spirits after death. For the
+      Strength of Youth asks youth to treat "people of all races, religions, and any
+      other groups with love and respect."
+    needs_check: false
+
+  - point: 5
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position. In 1931 the First Presidency asked leaders to leave geology,
+      biology, archaeology and anthropology to scientific research. Church history notes
+      that Latter-day Saints, including apostles, have held differing views on how long
+      the Creation took.
+    source: "ch-evolution"
+    split: >
+      Historically two camps among leaders: Joseph Fielding Smith read Genesis as not
+      allowing for long ages; James E. Talmage and John A. Widtsoe saw scientific
+      findings as evidence of God's natural laws. Members today hold diverse views.
+    handoff: "Scientists have a lot to say about that. Ask Mom or Dad what our family thinks too."
+    parent_note: >
+      The Church History Topics page "Organic Evolution" records the 1931 counsel and
+      the different views of Talmage, Widtsoe and Joseph Fielding Smith. A family can
+      present the scientific estimate and then its own faith view.
+    needs_check: false
+
+  - point: 6
+    when: from_age
+    from_age: 8
+    perspective: several_fairly
+    position: >
+      The Church has no official position on the theory of evolution and calls it a
+      matter for scientific study. It does teach that Adam was "the first man of all
+      men" and that every person is "the direct and lineal offspring of Deity", a child
+      of God made in His image.
+    source: "ch-evolution; fp-1909"
+    split: >
+      Leaders and members have long differed. The 1909 First Presidency statement calls
+      the idea that the first man developed from lower animals "the theories of men";
+      later statements (1910, 1931, 2016) decline to say how much of evolution is true
+      and leave it to science.
+    handoff: "That's a big question! Mom or Dad would love to talk about it with you."
+    parent_note: >
+      BYU's science classes use a First Presidency-approved packet (1992) with the
+      1909 and 1925 statements and the line "the scriptures tell why man was created,
+      but they do not tell how." Many families teach the science and the doctrine that
+      we are children of Heavenly Parents side by side.
+    needs_check: false
+
+  - point: 7
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that truth comes from God and that science and faith answer
+      different questions. Leaders have left scientific fields to research because they
+      "do not concern the salvation of souls", and scientist-apostles saw discovery as
+      evidence of God's laws.
+    source: "ch-evolution"
+    split: none
+    handoff: "Lots of people love both God and dinosaurs! Ask Mom or Dad what they think."
+    parent_note: >
+      The Church History Topics page quotes the BYU packet: "the scriptures tell why man
+      was created, but they do not tell how." Talmage and Widtsoe are good examples of
+      faithful scientists.
+    needs_check: false
+
+  - point: 8
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Parents have the primary responsibility for teaching children about sex, through
+      honest, age-appropriate, ongoing conversations at home. The Church teaches that
+      sexual feelings are sacred and that sexual intimacy belongs only within marriage
+      between a man and a woman.
+    source: "handbook-38, 38.6.17 and 38.6.5; fsy-10; proclamation, paragraph 4; ensign-chastity"
+    split: none
+    handoff: "That's a great question for Mom or Dad. They'd love to tell you."
+    parent_note: >
+      Matthew Richardson (Ensign, 2012) advises starting early, using plain and accurate
+      words instead of code words, and teaching "line upon line" rather than in one big
+      talk. The Proclamation teaches that the power to create life is sacred. Body safety
+      and telling a trusted adult stay on the safety floor regardless.
+    needs_check: false
+
+  - point: 9
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that marriage is between a man and a woman and that sexual
+      relations belong only in such a marriage. It also teaches that experiencing
+      same-sex attraction is not a sin, that prejudice of any kind is wrong, and that
+      all people deserve "kindness and compassion."
+    source: "proclamation, paragraphs 1 and 7; handbook-38, 38.6.14, 38.6.15, 38.6.16; gt-ssa"
+    split: none
+    handoff: "Every family is different. That's a good one to talk about with Mom or Dad."
+    parent_note: >
+      Gospel Topics: "We are all children of God, deserving of each other's kindness
+      and compassion." The Handbook (38.6.14) asks members to reject prejudice,
+      including based on sexual orientation. The Church's teaching on marriage is in
+      the Proclamation and Handbook 38.6.16.
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          Same Church teaching. Pew found 46% of Latter-day Saints overall say
+          homosexuality should be accepted by society, up from 24% in 2007, and
+          acceptance is higher outside the Mountain region (54%).
+        source: "pew-2026, pp. 12, 33, 52"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Same Church teaching. Pew found 37% of Latter-day Saint Republicans say
+          homosexuality should be accepted, fewer than Latter-day Saints overall (46%).
+        source: "pew-2026, pp. 33, 52"
+
+  - point: 10
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that gender is an essential part of each person's identity,
+      meaning biological sex at birth, and counsels against surgical, medical or social
+      transition. It takes no position on the causes of gender-identity feelings and
+      asks that transgender people be treated with "sensitivity, kindness, compassion,
+      and Christlike love."
+    source: "proclamation, paragraph 2; handbook-38, 38.6.23; gt-transgender"
+    split: none
+    handoff: "That's a thoughtful question. Mom or Dad would be glad to talk with you about it."
+    parent_note: >
+      Handbook 38.6.23 says all are children of God with divine worth. Church records
+      follow biological sex at birth, and transition brings some membership restrictions;
+      these are policies for adults that parents may explain as they see fit.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          The Church's teaching does not change with politics. No survey found that
+          breaks down Latter-day Saint views on this by political lean.
+        source: "handbook-38, 38.6.23; pew-2026, p. 33 note 18"
+      moderate: {}
+      conservative:
+        position: >
+          The Church's teaching does not change with politics. No survey found that
+          breaks down Latter-day Saint views on this by political lean.
+        source: "handbook-38, 38.6.23; pew-2026, p. 33 note 18"
+
+  - point: 11
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that the family is ordained of God and that children are
+      entitled to be raised by a mother and father who honor their marriage. When
+      divorce happens, members are asked to "forgive, lift, and help rather than to
+      condemn", and those hurt by others' choices "can receive strength and comfort
+      from the Lord."
+    source: "proclamation, paragraph 7; gt-divorce"
+    split: none
+    handoff: "Families come in lots of shapes. Ask Mom or Dad about it anytime."
+    parent_note: >
+      The Proclamation also says extended family should lend support when needed.
+      The Divorce page stresses compassion, not blame. Pew (2026) found nearly
+      eight in ten Latter-day Saints say children with two parents are better off
+      when one parent stays home.
+    needs_check: false
+
+  - point: 12
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that death is the separation of the spirit from the body, that
+      the spirit lives on in the spirit world, and that because of Jesus Christ "all of
+      God's children will be resurrected" with spirit and body reunited. Families can
+      be together forever through temple ordinances.
+    source: "gt-plan; gt-death; gt-spirit-world; proclamation, paragraph 3"
+    split: none
+    handoff: "That's a really important question. Let's ask Mom or Dad to talk about it."
+    parent_note: >
+      Gospel Topics describes paradise as "a state of rest, a state of peace". The
+      Church also teaches that people who did not hear the gospel in life are taught
+      it in the spirit world. Teaching about spirit prison and judgment is for parents
+      to share as they choose.
+    needs_check: false
+
+  - point: 13
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Church guidance for grieving children says to use the plain word "died", answer
+      questions honestly (saying "I don't know" is fine), and let children talk about
+      the one who died. It teaches hope "that we'll see our loved ones again." Scripture
+      teaches that animals also have spirits.
+    source: "ensign-grief; dc-77, verse 2; gt-plan"
+    split: none
+    handoff: "It's okay to feel sad. Mom or Dad would love to talk with you and give you a hug."
+    parent_note: >
+      Ensign (March 2018) says children "aren't too young to feel the peace and comfort
+      provided by the Holy Ghost and God's plan", and that grief may come back as they
+      grow. It suggests Mosiah 18:9 on comforting those who mourn. The article does not
+      address a child blaming themselves; reassure them it was not their fault.
+    needs_check: false
+
+  - point: 14
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      The Church is neutral on political parties, platforms and candidates and does not
+      tell members how to vote. It encourages members to be responsible citizens, to
+      vote, and to take part "in an informed and civil manner."
+    source: "newsroom-neutrality; handbook-38, 38.8.31; aof, article 12"
+    split: none
+    handoff: "Good people vote different ways. Ask Mom or Dad how they decide."
+    parent_note: >
+      Handbook 38.8.31: "The Church does not endorse any political party or candidate."
+      Article of Faith 12 teaches honoring and sustaining the law. Pew (2026) found 73%
+      of Latter-day Saints identify with or lean Republican and 23% Democratic.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          The Church's neutrality does not change with politics; members of all parties
+          are encouraged to take part civilly.
+        source: "newsroom-neutrality"
+      moderate: {}
+      conservative:
+        position: >
+          The Church's neutrality does not change with politics; members of all parties
+          are encouraged to take part civilly.
+        source: "newsroom-neutrality"
+
+  - point: 15
+    when: from_age
+    from_age: 8
+    perspective: several_fairly
+    position: >
+      The Church teaches that members "seek to be people of peace", that wars are
+      foretold in the last days, and that many members serve honorably in their
+      nations' militaries. It takes no side in elections.
+    source: "gt-war; newsroom-neutrality; gte-violence"
+    split: none
+    handoff: "That sounds like a big worry. Mom or Dad can help you talk it through."
+    parent_note: >
+      The War page points to Captain Moroni, who "did not delight in bloodshed".
+      President Russell M. Nelson has urged members to "renounce war and proclaim
+      peace" (quoted in the Peace and Violence essay).
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          The Church's teaching on peace and political neutrality does not change with
+          politics.
+        source: "gt-war; newsroom-neutrality"
+      moderate: {}
+      conservative:
+        position: >
+          The Church's teaching on peace and political neutrality does not change with
+          politics. On one news topic, Pew found 46% of Latter-day Saint Republicans see
+          a growing immigrant population as a change for the worse and 31% for the better.
+        source: "gt-war; pew-2026, p. 34"
+
+  - point: 16
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church calls caring for the poor "a fundamental gospel doctrine". Members
+      fast monthly and give fast offerings to help people in need, and are taught
+      self-reliance so they can provide for their families and serve others.
+    source: "gt-fast; gt-self-reliance; fsy-06"
+    split: none
+    handoff: "That's a caring question. Let's ask Mom or Dad how our family helps."
+    parent_note: >
+      Fast offerings "are used for one purpose only: to bless the lives of those in
+      need." The page suggests using Matthew 25:35-40 and real needs in the ward to show
+      children how giving helps.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          The Church's teaching on caring for the poor does not change with politics. No
+          survey found that breaks down Latter-day Saint views on government aid by lean.
+        source: "gt-fast; pew-2026, p. 33 note 18"
+      moderate: {}
+      conservative:
+        position: >
+          The Church's teaching on caring for the poor does not change with politics. No
+          survey found that breaks down Latter-day Saint views on government aid by lean.
+        source: "gt-fast; pew-2026, p. 33 note 18"
+
+  - point: 17
+    when: from_age
+    from_age: 8
+    perspective: several_fairly
+    position: >
+      No official Church statement on Columbus or colonization was found. The Book of
+      Mormon (1 Nephi 13) describes a vision of a man among the Gentiles moved by "the
+      Spirit of God" to cross "the many waters", followed by Gentiles who settled the
+      land while the native peoples "were scattered before the Gentiles and were smitten."
+    source: "bom-1ne13, verses 12-14 and chapter heading"
+    split: none
+    handoff: "History has lots of sides. Ask Mom or Dad what they think."
+    parent_note: >
+      The chapter heading describes this as the discovery and colonization of America.
+      Many members read verse 12 as referring to Columbus, but this draft found no
+      official statement saying so, nor one on how to teach colonization.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: >
+          No survey or Church statement found that breaks this down by political lean.
+        source: "bom-1ne13; pew-2026, p. 33 note 18"
+      moderate: {}
+      conservative:
+        position: >
+          No survey or Church statement found that breaks this down by political lean.
+        source: "bom-1ne13; pew-2026, p. 33 note 18"
+
+  - point: 18
+    when: from_age
+    from_age: 8
+    perspective: several_fairly
+    position: >
+      The Church's essay on race describes slavery and racial discrimination in
+      19th-century America, notes that Joseph Smith "openly opposed slavery" late in
+      his life, and records the Church's own past priesthood restriction, ended in 1978.
+      Church leaders today "unequivocally condemn all racism, past and present, in any form."
+    source: "gte-race; handbook-38, 38.6.14"
+    split: none
+    handoff: "That's an important part of history. Mom or Dad can help you learn more."
+    parent_note: >
+      The essay disavows past explanations for the restriction and the idea that any
+      race is inferior. Handbook 38.6.14 says "Prejudice is not consistent with the
+      revealed word of God." No Church statement was found on the founders as heroes.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          The Church's teaching on racism does not change with politics. No survey found
+          that breaks down views on the founders by lean among Latter-day Saints.
+        source: "gte-race; pew-2026, p. 33 note 18"
+      moderate: {}
+      conservative:
+        position: >
+          The Church's teaching on racism does not change with politics. Pew found 75% of
+          Latter-day Saint Republicans say racial and ethnic diversity strengthens the
+          country, vs. 60% of Republicans overall.
+        source: "gte-race; pew-2026, p. 33"
+
+  - point: 19
+    when: from_age
+    from_age: 8
+    perspective: several_fairly
+    position: >
+      The Church teaches freedom of worship for all people "how, where, or what they
+      may." Its history essay tells of early members being driven from Missouri and
+      Nauvoo, and also of violence by some members, including the Mountain Meadows
+      Massacre, which the Church calls a "terrible and inexcusable departure" from
+      Christian teaching. The Church "condemns violent words and actions."
+    source: "aof, article 11; gte-violence"
+    split: none
+    handoff: "People have argued about God for a long time. Ask Mom or Dad about it."
+    parent_note: >
+      The Peace and Violence essay presents both the persecution the Saints suffered and
+      wrongs done by some members, which may help a family talk about religious conflict
+      honestly from both sides.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          The Church's teaching on religious freedom does not change with politics.
+        source: "aof, article 11"
+      moderate: {}
+      conservative:
+        position: >
+          The Church's teaching on religious freedom does not change with politics. Pew
+          found 60% of Latter-day Saint Republicans say religious diversity strengthens
+          the country, vs. 39% of Republicans overall.
+        source: "aof, article 11; pew-2026, pp. 33-34"
+
+  - point: 20
+    when: from_age
+    from_age: 10
+    perspective: family_tradition
+    position: >
+      For the Strength of Youth asks young people to choose media that invites good
+      thoughts and to avoid content that dulls sensitivity to the Spirit, naming
+      violence, and to have "the courage to turn off a video or game." The Church
+      teaches seeking peace and preserving life when possible.
+    source: "fsy-05; gt-war"
+    split: none
+    handoff: "That's a serious topic. Let's ask Mom or Dad about it."
+    parent_note: >
+      No Church guidance was found on teaching the Holocaust or war history at a given
+      age; the age here is a starting suggestion. The War page's teaching on loving
+      even opponents can frame hard history.
+    needs_check: false
+
+  - point: 21
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Word of Wisdom is a commandment: members avoid alcohol, tobacco, coffee and
+      tea, vaping, recreational marijuana, and misuse of prescription drugs. It
+      encourages grains, fruits and vegetables, exercise and rest, with promised
+      blessings of health and wisdom.
+    source: "gt-wow; handbook-38, 38.7.14 and 38.7.9; fsy-10"
+    split: none
+    handoff: "Our family has its own reasons for that. Ask Mom or Dad to tell you."
+    parent_note: >
+      For the Strength of Youth: "Do things that will strengthen your body, not things
+      that will hurt or damage it." The Gospel Topics page names tea and coffee; it does
+      not mention caffeine by name, so cola and energy drinks are a family choice.
+    needs_check: false
+
+  - point: 22
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that "your body is an amazing gift from your Heavenly Father"
+      and is in the image of God. Youth are asked to dress in ways that honor the body
+      and avoid styles that bring inappropriate attention to it.
+    source: "fsy-10; fsy-05"
+    split: none
+    handoff: "Your body is a gift. Mom or Dad would love to talk with you about it."
+    parent_note: >
+      For the Strength of Youth invites us to see each other as "not just physical
+      bodies but His beloved children", and warns against comparing ourselves to others
+      on social media.
+    needs_check: false
+
+  - point: 23
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Church teaches that "your mind and spirit are profoundly affected by what you
+      read, watch, and listen to", that technology "can take a lot of your time without
+      giving much value in return", and that in-person relationships matter.
+    source: "fsy-05"
+    split: none
+    handoff: "Every family has its own screen rules. Ask Mom or Dad about ours."
+    parent_note: >
+      For the Strength of Youth suggests a simple plan when tempted: name it, replace it
+      with a better choice (like going outside), and connect with a loved one. If kids
+      see pornography, turn away and tell a trusted adult.
+    needs_check: false
+
+  - point: 24
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Members give one-tenth of their income as tithing and give fast offerings to help
+      people in need. The Church teaches self-reliance, "the ability, commitment, and
+      effort to provide the necessities of life for self and family", so people can also
+      serve others.
+    source: "gt-tithing; gt-fast; gt-self-reliance; handbook-38, 38.8.18"
+    split: none
+    handoff: "That's a great question about money. Ask Mom or Dad how our family thinks about it."
+    parent_note: >
+      Tithing expresses gratitude and trust in the Lord. The Handbook (38.8.18) counsels
+      against gambling in any form. Fast offerings give children a concrete way to see
+      giving help a neighbor.
+    needs_check: false

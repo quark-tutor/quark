@@ -1,0 +1,687 @@
+pack: evangelical
+name: Evangelical, including non-denominational (Southern Baptist as the concrete case)
+short_name: "Evangelical"
+subtitle: "Including non-denominational and Southern Baptist"
+order: 1
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For Evangelical families, including Southern Baptist and non-denominational
+  churches. Built from the Baptist Faith and Message 2000, Southern Baptist
+  Convention resolutions, and National Association of Evangelicals statements,
+  with Answers in Genesis and BioLogos as the two poles on origins and the Pew
+  Research Center 2023-24 Religious Landscape Study for belief, practice and lean.
+sources:
+  - id: bfm2000
+    title: The Baptist Faith and Message 2000
+    publisher: Southern Baptist Convention
+    url: https://bfm.sbc.net/bfm2000/
+  - id: sbc-transgender-2014
+    title: On Transgender Identity (2014)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-transgender-identity/
+  - id: sbc-moral-clarity-2025
+    title: On Restoring Moral Clarity through God's Design for Gender, Marriage, and the Family (2025)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-restoring-moral-clarity-through-gods-designfor-gender-marriage-and-the-family/
+  - id: sbc-racial-reconciliation-1995
+    title: Resolution on Racial Reconciliation on the 150th Anniversary of the Southern Baptist Convention (1995)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/resolution-on-racial-reconciliation-on-the-150th-anniversary-of-the-southern-baptist-convention/
+  - id: sbc-alcohol-2006
+    title: On Alcohol Use in America (2006)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-alcohol-use-in-america/
+  - id: sbc-educating-children-2005
+    title: On Educating Children (2005)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-educating-children/
+  - id: sbc-sports-betting-2025
+    title: On the Harmful and Predatory Nature of Sports Betting (2025)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-the-harmful-and-predatory-nature-of-sports-betting/
+  - id: sbc-gathered-church-digital
+    title: On the Nature and Importance of the Physically Gathered Church in a Digital Age
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-the-nature-and-importance-of-the-physically-gathered-church-in-a-digital-age/
+  - id: sbc-political-violence-2026
+    title: On Political Violence and Speech (2026)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-political-violence-and-speech/
+  - id: sbc-250th-2026
+    title: On the 250th Anniversary of the United States and the Baptist Contribution to Religious Liberty (2026)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-the-250th-anniversary-of-the-united-states-and-the-baptist-contribution-to-religious-liberty/
+  - id: sbc-antisemitism-2026
+    title: On Antisemitism (2026)
+    publisher: Southern Baptist Convention
+    url: https://www.sbc.net/resource-library/resolutions/on-antisemitism/
+  - id: nae-faith
+    title: NAE Statement of Faith
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/statement-of-faith/
+  - id: nae-what-is
+    title: What is an Evangelical?
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/what-is-an-evangelical/
+  - id: fthn-method
+    title: "For the Health of the Nation: The Method for Christian Civic Engagement"
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/for-the-health-of-the-nation/the-method-for-christian-civic-engagement/
+  - id: fthn-structures
+    title: "For the Health of the Nation: The Structures of Public Life"
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/for-the-health-of-the-nation/the-structures-of-public-life/
+  - id: fthn-religious-freedom
+    title: "For the Health of the Nation: Protecting Religious Freedom and Liberty of Conscience"
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/for-the-health-of-the-nation/protecting-religious-freedom-and-liberty-of-conscience/
+  - id: fthn-family
+    title: "For the Health of the Nation: Strengthening Marriages, Families and Children"
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/for-the-health-of-the-nation/strengthening-marriages-families-and-children/
+  - id: fthn-poor
+    title: "For the Health of the Nation: Seeking Justice and Compassion for the Poor and Vulnerable"
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/for-the-health-of-the-nation/seeking-justice-and-compassion-for-the-poor-and-vulnerable/
+  - id: fthn-racial-justice
+    title: "For the Health of the Nation: Pursuing Racial Justice and Reconciliation"
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/for-the-health-of-the-nation/pursuing-racial-justice-and-reconciliation/
+  - id: fthn-peace
+    title: "For the Health of the Nation: Promoting Just Peace and Restraining Violence"
+    publisher: National Association of Evangelicals
+    url: https://www.nae.org/for-the-health-of-the-nation/promoting-just-peace-and-restraining-violence/
+  - id: aig-faith
+    title: Answers in Genesis Statement of Faith
+    publisher: Answers in Genesis
+    url: https://answersingenesis.org/about/faith/
+  - id: biologos-beliefs
+    title: What We Believe
+    publisher: BioLogos
+    url: https://biologos.org/about-us/what-we-believe
+  - id: biologos-ec
+    title: What is Evolutionary Creation? (Common Question)
+    publisher: BioLogos
+    url: https://biologos.org/common-questions/what-is-evolutionary-creation
+  - id: pew-rls-evangelical
+    title: "2023-24 Religious Landscape Study: Evangelical Protestants"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religious-landscape-study/religious-tradition/evangelical-protestant/
+  - id: pew-partisanship-2025
+    title: Religion, partisanship and ideology (2023-24 Religious Landscape Study)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-partisanship-and-ideology/
+  - id: pew-lgbtq-2025
+    title: Religion and views on LGBTQ issues and abortion (2025)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-and-views-on-lgbtq-issues-and-abortion/
+  - id: pew-gender-2022
+    title: Americans' Complex Views on Gender Identity and Transgender Issues (2022)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/social-trends/2022/06/28/americans-complex-views-on-gender-identity-and-transgender-issues/
+  - id: pew-slavery-2019
+    title: Most Americans say the legacy of slavery still affects black people in the U.S. today (2019)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2019/06/17/most-americans-say-the-legacy-of-slavery-still-affects-black-people-in-the-u-s-today/
+entries:
+  - point: 1
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      There is one living and true God, eternally Father, Son and Holy Spirit.
+      Evangelicals hold that people come to know God through personal faith in
+      Jesus Christ. Belief is near universal in the community: 85% of evangelical
+      Protestants say they are absolutely certain God exists.
+    source: "bfm2000, Article II; nae-faith; pew-rls-evangelical, Belief in God"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The Baptist Faith and Message opens its article on God with "There is one
+      and only one living and true God." Friends who go to a different church or
+      none are still people made in God's image, with "full dignity" (Article III).
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Bible was written by people inspired by God and is "truth, without any
+      mixture of error," including its history. Evangelicals differ on how to read
+      the early chapters of Genesis: some read the flood as a worldwide event,
+      others read parts of Genesis as more symbolic while holding the Bible
+      authoritative.
+    source: "bfm2000, Article I; nae-faith; aig-faith, Origins and History; biologos-beliefs; biologos-ec"
+    split: >
+      On Genesis 1-11: a literal-history reading (Answers in Genesis: a global
+      flood, history of about 4,000 years from creation to Christ) and an
+      evolutionary-creation reading (BioLogos: Bible inspired and authoritative,
+      but differing views on how to interpret early Genesis, including Adam and Eve).
+    handoff: "That's a great one to ask Mom or Dad about. They can read that story with you."
+    parent_note: >
+      The Baptist Faith and Message calls Scripture "totally true and trustworthy"
+      and the supreme standard for belief and conduct. The NAE calls the Bible "the
+      inspired, the only infallible, authoritative Word of God." Families differ on
+      Noah's flood; decide which reading you want the tutor to describe as yours.
+    needs_check: false
+
+  - point: 3
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      God hears and answers prayer, and the miracles of Jesus, including his bodily
+      resurrection, really happened. Prayer is central to practice: 72% of
+      evangelical Protestants pray at least daily. No source found on ghosts.
+    source: "nae-faith; biologos-ec; pew-rls-evangelical, Prayer frequency"
+    split: none
+    handoff: "That's a good one to talk about with Mom or Dad. Maybe you could pray about it together."
+    parent_note: >
+      The NAE Statement of Faith affirms Jesus' virgin birth, "His miracles," and
+      his bodily resurrection. Even BioLogos, the more science-leaning pole, says
+      its community believes "God answers prayer." Questions about ghosts or the
+      supernatural are left to you; no official statement was found.
+    needs_check: false
+
+  - point: 4
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Salvation comes only through personal faith in Jesus Christ, so other
+      religions are not equal paths to God. Evangelicals also teach religious
+      liberty for people of all faiths and none, and reject religious hatred.
+    source: "bfm2000, Articles IV and XVII; nae-what-is; fthn-religious-freedom; sbc-antisemitism-2026"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Article IV says "There is no salvation apart from personal faith in Jesus
+      Christ as Lord." The same tradition holds that "the state has no right to
+      impose penalties for religious opinions of any kind" (Article XVII), and the
+      SBC's 2026 resolution rejects "every form of ethnic or religious hatred."
+      You decide how to speak about a friend's faith; the tutor will describe other
+      religions respectfully and leave the salvation question to you.
+    needs_check: false
+
+  - point: 5
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      There is no official Southern Baptist or NAE position on the age of the Earth.
+      Evangelicals are split: young-Earth creationists hold creation in six
+      24-hour days a few thousand years ago; evolutionary creationists accept the
+      scientific estimate of billions of years.
+    source: "bfm2000, Article III (creation of man, no statement on age); aig-faith, Origins and History; biologos-ec"
+    split: >
+      Answers in Genesis (six consecutive 24-hour days; "approximately 4,000 years
+      from creation to Christ") versus BioLogos (trust scientific consensus where
+      it exists, including the age of the Earth and universe).
+    handoff: "Christians answer that in different ways. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The Baptist Faith and Message says God created people but does not mention an
+      age for the Earth. Answers in Genesis teaches the days of Genesis "are six
+      consecutive, 24-hour days." BioLogos aims "to trust scientific consensus where
+      it exists." Pick which your family holds; the tutor can say "Scientists
+      estimate about 4.5 billion years; our family believes..."
+    needs_check: false
+
+  - point: 6
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official Southern Baptist or NAE position on evolution. Evangelicals are
+      split: some hold that life was made by direct acts of God and humans did not
+      evolve; others hold that God created through evolution. In a 2023-24 survey,
+      65% of evangelical Protestants said humans evolved through processes guided
+      or allowed by God, and 26% said humans have always existed in their present form.
+    source: "bfm2000, Article III; aig-faith, Origins and History; biologos-ec; pew-rls-evangelical, Views on evolution"
+    split: >
+      Answers in Genesis (life made "by direct, supernatural, creative acts of
+      God"; evolution incompatible with Scripture) versus BioLogos (evolution is
+      the best scientific explanation, and God is the creator of all things).
+    handoff: "People who love God answer that in different ways. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Both camps agree that "Man is the special creation of God, made in His own
+      image" (Article III). They differ on how God made people. Answers in Genesis
+      calls views that fit evolution into Genesis "incompatible with Scripture";
+      BioLogos says common ancestry "does not negate the image of God in us."
+    needs_check: false
+
+  - point: 7
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Evangelicals teach that true learning and faith belong together; "all sound
+      learning" is part of the Christian heritage. They differ on what to do when
+      a scientific claim seems to clash with Genesis.
+    source: "bfm2000, Article XII; aig-faith; biologos-ec"
+    split: >
+      Answers in Genesis (Scripture's authority extends to history and science and
+      overrules conflicting interpretations of evidence) versus BioLogos (science and
+      Scripture both reveal God; the Bible was not written to teach modern science).
+    handoff: "Lots of scientists love God. That's a fun one to talk about with Mom or Dad."
+    parent_note: >
+      Article XII says "Christianity is the faith of enlightenment and
+      intelligence." BioLogos says Christians can approach "both science and the
+      Bible with a sense of wonder." Answers in Genesis says the Bible's authority
+      "is not limited to spiritual, religious, or redemptive themes."
+    needs_check: false
+
+  - point: 8
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Children are "a blessing and heritage from the Lord." Marriage between a man
+      and a woman is the setting for sexual intimacy and "the means for procreation."
+      Parents carry the main responsibility for teaching their children.
+    source: "bfm2000, Article XVIII; sbc-educating-children-2005; fthn-family"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Article XVIII calls marriage "the channel of sexual expression according to
+      biblical standards." The SBC (2005) says God has given parents "the
+      responsibility for the upbringing and education of our children." Body safety
+      and naming body parts stay on the safety floor regardless of this setting.
+    needs_check: false
+
+  - point: 9
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Marriage is the union of one man and one woman for life, and the SBC opposes
+      same-sex marriage. The same resolutions call Southern Baptists to "love all
+      their neighbors" as image bearers of God. In 2023-24, 62% of evangelical
+      Protestants opposed same-sex marriage and 36% favored it.
+    source: "bfm2000, Articles XV and XVIII; sbc-moral-clarity-2025; pew-rls-evangelical, Same-sex marriage"
+    split: none
+    handoff: "Families come in different shapes, and Sam's family loves him. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Article XVIII: "Marriage is the uniting of one man and one woman in covenant
+      commitment for a lifetime." The 2025 resolution calls for overturning
+      Obergefell and also urges Southern Baptists to "love all their neighbors in
+      accordance with their God-given dignity as image bearers." A classmate with two
+      dads is a neighbor to be treated with kindness.
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          More progressive evangelicals are among the 36% who favor same-sex
+          marriage. They would describe the church's teaching and that other
+          Christians and families see it differently.
+        source: "pew-rls-evangelical, Same-sex marriage and Political ideology"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Conservative evangelicals (59% of the community) follow the SBC view that
+          marriage is one man and one woman, while treating every family's members
+          with kindness.
+        source: "pew-rls-evangelical, Political ideology; sbc-moral-clarity-2025"
+
+  - point: 10
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The SBC affirms "God's good design that gender identity is determined by
+      biological sex" and opposes medical transition. It also condemns bullying of
+      transgender people and calls them "image-bearers of Almighty God." In 2025,
+      64% of evangelical Protestants called growing acceptance of transgender people
+      a change for the worse.
+    source: "bfm2000, Article III; sbc-transgender-2014; sbc-moral-clarity-2025; pew-lgbtq-2025"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Article III: "The gift of gender is thus part of the goodness of God's
+      creation." The 2014 resolution extends "love and compassion" to people whose
+      sense of self conflicts with their sex and condemns bullying of them. The tutor
+      will never encourage unkindness toward anyone.
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          Progressive evangelicals are a small minority (7% call themselves
+          liberal). Families in this group may want the church's view described
+          alongside the views of other Christians and neighbors.
+        source: "pew-rls-evangelical, Political ideology; pew-gender-2022"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Conservative evangelicals follow the SBC view that sex at birth sets
+          gender. Nationally, 86% of Republicans say a person's gender is
+          determined by sex at birth.
+        source: "sbc-transgender-2014; pew-gender-2022"
+
+  - point: 11
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      God designed marriage as a lifelong covenant between a husband and wife, and
+      the family as the foundation of society. Evangelicals grieve divorce and call
+      the church to compassion toward people facing family loss or breakdown.
+    source: "bfm2000, Article XVIII; fthn-family; sbc-moral-clarity-2025"
+    split: none
+    handoff: "Every family is different, and kids are never the reason grown-ups split up. You can always ask Mom or Dad about it."
+    parent_note: >
+      Article XVIII calls marriage a "covenant commitment for a lifetime." The NAE
+      lists "easy divorce" among social harms; the SBC (2025) asks for compassion
+      toward those facing "familial loss or breakdown." Children whose parents live
+      apart are never at fault.
+    needs_check: false
+
+  - point: 12
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Evangelicals believe in heaven, bodily resurrection and eternal life with God
+      for those who trust in Christ, and in hell as everlasting punishment. 84% of
+      evangelical Protestants believe in heaven and 82% in hell.
+    source: "bfm2000, Article X; nae-faith; pew-rls-evangelical, Belief in heaven and Belief in hell"
+    split: none
+    handoff: "That's a really important question. Mom or Dad would love to talk with you about it."
+    parent_note: >
+      Article X teaches that the righteous "will dwell forever in Heaven with the
+      Lord" and that the unrighteous go to hell. The tutor will not talk about hell
+      or about where any particular person went; that conversation is yours.
+    needs_check: false
+
+  - point: 13
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official statement on helping children grieve was found. The community's
+      hope rests on the resurrection and on God's care for the grieving; the SBC
+      calls for compassion toward those facing loss.
+    source: "bfm2000, Article X; nae-faith; sbc-moral-clarity-2025"
+    split: none
+    handoff: "It's never your fault when someone we love dies. Let's tell Mom or Dad how you're feeling."
+    parent_note: >
+      No denominational guidance on grief or pet loss was found. Article X teaches
+      that the righteous "will dwell forever in Heaven with the Lord." You may want
+      to share your own words on loss with the tutor.
+    needs_check: true
+
+  - point: 14
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Government is ordained by God to keep order, and Christians should pray for
+      leaders, obey laws not contrary to God's will, and vote. Evangelical bodies
+      warn against equating faith with a party and against treating opponents as
+      enemies.
+    source: "bfm2000, Article XVII; fthn-structures; fthn-method; sbc-political-violence-2026; pew-partisanship-2025"
+    split: none
+    handoff: "People who love their country vote different ways. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The NAE says "biblical faith is vastly larger and richer than every limited,
+      inevitably imperfect political agenda" and asks Christians "to avoid
+      denigrating those with whom we disagree." The SBC (2026) says Christians
+      should not take their "primary identity from political affiliation" and that
+      "conviction does not require dangerous contempt." 70% of evangelicals lean
+      Republican.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "The community's teaching on this point does not change with political lean."
+        source: "fthn-method; sbc-political-violence-2026"
+      moderate: {}
+      conservative:
+        position: "The community's teaching on this point does not change with political lean."
+        source: "fthn-method; sbc-political-violence-2026"
+
+  - point: 15
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Christians are to seek peace with all people on principles of righteousness.
+      The NAE asks governments to try nonviolent paths first and to follow just war
+      principles, and notes that Christians disagree about when force is justified.
+    source: "bfm2000, Article XVI; fthn-peace; sbc-political-violence-2026"
+    split: >
+      The NAE notes Christians disagree on when force is justified and whether
+      believers should serve in the military; just war and pacifist views both exist.
+    handoff: "Lots of grown-ups are working hard to keep people safe. That's a good one to talk about with Mom or Dad."
+    parent_note: >
+      Article XVI: "It is the duty of Christians to seek peace with all men on
+      principles of righteousness." The NAE says governments "should at a minimum
+      restrain violence by applying classical just war principles." Prayer for
+      leaders, including those you disagree with, is part of the tradition.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No survey found on how evangelicals of different leans frame war and news for children; keep the base setting."
+        source: "fthn-peace"
+      moderate: {}
+      conservative:
+        position: "No survey found on how evangelicals of different leans frame war and news for children; keep the base setting."
+        source: "fthn-peace"
+
+  - point: 16
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      God cares for the poor, and Christians must provide for the orphaned, needy,
+      abused, aged, helpless and sick. Evangelicals differ on how much of that work
+      belongs to government: in 2023-24, 31% wanted more government assistance for
+      people in need, 42% less, and 26% about the same.
+    source: "bfm2000, Article XV; fthn-poor; pew-rls-evangelical, Views of government assistance to people in need"
+    split: >
+      Agreement on personal and church duty to the poor; division on the role of
+      government.
+    handoff: "Helping people who need it is something we can all do. Ask Mom or Dad how your family helps."
+    parent_note: >
+      Article XV calls Christians to provide for "the orphaned, the needy, the
+      abused, the aged, the helpless, and the sick." The NAE says "anyone in need is
+      our neighbor." Nobody is less valuable for being poor.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: >
+          More progressive evangelicals stress the NAE's concern about "unfair
+          socioeconomic structures" and support government help alongside the church.
+        source: "fthn-poor; pew-rls-evangelical, Views of government assistance to people in need"
+      moderate: {}
+      conservative:
+        position: >
+          More conservative evangelicals stress family, church and work as the first
+          answers to poverty, in line with the 42% who want less government assistance.
+        source: "fthn-family; pew-rls-evangelical, Views of government assistance to people in need"
+
+  - point: 17
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      The SBC has no statement on Columbus or colonization. The NAE names "a tragic
+      history of genocide against Native Americans" among the nation's wrongs and
+      affirms the equal dignity of every person.
+    source: "fthn-racial-justice; bfm2000, Article III"
+    split: none
+    handoff: "People tell that story in different ways. That's a great one to explore with Mom or Dad."
+    parent_note: >
+      The NAE statement on racial justice says "The Bible uniformly teaches the
+      essential dignity of all humans." Article III says "every person of every race
+      possesses full dignity." Explorers can be described honestly, with both their
+      courage and the harm done.
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          Progressive evangelicals tend to stress the NAE's confession of wrongs
+          against Native Americans. No evangelical-specific survey found.
+        source: "fthn-racial-justice"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Conservative evangelicals tend to stress God's providence in the nation's
+          history alongside its sins. No evangelical-specific survey found.
+        source: "sbc-250th-2026"
+
+  - point: 18
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Southern Baptists acknowledge that slavery played a role in the formation of
+      their convention, that many forebears defended it, and in 1995 apologized for
+      racism. The SBC (2026) gives thanks for the nation's founding while naming
+      slavery and racism among its sins.
+    source: "sbc-racial-reconciliation-1995; sbc-250th-2026; fthn-racial-justice"
+    split: none
+    handoff: "Yes, some of them did, and it was wrong. That's a good one to talk about more with Mom or Dad."
+    parent_note: >
+      The 1995 resolution says "Many of our Southern Baptist forbears defended the
+      right to own slaves" and denounces racism as "deplorable sin." The NAE
+      confesses "the Church's role in justifying or ignoring racism." The 2026
+      resolution also thanks God for "his providential hand in the founding."
+    needs_check: true
+    by_lean:
+      progressive:
+        position: >
+          Progressive evangelicals tend to stress slavery's lasting effects; in 2019,
+          80% of Democrats said its legacy still affects Black Americans.
+        source: "pew-slavery-2019; fthn-racial-justice"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Conservative evangelicals tend to honor the founders while naming slavery
+          as sin, and stress that the nation later ended slavery and segregation;
+          in 2019, 43% of Republicans said slavery's legacy still affects Black Americans.
+        source: "sbc-250th-2026; pew-slavery-2019"
+
+  - point: 19
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Baptists teach that God alone is Lord of the conscience, that church and state
+      should be separate, and that no one should be punished for religious opinions.
+      Baptists helped win religious liberty in America. No official statement on the
+      Crusades or other religious wars was found.
+    source: "bfm2000, Article XVII; sbc-250th-2026; fthn-religious-freedom"
+    split: none
+    handoff: "That's a big question. Mom or Dad would love to talk about it with you."
+    parent_note: >
+      Article XVII: "The state has no right to impose penalties for religious
+      opinions of any kind." The SBC credits Baptists such as Isaac Backus and John
+      Leland with shaping the First Amendment. The NAE backs freedom "for people of
+      all faiths and none."
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "The community's teaching on this point does not change with political lean."
+        source: "bfm2000, Article XVII"
+      moderate: {}
+      conservative:
+        position: "The community's teaching on this point does not change with political lean."
+        source: "bfm2000, Article XVII"
+
+  - point: 20
+    when: from_age
+    from_age: 9
+    perspective: several_fairly
+    position: >
+      No official position on how much violence to show children. The SBC asks
+      parents to monitor what shapes their children, and condemns antisemitism and
+      political violence.
+    source: "sbc-educating-children-2005; sbc-antisemitism-2026; sbc-political-violence-2026"
+    split: none
+    handoff: "That's a heavy one. Let's ask Mom or Dad to talk it through with you."
+    parent_note: >
+      The SBC (2005) urges parents "to research and monitor the entertainment and
+      educational influences on children." The age setting is a suggestion; adjust it
+      for each child.
+    needs_check: true
+
+  - point: 21
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The SBC opposes making, selling and drinking alcohol and commends
+      abstinence. The NAE names alcohol and drug addiction among serious harms. No
+      official position on caffeine was found.
+    source: "sbc-alcohol-2006; fthn-family"
+    split: >
+      The 2006 resolution states the SBC position; non-denominational and other
+      evangelical churches may differ on moderate drinking. No survey found.
+    handoff: "That's a good one to ask Mom or Dad about."
+    parent_note: >
+      The 2006 resolution expresses "total opposition to the manufacturing,
+      advertising, distributing, and consuming of alcoholic beverages." If your
+      church or family drinks in moderation, change this setting.
+    needs_check: true
+
+  - point: 22
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No source found yet for an official statement on body image, modesty or dress.
+      Evangelical teaching holds that every person is made in God's image with full
+      dignity.
+    source: "bfm2000, Article III"
+    split: none
+    handoff: "God made you, and you are loved just as you are. Mom or Dad can help with that one."
+    parent_note: >
+      Article III says "every person of every race possesses full dignity," and
+      calls for respect and Christian love toward each person. Dress and modesty
+      rules vary by church and family; add your own.
+    needs_check: true
+
+  - point: 23
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Parents are responsible for what shapes their children and should monitor
+      entertainment and media. The SBC supports responsible use of digital tools
+      but holds they cannot replace gathering in person.
+    source: "sbc-educating-children-2005; sbc-gathered-church-digital"
+    split: none
+    handoff: "Mom and Dad make the screen rules to help you grow. That's a good one to ask them about."
+    parent_note: >
+      The SBC (2005) says "Children are vulnerable to marketing and entertainment
+      campaigns that redefine truth, morality, and family relationships." A later
+      resolution affirms "responsible use of digital technologies" while valuing
+      embodied, in-person life.
+    needs_check: false
+
+  - point: 24
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      God is the source of every blessing, and Christians are stewards of what they
+      have. They are called to give cheerfully, regularly and generously, to work
+      diligently and honestly, and to avoid gambling.
+    source: "bfm2000, Article XIII; sbc-sports-betting-2025; fthn-family"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about. They can tell you how your family decides."
+    parent_note: >
+      Article XIII: "God is the source of all blessings, temporal and spiritual,"
+      and Christians should give "cheerfully, regularly, systematically,
+      proportionately, and liberally." The SBC (2025) opposes sports betting as
+      at odds with the biblical values of diligent work and honesty.
+    needs_check: false

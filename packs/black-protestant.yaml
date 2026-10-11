@@ -1,0 +1,582 @@
+pack: black-protestant
+name: Historically Black Protestant (National Baptist, AME, COGIC)
+short_name: "Historically Black Protestant"
+subtitle: "National Baptist, AME, COGIC"
+order: 6
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For families in the historically Black Protestant churches, with the National Baptist
+  Convention USA, the African Methodist Episcopal Church and the Church of God in Christ as
+  the concrete cases. Built from each body's articles of faith, doctrinal statements,
+  resolutions and history pages, with Pew Research Center's "Faith Among Black Americans"
+  (2021) for belief, practice and party breakdowns where the churches have no official position.
+sources:
+  - id: nbc-articles
+    title: "Articles of Faith of the National Baptist Convention, USA, Inc. (as reproduced by a member church)"
+    publisher: National Baptist Convention, USA, Inc.; text hosted by 19th Street Baptist Church
+    url: https://www.19thstreetbc.org/articles-of-faith
+  - id: nbc-hrc
+    title: "Stances of Faiths on LGBTQ+ Issues: National Baptist Convention, USA, Inc. (quotes the 2012 letter of President Julius Scruggs and the 2014 statement to chaplains)"
+    publisher: Human Rights Campaign
+    url: https://www.hrc.org/resources/stances-of-faiths-on-lgbt-issues-national-baptist-convention-usa-inc
+  - id: ame-beliefs
+    title: "Our Beliefs (Apostles' Creed and the Twenty-Five Articles of Religion)"
+    publisher: African Methodist Episcopal Church
+    url: https://www.ame-church.com/our-church/our-beliefs/
+  - id: ame-history
+    title: Our History
+    publisher: African Methodist Episcopal Church
+    url: https://www.ame-church.com/our-church/our-history/
+  - id: ame-preamble
+    title: "What AMEs Believe (Articles of Religion and the Historical Preamble from the Discipline)"
+    publisher: Mother Bethel AME Church, Philadelphia
+    url: https://motherbethel.org/what-ames-believe/
+  - id: ame-gc-2024
+    title: AME Church Delegates Name Six New Bishops While Retaining Same-Sex Marriage Ban
+    publisher: Word&Way (reporting the 2024 General Conference and quoting the Doctrine and Discipline)
+    url: https://wordandway.org/2024/08/28/ame-church-delegates-name-six-new-bishops-while-retaining-same-sex-marriage-ban
+  - id: ame-hrc
+    title: "Stances of Faiths on LGBTQ+ Issues: African Methodist Episcopal Church"
+    publisher: Human Rights Campaign
+    url: https://www.hrc.org/resources/stances-of-faiths-on-lgbt-issues-african-methodist-episcopal-church
+  - id: cogic-wwb
+    title: What We Believe
+    publisher: Church of God in Christ, Inc.
+    url: https://www.cogic.org/wp-content/uploads/2014/12/What-We-Believe.pdf
+  - id: cogic-2014
+    title: General Assembly Passes Resolution on Same Sex Marriage (November 2014)
+    publisher: Church of God in Christ, Inc., Public Policy
+    url: https://www.cogic.org/publicpolicy/2014/11/11/general-assembly-passes-resolution-on-same-sex-marriage/
+  - id: cogic-mason
+    title: Bishop Charles Harrison Mason (founder biography)
+    publisher: Church of God in Christ, Inc.
+    url: https://www.cogic.org/?p=5096
+  - id: cogic-hrc
+    title: "Stances of Faiths on LGBTQ+ Issues: Church of God in Christ"
+    publisher: Human Rights Campaign
+    url: https://www.hrc.org/resources/stances-of-faiths-on-lgbt-issues-church-of-god-in-christ
+  - id: pew-black-faith-2021
+    title: Faith Among Black Americans (survey of 8,660 Black adults, Nov. 2019 to June 2020)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2021/02/16/faith-among-black-americans/
+  - id: pew-black-faith-2021-pdf
+    title: Faith Among Black Americans, full report PDF
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/wp-content/uploads/sites/20/2021/02/PF_02.16.21_Black.religion.report.pdf
+  - id: pew-evolution-2019
+    title: How highly religious Americans view evolution depends on how they're asked about it (Cary Funk, Feb. 6, 2019)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2019/02/06/how-highly-religious-americans-view-evolution-depends-on-how-theyre-asked-about-it/
+  - id: pew-eternal-life-2008
+    title: Many Americans Say Other Faiths Can Lead to Eternal Life (Dec. 18, 2008)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2008/12/18/many-americans-say-other-faiths-can-lead-to-eternal-life/
+entries:
+  - point: 1
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      All three churches teach one God in three persons, Father, Son and Holy Spirit, creator
+      of all things. The AME summary is "God Our Father, Christ Our Redeemer, the Holy Spirit
+      Our Comforter, Humankind Our Family." In Pew's survey, 87% of Black Protestants believe
+      in God as described in the Bible.
+    source: "nbc-articles, Article II (The True God); ame-beliefs, motto and Apostles' Creed; cogic-wwb, The Father; pew-black-faith-2021, ch. 3"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about. They can tell you what our family believes."
+    parent_note: >
+      National Baptist Article II: "one, and only one, living and true God." COGIC calls God
+      "the Author and Creator of all things." For "why does my friend go to a different church?",
+      the AME motto's "Humankind Our Family" is a way to say we love people who worship differently.
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      All three churches hold the Bible is inspired by God and the final authority for belief
+      and conduct. National Baptists call it "a perfect treasure of heavenly instruction"; COGIC holds it
+      "the only authority in all matters." No official statement says which passages are history
+      and which are story. Pew found 56% of Black Protestants read the Bible literally, word for word.
+    source: "nbc-articles, Article I (The Scriptures); cogic-wwb, The Bible; ame-beliefs, Article 5; pew-black-faith-2021, ch. 3"
+    split: >
+      Members divide on literal reading: a slight majority read the Bible word for word, the rest
+      hold it is God's word but not all literal (Pew 2021).
+    handoff: "That's a great one to ask Mom or Dad about. They love talking about Bible stories."
+    parent_note: >
+      AME Article 5: "The Holy Scripture containeth all things necessary to salvation." Your
+      church does not rule on Noah's flood as literal history, so you can share your own reading
+      and mention that other Christians read it differently.
+    needs_check: false
+
+  - point: 3
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      These churches teach that God answers prayer and acts in the world. COGIC "believes in and
+      practices Divine Healing" and holds that miracles "do and will occur even today," and it
+      teaches that angels and demons are real. Pew found most Black Americans believe prayer can
+      heal and that evil spirits can cause problems.
+    source: "cogic-wwb, Divine Healing, Miracles, Angels, Demons; pew-black-faith-2021, ch. 3"
+    split: >
+      Practice varies by church: speaking in tongues and healing services are central in COGIC
+      and less common in many Baptist and AME congregations (Pew 2021, ch. 1 and 4).
+    handoff: "That's a really good question. Mom or Dad would love to talk with you about prayer."
+    parent_note: >
+      COGIC: elders "pray for the sick, lay hands upon them and to anoint them with oil." COGIC
+      also teaches that demons are real and "can be subdued and conquered" in Jesus' name. The
+      tutor will not frighten your child with this; how much to say about spirits is your call.
+    needs_check: false
+
+  - point: 4
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Official teaching is that salvation comes by grace through faith in Christ and is offered
+      freely to everyone. Members differ: in a 2008 Pew survey, 49% of Black Protestants said many
+      religions can lead to eternal life and 45% said only their own faith can.
+    source: "nbc-articles, Articles IV and VI; ame-beliefs, Articles of Religion; pew-eternal-life-2008"
+    split: >
+      Two camps among members: those who say only faith in Christ leads to eternal life, and those
+      who say many religions can (Pew 2008).
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      National Baptist Article VI teaches salvation is offered freely to all. The AME motto calls humankind our
+      family. Whatever you teach about heaven, the tutor will always say that people of other
+      faiths are to be respected and loved.
+    needs_check: false
+
+  - point: 5
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position found. The churches teach that God created all things but have issued
+      no statement on the age of the Earth that we could find.
+    source: "cogic-wwb, The Father; nbc-articles, Article II"
+    split: >
+      Unknown. No survey of this community on the age of the Earth was found.
+    handoff: "Scientists have an answer, and Mom or Dad can tell you how our family thinks about it."
+    parent_note: >
+      COGIC calls God "the Author and Creator of all things." Your church does not set an age
+      for the Earth, so the tutor will give the scientific estimate and note that families of
+      faith think about it in different ways.
+    needs_check: true
+
+  - point: 6
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position found. Pew found answers depend on how the question is asked: with one
+      question, 71% of Black Protestants said humans evolved over time; asked in two steps, 59%
+      said humans have always existed in their present form.
+    source: "pew-evolution-2019; cogic-wwb, The Father"
+    split: >
+      Members split between those who accept human evolution, often with God guiding it, and
+      those who hold humans were created in their present form (Pew 2019).
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Your church has no official ruling on evolution. Pew suggests many members accept evolution
+      but feel uneasy saying so unless God's role is named. You can tell your child how you hold
+      the two together.
+    needs_check: true
+
+  - point: 7
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official statement on science and faith found. The churches teach God as Creator and
+      the Bible as the final authority on faith; members' views on how science fits vary (see point 6).
+    source: "cogic-wwb, The Bible and The Father; pew-evolution-2019"
+    split: >
+      Same camps as point 6.
+    handoff: "Lots of people who love God also love science. Mom or Dad can tell you more."
+    parent_note: >
+      Nothing in the doctrinal statements we read sets science against faith. Point 6 shows how
+      members differ; the tutor will present science and your faith side by side.
+    needs_check: true
+
+  - point: 8
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official teaching on how to explain reproduction to children was found. The churches
+      teach that marriage is a lifelong covenant between a man and a woman (COGIC 2014; National
+      Baptist 2012).
+    source: "cogic-2014; nbc-hrc"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      COGIC describes marriage as "a life-long, sexually exclusive relationship and divine covenant
+      between one man and one woman." Body safety and telling a trusted adult stay on the safety
+      floor whatever you choose here.
+    needs_check: true
+
+  - point: 9
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      All three churches officially hold marriage is between a man and a woman. The AME
+      Discipline says same-sex unions "are contrary to the will of God" (kept by an 896-722 vote
+      in 2024); COGIC clergy may not perform them; the National Baptist Convention affirms
+      man-woman marriage but leaves the issue to each local church. Members differ: 57% of Black
+      Protestants say homosexuality should be accepted by society.
+    source: "ame-gc-2024; cogic-2014; nbc-hrc; pew-black-faith-2021, ch. 7"
+    split: >
+      Official teaching is traditional in all three; members are divided, and the AME Church
+      has a Sexual Ethics Discernment Committee still studying the question (ame-gc-2024).
+    handoff: "Families come in lots of shapes. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      COGIC's 2014 resolution affirms traditional marriage and "condemns acts of violence against
+      and the subjugation of any person" and says it does not intend "to defame or disparage any
+      group." The tutor will never teach your child to look down on any family.
+    needs_check: false
+    by_lean:
+      progressive:
+        when: anytime
+        perspective: several_fairly
+        position: >
+          Black Democrats are more likely than Black Republicans to say homosexuality should be
+          accepted; many progressive members want children to know such families as neighbors,
+          while the church's teaching stays the family's own.
+        source: "pew-black-faith-2021-pdf, overview p. 25; pew-black-faith-2021, ch. 7"
+      moderate: {}
+      conservative:
+        when: parent_led
+        perspective: family_tradition
+        position: >
+          Conservative members follow the churches' official teaching on marriage and want
+          parents to lead the conversation.
+        source: "pew-black-faith-2021-pdf, overview p. 25; cogic-2014; ame-gc-2024"
+
+  - point: 10
+    when: parent_led
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official statement on gender identity or transition was found for any of the three
+      churches; advocacy summaries describe them as having "remained silent." The AME Church
+      reports no agreement yet and is studying gender identity through a committee.
+    source: "ame-hrc; cogic-hrc; nbc-hrc; ame-gc-2024"
+    split: >
+      Unknown; no official statement and no Pew figure for this community found.
+    handoff: "That's a great one to ask Mom or Dad about."
+    parent_note: >
+      Your church has no official statement here. The tutor will hand this to you and will never
+      say anything unkind about any person.
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: "No survey source found for this community; progressive families may prefer several views presented fairly."
+        source: "ame-hrc; ame-gc-2024"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: "No survey source found for this community; conservative families likely keep this parent-led in the family's tradition."
+        source: "cogic-hrc; nbc-hrc"
+
+  - point: 11
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The churches teach marriage as a lifelong covenant between a man and a woman. No official
+      statement we read addresses how to talk with children about divorce or single-parent homes.
+    source: "cogic-2014; nbc-hrc"
+    split: none
+    handoff: "Every family is different, and that's a good one to talk about with Mom or Dad."
+    parent_note: >
+      COGIC calls marriage "life-long." The tutor will treat every child's family with kindness,
+      including children who live with one parent or with grandparents.
+    needs_check: true
+
+  - point: 12
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The churches teach that Christ rose from the dead and will return, raise the dead and judge
+      all people. National Baptist Article XVIII teaches endless joy for the righteous and endless
+      punishment for the wicked. COGIC teaches the church will be "caught up to meet Him in the air."
+    source: "nbc-articles, Article XVIII (The World to Come); ame-beliefs, Article 3 and Apostles' Creed; cogic-wwb, The Second Coming of Christ"
+    split: none
+    handoff: "That's a big question. Mom or Dad would love to talk with you about it."
+    parent_note: >
+      AME Article 3: Christ "did truly rise from the dead." Your church also teaches judgment and
+      hell (National Baptist Article XVIII); the tutor will not raise hell with your child, and
+      you can choose how and when to.
+    needs_check: false
+
+  - point: 13
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official guidance on talking with children about a death was found. The churches teach
+      the resurrection and the comfort of the Holy Spirit; Pew found 72% of Black adults say
+      spiritual comfort is an essential thing a church offers.
+    source: "ame-beliefs, motto and Article 3; pew-black-faith-2021, ch. 5"
+    split: none
+    handoff: "It's not your fault. That's a good time for a hug and a talk with Mom or Dad."
+    parent_note: >
+      The AME motto names "the Holy Spirit Our Comforter." The tutor will tell a grieving child
+      it is not their fault and send them to you; what to say about heaven is yours.
+    needs_check: true
+
+  - point: 14
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      The churches teach civil government is appointed by God for good order and that leaders
+      should be prayed for, though obedience never extends to what is against Christ's will. They
+      endorse no party. Pew found 41% of churchgoing Black Protestants heard a sermon on voting or
+      political engagement in the past year.
+    source: "nbc-articles, Article XVI (Civil Government); ame-beliefs, Article 23; pew-black-faith-2021, ch. 8"
+    split: none
+    handoff: "People in our country vote and disagree, and that's okay. Ask Mom or Dad what they think."
+    parent_note: >
+      National Baptist Article XVI: "Civil government is of divine appointment." The AME note to
+      Article 23: obedience to civil government is one of "the principle duties of all persons."
+      Voting is often encouraged from the pulpit; no party is named in church teaching.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          84% of Black Americans are Democrats or lean Democratic. Black Democrats are a little
+          more likely to call political sermons important (Pew). The teaching itself does not change.
+        source: "pew-black-faith-2021, ch. 8"
+      moderate: {}
+      conservative:
+        position: >
+          About 10% of Black adults lean Republican and more often attend non-Black congregations;
+          their religious commitment matches Black Democrats'. The teaching itself does not change.
+        source: "pew-black-faith-2021-pdf, overview pp. 24-25"
+
+  - point: 15
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official teaching on discussing wars and news with children was found. The churches ask
+      members to pray for leaders, and many hear sermons on public matters (24% of Black
+      Protestants call political sermons essential).
+    source: "nbc-articles, Article XVI; pew-black-faith-2021, ch. 8"
+    split: none
+    handoff: "That's a good one to talk about with Mom or Dad. You're safe, and grown-ups are working on it."
+    parent_note: >
+      National Baptist Article XVI asks members to pray for those in authority. You choose which
+      news to talk about at home; the tutor will stay calm and hand this to you.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "The churches' teaching does not change with politics on this point."
+        source: "pew-black-faith-2021, ch. 8"
+      moderate: {}
+      conservative:
+        position: "The churches' teaching does not change with politics on this point."
+        source: "pew-black-faith-2021, ch. 8"
+
+  - point: 16
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The churches teach Christians should help the poor generously. AME Article 24 teaches
+      believers to help the poor according to their means, and the AME preamble names serving
+      the needy as part of its vision. Pew found 70% of Black Protestants think racial discrimination is the
+      main reason many Black people can't get ahead.
+    source: "ame-beliefs, Article 24; ame-preamble, Historical Preamble; pew-black-faith-2021, ch. 5 and 6"
+    split: none
+    handoff: "That's a kind thing to wonder about. Ask Mom or Dad how our family helps."
+    parent_note: >
+      55% of Black adults say helping the needy with bills, housing or food is essential for a
+      church. Your child can learn that helping is part of faith and that people end up poor for
+      many reasons.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          Many members frame poverty as shaped by unfair treatment as well as choices, and see
+          working to change that as part of faith.
+        source: "pew-black-faith-2021, ch. 6"
+      moderate: {}
+      conservative:
+        position: >
+          About a quarter of Black Protestants say people who can't get ahead are mostly
+          responsible for their own condition; these families stress personal effort alongside
+          generosity. No party breakdown on this question was published.
+        source: "pew-black-faith-2021, ch. 6"
+
+  - point: 17
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position on Columbus or colonization was found. The churches' history pages
+      begin with Africans brought to America in slavery, so the colonial era is told partly from
+      that side.
+    source: "pew-black-faith-2021, ch. 10"
+    split: >
+      Unknown; no survey of this community on explorers or colonization was found.
+    handoff: "People tell that story in different ways. Mom or Dad can share how our family sees it."
+    parent_note: >
+      Pew's history chapter starts with enslaved Africans brought to America, most following West
+      African religions and some Muslim. The tutor can tell the explorer story with the people
+      who were already here, and those who were brought in chains.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No source found yet for how progressive members frame this point."
+        source: "pew-black-faith-2021, ch. 10"
+      moderate: {}
+      conservative:
+        position: "No source found yet for how conservative members frame this point."
+        source: "pew-black-faith-2021, ch. 10"
+
+  - point: 18
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Slavery is part of these churches' own founding story. Richard Allen, who bought his freedom,
+      founded the AME Church after Black worshippers were pulled from their knees in prayer; the
+      AME preamble says its founders "affirmed their humanity in the face of slavery and racism."
+      COGIC's founder was born to formerly enslaved parents. 75% of Black Protestants say opposing
+      racism is essential to their faith.
+    source: "ame-history; ame-preamble, Historical Preamble; cogic-mason; pew-black-faith-2021, ch. 6 and 10"
+    split: none
+    handoff: "Yes, he did, and that's an important story. Mom or Dad can tell you more about it."
+    parent_note: >
+      The AME Church says it has preached "salvation from sin and deliverance from bondage." Your
+      child can learn that founders did good things and wrong things, and that people of faith
+      worked to end slavery and win civil rights.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          Black Democrats are more likely to call opposing racism essential to being Christian,
+          and more often credit Black churches and civil rights groups with progress (Pew).
+        source: "pew-black-faith-2021-pdf, overview p. 25 and ch. 5"
+      moderate: {}
+      conservative:
+        position: >
+          Black Republicans are somewhat less likely to credit civil rights groups and Black
+          churches, and more likely to credit White churches, but more than half still call
+          opposing racism essential. The settings stay the same.
+        source: "pew-black-faith-2021-pdf, overview p. 25 and ch. 5"
+
+  - point: 19
+    when: from_age
+    from_age: 8
+    perspective: several_fairly
+    position: >
+      No official statement on religious wars was found. The churches' history includes religion
+      misused: colonies passed laws that baptism did not free enslaved people, some owners banned
+      them from worship, and White clergy preached obedience to owners, so enslaved Christians
+      worshipped in secret. Black Methodists left St. George's after being pulled from prayer.
+    source: "pew-black-faith-2021, ch. 10; ame-history"
+    split: none
+    handoff: "Sometimes people have treated others badly about religion. Mom or Dad can tell you more."
+    parent_note: >
+      Pew's history notes spirituals like "Go Down, Moses" drew hope from the Exodus. Your child
+      can learn that faith was used both to hurt and to set people free, without blaming anyone
+      today.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "No difference by politics found in official teaching on this point."
+        source: "pew-black-faith-2021, ch. 10"
+      moderate: {}
+      conservative:
+        position: "No difference by politics found in official teaching on this point."
+        source: "pew-black-faith-2021, ch. 10"
+
+  - point: 20
+    when: from_age
+    from_age: 9
+    perspective: family_tradition
+    position: >
+      No official position found on how much violence to show children. COGIC's 2014 resolution
+      condemns violence against any person.
+    source: "cogic-2014; pew-black-faith-2021, ch. 10"
+    split: none
+    handoff: "That's a heavy one. Let's ask Mom or Dad to look at it with you."
+    parent_note: >
+      No church guidance found. The tutor will describe hard history plainly without graphic
+      detail and send the rest to you.
+    needs_check: true
+
+  - point: 21
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No source found yet. The doctrinal statements we opened do not address alcohol, tobacco or
+      drugs; the Methodist General Rules and COGIC holiness standards may, but we could not open
+      the AME Discipline or COGIC Official Manual.
+    source: "ame-beliefs; cogic-wwb"
+    split: none
+    handoff: "That's a good one to ask Mom or Dad about."
+    parent_note: >
+      Please check your own church's rules here. The tutor will teach basic health facts and hand
+      questions about family rules to you.
+    needs_check: true
+
+  - point: 22
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No source found yet on modesty or dress. COGIC teaches believers to "purify themselves"
+      and practices sanctification, but we did not find a written dress standard.
+    source: "cogic-wwb, The Second Coming of Christ and Salvation"
+    split: none
+    handoff: "Your body is good just as it is. Ask Mom or Dad about what to wear."
+    parent_note: >
+      Holiness churches like COGIC often have dress customs; please add your own. The tutor will
+      never comment on a child's body or weight.
+    needs_check: true
+
+  - point: 23
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official position found on screens or games. Pew found 39% of Black Protestants watch or
+      listen to services online, on TV or on the radio weekly.
+    source: "pew-black-faith-2021, ch. 4"
+    split: none
+    handoff: "Every family has its own screen rules. That's one for Mom or Dad."
+    parent_note: >
+      No church guidance found. Screen rules are yours to set.
+    needs_check: true
+
+  - point: 24
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      AME Article 24 teaches that Christians own their goods but should give to the poor according
+      to their ability. The churches serve the needy through schools, hospitals and social
+      services, and many families have turned to their church for help.
+    source: "ame-beliefs, Article 24; ame-preamble, Historical Preamble; pew-black-faith-2021, ch. 5"
+    split: >
+      Pew's interviews with pastors note debate over the "prosperity gospel," which links strong
+      faith to financial success; some pastors criticize it.
+    handoff: "That's a good one to ask Mom or Dad about. Giving is a way of caring for people."
+    parent_note: >
+      AME Article 24 teaches that Christians' goods are their own but that they should help the
+      poor generously, according to their means. You can share how your family gives, at church and to neighbors.
+    needs_check: false

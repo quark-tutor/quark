@@ -1,0 +1,492 @@
+<title>Our Family's Beliefs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<style>
+/* Layout: one column of the 24 points, grouped by area; under each point, a wrapping grid of pack
+   cards. A ranking strip up top answers "which pack fits us" as the reader taps their own answers.
+   Palette and type follow the Quark app (warm paper, sea-green accent, Atkinson Hyperlegible). */
+:root {
+  --bg: #fbf8f2;
+  --surface: #ffffff;
+  --ink: #1f2a37;
+  --muted: #5b6472;
+  --line: #e6e0d4;
+  --accent: #2f6f62;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3efeb;
+  --flag: #9a5b13;
+  --a-ours: #2f6f62;
+  --a-fair: #2f5f8f;
+  --a-later: #9a6a12;
+  --a-us: #6b4c9a;
+  --a-never: #6b7078;
+  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-read: "Literata", Georgia, serif;
+  --radius: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161b22; --surface: #1f2630; --ink: #eef1f4; --muted: #a3acb8; --line: #2e3744;
+    --accent: #6cc2ad; --accent-ink: #10201c; --accent-soft: #1d3530; --flag: #e3a95a;
+    --a-ours: #6cc2ad; --a-fair: #8ab8e6; --a-later: #e0b562; --a-us: #b9a0e3; --a-never: #a3acb8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161b22; --surface: #1f2630; --ink: #eef1f4; --muted: #a3acb8; --line: #2e3744;
+  --accent: #6cc2ad; --accent-ink: #10201c; --accent-soft: #1d3530; --flag: #e3a95a;
+  --a-ours: #6cc2ad; --a-fair: #8ab8e6; --a-later: #e0b562; --a-us: #b9a0e3; --a-never: #a3acb8;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); }
+.lede { max-width: 64ch; color: var(--muted); margin: 8px 0 0; }
+.draft { display: inline-block; margin-top: 12px; padding: 6px 10px; border-radius: 8px; background: var(--accent-soft); font-size: 13px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end; margin-top: 24px; }
+.control { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 3px; }
+.seg button { border: 0; background: none; padding: 6px 14px; border-radius: 999px; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.check { display: inline-flex; gap: 8px; align-items: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  border: 1.5px solid var(--c); color: var(--c); background: transparent; white-space: nowrap; }
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.a-ours { --c: var(--a-ours); } .a-fair { --c: var(--a-fair); } .a-later { --c: var(--a-later); }
+.a-us { --c: var(--a-us); } .a-never { --c: var(--a-never); }
+
+.ranking { margin-top: 28px; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.ranking h2 { font-size: 1.05rem; }
+.ranking p { margin: 4px 0 12px; color: var(--muted); font-size: 14px; }
+.ranks { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 20px; }
+.rank { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; min-width: 0; }
+.rank button { border: 0; background: none; padding: 0; text-align: left; font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+.rank button[aria-pressed="false"] { color: var(--muted); font-weight: 400; text-decoration: line-through; }
+.rank .score { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+.bar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--accent); }
+
+.area { margin-top: 40px; }
+.area > h2 { font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.point { margin-top: 22px; }
+.point-head { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.point-head .num { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; }
+.point-head h3 { font-size: 1.12rem; }
+.kidq { margin: 2px 0 10px; font-family: var(--font-read); font-style: italic; color: var(--muted); }
+.mine { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px; }
+.mine .label { margin-right: 4px; }
+.mine button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 11px; font-size: 13px; }
+.mine button[aria-pressed="true"] { border-color: var(--c); background: var(--c); color: var(--bg); font-weight: 700; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.card { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.card.match { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.card-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.card-head strong { overflow-wrap: anywhere; }
+.tick { font-size: 12px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.position { margin: 0; font-family: var(--font-read); font-size: 14.5px; line-height: 1.55; }
+.meta { font-size: 13px; color: var(--muted); }
+.meta a { color: inherit; }
+.flag { font-size: 12px; font-weight: 700; color: var(--flag); }
+details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+details[open] summary { margin-bottom: 6px; }
+.hidden-note { color: var(--muted); font-size: 14px; }
+footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch; }
+@media (prefers-reduced-motion: no-preference) { .bar span { transition: width 200ms ease; } }
+
+.yours { margin-top: 24px; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: flex; flex-direction: column; gap: 12px; }
+.progress-row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: baseline; justify-content: space-between; }
+.progress-row h2 { font-size: 1.05rem; }
+.progress-count { font-variant-numeric: tabular-nums; font-weight: 700; }
+.progress { height: 8px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.progress span { display: block; height: 100%; background: var(--accent); }
+.quick { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.quick select { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; max-width: 100%; }
+.btn { border: 1.5px solid var(--accent); border-radius: 999px; padding: 6px 14px; background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.btn.quiet { background: transparent; color: var(--accent); }
+.btn.warn { border-color: var(--flag); color: var(--flag); background: transparent; }
+.hint { color: var(--muted); font-size: 13px; margin: 0; }
+
+button.chip { cursor: pointer; }
+button.chip:hover { background: color-mix(in srgb, var(--c) 12%, transparent); }
+button.chip[aria-pressed="true"] { background: var(--c); color: var(--bg); }
+button.chip[aria-pressed="true"]::before { background: var(--bg); }
+.card.chosen { border-color: var(--c, var(--accent)); box-shadow: inset 0 0 0 1px var(--c, var(--accent)); }
+.use-hint { font-size: 12px; color: var(--muted); }
+
+.point.done { margin-top: 10px; }
+.done-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.done-row .num { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; }
+.done-row .name { font-weight: 700; flex: 1 1 200px; min-width: 0; }
+.done-row .from { color: var(--muted); font-size: 13px; }
+
+/* Three screens: a start screen that explains and offers two paths, a quick start, and the full list. */
+.screen[hidden] { display: none; }
+.intro { max-width: 640px; margin: 0 auto; padding-block: 4vh 0; display: flex; flex-direction: column; gap: 20px; }
+.intro h1 { font-size: clamp(2rem, 6vw, 2.8rem); }
+.facts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.facts li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; font-size: 16.5px; }
+.facts .dot { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.examples { font-family: var(--font-read); font-style: italic; color: var(--muted); }
+.paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 8px; }
+.path { text-align: left; display: flex; flex-direction: column; gap: 6px; padding: 18px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.path:hover { border-color: var(--accent); }
+.path strong { font-size: 1.15rem; }
+.path .time { font-size: 13px; font-weight: 700; color: var(--accent); }
+.path span:last-child { color: var(--muted); }
+.fine { color: var(--muted); font-size: 13px; margin: 0; }
+.back { border: 0; background: none; padding: 0; color: var(--accent); font-weight: 700; }
+.step { display: flex; flex-direction: column; gap: 10px; }
+.step h2 { font-size: 1.15rem; }
+.trads { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.trad { text-align: left; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.trad[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.trad small { color: var(--muted); overflow-wrap: anywhere; }
+.list-head { display: flex; flex-direction: column; gap: 10px; }
+.list-head h1 { font-size: clamp(1.5rem, 4vw, 2rem); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.seg { flex-wrap: wrap; border-radius: 18px; }
+</style>
+
+<div class="wrap">
+  <!-- 1. Start -->
+  <section class="screen intro" id="screen-start">
+    <h1>Our Family's Beliefs</h1>
+    <ul class="facts">
+      <li><span class="dot">1</span><span>Quark writes your kids' lessons. When a lesson touches a sensitive subject, it follows the answers you give here.</span></li>
+      <li><span class="dot">2</span><span>There are 24 sensitive subjects, like <span class="examples">"Is God real?"</span> or <span class="examples">"Where do babies come from?"</span> For each one, you choose how Quark handles it: answer from what you believe, show several views, wait until your child is older, send them to you, or leave it alone.</span></li>
+      <li><span class="dot">3</span><span>You can change any answer later. Nothing reaches your kids until you've finished.</span></li>
+    </ul>
+    <div class="paths">
+      <button type="button" class="path" data-go="quick">
+        <strong>Quick start</strong>
+        <span class="time">About 2 minutes</span>
+        <span>Pick the religious tradition closest to yours and your political leaning. We fill in all 24 answers for you to look over.</span>
+      </button>
+      <button type="button" class="path" data-go="list">
+        <strong>Go through each one</strong>
+        <span class="time">About 20 minutes</span>
+        <span>See each subject and how different traditions handle it, then choose your own answer.</span>
+      </button>
+    </div>
+    <p class="fine">The traditions' answers are drafts made from each tradition's own published teaching or, where there is none, from surveys. Members of each tradition haven't reviewed them yet.</p>
+  </section>
+
+  <!-- 2. Quick start -->
+  <section class="screen intro" id="screen-quick" hidden>
+    <button type="button" class="back" data-go="start">&larr; Back</button>
+    <h1>Quick start</h1>
+    <div class="step">
+      <h2>1. Which tradition is closest to your family's?</h2>
+      <div class="trads" id="trads" role="group" aria-label="Tradition"></div>
+    </div>
+    <div class="step">
+      <h2>2. Your political leaning</h2>
+      <p class="fine">It changes how a few traditions handle 8 subjects, like politics and how history is told.</p>
+      <div class="seg" role="group" aria-label="Political leaning" id="quick-lean"></div>
+    </div>
+    <div class="step">
+      <button type="button" class="btn" id="quick-go">Fill in our answers</button>
+      <p class="fine" id="quick-note"></p>
+    </div>
+  </section>
+
+  <!-- 3. The list -->
+  <section class="screen" id="screen-list" hidden>
+    <div class="list-head">
+      <button type="button" class="back" data-go="start">&larr; How this works</button>
+      <h1>Our Family's Beliefs</h1>
+      <p class="lede">For each subject, tap the answer you'd give, or tap a tradition's answer to use its wording too. Answered subjects fold up. Tap Change to look again.</p>
+    </div>
+
+    <section class="yours" aria-labelledby="yours-title">
+      <div class="progress-row">
+        <h2 id="yours-title">Your answers</h2>
+        <span class="progress-count" id="progress-count"></span>
+      </div>
+      <div class="progress"><span id="progress-bar"></span></div>
+      <div class="controls">
+        <div class="control">
+          <span class="label" id="lean-label">Political leaning</span>
+          <div class="seg" role="group" aria-labelledby="lean-label" id="lean"></div>
+        </div>
+        <label class="check control"><input type="checkbox" id="diff-only"> Hide subjects where every tradition agrees</label>
+        <button type="button" class="btn warn" id="clear-all">Clear all</button>
+      </div>
+    </section>
+
+    <section class="ranking" aria-live="polite">
+      <h2>Traditions closest to your answers</h2>
+      <p id="rank-note"></p>
+      <div class="ranks" id="ranks"></div>
+    </section>
+
+    <main id="points"></main>
+
+    <section class="yours" id="export">
+      <h2>Bring these answers into Quark</h2>
+      <p class="hint">In Quark, open Our Family's Beliefs and choose "Bring those answers over". Then copy your answers here and paste them there.</p>
+      <div class="quick">
+        <button type="button" class="btn" id="copy-answers">Copy my answers</button>
+        <span class="hint" id="copy-note" aria-live="polite"></span>
+      </div>
+      <textarea id="copy-text" readonly hidden rows="5" style="width:100%;font:13px ui-monospace,monospace;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)"></textarea>
+    </section>
+
+    <footer>
+      The traditions' answers are drafts made from each tradition's own published documents, or from surveys where it has no official body, with sources on every card. Members of each tradition haven't reviewed them yet, and they describe official teaching, not what every family in a tradition believes. Your answers here are saved only in this browser.
+    </footer>
+  </section>
+</div>
+
+<script type="application/json" id="data">/*__DATA__*/null</script>
+<script>
+(() => {
+  const { points, packs } = JSON.parse(document.getElementById("data").textContent);
+  const ANSWERS = [
+    { id: "ours", label: "Answer from what we believe" },
+    { id: "fair", label: "Answer, and show other views" },
+    { id: "later", label: "Not yet" },
+    { id: "us", label: "Send them to us" },
+    { id: "never", label: "Don't bring it up" },
+  ];
+  const LEANS = [["progressive", "Progressive"], ["moderate", "Moderate"], ["conservative", "Conservative"], ["unset", "Rather not say"]];
+  const shortName = (p) => p.short_name || p.name;
+  const subName = (p) => p.subtitle || "";
+  const KEY = "quark-pack-chooser";
+
+  // mine[point] = { a: answer id, pack: slug the answer was taken from, or null if picked directly }
+  let state = { lean: "moderate", mine: {}, hidden: [], diffOnly: false, quick: "", screen: "" };
+  try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch {}
+  for (const [k, v] of Object.entries(state.mine)) if (typeof v === "string") state.mine[k] = { a: v, pack: null };
+  if (!["start", "quick", "list"].includes(state.screen)) state.screen = Object.keys(state.mine).length ? "list" : "start";
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+  const open = new Set(); // answered subjects reopened with Change; not saved
+
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) n.append(kid);
+    return n;
+  };
+
+  const entryFor = (pack, number) => {
+    const e = (pack.entries || []).find((x) => x.point === number);
+    if (!e) return null;
+    const o = (e.by_lean && e.by_lean[state.lean]) || {};
+    return { ...e, ...o };
+  };
+  const answerOf = (e) => {
+    if (!e) return null;
+    if (e.when === "never") return "never";
+    if (e.when === "parent_led") return "us";
+    if (e.when === "from_age") return "later";
+    return e.perspective === "family_tradition" ? "ours" : "fair";
+  };
+  const labelOf = (id, e) => {
+    const a = ANSWERS.find((x) => x.id === id);
+    return id === "later" && e && e.from_age ? `Not yet: from about ${e.from_age}` : a ? a.label : "No answer";
+  };
+  const packBySlug = (slug) => packs.find((p) => p.pack === slug);
+  const visible = () => packs.filter((p) => !state.hidden.includes(p.pack));
+  const answeredCount = () => points.filter((p) => state.mine[p.number]).length;
+  const choose = (n, a, pack) => { state.mine[n] = { a, pack }; open.delete(n); save(); render(); };
+  const clearPoint = (n) => { delete state.mine[n]; save(); render(); };
+
+  // Screens
+  function go(screen) {
+    state.screen = screen; save();
+    for (const s of ["start", "quick", "list"]) document.getElementById(`screen-${s}`).hidden = s !== screen;
+    render();
+    window.scrollTo(0, 0);
+  }
+  for (const b of document.querySelectorAll("[data-go]")) b.addEventListener("click", () => go(b.dataset.go));
+
+  // Lean pickers (quick start and list share the same setting)
+  const leanBoxes = [document.getElementById("lean"), document.getElementById("quick-lean")];
+  for (const box of leanBoxes) for (const [id, label] of LEANS) {
+    box.append(el("button", { type: "button", "data-lean": id, onclick: () => { state.lean = id; save(); render(); } }, label));
+  }
+
+  // Quick start
+  const trads = document.getElementById("trads");
+  function renderQuick() {
+    trads.replaceChildren(...packs.map((p) =>
+      el("button", { type: "button", class: "trad", "aria-pressed": String(state.quick === p.pack),
+        onclick: () => { state.quick = p.pack; save(); render(); } },
+        el("strong", {}, shortName(p)), subName(p) ? el("small", {}, subName(p)) : null)));
+    const n = answeredCount();
+    const goBtn = document.getElementById("quick-go");
+    goBtn.disabled = !state.quick;
+    document.getElementById("quick-note").textContent = !state.quick
+      ? "Pick a tradition first."
+      : n
+        ? `Fills the ${points.length - n} subjects you haven't answered and keeps your ${n} answers.`
+        : `Fills all ${points.length} subjects from the ${shortName(packBySlug(state.quick))} answers. You can change any of them next.`;
+  }
+  document.getElementById("quick-go").addEventListener("click", () => {
+    const p = packBySlug(state.quick);
+    if (!p) return;
+    for (const pt of points) {
+      if (state.mine[pt.number]) continue;
+      const id = answerOf(entryFor(p, pt.number));
+      if (id) state.mine[pt.number] = { a: id, pack: p.pack };
+    }
+    go("list");
+  });
+
+  // Hand the answers to Quark's own page (/parent/beliefs), which reads this shape.
+  document.getElementById("copy-answers").addEventListener("click", async () => {
+    const text = JSON.stringify({ kind: "quark-beliefs", lean: state.lean, quick: state.quick || null, mine: state.mine });
+    const box = document.getElementById("copy-text");
+    const note = document.getElementById("copy-note");
+    box.value = text;
+    try {
+      await navigator.clipboard.writeText(text);
+      box.hidden = true;
+      note.textContent = `Copied ${answeredCount()} answers. Now paste them into Quark.`;
+    } catch {
+      box.hidden = false;
+      box.focus();
+      box.select();
+      note.textContent = "Couldn't copy automatically. Select everything in the box below and copy it.";
+    }
+  });
+
+  // List controls
+  const diff = document.getElementById("diff-only");
+  diff.addEventListener("change", () => { state.diffOnly = diff.checked; save(); render(); });
+  const clearBtn = document.getElementById("clear-all");
+  let clearArmed = false;
+  clearBtn.addEventListener("click", () => {
+    if (!clearArmed) {
+      clearArmed = true;
+      clearBtn.textContent = "Tap again to clear all 24";
+      setTimeout(() => { clearArmed = false; clearBtn.textContent = "Clear all"; }, 4000);
+      return;
+    }
+    clearArmed = false; clearBtn.textContent = "Clear all";
+    state.mine = {}; open.clear(); save(); render();
+  });
+
+  function sourceLinks(pack, e) {
+    const ids = String(e.source || "").match(/[a-z0-9][a-z0-9._-]*/gi) || [];
+    const found = (pack.sources || []).filter((s) => ids.includes(s.id));
+    if (!found.length) return el("span", {}, e.source || "No source listed");
+    return found.flatMap((s, i) => [i ? "; " : "", el("a", { href: s.url, target: "_blank", rel: "noopener" }, s.title)]);
+  }
+
+  function renderProgress() {
+    const n = answeredCount();
+    document.getElementById("progress-count").textContent = `${n} of ${points.length} answered`;
+    document.getElementById("progress-bar").style.width = `${(n / points.length) * 100}%`;
+  }
+
+  function renderRanking() {
+    const answered = points.filter((p) => state.mine[p.number]);
+    document.getElementById("rank-note").textContent = answered.length
+      ? `How many of your ${answered.length} answer${answered.length === 1 ? "" : "s"} each tradition shares. Tap a name to hide or show its cards.`
+      : "As you answer, the traditions that share the most of your answers rise to the top.";
+    const scored = packs.map((p) => ({
+      p,
+      score: answered.filter((pt) => answerOf(entryFor(p, pt.number)) === state.mine[pt.number].a).length,
+    })).sort((a, b) => b.score - a.score);
+    document.getElementById("ranks").replaceChildren(...scored.map(({ p, score }) => {
+      const pct = answered.length ? Math.round((score / answered.length) * 100) : 0;
+      const shown = !state.hidden.includes(p.pack);
+      return el("div", { class: "rank" },
+        el("button", { type: "button", "aria-pressed": String(shown), title: shown ? "Hide this tradition's cards" : "Show this tradition's cards",
+          onclick: () => { state.hidden = shown ? [...state.hidden, p.pack] : state.hidden.filter((x) => x !== p.pack); save(); render(); } }, shortName(p)),
+        el("span", { class: "score" }, answered.length ? `${score} of ${answered.length}` : ""),
+        el("div", { class: "bar" }, el("span", { style: `width:${pct}%` })));
+    }));
+  }
+
+  function renderPoint(pt, entries) {
+    const mine = state.mine[pt.number];
+    if (mine && !open.has(pt.number)) {
+      const src = mine.pack ? packBySlug(mine.pack) : null;
+      const e = src ? entryFor(src, pt.number) : null;
+      return el("div", { class: "point done", id: `p${pt.number}` },
+        el("div", { class: "done-row" },
+          el("span", { class: "num" }, `${pt.number}`),
+          el("span", { class: "name" }, pt.name),
+          el("span", { class: `chip a-${mine.a}` }, labelOf(mine.a, e)),
+          el("span", { class: "from" }, src ? `from ${shortName(src)}` : "your own pick"),
+          el("button", { type: "button", class: "btn quiet", onclick: () => { open.add(pt.number); render(); } }, "Change")));
+    }
+
+    const mineRow = el("div", { class: "mine", role: "group", "aria-label": `Your answer on subject ${pt.number}` },
+      el("span", { class: "label" }, "Your answer"),
+      ANSWERS.map((a) => el("button", { type: "button", class: `a-${a.id}`, "aria-pressed": String(!!mine && mine.a === a.id && !mine.pack),
+        onclick: () => (mine && mine.a === a.id && !mine.pack ? clearPoint(pt.number) : choose(pt.number, a.id, null)) }, a.label)),
+      mine ? el("button", { type: "button", class: "btn quiet", onclick: () => { open.delete(pt.number); render(); } }, "Done") : null);
+
+    const cards = el("div", { class: "cards" }, entries.map(([p, e]) => {
+      if (!e) return el("div", { class: "card" }, el("strong", {}, shortName(p)), el("span", { class: "meta" }, "No answer for this subject."));
+      const id = answerOf(e);
+      const chosen = !!mine && mine.pack === p.pack;
+      const match = !!mine && mine.a === id;
+      return el("article", { class: `card a-${id}${chosen ? " chosen" : match ? " match" : ""}` },
+        el("div", { class: "card-head" }, el("strong", {}, shortName(p)),
+          chosen ? el("span", { class: "tick" }, "Your pick") : match ? el("span", { class: "tick" }, "Same as yours") : null),
+        el("div", {},
+          el("button", { type: "button", class: `chip a-${id}`, "aria-pressed": String(chosen),
+            title: chosen ? "Tap to undo" : "Use this tradition's answer for this subject",
+            onclick: () => (chosen ? clearPoint(pt.number) : choose(pt.number, id, p.pack)) }, labelOf(id, e)),
+          chosen ? null : el("span", { class: "use-hint" }, " tap to use")),
+        el("p", { class: "position" }, e.position || ""),
+        e.split && e.split !== "none" ? el("div", { class: "meta" }, el("strong", {}, "Split: "), e.split) : null,
+        e.needs_check ? el("div", { class: "flag" }, "Needs checking: the drafter wasn't sure of this one.") : null,
+        el("details", {},
+          el("summary", {}, "What your child would hear, notes for you, sources"),
+          el("div", { class: "meta" }, el("strong", {}, "Your child hears: "), e.handoff || "None"),
+          e.parent_note ? el("div", { class: "meta" }, el("strong", {}, "For you: "), e.parent_note) : null,
+          el("div", { class: "meta" }, el("strong", {}, "Sources: "), sourceLinks(p, e))));
+    }));
+
+    return el("div", { class: "point", id: `p${pt.number}` },
+      el("div", { class: "point-head" }, el("span", { class: "num" }, `${pt.number}`), el("h3", {}, pt.name)),
+      el("p", { class: "kidq" }, pt.question), mineRow, cards);
+  }
+
+  function renderPoints() {
+    const main = document.getElementById("points");
+    main.replaceChildren();
+    const shownPacks = visible();
+    let area = null, section = null, count = 0;
+    for (const pt of points) {
+      const entries = shownPacks.map((p) => [p, entryFor(p, pt.number)]);
+      const kinds = new Set(entries.map(([, e]) => answerOf(e)));
+      if (state.diffOnly && kinds.size < 2 && !state.mine[pt.number]) continue;
+      count++;
+      if (pt.area !== area) {
+        area = pt.area;
+        section = el("section", { class: "area" }, el("h2", {}, area));
+        main.append(section);
+      }
+      section.append(renderPoint(pt, entries));
+    }
+    if (!count) main.append(el("p", { class: "hidden-note" }, "Every shown tradition gives the same answer on every subject. Show more traditions, or untick the filter."));
+  }
+
+  function render() {
+    for (const box of leanBoxes) for (const b of box.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.lean === state.lean));
+    diff.checked = state.diffOnly;
+    if (state.screen === "quick") renderQuick();
+    if (state.screen === "list") { renderProgress(); renderRanking(); renderPoints(); }
+  }
+  go(state.screen);
+})();
+</script>

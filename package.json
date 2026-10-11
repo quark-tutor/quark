@@ -10,7 +10,8 @@
     "test": "vitest run",
     "typecheck": "next typegen && tsc --noEmit",
     "db:push": "node --env-file=.env.local scripts/db-push.mts",
-    "seed": "node --env-file=.env.local scripts/seed-family.mts scripts/family.local.json"
+    "seed": "node --env-file=.env.local scripts/seed-family.mts scripts/family.local.json",
+    "packs:import": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-packs.mts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
@@ -18,7 +19,8 @@
     "next": "16.4.0",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "yaml": "^2.9.1"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",

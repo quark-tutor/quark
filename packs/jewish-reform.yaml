@@ -1,0 +1,642 @@
+pack: jewish-reform
+name: Jewish, Reform
+short_name: "Reform Jewish"
+subtitle: ""
+order: 7
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For families who follow Reform Judaism, the largest Jewish movement in North America.
+  Built from the Central Conference of American Rabbis (the 1999 Pittsburgh Principles,
+  resolutions and responsa), Union for Reform Judaism resolutions, and guidance published
+  on ReformJudaism.org, with Pew Research Center's "Jewish Americans in 2020" for belief
+  and political lean. Reform Judaism has no catechism and stresses that members differ,
+  so many entries describe a range rather than a rule.
+sources:
+  - id: ccar-pittsburgh
+    title: A Statement of Principles for Reform Judaism (Pittsburgh Principles, 1999)
+    publisher: Central Conference of American Rabbis
+    url: https://www.ccarnet.org/rabbinic-voice/platforms/article-statement-principles-reform-judaism/
+  - id: rj-what-is
+    title: What is Reform Judaism?
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/what-is-reform-judaism
+  - id: rj-torah
+    title: Can a Reform Jew believe the Torah is the word of God? (Rabbi Jason Rosenberg)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/learning/answers-jewish-questions/can-reform-jew-believe-torah-word-god
+  - id: rj-hanukkah
+    title: "History: The Hanukkah Story"
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/jewish-holidays/hanukkah/history-hanukkah-story
+  - id: rj-messiah
+    title: Do Reform Jews Believe in the Messiah? (Rabbi Joseph B. Meszler)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/learning/answers-jewish-questions/do-reform-jews-believe-messiah
+  - id: rj-afterlife
+    title: Do Jews Believe in an Afterlife? (Rabbi Evan Moffic)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/beliefs-practices/lifecycle-rituals/death-mourning/do-jews-believe-afterlife
+  - id: urj-interreligious
+    title: Interreligious Relationships (resolution, 1984)
+    publisher: Union of American Hebrew Congregations (now Union for Reform Judaism)
+    url: https://urj.org/what-we-believe/resolutions/interreligious-relationships
+  - id: rj-religious-freedom
+    title: Religious Freedom (social justice primer)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/religious-freedom
+  - id: rac-creationism
+    title: Jewish Values and Creationism (summarising URJ 2005 "Politicization of Science" and CCAR 1984 and 1987 resolutions)
+    publisher: Religious Action Center of Reform Judaism
+    url: https://rac.org/jewish-values-and-creationism
+  - id: urj-sex-ed
+    title: Youth Sexuality Education (resolution, 2004)
+    publisher: Union for Reform Judaism
+    url: https://urj.org/what-we-believe/resolutions/youth-sexuality-education
+  - id: uahc-civil-marriage
+    title: Civil Marriage for Gay and Lesbian Jewish Couples (resolution, 1997)
+    publisher: Union of American Hebrew Congregations (now Union for Reform Judaism)
+    url: https://urj.org/what-we-believe/resolutions/civil-marriage-gay-and-lesbian-jewish-couples
+  - id: ccar-kiddushin
+    title: Same-Sex Marriage as Kiddushin (Responsum 5774.4, 2014)
+    publisher: Central Conference of American Rabbis, Responsa Committee
+    url: https://ccarnet.org/responsa/same-sex-marriage-kiddushin/
+  - id: urj-transgender
+    title: Resolution on the Rights of Transgender and Gender Non-Conforming People (2015)
+    publisher: Union for Reform Judaism
+    url: https://urj.org/what-we-believe/resolutions/resolution-rights-transgender-and-gender-non-conforming-people
+  - id: ccar-divorce
+    title: Resolution on Recalcitrant Husbands (2001)
+    publisher: Central Conference of American Rabbis
+    url: https://www.ccarnet.org/?p=1794
+  - id: rj-death-children
+    title: 11 Questions and Answers to Help You Talk to Children About Death (Rabbi Edythe Held Mencher)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/reform-jewish-life/youth-family-community/parenting/11-questions-and-answers-help-you-talk-children-about-death
+  - id: rac-nonpartisan
+    title: How the RAC's Nonpartisan History Guides Our Civic Engagement Work (Daniel Block, 2026)
+    publisher: Religious Action Center of Reform Judaism
+    url: https://rac.org/blog/how-racs-nonpartisan-history-guides-our-civic-engagement-work
+  - id: rj-voting
+    title: What's So Jewish About Voting? (Rabbi Dara Lithwick)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/beliefs-practices/social-justice-reform-judaism/whats-so-jewish-about-voting
+  - id: rj-war-children
+    title: How to Talk to Children About the Conflict in Israel (Rabbi Edythe Held Mencher)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/reform-jewish-life/youth-family-community/parenting/how-talk-children-about-conflict-israel
+  - id: urj-poverty
+    title: Confronting and Combatting Poverty in the United States (resolution, 2003)
+    publisher: Union for Reform Judaism
+    url: https://urj.org/what-we-believe/resolutions/confronting-and-combatting-poverty-united-states
+  - id: urj-native
+    title: Native American Indians (resolution, 1977)
+    publisher: Union of American Hebrew Congregations (now Union for Reform Judaism)
+    url: https://urj.org/what-we-believe/resolutions/native-american-indians
+  - id: rac-native
+    title: "Race Relations: Native American Jewish Relations and the Position of the Reform Movement"
+    publisher: Religious Action Center of Reform Judaism
+    url: https://rac.org/race-relations-native-american-jewish-relations-and-position-reform-movement
+  - id: urj-reparations
+    title: Resolution on the Study and Development of Reparations for Slavery and Systemic Racism in the U.S. (2019)
+    publisher: Union for Reform Judaism
+    url: https://urj.org/what-we-believe/resolutions/resolution-study-and-development-reparations-slavery-and-systemic
+  - id: rj-holocaust-children
+    title: How Do I Teach My Child About the Holocaust? (Stephanie Fink)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/learning/answers-jewish-questions/how-do-i-teach-my-child-about-holocaust
+  - id: urj-substance
+    title: Substance Abuse (resolution, 1989)
+    publisher: Union of American Hebrew Congregations (now Union for Reform Judaism)
+    url: https://urj.org/what-we-believe/resolutions/substance-abuse
+  - id: rj-every-body
+    title: Every Body is a Reflection of God (Rabbi Rachel Barenblat, 2013)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/blog/every-body-reflection-god
+  - id: ccar-narr-13
+    title: Women with Heads Covered in the Synagogue (New American Reform Responsa 13, 1990)
+    publisher: Central Conference of American Rabbis
+    url: https://www.ccarnet.org/ccar-responsa/narr-23-25/
+  - id: rj-attire
+    title: What Is the Proper Attire to Wear in the Sanctuary? (Rabbis Stephanie M. Alexander and Bryan Zive, 2020)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/learning/torah-study/torah-commentary/what-proper-attire-wear-sanctuary
+  - id: rj-unplug
+    title: Shabbat is a Time to Unplug (Rabbi Eric H. Yoffie, 2012)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/blog/shabbat-time-unplug
+  - id: rj-plugged
+    title: Our Plugged-In Shabbat (Rabbi Victor S. Appell, 2012)
+    publisher: Union for Reform Judaism (ReformJudaism.org)
+    url: https://reformjudaism.org/blog/our-plugged-shabbat
+  - id: pew-belief
+    title: "Jewish Americans in 2020, chapter 3: Jewish identity and belief"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2021/05/11/jewish-identity-and-belief/
+  - id: pew-key-findings
+    title: 10 key findings about Jewish Americans (2021)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2021/05/11/10-key-findings-about-jewish-americans/
+  - id: pew-politics
+    title: "Jewish Americans in 2020: U.S. Jews' political views"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2021/05/11/u-s-jews-political-views/
+
+entries:
+  - point: 1
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform Judaism affirms "the reality and oneness of God, even as we may differ in our
+      understanding of the Divine presence." It has no required creed. Pew found most U.S. Jews
+      believe in God or a spiritual force, but only 18% of Reform Jews believe in God as described
+      in the Bible.
+    source: "ccar-pittsburgh, God and Torah; rj-torah; pew-belief, belief in God"
+    split: >
+      Within the movement: those who hold a personal, biblical God; those who hold a less personal
+      idea of God or a spiritual force; and some who are unsure. All are counted as Reform Jews.
+    handoff: "That's a big question, and people have wondered about it for thousands of years. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      The Pittsburgh Principles say "we may differ in our understanding of the Divine presence."
+      You can share what you believe and tell your child that Reform Jews, and their friends of other
+      faiths, answer this in different ways. "We seek dialogue and joint action with people of other faiths."
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform Judaism teaches that the Torah was written by people and can still carry divine wisdom;
+      it brings "faith to sacred texts without sacrificing critical scholarship." It calls Torah
+      "God's ongoing revelation." A Reform Jew is not required to reject the traditional belief in
+      Torah given at Sinai.
+    source: "ccar-pittsburgh, Preamble and Torah; rj-torah; rj-what-is"
+    split: none
+    handoff: "Some people read that story as history and some read it as a teaching story. What do you think it's trying to teach? You can ask Mom or Dad what our family thinks too."
+    parent_note: >
+      ReformJudaism.org: Reform "has never been a dogmatic movement" and has "no required beliefs."
+      Torah is "a living, God-inspired document." Rabbi Rosenberg notes many Reform Jews believe a Torah
+      written by people still carries divine wisdom.
+    needs_check: false
+
+  - point: 3
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform Jews "respond to God daily: through public and private prayer," and "encounter God's
+      presence in moments of awe and wonder." There is no official teaching on miracles. Movement
+      writing tends to stress human action in partnership with God, and treats some miracle stories,
+      such as the Hanukkah oil, as later legends that still carry meaning.
+    source: "ccar-pittsburgh, God; rj-messiah; rj-hanukkah"
+    split: >
+      Members range from those who believe God answers prayer and acts in the world to those who see
+      prayer mainly as gratitude, reflection and community.
+    handoff: "People believe different things about that. It's a great one to ask Mom or Dad about."
+    parent_note: >
+      ReformJudaism.org notes the Hanukkah oil story first appears in the Talmud, centuries after the
+      Maccabees. Reform teaching stresses that "in partnership with God, it is up to us to make the world
+      into a place of peace and justice." No Reform source found on ghosts or the supernatural.
+    needs_check: true
+
+  - point: 4
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Reform Judaism seeks "dialogue and joint action with people of other faiths." Its writing teaches
+      that the righteous of any people and any faith have a place in the world to come, and that
+      "our actions, not our specific beliefs, determine our fate."
+    source: "ccar-pittsburgh, Torah; rj-afterlife; urj-interreligious; rj-religious-freedom"
+    split: none
+    handoff: "Jewish tradition teaches that good people of every faith are close to God. You can ask Mom or Dad more about it."
+    parent_note: >
+      URJ's 1984 resolution commits the movement to interreligious work to "eliminate the misunderstandings
+      and prejudices of the past." The movement's religious freedom primer says "peaceful co-existence
+      comes from honoring one another and one God."
+    needs_check: false
+
+  - point: 5
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Reform movement accepts scientific findings and opposes "the teaching of creationism as a
+      scientific theory" (CCAR). It holds that "science and God are complementary."
+    source: "rac-creationism"
+    split: none
+    handoff: "Scientists measure that the Earth is very, very old, about 4.5 billion years. If you want to talk about how that fits with the Torah, ask Mom or Dad."
+    parent_note: >
+      The Religious Action Center: "Objective scientific processes and theories must never be subverted
+      to serve religious, political, or ideological goals."
+    needs_check: false
+
+  - point: 6
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The URJ's 2005 resolution opposed teaching intelligent design in public school science classes, and
+      the RAC describes evolution as how life on Earth "has changed over millions of years." Reform sees no
+      conflict between evolution and faith.
+    source: "rac-creationism; ccar-pittsburgh, God"
+    split: none
+    handoff: "That's a great question for Mom or Dad, and a fun one to look up together."
+    parent_note: >
+      The RAC says intelligent design has a place in religion or theology classes but not in science class.
+      The Pittsburgh Principles (God section) still affirm that "every human being is created in the image of God."
+    needs_check: false
+
+  - point: 7
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform Judaism teaches that "science and God are complementary," and it seeks faith "without
+      sacrificing critical scholarship."
+    source: "rac-creationism; ccar-pittsburgh, Preamble and God; rj-what-is"
+    split: none
+    handoff: "Lots of people believe in God and love dinosaurs. You can ask Mom or Dad what they think."
+    parent_note: >
+      Reform Judaism says it "must change and adapt to the needs of the day." The Pittsburgh Principles
+      say "we encounter God's presence in moments of awe and wonder."
+    needs_check: false
+
+  - point: 8
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The URJ supports "comprehensive, accurate, and age-appropriate sexuality education," built on Jewish
+      values and stressing sexuality within healthy, committed relationships. It encourages parents to
+      "talk with their children about sexuality."
+    source: "urj-sex-ed"
+    split: none
+    handoff: "Babies grow inside a part of the mother's body called the uterus. For the rest of the story, Mom or Dad are the best people to ask."
+    parent_note: >
+      The 2004 URJ resolution asks for education "appropriate to each age level and built on Jewish
+      values," and for helping families with training, tools and materials to talk at home.
+    needs_check: false
+
+  - point: 9
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform Judaism welcomes Jews "regardless of their sexual orientation" and is committed to the full
+      participation of LGBTQ+ people. It has supported civil marriage for same-sex couples since at least 1997,
+      and a 2014 CCAR responsum says Reform rabbis may treat these marriages as kiddushin (Jewish marriage).
+    source: "ccar-pittsburgh, Israel; rj-what-is; uahc-civil-marriage; ccar-kiddushin"
+    split: none
+    handoff: "Families come in lots of shapes. Sam's family has two dads who love him. You can talk with Mom or Dad about families too."
+    parent_note: >
+      The movement grounds this in every person being created b'tzelem Elohim, in the image of God.
+      The 1997 resolution asks congregations to "honor monogamous domestic relationships formed by gay men
+      or lesbians."
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "Same as the movement's teaching; politics does not change it."
+        source: "rj-what-is"
+      moderate:
+        position: "Same as the movement's teaching; politics does not change it."
+        source: "rj-what-is"
+      conservative:
+        perspective: several_fairly
+        position: >
+          The movement's teaching is the same. Pew finds about 80% of Reform Jews lean Democratic but does
+          not report Reform views on this point by party, so how conservative-leaning Reform families frame
+          it is not measured. They may prefer several views presented.
+        source: "pew-key-findings"
+
+  - point: 10
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      A unanimous 2015 URJ resolution affirms "the full equality, inclusion and acceptance of people of all
+      gender identities," and the right of transgender people to be called by their chosen name and pronouns,
+      grounded in every person being created b'tselem Elohim.
+    source: "urj-transgender"
+    split: none
+    handoff: "Some people feel that the body they were born with doesn't match who they are inside. That's a good one to talk about with Mom or Dad."
+    parent_note: >
+      The resolution cites Genesis 1:27 and Leviticus 19:16, "do not stand idly while your neighbor bleeds,"
+      as the basis for defending people from discrimination rooted in "ignorance, fear, insensitivity, or hatred."
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "Same as the movement's teaching; politics does not change it."
+        source: "urj-transgender"
+      moderate:
+        position: "Same as the movement's teaching; politics does not change it."
+        source: "urj-transgender"
+      conservative:
+        perspective: several_fairly
+        when: parent_led
+        position: >
+          The movement's teaching is the same. Pew does not report Reform views on gender identity by party,
+          so how conservative-leaning Reform families frame it is not measured. They may prefer to lead this
+          conversation themselves.
+        source: "pew-key-findings"
+
+  - point: 11
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform Judaism recognises civil divorce as ending a marriage, without a religious divorce document.
+      It welcomes interfaith families and counts a child as Jewish if either parent is Jewish.
+    source: "ccar-divorce; rj-what-is"
+    split: none
+    handoff: "Families look different, and kids are loved in all of them. Mom or Dad can tell you more."
+    parent_note: >
+      The CCAR "continues to recognize civil divorce as sufficient to actualize divorce within the Reform
+      context." The Pittsburgh Principles support "individuals and families in the creation of homes rich
+      in Jewish learning," whatever their shape.
+    needs_check: false
+
+  - point: 12
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      "We trust in our tradition's promise that, although God created us as finite beings, the spirit within
+      us is eternal." Reform writing says Jewish wisdom "offers no definitive answer," that Judaism has no
+      concept of hell, and that we also live on through the good we leave in others.
+    source: "ccar-pittsburgh, God; rj-afterlife"
+    split: >
+      Views range from a soul that lives on with God, to resurrection in a messianic age, to living on through
+      memory, children and deeds.
+    handoff: "People believe different things about that. Some believe the soul goes on with God, and we remember people by the good they did. Mom or Dad can tell you what they believe."
+    parent_note: >
+      The Reform prayerbook pictures a leaf that falls and nourishes the tree. Rabbi Moffic: "Our actions, not
+      our specific beliefs, determine our fate."
+    needs_check: false
+
+  - point: 13
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform guidance asks adults to be truthful: death is final and does not hurt, avoid comparing it to sleep
+      or a long trip, and reassure children it was not their fault. Jewish mourning customs such as shiva and
+      the Mourner's Kaddish bring the family and community together.
+    source: "rj-death-children"
+    split: none
+    handoff: "It's not your fault. Feeling sad means you loved them. Let's find Mom or Dad so you can talk and have a hug."
+    parent_note: >
+      Rabbi Mencher: children "need our truthfulness to master the realities," and may "hold themselves
+      responsible." She suggests the Mourner's Kaddish as a gentle way to begin. You can offer hope about an
+      afterlife without promising more than you believe.
+    needs_check: false
+
+  - point: 14
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      The Reform movement treats voting as a mitzvah and civic duty, and its civic work is "proudly nonpartisan":
+      it invests "not in any candidate or party but in the democratic process itself." Its congregations hold
+      "a range of deeply held, morally-grounded political viewpoints."
+    source: "rac-nonpartisan; rj-voting"
+    split: none
+    handoff: "People who care about their country vote for different parties for different reasons. Mom or Dad can tell you how they decide."
+    parent_note: >
+      ReformJudaism.org cites Jeremiah 29:7, seek the welfare of the city where you live, and Hillel, "do not
+      separate yourself from the community." The movement's advocacy on issues sits alongside a rule of not
+      endorsing parties.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: >
+          Pew finds 80% of Reform Jews are Democrats or lean Democratic. The movement's teaching on voting does
+          not change with politics.
+        source: "pew-key-findings"
+      moderate:
+        position: "The movement's teaching on voting does not change with politics."
+        source: "rac-nonpartisan"
+      conservative:
+        position: >
+          A minority of Reform Jews lean Republican (Pew does not give the Reform figure). The RAC says its
+          congregations include people of many political views. The teaching does not change with politics.
+        source: "pew-key-findings; rac-nonpartisan"
+
+  - point: 15
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Reform guidance on war news, including about Israel, asks adults to limit children's media, share only
+      what the child asks, avoid graphic detail, answer honestly but hopefully, and stress "it is not the fault
+      of children that wars happen." A trusted adult is better than peers or the news.
+    source: "rj-war-children"
+    split: >
+      U.S. Jews differ on Israel policy. Pew: Jewish Democrats were more likely than Jewish Republicans to say the
+      U.S. is too supportive of Israel (29% vs. 5%).
+    handoff: "That's an important question. Grown-ups are working hard to keep people safe. Let's ask Mom or Dad about it together."
+    parent_note: >
+      Rabbi Mencher: "Answer questions and be honest, but try to be optimistic about the possibility of the
+      situation improving." Gently steer toward what is happening far from home.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: >
+          Same guidance on how to talk with children. On Israel, Jewish Democrats are more likely to say the U.S.
+          is too supportive (29%, Pew); Pew does not give the Reform-only figure.
+        source: "pew-key-findings; rj-war-children"
+      moderate: {}
+      conservative:
+        position: >
+          Same guidance on how to talk with children. Jewish Republicans rarely say the U.S. is too supportive of
+          Israel (5%, Pew) and were far more likely to rate Trump as friendly toward Israel (85% vs. 55%).
+        source: "pew-key-findings; pew-politics; rj-war-children"
+
+  - point: 16
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Reform Judaism calls social justice "a central prophetic focus" and affirms "the mitzvah of tzedakah."
+      It works "to narrow the gap between the affluent and the poor," treats poverty relief as justice rather
+      than charity, and supports a government safety net alongside congregational help.
+    source: "ccar-pittsburgh, Torah; urj-poverty"
+    split: none
+    handoff: "Some people don't have a home because of hard things that happened to them. Jewish tradition asks us to help. Mom or Dad can tell you more."
+    parent_note: >
+      The 2003 URJ resolution quotes Isaiah, "share your bread with the hungry," and Maimonides, whose highest
+      form of giving helps a person become self-supporting.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "Matches the movement's resolutions, which favour a strong government safety net."
+        source: "urj-poverty"
+      moderate: {}
+      conservative:
+        perspective: several_fairly
+        position: >
+          The duty of tzedakah does not change with politics. On the role of government, conservative-leaning
+          members may differ from the URJ resolutions; Pew does not measure this for Reform Jews.
+        source: "ccar-pittsburgh, Torah; pew-key-findings"
+
+  - point: 17
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No official position on Columbus was found. URJ resolutions speak of "an American history strewn with
+      broken promises and unhonored treaties" with Native Americans, and focus on religious rights, civil rights
+      and tribal sovereignty.
+    source: "urj-native; rac-native"
+    split: none
+    handoff: "People see Columbus in different ways. He was a brave sailor, and his arrival also brought great harm to the people already living here. Mom or Dad can tell you more."
+    parent_note: >
+      The 1977 resolution urges congregations to study Indian history and cultures and to watch for stereotyping
+      in schools, libraries and media.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "Close to the URJ resolutions' emphasis on harms to Native peoples."
+        source: "urj-native"
+      moderate: {}
+      conservative:
+        position: >
+          No survey measures how conservative-leaning Reform Jews frame Columbus. Several views presented fairly
+          fits the movement's emphasis on honest history.
+        source: "pew-key-findings"
+
+  - point: 18
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The URJ's 2019 resolution says systemic racial oppression in the U.S. "began four hundred years ago with the
+      institution of slavery," acknowledges that "some early Jewish Americans were among slave traders and owners,"
+      and supports a federal commission to study reparations.
+    source: "urj-reparations"
+    split: none
+    handoff: "Yes, George Washington owned enslaved people. People can do great things and also very wrong things. Mom or Dad can talk with you about it."
+    parent_note: >
+      The resolution cites Sanhedrin 37a: all people descend from one person "so that no person can say, 'my
+      ancestor is greater than yours.'" It frames repair as teshuvah, returning and making amends.
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "Matches the 2019 resolution."
+        source: "urj-reparations"
+      moderate: {}
+      conservative:
+        perspective: several_fairly
+        position: >
+          The facts of slavery are not in dispute. Conservative-leaning members may weigh reparations and how to
+          honour the founders differently; Pew does not measure this for Reform Jews.
+        source: "pew-key-findings"
+
+  - point: 19
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      No Reform document on teaching religious wars was found. The movement commits to interreligious dialogue
+      to "eliminate the misunderstandings and prejudices of the past," to Muslim-Jewish dialogue, and to standing
+      against antisemitism and Islamophobia.
+    source: "urj-interreligious; rj-religious-freedom; ccar-pittsburgh, God and Torah"
+    split: none
+    handoff: "Sometimes people have hurt each other over religion, and Jewish people were often among those hurt. Today many people of different faiths work together. Mom or Dad can tell you more."
+    parent_note: >
+      The Pittsburgh Principles remember "the unspeakable evils committed against our people" and also call for
+      "dialogue and joint action with people of other faiths."
+    needs_check: true
+    by_lean:
+      progressive:
+        position: "The movement's teaching here does not change with politics."
+        source: "urj-interreligious"
+      moderate:
+        position: "The movement's teaching here does not change with politics."
+        source: "urj-interreligious"
+      conservative:
+        position: "The movement's teaching here does not change with politics."
+        source: "urj-interreligious"
+
+  - point: 20
+    when: from_age
+    from_age: 10
+    perspective: family_tradition
+    position: >
+      Reform educators teach the Holocaust "up to the gates [of the camps]" until fifth grade, with little explicit
+      detail before middle school, but do not avoid the topic. Yad Vashem's main exhibits require visitors to be 10.
+      For current wars, share only what the child asks and avoid graphic detail.
+    source: "rj-holocaust-children; rj-war-children"
+    split: none
+    handoff: "That's a very important part of history. It's best to learn about it with Mom or Dad beside you."
+    parent_note: >
+      Stephanie Fink suggests starting with age-appropriate books about memory, human dignity and standing up for
+      others, matched to your child's temperament, and agreeing with your co-parent on what is right.
+    needs_check: false
+
+  - point: 21
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The Reform movement opposes "all forms of substance abuse, including alcohol," and asks members to drink in
+      moderation with "an awareness of the example set for adolescents and children."
+    source: "urj-substance"
+    split: none
+    handoff: "Some things are only safe for grown-ups, and some aren't safe for anyone. Mom or Dad can explain the rules in our home."
+    parent_note: >
+      The 1989 resolution asks for education in religious schools and youth groups and for support of people
+      struggling with addiction.
+    needs_check: false
+
+  - point: 22
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official Reform statement on body image or modest dress was found. Reform teaches every person is created
+      in the image of God, and leaves dress to personal choice; a CCAR responsum says women may worship with hair
+      "covered or uncovered, as they wish."
+    source: "rj-every-body; ccar-narr-13; rj-attire; rj-what-is"
+    split: none
+    handoff: "Your body is good, and it's yours to take care of. Mom or Dad can talk with you about clothes and how you feel."
+    parent_note: >
+      Rabbi Barenblat: "This body is a reflection of God, exactly as I am." ReformJudaism.org commentary links
+      special clothing to marking sacred times, while affirming "the autonomy and authority of individuals."
+    needs_check: true
+
+  - point: 23
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official Reform position on children's screens was found. Movement writers suggest Shabbat as a time for
+      rest and face-to-face connection, and families vary in how they do it.
+    source: "rj-unplug; rj-plugged"
+    split: >
+      Some Reform families unplug on Shabbat; others limit screens on weekdays and allow them on Shabbat for
+      family harmony.
+    handoff: "Every family makes its own screen rules. That's one to ask Mom or Dad about."
+    parent_note: >
+      Rabbi Yoffie: "the work and the worries can wait." Rabbi Appell's family banned weekday screens and allowed
+      them on Shabbat for shalom bayit, peace in the home.
+    needs_check: true
+
+  - point: 24
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      "We affirm the mitzvah of tzedakah, setting aside portions of our earnings and our time to provide for
+      those in need." Shabbat "calls us to bring the highest moral values to our daily labor."
+    source: "ccar-pittsburgh, Torah; urj-poverty"
+    split: none
+    handoff: "Jewish families set aside some of what they have to help others. It's called tzedakah. Ask Mom or Dad how our family does it."
+    parent_note: >
+      The URJ's 2003 poverty resolution cites Maimonides: the highest form of giving helps someone become
+      self-supporting, so they "may not fall and be in need of help."
+    needs_check: false

@@ -1,0 +1,634 @@
+pack: catholic
+name: Catholic
+short_name: "Catholic"
+subtitle: ""
+order: 3
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For Catholic families who want the tutor to follow the Church's teaching while still
+  showing children, kindly, that other people believe differently. Built mainly from the
+  Catechism of the Catholic Church (cited by paragraph), papal encyclicals and Vatican
+  documents, and statements of the US bishops (USCCB). Pew Research Center surveys are
+  used where US Catholics differ from each other or by political lean.
+sources:
+  - id: ccc
+    title: Catechism of the Catholic Church (English edition), cited by paragraph number
+    publisher: Holy See (Libreria Editrice Vaticana)
+    url: https://www.vatican.va/archive/ENG0015/_INDEX.HTM
+  - id: humani-generis
+    title: Humani Generis, encyclical of Pope Pius XII (1950)
+    publisher: Holy See
+    url: https://www.vatican.va/content/pius-xii/en/encyclicals/documents/hf_p-xii_enc_12081950_humani-generis.html
+  - id: laudato-si
+    title: Laudato si', encyclical of Pope Francis on care for our common home (2015)
+    publisher: Holy See
+    url: https://www.vatican.va/content/francesco/en/encyclicals/documents/papa-francesco_20150524_enciclica-laudato-si.html
+  - id: francis-pas-2014
+    title: Address of Pope Francis to the Plenary Session of the Pontifical Academy of Sciences, 27 October 2014
+    publisher: Holy See
+    url: https://www.vatican.va/content/francesco/en/speeches/2014/october/documents/papa-francesco_20141027_plenaria-accademia-scienze.html
+  - id: truth-meaning
+    title: "The Truth and Meaning of Human Sexuality: Guidelines for Education within the Family (1995)"
+    publisher: Pontifical Council for the Family
+    url: https://www.vatican.va/roman_curia/pontifical_councils/family/documents/rc_pc_family_doc_08121995_human-sexuality_en.html
+  - id: dignitas-infinita
+    title: Dignitas Infinita, declaration on human dignity (2024)
+    publisher: Dicastery for the Doctrine of the Faith
+    url: https://www.vatican.va/roman_curia/congregations/cfaith/documents/rc_ddf_doc_20240402_dignitas-infinita_en.html
+  - id: doctrine-of-discovery
+    title: Joint Statement of the Dicasteries for Culture and Education and for Promoting Integral Human Development on the "Doctrine of Discovery" (30 March 2023)
+    publisher: Holy See, Dicastery for Promoting Integral Human Development
+    url: https://www.humandevelopment.va/en/news/2023/nota-congiunta-sulla-dottrina-della-scoperta.html
+  - id: memory-reconciliation
+    title: "Memory and Reconciliation: The Church and the Faults of the Past (1999)"
+    publisher: International Theological Commission
+    url: https://www.vatican.va/roman_curia/congregations/cfaith/cti_documents/rc_con_cfaith_doc_20000307_memory-reconc-itc_en.html
+  - id: we-remember
+    title: "We Remember: A Reflection on the Shoah (1998)"
+    publisher: Holy See, Commission for Religious Relations with the Jews
+    url: https://www.christianunity.va/content/unitacristiani/en/commissione-per-i-rapporti-religiosi-con-l-ebraismo/commissione-per-i-rapporti-religiosi-con-l-ebraismo-crre/documenti-della-commissione/en1.html
+  - id: usccb-open-wide
+    title: "Open Wide Our Hearts: The Enduring Call to Love. A Pastoral Letter Against Racism (2018)"
+    publisher: United States Conference of Catholic Bishops
+    url: https://www.usccb.org/resources/open-wide-our-hearts_0.pdf
+  - id: usccb-faithful-citizenship
+    title: Forming Consciences for Faithful Citizenship, with introductory notes of 2011, 2015, 2019 and 2023
+    publisher: United States Conference of Catholic Bishops
+    url: https://www.usccb.org/issues-and-action/faithful-citizenship/forming-consciences-for-faithful-citizenship-title
+  - id: kofc-columbus
+    title: "Knights of Columbus & Christopher Columbus, message of Supreme Knight Carl A. Anderson (2020)"
+    publisher: Knights of Columbus, Florida State Council
+    url: https://www.floridakofc.org/Blog/Hot-News/Hot-News/Knights-of-Columbus--Christopher-Columbus
+  - id: kolbe-center
+    title: Kolbe Center for the Study of Creation, home page
+    publisher: Kolbe Center for the Study of Creation (Catholic lay apostolate)
+    url: https://kolbecenter.org/
+  - id: pew-evolution-2014
+    title: 5 facts about evolution and religion (2014)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2014/10/30/5-facts-about-evolution-and-religion/
+  - id: pew-catholics-party-2019
+    title: Like Americans overall, U.S. Catholics are sharply divided by party (2019)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2019/01/24/like-americans-overall-u-s-catholics-are-sharply-divided-by-party/
+  - id: pew-catholics-inclusive-2025
+    title: Most U.S. Catholics Say They Want the Church To Be 'More Inclusive' (2025)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/04/30/most-us-catholics-say-they-want-the-church-to-be-more-inclusive/
+  - id: pew-transgender-religion-2022
+    title: Attitudes about transgender issues vary widely among Christians, religious 'nones' in U.S. (2022)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/short-reads/2022/07/07/attitudes-about-transgender-issues-vary-widely-among-christians-religious-nones-in-u-s/
+  - id: pew-party-religion-2024
+    title: Party identification among religious groups and religiously unaffiliated voters (2024)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/politics/2024/04/09/party-identification-among-religious-groups-and-religiously-unaffiliated-voters/
+entries:
+  - point: 1
+    when: anytime
+    perspective: family_tradition
+    position: >
+      God exists, and the Church teaches that God the Creator can be known with certainty
+      by human reason through the things he made. The Church respects other religions,
+      which can reflect "a ray of that truth which enlightens all men," and sees all
+      peoples as sharing one origin and one destiny.
+    source: "ccc, paragraphs 286, 842-843, 2104"
+    split: none
+    handoff: "That's a great one to ask Mom or Dad about. They'd love to talk about it with you."
+    parent_note: >
+      The Catechism says God can be known "through his works, by the light of human reason"
+      (286). On friends of other faiths: the Church sees a bond with every people and
+      religion (842), and says the duty to seek the truth does not conflict with respect for
+      other religions (2104).
+    needs_check: false
+
+  - point: 2
+    when: anytime
+    perspective: family_tradition
+    position: >
+      Scripture is inspired by God and true, and it is read by asking what its human
+      authors meant, paying attention to the kinds of writing used in their time. The six
+      days of creation are described as symbolic. Genesis 1-11 tells real foundational
+      truths in simple, figurative language, not in the style of modern history writing.
+    source: "ccc, paragraphs 109-110, 115-117, 337; humani-generis, paragraph 38; francis-pas-2014"
+    split: >
+      Official teaching reads Scripture by its literary genres. A smaller traditionalist
+      camp (for example the Kolbe Center, a Catholic lay apostolate) reads the six days of
+      Genesis more literally.
+    handoff: "Good question! Mom or Dad can tell you how our family reads that story."
+    parent_note: >
+      The Catechism asks readers to consider "the literary genres in use at that time"
+      (110) and names a literal sense and three spiritual senses of Scripture (115-117).
+      It calls the six days a symbolic description of God's work (337). Pope Francis warned
+      against picturing God as "a magician, complete with an all powerful magic wand" (2014).
+    needs_check: false
+
+  - point: 3
+    when: anytime
+    perspective: family_tradition
+    position: >
+      Prayer is a living relationship with God, a lifting of the mind and heart to
+      God, and God reaches out first. Jesus worked real miracles as signs that God sent
+      him. Angels are real. The Church rejects fortune telling, horoscopes, and trying to
+      contact the dead.
+    source: "ccc, paragraphs 328-336, 547-549, 1032, 2116-2117, 2558-2565"
+    split: none
+    handoff: "That's a wonderful thing to wonder about. Ask Mom or Dad what they think!"
+    parent_note: >
+      Prayer is described as an encounter where "God thirsts that we may thirst for him"
+      (2560). Jesus' signs invite belief but are not meant to satisfy curiosity (548).
+      On ghosts and spooky things: the Church rejects all divination, including
+      conjuring up the dead, mediums, and horoscopes (2116), and lucky charms (2117).
+      Praying for those who have died is encouraged (1032).
+    needs_check: false
+
+  - point: 4
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The Church teaches that salvation comes through Christ and his Church, and it also
+      teaches that people who, through no fault of their own, do not know Christ but
+      sincerely seek God and follow their conscience may be saved. Jews hold a special
+      place as "the first to hear the Word of God," and Muslims adore the one merciful God.
+    source: "ccc, paragraphs 839, 841-843, 846-848, 2104"
+    split: none
+    handoff: "That's a big question. Mom or Dad would love to talk about it with you."
+    parent_note: >
+      The Church sees goodness and truth in other religions as "a preparation for the
+      Gospel" (843). "Outside the Church there is no salvation" is explained positively:
+      all salvation comes from Christ (846), and it does not apply to those who do not know
+      Christ "through no fault of their own" (847). The Church still keeps its duty to
+      share the Gospel (848).
+    needs_check: false
+
+  - point: 5
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The Church has no fixed date for the age of the Earth. It welcomes scientific study of
+      the age and development of the cosmos as a reason to admire the Creator, and Pope
+      Francis has said the Big Bang "does not contradict the intervention of a divine
+      creator."
+    source: "ccc, paragraphs 159, 283-284; francis-pas-2014"
+    split: >
+      Most official statements accept the scientific picture. A minority traditionalist camp
+      (for example the Kolbe Center) teaches a literal six-day creation.
+    handoff: "Scientists have a great answer to that, and Mom or Dad can tell you what our family believes too."
+    parent_note: >
+      The Catechism says discoveries about the cosmos and the development of life invite
+      "even greater admiration for the greatness of the Creator" (283), and that the deeper
+      question is the meaning of origins, not only when and how (284).
+    needs_check: false
+
+  - point: 6
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The Church allows study of the human body's development from earlier living things,
+      and Pope Francis said evolution "does not conflict with the notion of Creation." It
+      holds that each human soul is created directly by God, and that humanity comes from
+      a first set of parents.
+    source: "humani-generis, paragraphs 36-37; francis-pas-2014; laudato-si, paragraph 81; ccc, paragraph 366; pew-evolution-2014"
+    split: >
+      Official teaching permits evolution of the body. Pew found about a quarter of white
+      US Catholics (26%) and 31% of Hispanic US Catholics say humans have always existed in
+      their present form; the Kolbe Center rejects evolution.
+    handoff: "People wonder about that a lot. Ask Mom or Dad how our family thinks about it!"
+    parent_note: >
+      Pius XII: research into the body's origin from earlier living matter is
+      permitted, but "souls are immediately created by God" (Humani Generis 36), and Adam
+      was not one of many first parents (37). Laudato si' 81: even with evolution, each
+      person is unique and called to relationship with God.
+    needs_check: false
+
+  - point: 7
+    when: anytime
+    perspective: family_tradition
+    position: >
+      Faith and science cannot truly conflict, because the same God gave both faith and
+      reason. Science and religion can "enter into an intense dialogue fruitful for both."
+    source: "ccc, paragraph 159; laudato-si, paragraphs 62, 199-201"
+    split: none
+    handoff: "You can love science and love God. Mom or Dad can tell you more!"
+    parent_note: >
+      The Catechism: "there can never be any real discrepancy between faith and reason,"
+      and honest research "can never conflict with the faith" (159). Laudato si' adds that
+      science cannot answer every question about meaning and beauty (199).
+    needs_check: false
+
+  - point: 8
+    when: parent_led
+    perspective: family_tradition
+    position: >
+      Parents are "the first and the principal educators" of their children, including in sexuality,
+      giving information gradually, one child at a time, in a personal conversation suited
+      to each child. In the years from about five to puberty, children should not be given
+      unnecessary information about sex; early questions usually concern pregnancy and a
+      new baby.
+    source: "truth-meaning, paragraphs 5, 64-66, 75-78, 83"
+    split: none
+    handoff: "That's a really good question for Mom or Dad. They'd love to tell you."
+    parent_note: >
+      The Pontifical Council asks parents to give each child "individualized formation"
+      through "a personalized dialogue" (65-66), with delicacy and at the right time;
+      too much detail is counterproductive, but waiting too long is imprudent (75).
+      Body safety and telling a trusted adult are on the safety floor and are always taught.
+    needs_check: false
+
+  - point: 9
+    when: parent_led
+    perspective: family_tradition
+    position: >
+      The Church teaches that marriage is between a man and a woman and that homosexual
+      acts cannot be approved. It also teaches that people with same-sex attraction "must
+      be accepted with respect, compassion, and sensitivity," and that every sign of unjust
+      discrimination should be avoided.
+    source: "ccc, paragraphs 2357-2359, 2360; dignitas-infinita, paragraph 55"
+    split: >
+      US Catholics differ from official teaching and from each other. In 2025 Pew found half
+      of Catholics say the Church should recognize marriages of gay and lesbian couples,
+      with most Democrats in favor and most Republicans opposed.
+    handoff: "Families come in lots of shapes. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The Catechism calls homosexual acts "intrinsically disordered" (2357) and asks that
+      people with same-sex attraction be treated with "respect, compassion, and
+      sensitivity" (2358). Dignitas Infinita: every person, "regardless of sexual
+      orientation, ought to be respected in his or her dignity" (55).
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          Many progressive Catholics hold the Church's call to respect and welcome alongside
+          support for civil same-sex marriage; Pew found 76% of Catholic Democrats support
+          it, and about three-quarters want a "more inclusive" Church.
+        source: "pew-catholics-party-2019; pew-catholics-inclusive-2025"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Conservative Catholics more often hold closely to the Church's teaching on
+          marriage; in 2025 Pew found most Catholic Republicans oppose the Church recognizing
+          same-sex marriages, though 59% supported legal same-sex marriage in 2019.
+        source: "pew-catholics-inclusive-2025; pew-catholics-party-2019"
+
+  - point: 10
+    when: parent_led
+    perspective: family_tradition
+    position: >
+      The Church teaches that God creates each person male or female, with equal dignity,
+      and that each person should "acknowledge and accept" their sexual identity. It holds
+      that biological sex and gender "can be distinguished but not separated," and that
+      sex-change interventions, as a rule, risk a person's dignity. Every person is to be
+      treated with respect.
+    source: "ccc, paragraphs 369, 2333-2334; dignitas-infinita, paragraphs 55, 59-60"
+    split: >
+      Pew (2022) found 62% of US Catholics say a person's gender is determined by sex at
+      birth; the rest disagree or are unsure.
+    handoff: "That's a good one to talk about with Mom or Dad."
+    parent_note: >
+      The Catechism: "Everyone, man and woman, should acknowledge and accept his sexual
+      identity" (2333), and God gives man and woman "an equal personal dignity" (2334).
+      Dignitas Infinita says sex and gender "can be distinguished but not separated" (59)
+      and asks that every person be respected (55).
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          No Pew figure splits Catholics by party on gender identity. Progressive Catholic
+          families may want the Church's teaching shown alongside other views, with stress on
+          respect for every person.
+        source: "pew-transgender-religion-2022; dignitas-infinita, paragraph 55"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Conservative Catholic families typically hold to the teaching that sex and gender
+          cannot be separated. Pew notes Republicans are much more likely than Democrats to
+          say society has gone too far in accepting transgender people.
+        source: "pew-transgender-religion-2022; dignitas-infinita, paragraphs 59-60"
+
+  - point: 11
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The Church teaches that a husband, wife and their children form a family, that its
+      members are equal in dignity, and that a valid sacramental marriage lasts until death.
+      Divorce harms spouses and children. A spouse who was unjustly abandoned has done no
+      wrong. Adoption is praised as a generous response to infertility.
+    source: "ccc, paragraphs 2201-2203, 2379, 2382-2386"
+    split: none
+    handoff: "Every family is different. Mom or Dad can tell you more about that."
+    parent_note: >
+      The Catechism says divorce harms children, who are often caught between their parents
+      (2385), and distinguishes a spouse who was "unjustly abandoned" from one at fault
+      (2386). Members of a family are "persons equal in dignity" (2203). The tutor speaks
+      kindly about every child's family.
+    needs_check: false
+
+  - point: 12
+    when: anytime
+    perspective: family_tradition
+    position: >
+      Each person has an immortal soul. After death, each person meets Christ, and those
+      who die in God's friendship go to heaven, perhaps after a purification (purgatory).
+      The Church also teaches that hell exists as a freely chosen separation from God, and
+      that God predestines no one to it.
+    source: "ccc, paragraphs 366, 1020-1029, 1030-1032, 1033-1037"
+    split: none
+    handoff: "That's a really important question. Mom or Dad would love to talk with you about it."
+    parent_note: >
+      Heaven is life with God, Mary, the angels and saints, a state of complete and
+      lasting happiness (1024); Scripture describes it with images like light, peace
+      and a wedding feast (1027). "At the evening of life, we shall be judged on our love"
+      (1022). The Church prays for the dead (1032). The tutor never uses hell language with
+      the child.
+    needs_check: false
+
+  - point: 13
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The Church asks that the dying be cared for in dignity and peace, that the dead be
+      treated with respect in hope of the resurrection, and that we pray for them. Animals
+      are God's creatures, owed kindness, and people may love them. The Catechism's
+      paragraphs on animals do not say whether animals have an afterlife.
+    source: "ccc, paragraphs 1032, 2299-2300, 2416-2418"
+    split: none
+    handoff: "It's okay to feel sad. Let's go find Mom or Dad for a hug and a talk."
+    parent_note: >
+      "The bodies of the dead must be treated with respect and charity, in faith and hope
+      of the Resurrection" (2300). Praying for those who died is a long Church practice
+      (1032). Animals give God glory, and kindness to them is a duty (2416). No Church
+      document read for this draft addresses a child's sense of blame; that is for parents.
+    needs_check: false
+
+  - point: 14
+    when: anytime
+    perspective: several_fairly
+    position: >
+      Catholics are called to vote, pay taxes and take part in public life, and may voice
+      "just criticisms" of leaders. The US bishops do not tell Catholics which party or
+      candidate to support, and warn against using parts of Church teaching for partisan
+      purposes.
+    source: "ccc, paragraphs 2238-2240; usccb-faithful-citizenship, introductory notes 2011, 2015, 2023"
+    split: >
+      US Catholics are split by party: in 2023, 52% of Catholic voters identified with or
+      leaned Republican and 44% Democratic.
+    handoff: "People in both parties are trying to help our country. Ask Mom or Dad what they think!"
+    parent_note: >
+      The bishops' guide "does not offer a voters guide, scorecard of issues, or direction
+      on how to vote" (2011 note) and asks voters to weigh candidates' "character and
+      integrity" as well as issues (2023 note). The Catechism names voting as a duty (2240).
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "Church teaching on citizenship does not change with politics; the base entry applies."
+        source: "usccb-faithful-citizenship; pew-party-religion-2024"
+      moderate: {}
+      conservative:
+        position: "Church teaching on citizenship does not change with politics; the base entry applies."
+        source: "usccb-faithful-citizenship; pew-party-religion-2024"
+
+  - point: 15
+    when: from_age
+    from_age: 8
+    perspective: family_tradition
+    position: >
+      The Church urges everyone to pray and work to avoid war. Nations may defend
+      themselves only under strict conditions, and even in war, civilians, the wounded and
+      prisoners must be respected. Wealthier nations should welcome those in need as far as
+      they can, and newcomers should respect their new country's laws.
+    source: "ccc, paragraphs 2241, 2307-2317"
+    split: >
+      On news topics such as immigration, US Catholics split by party: Pew (2019) found 86%
+      of Catholic Democrats and 47% of Catholic Republicans say immigrants strengthen the
+      country.
+    handoff: "That's a big thing to think about. Mom or Dad can help you understand it."
+    parent_note: >
+      The Catechism asks everyone to work for peace (2308) and hopes people will "beat
+      their swords into plowshares" (2317). Injustice, inequality, envy and pride threaten
+      peace (2317). It also teaches welcome for foreigners in need (2241).
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          Progressive Catholics more often stress welcome for migrants and peacemaking;
+          86% of Catholic Democrats say immigrants strengthen the country (Pew 2019).
+        source: "pew-catholics-party-2019; ccc, paragraph 2241"
+      moderate: {}
+      conservative:
+        position: >
+          Conservative Catholics more often stress law and the common good; 81% of Catholic
+          Republicans favored expanding the border wall (Pew 2019). The Catechism names both
+          welcome and respect for the host country's laws (2241).
+        source: "pew-catholics-party-2019; ccc, paragraph 2241"
+
+  - point: 16
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The goods of the Earth are meant for everyone, and owners are stewards who should
+      share, especially with the poor. The Church shows "a preferential love" for the poor
+      and calls caring for them a matter of justice as well as charity.
+    source: "ccc, paragraphs 2402-2406, 2443-2449"
+    split: >
+      Catholics agree on caring for the poor but split on how: Pew (2019) found 64% of
+      Catholic Democrats and 33% of Catholic Republicans say government aid to the poor does
+      more good than harm.
+    handoff: "That's a kind thing to wonder about. Ask Mom or Dad how our family helps."
+    parent_note: >
+      "The goods of creation are destined for the whole human race" (2402). Christ is
+      present in the poor (2449), and giving to them is "one of the chief witnesses to
+      fraternal charity" (2447). Political authority may regulate property for the common
+      good (2406).
+    needs_check: false
+    by_lean:
+      progressive:
+        position: >
+          Progressive Catholics more often stress justice and public policy for the poor; 64%
+          of Catholic Democrats say government aid does more good than harm (Pew 2019).
+        source: "pew-catholics-party-2019; ccc, paragraph 2406"
+      moderate: {}
+      conservative:
+        position: >
+          Conservative Catholics more often stress personal and parish charity; 67% of
+          Catholic Republicans say government aid to the poor does more harm than good
+          (Pew 2019).
+        source: "pew-catholics-party-2019; ccc, paragraphs 2404-2405"
+
+  - point: 17
+    when: anytime
+    perspective: several_fairly
+    position: >
+      The Vatican (2023) says the "doctrine of discovery" is "not part of the teaching of
+      the Catholic Church," admits that many Christians did evil to Indigenous peoples, and
+      asks pardon. The US bishops (2018) describe colonization as a "harsh and painful
+      reality" for Native peoples. The Church also honors missionaries who defended
+      Indigenous peoples.
+    source: "doctrine-of-discovery, paragraphs 2-8; usccb-open-wide, section on the Native American experience"
+    split: >
+      Catholic heritage groups such as the Knights of Columbus honor Columbus as a Catholic
+      whose name stood against anti-Catholic prejudice; Vatican and USCCB statements stress
+      the harms done to Indigenous peoples.
+    handoff: "People see Columbus in different ways. Mom or Dad can tell you what they think."
+    parent_note: >
+      The Vatican joint statement cites the 1537 bull Sublimis Deus: Indigenous peoples
+      "are by no means to be deprived of their liberty or the possession of their
+      property" (8). The Knights of Columbus took the name to show "a Catholic could be both
+      a good citizen and a good Catholic."
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: several_fairly
+        position: >
+          Progressive Catholics more often lead with the Vatican's 2023 repudiation of the
+          doctrine of discovery and the harms done to Indigenous peoples.
+        source: "doctrine-of-discovery; usccb-open-wide"
+      moderate: {}
+      conservative:
+        perspective: several_fairly
+        position: >
+          Conservative Catholics more often lead with Columbus as part of Catholic American
+          heritage, as the Knights of Columbus do, while still condemning injustice.
+        source: "kofc-columbus"
+
+  - point: 18
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The Church teaches that enslaving people or treating them as goods is always wrong.
+      The US bishops say chattel slavery's injustices "were horrifying," and admit that
+      "many American religious leaders, including Catholic bishops, failed to formally
+      oppose slavery; some even owned slaves." They ask Catholics to look honestly at
+      history.
+    source: "ccc, paragraph 2414; usccb-open-wide, sections on the African American experience and Acknowledging Sin"
+    split: none
+    handoff: "That's an important part of history. Mom or Dad can tell you more."
+    parent_note: >
+      The bishops: "Only from a place of humility can we look honestly at past failures,
+      ask for forgiveness, and move toward healing and reconciliation." The Catechism
+      forbids any act that leads to enslaving human beings (2414).
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "No survey found splitting Catholics by party on this; the bishops' teaching does not change with politics, so the base entry applies."
+        source: "usccb-open-wide"
+      moderate: {}
+      conservative:
+        position: "No survey found splitting Catholics by party on this; the bishops' teaching does not change with politics, so the base entry applies."
+        source: "usccb-open-wide"
+
+  - point: 19
+    when: from_age
+    from_age: 8
+    perspective: family_tradition
+    position: >
+      The Church teaches that no one may be forced to act against their conscience in
+      religious matters. It has publicly repented of past "intolerance and even the use of
+      force in the service of truth," and of the divisions among Christians.
+    source: "ccc, paragraphs 2106, 2108; memory-reconciliation, sections 5.2-5.3"
+    split: none
+    handoff: "That's a good question about history. Ask Mom or Dad about it."
+    parent_note: >
+      The International Theological Commission's study for the Jubilee Year 2000 asks the
+      Church to return "with a spirit of repentance" to the use of force in religion (5.3).
+      The Catechism calls religious freedom a natural right that persists even in those who
+      do not seek the truth (2106).
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "No survey found splitting Catholics by party on this; the teaching does not change with politics, so the base entry applies."
+        source: "memory-reconciliation"
+      moderate: {}
+      conservative:
+        position: "No survey found splitting Catholics by party on this; the teaching does not change with politics, so the base entry applies."
+        source: "memory-reconciliation"
+
+  - point: 20
+    when: from_age
+    from_age: 9
+    perspective: family_tradition
+    position: >
+      The Church sets no age for learning about war and atrocities. It teaches that the
+      Shoah "can never be forgotten" and asks all people to know about it, and it condemns
+      genocide and the targeting of civilians. It also warns against media that show too
+      much.
+    source: "we-remember, sections I and V; ccc, paragraphs 2313-2314, 2523"
+    split: none
+    handoff: "That's a serious part of history. Let's look at it together with Mom or Dad."
+    parent_note: >
+      We Remember: "there is no future without memory" (I), and Catholics should see Jews
+      as "our elder brothers" (V). The Catechism condemns genocide and calls the
+      destruction of whole cities "a crime against God and man" (2313-2314). The starting
+      age here is a suggestion only.
+    needs_check: true
+
+  - point: 21
+    when: anytime
+    perspective: family_tradition
+    position: >
+      Temperance means avoiding every kind of excess in food, alcohol, tobacco and medicine.
+      Using drugs outside strict medical need does very grave harm and is seriously wrong.
+      Health is a gift from God to care for.
+    source: "ccc, paragraphs 2288, 2290-2291"
+    split: none
+    handoff: "Good question! Mom or Dad can tell you our family's rules about that."
+    parent_note: >
+      "Life and physical health are precious gifts entrusted to us by God" (2288). "The
+      virtue of temperance disposes us to avoid every kind of excess" (2290). The Catechism
+      does not forbid alcohol, but warns against drunkenness (2290).
+    needs_check: false
+
+  - point: 22
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The body shares in the dignity of being made in God's image and is to be honored.
+      The Church rejects idolizing physical perfection. Modesty protects a person's dignity,
+      shows up in decent dress, and takes different forms in different cultures.
+    source: "ccc, paragraphs 364, 2289, 2521-2524"
+    split: none
+    handoff: "Your body is a good gift. Mom or Dad would love to talk about that with you."
+    parent_note: >
+      The body is to be honored, not despised (364). The Church warns against a
+      "cult of the body" (2289). Modesty "protects the intimate center of the person"
+      (2521) and varies from culture to culture (2524).
+    needs_check: false
+
+  - point: 23
+    when: anytime
+    perspective: family_tradition
+    position: >
+      The Church asks people to use media with "moderation and discipline" and to form
+      their consciences so they can resist harmful influences. Pope Francis warns that
+      constant media can crowd out wisdom, deep thought and real friendship.
+    source: "ccc, paragraph 2496; laudato-si, paragraph 47"
+    split: none
+    handoff: "Mom and Dad pick our screen rules. That's a good one to ask them about."
+    parent_note: >
+      Users "should practice moderation and discipline in their approach to the mass
+      media" (2496). Laudato si' calls information overload "a sort of mental pollution"
+      and says online ties can leave people lonely (47).
+    needs_check: false
+
+  - point: 24
+    when: anytime
+    perspective: family_tradition
+    position: >
+      What we own is held as stewards, to benefit our family and others, with the best
+      kept for guests, the sick and the poor. Giving to the poor is both charity and
+      justice. Pope Francis warns that buying more does not fill an empty heart.
+    source: "ccc, paragraphs 2404-2405, 2446-2447; laudato-si, paragraphs 203-204"
+    split: none
+    handoff: "Great question. Mom or Dad can tell you how our family thinks about money."
+    parent_note: >
+      Owners should treat goods "not merely as exclusive to himself but common to others
+      also" (2404). Laudato si' says the emptier a person's heart is, the more they crave
+      things to buy and own (204).
+    needs_check: false

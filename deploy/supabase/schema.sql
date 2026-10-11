@@ -140,6 +140,11 @@ create table values_settings (
   primary key (family_id, point_number)
 );
 
+-- The beliefs interview adds, in supabase/migrations/20261011000000_beliefs_interview.sql:
+--   each guardian's own answers until the two compare (guardian_values, guardian_answers,
+--   guardian_answer_ages); "Not yet" ages per child (child_point_ages, superseding
+--   values_settings.from_age); values_settings.from_pack; and one values_pack_entries row per lean.
+
 -- Any one guardian can place one. Only that guardian can lift it. Lifted rows stay for the audit.
 create table blackballs (
   id            uuid primary key default gen_random_uuid(),

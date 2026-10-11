@@ -8,6 +8,14 @@
   --accent-ink: #ffffff;
   --danger: #a33a2b;
   --radius: 14px;
+  --accent-soft: #e3efeb;
+  --flag: #9a5b13;
+  /* The five answers in "Our Family's Beliefs" */
+  --a-ours: #2f6f62;
+  --a-fair: #2f5f8f;
+  --a-later: #9a6a12;
+  --a-us: #6b4c9a;
+  --a-never: #6b7078;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,6 +28,14 @@
     --accent: #6cc2ad;
     --accent-ink: #10201c;
     --danger: #f08a7a;
+    --accent-soft: #1d3530;
+    --flag: #e3a95a;
+    --a-ours: #6cc2ad;
+    --a-fair: #8ab8e6;
+    --a-later: #e0b562;
+    --a-us: #b9a0e3;
+    --a-never: #a3acb8;
+    color-scheme: dark;
   }
 }
 
@@ -43,7 +59,8 @@ body {
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
   color: inherit;
 }

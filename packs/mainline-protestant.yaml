@@ -1,0 +1,652 @@
+pack: mainline-protestant
+name: Mainline Protestant (United Methodist, Episcopal, ELCA, PCUSA)
+short_name: "Mainline Protestant"
+subtitle: "Methodist, Episcopal, Lutheran (ELCA), Presbyterian (PCUSA)"
+order: 4
+status: draft-by-outsiders
+label: "Draft by outsiders. Awaiting review by members of this community."
+version: 1
+drafted: 2026-10-11
+summary: >
+  For families in the four largest mainline Protestant churches: the United Methodist
+  Church, the Episcopal Church, the Evangelical Lutheran Church in America (ELCA) and the
+  Presbyterian Church (U.S.A.). Built from the UMC Social Principles (2024) and Book of
+  Discipline, Episcopal General Convention resolutions and Prayer Book catechism, ELCA social
+  statements and policy statements, and the PCUSA Book of Order and General Assembly actions,
+  with Pew Research Center surveys for what members believe and how they lean politically.
+sources:
+  - id: umc-sp
+    title: United Methodist Social Principles, as adopted by General Conference, Charlotte 2024 (in effect 2025-2028)
+    publisher: The United Methodist Church, General Board of Church and Society
+    url: https://www.umcjustice.org/documents/124
+  - id: umc-bod105
+    title: "Book of Discipline, Paragraph 105: Our Theological Task"
+    publisher: The United Methodist Church
+    url: https://www.umc.org/content/book-of-discipline-105-our-theological-task
+  - id: elca-hs
+    title: "Human Sexuality: Gift and Trust (social statement, 2009; Section IV edits adopted 2025)"
+    publisher: Evangelical Lutheran Church in America
+    url: https://cdn.elca.org/cdn/wp-content/uploads/HumanSexualityGiftandTrust2025.pdf
+  - id: elca-gen
+    title: "Genetics, Faith and Responsibility (social statement, 2011)"
+    publisher: Evangelical Lutheran Church in America
+    url: https://cdn.elca.org/cdn/wp-content/uploads/GeneticsSS.pdf
+  - id: elca-econ
+    title: "A brief summary of Sufficient, Sustainable Livelihood for All (social statement on economic life, 1999)"
+    publisher: Evangelical Lutheran Church in America
+    url: https://cdn.elca.org/cdn/wp-content/uploads/Sufficient_Sustainable_Livelihood_BriefSummary.pdf
+  - id: elca-ir
+    title: "A Declaration of Inter-Religious Commitment (policy statement, 2019)"
+    publisher: Evangelical Lutheran Church in America
+    url: https://resources.elca.org/wp-content/uploads/Inter-Religious_Policy_Statement.pdf
+  - id: elca-jewish
+    title: A Declaration of the Evangelical Lutheran Church in America to the Jewish Community (1994, revised 2021)
+    publisher: Evangelical Lutheran Church in America
+    url: https://resources.elca.org/wp-content/uploads/Declaration_Of_The_ELCA_To_The_Jewish_Community.pdf
+  - id: tec-catechism
+    title: "Book of Common Prayer (1979), An Outline of the Faith, commonly called the Catechism"
+    publisher: The Episcopal Church
+    url: https://www.bcponline.org/Misc/catechism.html
+  - id: tec-2006-a129
+    title: "General Convention Resolution 2006-A129, Affirm Evolution and Science Education"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2006-A129
+  - id: tec-2015-a054
+    title: "General Convention Resolution 2015-A054, Authorize Trial Use of Marriage and Blessing Rites"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2015-A054
+  - id: tec-2018-b012
+    title: "General Convention Resolution 2018-B012, Authorize Trial Liturgies for Same-Sex Marriage"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2018-B012
+  - id: tec-2012-d019
+    title: "General Convention Resolution 2012-D019, Amend Canon I.17.5 [Rights of Laity]"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2012-D019
+  - id: tec-2012-d002
+    title: "General Convention Resolution 2012-D002, Amend Canon III.1.2 [Access to Discernment Process for Ministry]"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2012-D002
+  - id: tec-2009-d035
+    title: "General Convention Resolution 2009-D035, Repudiate the Doctrine of Discovery"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2009-D035
+  - id: tec-2006-a123
+    title: "General Convention Resolution 2006-A123, Study Economic Benefits Derived from Slavery"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2006-A123
+  - id: tec-2015-a158
+    title: "General Convention Resolution 2015-A158, Adopt Policy on Alcohol and Other Substance Misuse"
+    publisher: The Episcopal Church, Archives
+    url: https://digitalarchives.episcopalarchives.org/cgi-bin/acts/acts_resolution.pl?resolution=2015-A158
+  - id: pcusa-boo
+    title: Book of Order 2025-2027, The Constitution of the Presbyterian Church (U.S.A.), Part II
+    publisher: Office of the General Assembly, Presbyterian Church (U.S.A.)
+    url: https://pcusa.org/sites/default/files/2025-08/2025_0724_Book_of_Order_Interactive_2025-2027.pdf
+  - id: pcusa-2002-science
+    title: "214th General Assembly (2002), Item 09-08, On Supporting High Public Science Education Standards (with the 1969 PCUS statement Evolution and the Bible in its rationale)"
+    publisher: Presbyterian Church (U.S.A.), Advisory Committee on Social Witness Policy
+    url: https://pcusa.org/sites/default/files/2026-08/Science%20and%20public%20education%202002.pdf
+  - id: pew-rls-party
+    title: "Religious Landscape Study 2023-24, Chapter 15: Religion, partisanship and ideology"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-partisanship-and-ideology/
+  - id: pew-rls-lgbtq
+    title: "Religious Landscape Study 2023-24, Chapter 16: Religion and views on LGBTQ issues and abortion"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-and-views-on-lgbtq-issues-and-abortion/
+  - id: pew-rls-beliefs
+    title: "Religious Landscape Study 2023-24, Chapter 11: Religious and spiritual beliefs"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religious-and-spiritual-beliefs/
+  - id: pew-rls-govt
+    title: "Religious Landscape Study 2023-24, Chapter 20: Religion and views on the role of government"
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2025/02/26/religion-and-views-on-the-role-of-government/
+  - id: pew-2008-eternal-life
+    title: Many Americans Say Other Faiths Can Lead to Eternal Life (December 18, 2008)
+    publisher: Pew Research Center
+    url: https://www.pewresearch.org/religion/2008/12/18/many-americans-say-other-faiths-can-lead-to-eternal-life/
+entries:
+  - point: 1   # Is there a God, and whose?
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The churches confess one God, "the Father Almighty, creator of heaven and earth, of all that
+      is, seen and unseen." They also affirm the right of people of other faiths,
+      and of people who choose no faith, to believe freely, and reject coercing anyone into belief.
+    source: "tec-catechism, God the Father (p. 846); umc-sp, Basic Rights and Freedoms, J. Religious Minorities; elca-ir"
+    split: none
+    handoff: "People believe different things about God. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The Episcopal catechism: "there is one God, the Father Almighty, creator of heaven and earth."
+      The UMC Social Principles "support the right of individuals to choose their own faith" and
+      "reject attempts to impose beliefs on people." A friend's different church is a chance to talk
+      about loving our neighbors, which the ELCA calls part of our calling.
+    needs_check: false
+
+  - point: 2   # Scripture: history, story or both?
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Scripture is primary and is the Word of God, written by human authors whom God inspired. It is
+      read as a whole, in light of its original context, with the help of historical and literary
+      study, reason and the church's tradition. The PCUSA has said Scripture does not teach creation
+      in a way that rules out evolution.
+    source: "umc-bod105; tec-catechism, The Holy Scriptures (pp. 853-854); pcusa-2002-science, Rationale (quoting PCUS 1969, Evolution and the Bible)"
+    split: >
+      No split in official teaching found. Members and congregations vary in how literally they read
+      particular stories; no survey figure for mainline Protestants was found.
+    handoff: "Christians read Bible stories in different ways. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The Episcopal catechism: Scripture is the Word of God "because God inspired their human authors
+      and because God still speaks to us through the Bible." The UMC: "We interpret individual texts in
+      light of their place in the Bible as a whole," taking into account "the original context and
+      intention of that text." A story like Noah's ark can be talked about for what it teaches about God.
+    needs_check: false
+
+  - point: 3   # Prayer, miracles and the supernatural
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Prayer is "responding to God, by thought and by deeds, with or without words." Christians bring
+      their own needs and the needs of others to God, "that God's will may be done." No official
+      teaching on ghosts was found in the sources reviewed.
+    source: "tec-catechism, Prayer and Worship (pp. 856-857)"
+    split: none
+    handoff: "People pray in lots of ways. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The Episcopal catechism describes prayer as a response to God, and names thanksgiving,
+      intercession ("the needs of others") and petition ("our own needs, that God's will may be done").
+      This frames prayer as a relationship rather than a way of getting things.
+    needs_check: false
+
+  - point: 4   # Other religions
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      The churches confess Jesus Christ as Lord and Savior and share that good news, while respecting
+      neighbors of other religions. The ELCA teaches that Christians "must be careful about claiming
+      to know God's judgments regarding another religion," and that "our neighbors are made in God's
+      image." Most members agree: in a 2008 Pew survey, 82% of white mainline Protestants said many
+      religions can lead to eternal life.
+    source: "elca-ir; umc-sp, J. Religious Minorities; umc-bod105; pew-2008-eternal-life"
+    split: none
+    handoff: "People of many faiths are our neighbors. That's a good one to talk about with your parents."
+    parent_note: >
+      The ELCA: "The full story of the relationship between our neighbor and God is beyond our
+      knowledge." The UMC condemns anything that would "denigrate or demean those belonging to another
+      faith," calling that "antithetical to Jesus's command to love one's neighbor."
+    needs_check: false
+
+  - point: 5   # Age of the Earth and universe
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      God is Creator, and science is the right way to learn the age and history of the universe and
+      the Earth. The PCUSA and Episcopal Church urge science education based on the scientific
+      consensus, and the PCUSA names "the age and origin of the universe, the age of the Earth" among
+      the findings it should include.
+    source: "pcusa-2002-science, Recommendations 1-3 and Rationale; tec-2006-a129; umc-sp, Community of All Creation, F. Affirming Science and Traditional Wisdom"
+    split: none
+    handoff: "Scientists say the Earth is about 4.5 billion years old, and our church says God made it all. Ask Mom or Dad what they think."
+    parent_note: >
+      The PCUSA, quoting St. Augustine, warns against Christians talking "nonsense" about the natural
+      world "claiming that what he is saying is based in Scripture." The UMC affirms "the value of
+      science and reason in providing deeper understandings of the origins and functioning of the
+      cosmos."
+    needs_check: false
+
+  - point: 6   # Evolution, including of humans
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Evolution, including human evolution, is compatible with faith in God as Creator. The PCUSA:
+      "there is no contradiction between an evolutionary theory of human origins and the doctrine of
+      God as Creator." The Episcopal Church calls evolution a "fruitful and unifying scientific
+      explanation for the emergence of life on earth."
+    source: "pcusa-2002-science, Recommendation 2; tec-2006-a129; elca-gen, 2.1 Genetic science and technology"
+    split: none
+    handoff: "Scientists study how living things change over a very long time. That's a fun one to talk about with Mom or Dad."
+    parent_note: >
+      The ELCA "recognizes and embraces the theoretical frameworks on which the science of genetics
+      rests," including paleontology, which "enrich our appreciation of the human place in nature."
+      The PCUS in 1969: Scripture does not teach creation "so as to exclude the possibility of
+      evolution as a scientific theory."
+    needs_check: false
+
+  - point: 7   # Do science and faith conflict?
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No. "There is no inherent conflict between scientific findings and the understanding of God as
+      creator, redeemer and sanctifier" (ELCA). The UMC calls efforts to connect "faith and science"
+      useful, and the PCUSA says God as Creator is compatible with "a fully natural explanation of the
+      history of nature."
+    source: "elca-gen, 2.1; umc-bod105; pcusa-2002-science, Rationale"
+    split: none
+    handoff: "Lots of Christians love science. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The ELCA: "The sciences, by definition, do not constitute understandings (or imply judgments)
+      about God." So yes, you can believe in God and dinosaurs. The PCUSA calls on Presbyterian
+      scientists to help congregations understand reliable scientific knowledge.
+    needs_check: false
+
+  - point: 8   # Where babies come from
+    when: from_age
+    from_age: 8
+    perspective: family_tradition
+    position: >
+      Sexuality is a sacred gift. The ELCA supports sex education "as a priority" that "must begin
+      early," fits "growing maturity levels," and comes "within the context of Christian faith." The
+      UMC supports the right of all people "to receive comprehensive sexual education."
+    source: "elca-hs, Section IV, sexual education of children and teens; umc-sp, The Social Community, C. Human Sexuality"
+    split: none
+    handoff: "Babies are an amazing part of how God made people. That's a great one to ask Mom or Dad about."
+    parent_note: >
+      The ELCA notes that "few parents or congregations meaningfully engage young people" in these
+      conversations and asks for "sustained conversation about what is good and what is harmful in
+      ways appropriate to growing maturity levels." The age here is a starting suggestion; many
+      families start earlier at home.
+    needs_check: false
+
+  - point: 9   # Same-sex couples and families
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The UMC (2024) defines marriage as between "an adult man and woman" or "two adult persons"; the
+      PCUSA as "between two people, traditionally a man and a woman"; the Episcopal Church provides
+      marriage rites to all couples. PCUSA and Episcopal rules let clergy decline. The ELCA leaves the
+      decision to marry to pastors and welcomes "families where the parents are the same sex or
+      gender," while holding four conscience-bound views on such marriages.
+    source: "umc-sp, D. Marriage and A. The Family; pcusa-boo, W-4.0601 and W-4.0605; tec-2015-a054; tec-2018-b012; elca-hs, Section IV, Marriage, Sex, gender, and sexuality in marriage, and Loving families"
+    split: >
+      The ELCA formally names four positions held "with conviction and integrity," ranging from
+      holding that same-gender sexual behavior is sinful, to honoring same-gender couples with "the
+      same rigorous standards, sexual ethics, and status as heterosexual marriage." The Episcopal
+      Church and PCUSA protect clergy who decline. Pew finds most mainline Protestants say
+      homosexuality should be accepted.
+    handoff: "Families come in lots of shapes. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The UMC: "families come in a variety of sizes and forms." The ELCA: "The critical issue with
+      respect to the family is not whether it has a conventional form but how it performs
+      indispensable individual and social tasks." Even where members disagree on marriage, the ELCA
+      says the church is united in opposing harassment and in calling congregations "to welcome, care
+      for, and support all couples and their families."
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: family_tradition
+        position: "Affirms same-sex couples and their marriages, as the four churches' current rules permit."
+        source: "umc-sp, D. Marriage; tec-2018-b012; pew-rls-lgbtq"
+      moderate: {}
+      conservative:
+        when: parent_led
+        perspective: several_fairly
+        position: >
+          Holds one of the ELCA's first two conscience-bound positions (same-gender relationships are
+          sinful, or are not to be publicly recognized as marriage), while still welcoming every family.
+        source: "elca-hs, Section IV, four conscience-bound positions; tec-2015-a054 (clergy discretion)"
+        handoff: "That's a great one to talk about with Mom or Dad."
+
+  - point: 10  # Gender identity and transition
+    when: parent_led
+    from_age: null
+    perspective: several_fairly
+    position: >
+      All four churches protect people of every gender identity from discrimination and welcome them
+      fully. The Episcopal canons and PCUSA Book of Order name "gender identity"; the UMC supports equal
+      rights "regardless of sexual orientation or gender identity"; the ELCA ministers to "those with
+      diverse sex, gender, or sexual identities." No denomination-wide teaching on medical or social
+      transition was found in the sources reviewed.
+    source: "tec-2012-d019; tec-2012-d002; pcusa-boo, F-1.0403 Unity in Diversity; umc-sp, I. Sexual Orientations and Gender Identities; elca-hs, Section IV; pew-rls-lgbtq"
+    split: >
+      Members are divided. Pew (2023-24) finds 39% of mainline Protestants say greater acceptance of
+      transgender people is a change for the better and 37% a change for the worse.
+    handoff: "That's a really good question to ask Mom or Dad about."
+    parent_note: >
+      The ELCA says pastoral care should affirm "the value of the individual's life" and "concern for
+      their well-being, regardless of their sex, gender, or sexuality," and singles out children with
+      "actual or perceived differences in sexual orientation or gender identity" as especially
+      vulnerable to abuse. All four churches teach kindness to every child.
+    needs_check: true
+    by_lean:
+      progressive:
+        when: anytime
+        perspective: several_fairly
+        position: "Affirms transgender people and follows the churches' nondiscrimination teaching closely."
+        source: "tec-2012-d019; pcusa-boo, F-1.0403; pew-rls-lgbtq"
+      moderate: {}
+      conservative:
+        when: parent_led
+        perspective: family_tradition
+        position: >
+          Welcomes and protects everyone, as all four churches teach, but holds a traditional view that
+          sex is given at birth. No official mainline statement teaches this view; it reflects members.
+        source: "pew-rls-lgbtq"
+
+  - point: 11  # Marriage, divorce and what a family is
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Marriage is a lifelong covenant blessed by God. Divorce is "a regrettable but necessary
+      alternative" when a marriage is beyond repair or harmful; no one must stay in an abusive
+      marriage, divorced people are fully welcome, and they may remarry. Families come in many forms,
+      including single-parent, blended, adoptive and foster families.
+    source: "umc-sp, A. The Family, B. Single People, D.3 Divorce; elca-hs, Section IV, Marriage and Loving families"
+    split: none
+    handoff: "Every family is different, and every kid is loved. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The ELCA: "This church does not treat divorce lightly," and it will "tend pastorally to the
+      special concerns of blended families, to children of separated or divorced parents." The UMC
+      urges churches to help divorced people overcome "social and religious stigmas." A child is never
+      the reason a family changes.
+    needs_check: false
+
+  - point: 12  # What happens after we die
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Christians hope in the resurrection: God "will raise us from death in the fullness of our being,"
+      and nothing, "not death or life," separates us from God's love. The Episcopal catechism describes
+      heaven as "eternal life in our enjoyment of God." Pew finds 59% of mainline Protestants believe
+      in hell.
+    source: "tec-catechism, The Christian Hope (pp. 861-862); pcusa-boo, W-4.0701 Witness to the Resurrection; umc-sp, Preamble and D. Death with Dignity; pew-rls-beliefs"
+    split: none
+    handoff: "Many people believe those we love are with God. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The PCUSA: "In the face of death, we affirm with tears and joy the good news of the gospel and
+      the hope of the resurrection." The UMC speaks of the "transition from life to death to greater
+      life." The Episcopal catechism also defines hell as "eternal death in our rejection of God";
+      this pack never uses that with a child.
+    needs_check: false
+
+  - point: 13  # A death in the family or a pet
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official statement on talking with children about a death, or on pets, was found. The
+      churches' teaching on grief is that we do not grieve alone, that God's love and care remain
+      with us, and that the community of faith supports the grieving.
+    source: "pcusa-boo, W-4.0701 Witness to the Resurrection; umc-sp, D. Death with Dignity"
+    split: none
+    handoff: "Lots of kids wonder that when they feel sad, and it's okay to feel sad. Let's find Mom or Dad to talk about it together."
+    parent_note: >
+      The PCUSA: "We do not grieve in isolation, but are sustained by the power of the Holy Spirit and
+      the community of faith." The UMC: "we bear witness to God's enduring love and grace, even when
+      they cannot be felt or experienced in an immediate way."
+    needs_check: false
+
+  - point: 14  # Government, voting and parties
+    when: anytime
+    from_age: null
+    perspective: several_fairly
+    position: >
+      Christians are called to responsible political engagement out of love for neighbor, with
+      humility. The UMC does "not believe churches should affiliate with particular political
+      parties" but encourages speaking out on social issues. Members are politically mixed: 51% lean
+      Republican and 41% lean Democratic (Pew 2023-24).
+    source: "umc-sp, The Political Community, Preface and A. Church and Governments; pew-rls-party"
+    split: >
+      Members split across parties (51% Republican or leaning Republican, 41% Democratic or leaning
+      Democratic).
+    handoff: "People in both parties are trying to help, and they disagree about how. That's a good one to talk about with Mom or Dad."
+    parent_note: >
+      The UMC calls political engagement something that "demands humility and mindfulness of our own
+      complicity in perpetuating injustice," and urges "compassion, prayer, and a willingness to
+      discern God's guidance." No party is the good guy or the bad guy in the churches' teaching.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "The churches' teaching on parties does not change with politics: no party affiliation, engage with humility."
+        source: "umc-sp, A. Church and Governments"
+      moderate: {}
+      conservative:
+        position: "The churches' teaching on parties does not change with politics: no party affiliation, engage with humility."
+        source: "umc-sp, A. Church and Governments"
+
+  - point: 15  # Current wars, elections and news
+    when: from_age
+    from_age: 9
+    perspective: several_fairly
+    position: >
+      The church "deplores war" and urges peaceful settlement of disputes. It names two faithful
+      Christian views, that violence is never acceptable and that force is sometimes needed to defend
+      the innocent, and honors both pacifists and those who serve in the military.
+    source: "umc-sp, F. War and Military Service"
+    split: >
+      Within the teaching itself: pacifist and just-defense views are both honored.
+    handoff: "Grown-ups are working hard to keep people safe. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The UMC: "We yearn for the day when there will be no more war and people will live together in
+      peace and justice," and it supports "those who serve in the military" and "those who are
+      conscientious objectors." The churches name prayer and peacemaking as the Christian response.
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "The churches' teaching on war does not change with politics; both pacifist and just-defense views are honored."
+        source: "umc-sp, F. War and Military Service"
+      moderate: {}
+      conservative:
+        position: "The churches' teaching on war does not change with politics; both pacifist and just-defense views are honored."
+        source: "umc-sp, F. War and Military Service"
+
+  - point: 16  # Wealth, poverty and fairness
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      God cares for all people, with special concern for people who are poor. The churches reject the
+      idea that wealth shows God's favor or poverty God's disfavor, and commit to ending the causes of
+      poverty. The ELCA also calls for government to provide for people in need.
+    source: "umc-sp, The Economic Community, B. Poverty and Income Inequality; elca-econ"
+    split: >
+      Members split on policy: Pew (2023-24) finds mainline Protestants evenly divided, 48% preferring
+      a bigger government with more services and 48% a smaller one.
+    handoff: "Lots of people are working to help folks who don't have a home. That's a good one to talk about with Mom or Dad."
+    parent_note: >
+      The UMC: "We reject religious teachings that view the accumulation of wealth as a sign of God's
+      favor and poverty as a sign of God's disfavor." The ELCA: "God created a world that has enough
+      for all, but it needs to be shared and distributed justly in order to be enough for all."
+    needs_check: false
+    by_lean:
+      progressive:
+        perspective: family_tradition
+        position: "Follows the churches' call for government action against poverty."
+        source: "elca-econ; pew-rls-govt"
+      moderate: {}
+      conservative:
+        perspective: several_fairly
+        position: >
+          Shares the churches' concern for the poor but prefers smaller government, so would present
+          charity, work and government as different ways people try to help.
+        source: "pew-rls-govt"
+
+  - point: 17  # Explorers and colonization
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The churches teach honestly about the harm of colonization. The Episcopal Church (2009)
+      repudiated the "Doctrine of Discovery"; the UMC names colonial "conquest and exploitation" and
+      calls members to learn the history and support the rights of Indigenous peoples. The ELCA confesses its "readiness to
+      benefit from the conquest of American Indian people and land."
+    source: "tec-2009-d035; umc-sp, C. Colonialism, Neocolonialism and their Consequences and F. Indigenous, Native and Aboriginal Communities; elca-ir, Ever-depending on forgiveness"
+    split: none
+    handoff: "People tell that story in different ways. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The Episcopal Church called the Doctrine of Discovery "fundamentally opposed to the Gospel of
+      Jesus Christ." The UMC: "far from being innocent bystanders, the church has often been deeply
+      involved in colonialism," and it calls members to "educate themselves." It also supports
+      Indigenous efforts "to revitalize their languages and cultures."
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: family_tradition
+        position: "Follows the churches' repudiation of the Doctrine of Discovery closely."
+        source: "tec-2009-d035"
+      moderate: {}
+      conservative:
+        perspective: several_fairly
+        position: >
+          Accepts the churches' teaching on the harm done to Indigenous peoples while also wanting
+          explorers' courage and achievements presented. No survey was found that confirms this framing.
+        source: "pew-rls-party"
+
+  - point: 18  # Slavery, the founders and national heroes
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Slavery was a sin. The Episcopal Church (2006) called it "a fundamental betrayal of the humanity
+      of all persons who were involved," confessed its own complicity and apologized. The UMC
+      condemns slavery of any kind and recalls early Methodists who opposed the slave trade; the ELCA
+      confesses benefiting from chattel slavery.
+    source: "tec-2006-a123; umc-sp, Preface and The Economic Community, C. Human Trafficking and Slavery; elca-ir, Ever-depending on forgiveness"
+    split: none
+    handoff: "Yes, some founders owned enslaved people, and that was wrong. Mom or Dad can tell you more."
+    parent_note: >
+      The Episcopal Church expressed "deep regret" that it supported slavery with scriptural
+      justification and later backed segregation, and repented. The UMC calls slavery "a repudiation
+      of the basic Christian understanding that all people are created in the image of God." Telling the truth about heroes is part of the
+      churches' practice of confession.
+    needs_check: true
+    by_lean:
+      progressive:
+        perspective: family_tradition
+        position: "Follows the churches' teaching and apology closely, with emphasis on repair."
+        source: "tec-2006-a123"
+      moderate: {}
+      conservative:
+        perspective: family_tradition
+        position: >
+          Shares the teaching that slavery was a sin, while wanting the founders' achievements presented
+          alongside their wrongs. No survey was found that confirms this framing.
+        source: "tec-2006-a123; pew-rls-party"
+
+  - point: 19  # Religious wars and persecution
+    when: from_age
+    from_age: 8
+    perspective: family_tradition
+    position: >
+      The churches teach honestly about Christian wrongdoing, including their own. The ELCA rejects
+      Martin Luther's "anti-Judaic diatribes" and grieves "the complicity of our own tradition" in
+      anti-Semitism. The UMC defends religious minorities' right "to worship in peace" and condemns
+      demeaning any faith.
+    source: "elca-jewish; umc-sp, J. Religious Minorities"
+    split: none
+    handoff: "People have sometimes been unkind about religion, and our church says that's wrong. Mom or Dad can tell you more."
+    parent_note: >
+      The ELCA: "In the long history of the church, the treatment accorded the Jewish people by
+      Christians has been among our most grievous and shameful legacies." It pledges to oppose such
+      bigotry "both within our own circles and in the society around us."
+    needs_check: false
+    by_lean:
+      progressive:
+        position: "The churches' teaching here does not change with politics."
+        source: "elca-jewish"
+      moderate: {}
+      conservative:
+        position: "The churches' teaching here does not change with politics."
+        source: "elca-jewish"
+
+  - point: 20  # Violence and war: how much to show
+    when: from_age
+    from_age: 9
+    perspective: family_tradition
+    position: >
+      No official position on what children should see or hear about violence was found. The related
+      teaching: the church deplores war, grieves its victims, and calls Christians to model "the
+      nonviolent example of Jesus."
+    source: "umc-sp, F. War and Military Service and B. Bullying and Other Forms of Violence"
+    split: none
+    handoff: "That's an important one to learn about with Mom or Dad."
+    parent_note: >
+      The UMC urges the church "to care and work for systemic justice for all people affected by war,"
+      and decries "all forms of bullying." When to teach hard history like the Holocaust is a family
+      decision; the age here is a starting suggestion.
+    needs_check: false
+
+  - point: 21  # Alcohol, drugs, tobacco and caffeine
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      The UMC urges refraining from substances that "foster addiction," acknowledges its "historic
+      United Methodist stance on abstinence," urges adults who drink to do so "wisely and in
+      moderation," and recommends
+      complete abstinence from tobacco. The Episcopal Church acknowledges its past tolerance of alcohol
+      misuse and has adopted a policy to "create a new normal." No teaching on caffeine was found.
+    source: "umc-sp, A. Substance Abuse, Alcohol and Tobacco; tec-2015-a158"
+    split: >
+      Emphasis differs: the UMC carries a historic abstinence tradition; the Episcopal Church focuses
+      on safe practice and recovery. No ELCA or PCUSA statement was reviewed for this point.
+    handoff: "Some things are just for grown-ups, and some aren't healthy for anyone. That's a good one to ask Mom or Dad about."
+    parent_note: >
+      The UMC asks members to consider "the impact of such actions on those struggling to recover from
+      alcohol use" and calls on society "to refrain from judging people who are addicted."
+    needs_check: true
+
+  - point: 22  # Body image, modesty and dress
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      Caring for the body is part of caring for God's good creation, and "a positive sense of one's own
+      body" is healthy. The ELCA warns against narrow standards of attractiveness and "idealized and
+      commercialized images of a 'perfect body'" aimed at the young. No official dress or modesty code
+      was found.
+    source: "elca-hs, Sexuality and self; elca-hs, Section IV (children in a highly sexualized world)"
+    split: none
+    handoff: "Your body is a good gift. That's a great one to talk about with Mom or Dad."
+    parent_note: >
+      The ELCA "is committed to affirming throughout life the value, beauty, and health of the human
+      body," and names the danger of "sexually suggestive clothing" and child beauty contests that
+      pressure children. Dress rules are left to families.
+    needs_check: false
+
+  - point: 23  # Technology, screens and games
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      No official teaching on screen time or games was found. The churches value media for educating
+      and connecting people, but warn that media can "spread misinformation, hostility and fear," and
+      ask parents to be "extremely vigilant" about the hidden dangers of the online world for children.
+    source: "umc-sp, G. Media and Communication Technologies; elca-hs, Section IV (electronic media and child protection)"
+    split: none
+    handoff: "Grown-ups make those choices to help kids stay healthy and safe. That's a good one to ask Mom or Dad about."
+    parent_note: >
+      The ELCA: "It is important that parents, society, and lawmakers continue to be extremely vigilant
+      to protect the well-being of children and youth in this electronic world." The UMC encourages
+      people to post with "compassion."
+    needs_check: false
+
+  - point: 24  # Money, work and generosity
+    when: anytime
+    from_age: null
+    perspective: family_tradition
+    position: >
+      All we have belongs to God; we are "temporary stewards." Work is a calling to serve our
+      neighbors, and having enough ("sufficiency") matters more than having more. Possessions and
+      wealth can become idols, so Christians share with those in need.
+    source: "umc-sp, The Economic Community, Preface and A. Responsible Consumerism; elca-econ"
+    split: none
+    handoff: "Sharing is one way families care for neighbors. Ask Mom or Dad how your family does it."
+    parent_note: >
+      The UMC, quoting John Wesley: God placed us here "not as a proprietor, but a steward." The ELCA:
+      "Consumerism causes us to confuse what we want with what we need," and Christian vocation is our
+      freedom "to serve others through our earthly responsibilities such as family, work and community
+      life."
+    needs_check: false
