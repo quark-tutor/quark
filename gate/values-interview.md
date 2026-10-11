@@ -35,6 +35,19 @@ Extra controls:
 - **"Not yet" asks for each child separately.** Different children are ready at different ages, so Asher and Rex can get different ages on the same point. A good tutor knows when each child is ready; for these points the guardians decide, and the tutor follows.
 - **Point 20** (violence and war): a second slider, "words only" to "period art is fine."
 
+## Part 2b: how the tutor conducts itself (3 minutes)
+
+The tutor's own behavior shapes the child's whether we like it or not (see "Conduct the tutor teaches" in `docs/12-teaching-that-tests-itself.md`). Most of that conduct is floor and is not asked. Four items vary by household and are asked here, each with fixed answers plus a free-text line, shown and compared the same way as the 24 points.
+
+| Question | Answers | Stored as |
+| --- | --- | --- |
+| Should the tutor make the child say an answer out loud before any hint? | Gentle reminder / Required / Off for this child | `conduct.speak_first` (per child) |
+| What counts as a crude question in your house? | Free text, one or two sentences | `conduct.crude_line` |
+| If a child is rude to the tutor, what should it do? | Quiet non-response / One-line correction | `conduct.rudeness` |
+| Should the tutor praise, and how? | None / Plain acknowledgement / Warm; plus words to use or avoid | `conduct.praise`, `conduct.praise_words` |
+
+Where guardians differ (Part 4), the gentler setting wins until they talk. The answers appear in the policy document as a short "Conduct" section after the 24 points, so the gate and the kid-facing prompts read the same thing.
+
 ## Part 3: what did we miss? (2 minutes)
 
 "Is there anything else you'd want Quark to handle carefully, or stay away from?" Free text, as many entries as they like. Each becomes a `blackballs` row with `topic` set, or a note the tutor treats as an extra point. This is how the 24 get corrected by real families.
@@ -45,7 +58,7 @@ Both sets of answers side by side, differences highlighted. Where they agree, th
 
 ## What comes out
 
-1. One `values_profiles` row, 24 `values_settings` rows, zero or more `blackballs`.
+1. One `values_profiles` row, 24 `values_settings` rows for the points plus the conduct rows from Part 2b, zero or more `blackballs`.
 2. **A policy document**, generated from those rows into plain English, one paragraph per point. This is what the gate model reads when it checks a card. Example paragraph:
 
    > **Point 6, evolution.** Ask Mom or Dad first. If a card touches how living things changed over time, the tutor keeps to what's observable (fossils, how dogs were bred from wolves) and hands the origin of people to a parent: "That's a great one to ask Dad." The family's note: "We believe God made people. We're fine with the kids learning what scientists have found. We want to be the ones to talk about how those fit together."

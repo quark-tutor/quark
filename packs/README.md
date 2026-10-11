@@ -118,4 +118,19 @@ by_lean:
     position: Placeholder for how conservative members of this community frame it.
 ```
 
+### Pack-level fields
+
+Besides the 24 point entries, each pack carries two fields about how a child learns to act, because that is where traditions differ most. They change which stories get weight and what the "then" slot asks a child to do. They never change the tutor's own voice or conduct, which stay the same across every pack (see `docs/12-teaching-that-tests-itself.md`, "Conduct the tutor teaches").
+
+```yaml
+learns_to_act: exemplars         # exemplars | consideration | practice | mixed
+# exemplars: by copying people who acted well (stories of saints, heroes, family)
+# consideration: by learning to notice and think before acting
+# practice: by doing the right thing until it is a habit
+# mixed: the pack draws on more than one
+match_exemplars_to_sex: true     # lean toward exemplars of the child's sex in stories
+```
+
+A family can override both in the values interview. Setting `match_exemplars_to_sex` never removes any story from a child; it only shifts which ones are chosen first.
+
 Packs live in this folder, one file per pack (`catholic.yaml`, `nothing-in-particular.yaml`, and so on). Propose changes by pull request. To endorse a pack as a member of its community, open an issue using the "Pack endorsement" template.
