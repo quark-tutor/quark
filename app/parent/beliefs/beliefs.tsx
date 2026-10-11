@@ -15,8 +15,9 @@ import {
 } from "@/lib/beliefs";
 import * as actions from "./actions";
 import type { Result } from "./actions";
+import { Blackball } from "./compare/blackball";
 import { ActsPanel, ConductPanel } from "./conduct";
-import type { AnswerView, Answers, BeliefsData, EntryView, PackView, PointView, Words } from "./data";
+import type { AnswerView, Answers, BeliefsData, BlockView, EntryView, PackView, PointView, Words } from "./data";
 import styles from "./beliefs.module.css";
 
 const LEAN_LABELS: [LeanChoice, string][] = [
@@ -456,6 +457,7 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
                         Change
                       </button>
                     </div>
+                    <Blocks point={pt.number} blocks={initial.blocks} />
                   </div>
                 );
               }
@@ -463,6 +465,7 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
                 <OpenPoint
                   key={pt.number}
                   point={pt}
+                  blocks={initial.blocks}
                   mine={mine}
                   packs={shownPacks}
                   kids={children}
@@ -573,8 +576,27 @@ function ClearAll({ onClear }: { onClear: () => void }) {
   );
 }
 
+// Who has blocked this subject, and the block / lift-my-block button. The blocks come from the
+// server on every refresh, so they are read from props, not kept in state.
+function Blocks({ point, blocks }: { point: number; blocks: BlockView[] }) {
+  const here = blocks.filter((b) => b.point === point);
+  const mine = here.find((b) => b.mine);
+  return (
+    <div className={styles.blockRow}>
+      {here.length ? (
+        <span className={styles.fine}>
+          <span className={cls(styles.chip, styles["a-never"])}>Blocked by {here.map((b) => b.by).join(" and ")}</span>{" "}
+          Quark won&rsquo;t bring this up, whatever either of you answers.
+        </span>
+      ) : null}
+      <Blackball point={point} mine={mine?.id ?? null} />
+    </div>
+  );
+}
+
 function OpenPoint({
   point,
+  blocks,
   mine,
   packs,
   kids,
@@ -588,6 +610,7 @@ function OpenPoint({
   onNote,
 }: {
   point: PointView;
+  blocks: BlockView[];
   mine: AnswerView | undefined;
   packs: PackView[];
   kids: BeliefsData["children"];
@@ -608,6 +631,7 @@ function OpenPoint({
         <h3>{point.name}</h3>
       </div>
       <p className={styles.kidq}>{point.question}</p>
+      <Blocks point={point.number} blocks={blocks} />
 
       <div className={styles.mine} role="group" aria-label={`Your answer on subject ${point.number}`}>
         <span className={styles.label}>Your answer</span>

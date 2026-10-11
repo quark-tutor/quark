@@ -796,3 +796,12 @@ button.chip[aria-pressed="true"]::before {
 .rulebook h2 {
   margin-top: 32px;
 }
+
+.blockRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 6px 0;
+}

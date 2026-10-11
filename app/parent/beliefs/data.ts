@@ -52,6 +52,9 @@ export type Words = { understand: string; believe: string; decide: string };
 // How the kids learn to act: the guardian's own choice, null where they follow their tradition.
 export type Acts = { learns: LearnsToAct | null; match: boolean | null };
 
+// A subject someone has blocked (founding rule 2). Only the guardian who placed it can lift it.
+export type BlockView = { id: string; point: number; by: string; mine: boolean };
+
 export type BeliefsData = {
   points: PointView[];
   packs: PackView[];
@@ -62,6 +65,7 @@ export type BeliefsData = {
   words: Words;
   conduct: ConductAnswer[];
   acts: Acts;
+  blocks: BlockView[];
 };
 
 function check<T>(result: { data: T | null; error: { message: string } | null }): T {
@@ -95,7 +99,7 @@ export async function loadAnswers(supabase: SupabaseClient, guardianId: string):
 }
 
 export async function loadBeliefs(supabase: SupabaseClient, guardianId: string): Promise<BeliefsData> {
-  const [points, packs, entries, kids, mine, answers, conduct] = await Promise.all([
+  const [points, packs, entries, kids, mine, answers, conduct, blocks, guardians] = await Promise.all([
     supabase.from("values_points").select("number, area, name, kid_question").order("number"),
     supabase.from("values_packs").select("id, slug, name, short_name, subtitle, sources, learns_to_act, match_exemplars_to_sex").order("sort_order"),
     supabase
@@ -109,7 +113,10 @@ export async function loadBeliefs(supabase: SupabaseClient, guardianId: string):
       .maybeSingle(),
     loadAnswers(supabase, guardianId),
     supabase.from("guardian_conduct").select("key, child_id, value, note").eq("guardian_id", guardianId),
+    supabase.from("blackballs").select("id, point_number, placed_by").is("lifted_at", null).not("point_number", "is", null),
+    supabase.from("guardians").select("id, display_name"),
   ]);
+  const names = new Map((check(guardians) ?? []).map((g) => [g.id, g.display_name as string]));
 
   const packViews: PackView[] = (check(packs) ?? []).map((p) => ({
     id: p.id,
@@ -153,5 +160,11 @@ export async function loadBeliefs(supabase: SupabaseClient, guardianId: string):
     },
     conduct: (check(conduct) ?? []).map((c) => ({ key: c.key, childId: c.child_id, value: c.value, note: c.note })),
     acts: { learns: profile?.learns_to_act ?? null, match: profile?.match_exemplars_to_sex ?? null },
+    blocks: (check(blocks) ?? []).map((b) => ({
+      id: b.id,
+      point: b.point_number,
+      by: names.get(b.placed_by) ?? "A guardian",
+      mine: b.placed_by === guardianId,
+    })),
   };
 }

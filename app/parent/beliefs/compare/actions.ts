@@ -5,7 +5,7 @@ import { saveFamilyValues } from "@/lib/family-save";
 import { requireGuardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
 
-// Blackballs from the compare screen (founding rule 2): any guardian can block a subject, and
+// Blackballs, from the beliefs and compare screens (founding rule 2): any guardian can block a subject, and
 // only that guardian can lift it. Row-level security enforces the same.
 
 type Result = { error?: string };
