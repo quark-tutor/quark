@@ -1,0 +1,279 @@
+<title>Quark Pack Chooser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
+<style>
+/* Layout: one column of the 24 points, grouped by area; under each point, a wrapping grid of pack
+   cards. A ranking strip up top answers "which pack fits us" as the reader taps their own answers.
+   Palette and type follow the Quark app (warm paper, sea-green accent, Atkinson Hyperlegible). */
+:root {
+  --bg: #fbf8f2;
+  --surface: #ffffff;
+  --ink: #1f2a37;
+  --muted: #5b6472;
+  --line: #e6e0d4;
+  --accent: #2f6f62;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3efeb;
+  --flag: #9a5b13;
+  --a-ours: #2f6f62;
+  --a-fair: #2f5f8f;
+  --a-later: #9a6a12;
+  --a-us: #6b4c9a;
+  --a-never: #6b7078;
+  --font-body: "Atkinson Hyperlegible", system-ui, sans-serif;
+  --font-read: "Literata", Georgia, serif;
+  --radius: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161b22; --surface: #1f2630; --ink: #eef1f4; --muted: #a3acb8; --line: #2e3744;
+    --accent: #6cc2ad; --accent-ink: #10201c; --accent-soft: #1d3530; --flag: #e3a95a;
+    --a-ours: #6cc2ad; --a-fair: #8ab8e6; --a-later: #e0b562; --a-us: #b9a0e3; --a-never: #a3acb8;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161b22; --surface: #1f2630; --ink: #eef1f4; --muted: #a3acb8; --line: #2e3744;
+  --accent: #6cc2ad; --accent-ink: #10201c; --accent-soft: #1d3530; --flag: #e3a95a;
+  --a-ours: #6cc2ad; --a-fair: #8ab8e6; --a-later: #e0b562; --a-us: #b9a0e3; --a-never: #a3acb8;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.7rem, 4vw, 2.3rem); }
+.lede { max-width: 64ch; color: var(--muted); margin: 8px 0 0; }
+.draft { display: inline-block; margin-top: 12px; padding: 6px 10px; border-radius: 8px; background: var(--accent-soft); font-size: 13px; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end; margin-top: 24px; }
+.control { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.label { font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); padding: 3px; }
+.seg button { border: 0; background: none; padding: 6px 14px; border-radius: 999px; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.check { display: inline-flex; gap: 8px; align-items: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 700;
+  border: 1.5px solid var(--c); color: var(--c); background: transparent; white-space: nowrap; }
+.chip::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+.a-ours { --c: var(--a-ours); } .a-fair { --c: var(--a-fair); } .a-later { --c: var(--a-later); }
+.a-us { --c: var(--a-us); } .a-never { --c: var(--a-never); }
+
+.ranking { margin-top: 28px; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.ranking h2 { font-size: 1.05rem; }
+.ranking p { margin: 4px 0 12px; color: var(--muted); font-size: 14px; }
+.ranks { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 20px; }
+.rank { display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; align-items: center; min-width: 0; }
+.rank button { border: 0; background: none; padding: 0; text-align: left; font-weight: 700; min-width: 0; overflow-wrap: anywhere; }
+.rank button[aria-pressed="false"] { color: var(--muted); font-weight: 400; text-decoration: line-through; }
+.rank .score { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 13px; }
+.bar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.bar span { display: block; height: 100%; background: var(--accent); }
+
+.area { margin-top: 40px; }
+.area > h2 { font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+.point { margin-top: 22px; }
+.point-head { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.point-head .num { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; }
+.point-head h3 { font-size: 1.12rem; }
+.kidq { margin: 2px 0 10px; font-family: var(--font-read); font-style: italic; color: var(--muted); }
+.mine { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px; }
+.mine .label { margin-right: 4px; }
+.mine button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 11px; font-size: 13px; }
+.mine button[aria-pressed="true"] { border-color: var(--c); background: var(--c); color: var(--bg); font-weight: 700; }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.card { display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.card.match { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.card-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.card-head strong { overflow-wrap: anywhere; }
+.tick { font-size: 12px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+.position { margin: 0; font-family: var(--font-read); font-size: 14.5px; line-height: 1.55; }
+.meta { font-size: 13px; color: var(--muted); }
+.meta a { color: inherit; }
+.flag { font-size: 12px; font-weight: 700; color: var(--flag); }
+details summary { cursor: pointer; font-size: 13px; color: var(--muted); }
+details[open] summary { margin-bottom: 6px; }
+.hidden-note { color: var(--muted); font-size: 14px; }
+footer { margin-top: 48px; color: var(--muted); font-size: 13px; max-width: 70ch; }
+@media (prefers-reduced-motion: no-preference) { .bar span { transition: width 200ms ease; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Which pack fits us?</h1>
+    <p class="lede">Each pack is one community's starting answers to the 24 points Quark handles carefully. Pick the pack you'll start from, then change any answer you like in the values interview. Tap your own answer on the points you care most about, and the packs re-rank by how many match.</p>
+    <span class="draft" id="draft-note"></span>
+  </header>
+
+  <div class="controls">
+    <div class="control">
+      <span class="label" id="lean-label">Political lean</span>
+      <div class="seg" role="group" aria-labelledby="lean-label" id="lean"></div>
+    </div>
+    <label class="check control"><input type="checkbox" id="diff-only"> Only points where the packs differ</label>
+    <div class="control">
+      <span class="label">The five answers</span>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+
+  <section class="ranking" aria-live="polite">
+    <h2>How the packs match you</h2>
+    <p id="rank-note"></p>
+    <div class="ranks" id="ranks"></div>
+  </section>
+
+  <main id="points"></main>
+
+  <footer>
+    Drafted from each community's own published documents, or from surveys where a community has no official body, with sources on every card. These are drafts by outsiders, not yet reviewed by members of each community, and they record official teaching, not what every family in it believes. Tap a pack's name in the ranking to hide or show its cards. Your answers on this page are saved only in this browser.
+  </footer>
+</div>
+
+<script type="application/json" id="data">/*__DATA__*/null</script>
+<script>
+(() => {
+  const { points, packs } = JSON.parse(document.getElementById("data").textContent);
+  const ANSWERS = [
+    { id: "ours", label: "Answer from what we believe" },
+    { id: "fair", label: "Answer, and show other views" },
+    { id: "later", label: "Not yet" },
+    { id: "us", label: "Send them to us" },
+    { id: "never", label: "Don't bring it up" },
+  ];
+  const LEANS = [["progressive", "Progressive"], ["moderate", "Moderate"], ["conservative", "Conservative"]];
+  const KEY = "quark-pack-chooser";
+
+  let state = { lean: "moderate", mine: {}, hidden: [], diffOnly: false };
+  try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
+
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (k === "class") n.className = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v);
+    }
+    for (const kid of kids.flat()) if (kid != null && kid !== false) n.append(kid);
+    return n;
+  };
+
+  const entryFor = (pack, number) => {
+    const e = (pack.entries || []).find((x) => x.point === number);
+    if (!e) return null;
+    const o = (e.by_lean && e.by_lean[state.lean]) || {};
+    return { ...e, ...o };
+  };
+  const answerOf = (e) => {
+    if (!e) return null;
+    if (e.when === "never") return "never";
+    if (e.when === "parent_led") return "us";
+    if (e.when === "from_age") return "later";
+    return e.perspective === "family_tradition" ? "ours" : "fair";
+  };
+  const answerLabel = (e) => {
+    const id = answerOf(e);
+    const a = ANSWERS.find((x) => x.id === id);
+    return id === "later" && e.from_age ? `Not yet: from about ${e.from_age}` : a ? a.label : "No answer";
+  };
+  const chip = (e) => el("span", { class: `chip a-${answerOf(e)}` }, answerLabel(e));
+  const visible = () => packs.filter((p) => !state.hidden.includes(p.pack));
+
+  // Header bits
+  document.getElementById("draft-note").textContent =
+    `${packs.length} packs, all marked "draft by outsiders" until members of each community review them.`;
+  const leanBox = document.getElementById("lean");
+  for (const [id, label] of LEANS) {
+    leanBox.append(el("button", { type: "button", "data-lean": id, onclick: () => { state.lean = id; save(); render(); } }, label));
+  }
+  const legend = document.getElementById("legend");
+  for (const a of ANSWERS) legend.append(el("span", { class: `chip a-${a.id}` }, a.label));
+  const diff = document.getElementById("diff-only");
+  diff.addEventListener("change", () => { state.diffOnly = diff.checked; save(); render(); });
+
+  function sourceLinks(pack, e) {
+    const ids = String(e.source || "").match(/[a-z0-9][a-z0-9._-]*/gi) || [];
+    const found = (pack.sources || []).filter((s) => ids.includes(s.id));
+    if (!found.length) return el("span", {}, e.source || "No source listed");
+    return found.flatMap((s, i) => [i ? "; " : "", el("a", { href: s.url, target: "_blank", rel: "noopener" }, s.title)]);
+  }
+
+  function renderRanking() {
+    const answered = points.filter((p) => state.mine[p.number]);
+    const note = document.getElementById("rank-note");
+    note.textContent = answered.length
+      ? `Out of the ${answered.length} point${answered.length === 1 ? "" : "s"} you've answered, with a ${state.lean} lean.`
+      : "Tap your own answer under any point below. The packs will rank here by how many of your answers they share.";
+    const scored = packs.map((p) => ({
+      p,
+      score: answered.filter((pt) => answerOf(entryFor(p, pt.number)) === state.mine[pt.number]).length,
+    })).sort((a, b) => b.score - a.score);
+    const box = document.getElementById("ranks");
+    box.replaceChildren(...scored.map(({ p, score }) => {
+      const pct = answered.length ? Math.round((score / answered.length) * 100) : 0;
+      const shown = !state.hidden.includes(p.pack);
+      return el("div", { class: "rank" },
+        el("button", { type: "button", "aria-pressed": String(shown), title: shown ? "Hide this pack's cards" : "Show this pack's cards",
+          onclick: () => { state.hidden = shown ? [...state.hidden, p.pack] : state.hidden.filter((x) => x !== p.pack); save(); render(); } }, p.name),
+        el("span", { class: "score" }, answered.length ? `${score} of ${answered.length}` : ""),
+        el("div", { class: "bar" }, el("span", { style: `width:${pct}%` })));
+    }));
+  }
+
+  function renderPoints() {
+    const main = document.getElementById("points");
+    main.replaceChildren();
+    const shownPacks = visible();
+    let area = null, section = null, count = 0;
+    for (const pt of points) {
+      const entries = shownPacks.map((p) => [p, entryFor(p, pt.number)]);
+      const kinds = new Set(entries.map(([, e]) => answerOf(e)));
+      if (state.diffOnly && kinds.size < 2) continue;
+      count++;
+      if (pt.area !== area) {
+        area = pt.area;
+        section = el("section", { class: "area" }, el("h2", {}, area));
+        main.append(section);
+      }
+      const mine = state.mine[pt.number];
+      const mineRow = el("div", { class: "mine", role: "group", "aria-label": `Your answer on point ${pt.number}` },
+        el("span", { class: "label" }, "Your answer"),
+        ANSWERS.map((a) => el("button", { type: "button", class: `a-${a.id}`, "aria-pressed": String(mine === a.id),
+          onclick: () => { if (state.mine[pt.number] === a.id) delete state.mine[pt.number]; else state.mine[pt.number] = a.id; save(); render(); } }, a.label)));
+      const cards = el("div", { class: "cards" }, entries.map(([p, e]) => {
+        if (!e) return el("div", { class: "card" }, el("strong", {}, p.name), el("span", { class: "meta" }, "No entry for this point."));
+        const match = mine && answerOf(e) === mine;
+        return el("article", { class: `card${match ? " match" : ""}` },
+          el("div", { class: "card-head" }, el("strong", {}, p.name), match ? el("span", { class: "tick" }, "Matches you") : null),
+          el("div", {}, chip(e)),
+          el("p", { class: "position" }, e.position || ""),
+          e.split && e.split !== "none" ? el("div", { class: "meta" }, el("strong", {}, "Split: "), e.split) : null,
+          e.needs_check ? el("div", { class: "flag" }, "Needs checking: the drafter wasn't sure of this one.") : null,
+          el("details", {},
+            el("summary", {}, "What the child hears, notes for parents, sources"),
+            el("div", { class: "meta" }, el("strong", {}, "Hand-off: "), e.handoff || "None"),
+            e.parent_note ? el("div", { class: "meta" }, el("strong", {}, "For parents: "), e.parent_note) : null,
+            el("div", { class: "meta" }, el("strong", {}, "Sources: "), sourceLinks(p, e))));
+      }));
+      section.append(el("div", { class: "point", id: `p${pt.number}` },
+        el("div", { class: "point-head" }, el("span", { class: "num" }, `${pt.number}`), el("h3", {}, pt.name)),
+        el("p", { class: "kidq" }, pt.question),
+        mineRow, cards));
+    }
+    if (!count) main.append(el("p", { class: "hidden-note" }, "Every shown pack gives the same answer on every point. Show more packs, or untick the filter."));
+  }
+
+  function render() {
+    for (const b of leanBox.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.lean === state.lean));
+    diff.checked = state.diffOnly;
+    renderRanking();
+    renderPoints();
+  }
+  render();
+})();
+</script>
