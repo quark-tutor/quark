@@ -2,6 +2,8 @@
 
 How a family's beliefs become rows in the database and then a policy the gate can enforce. Each guardian takes it alone, about 20 minutes, then the two compare. It ends with a generated policy document the parents can read in plain English, and a test run that shows how the tutor would answer.
 
+**What parents see.** The interview is called **Our Family's Beliefs**. Parents never see the word "pack": in the app a pack is a **tradition**, and a point is a **subject**. It opens on a start screen with three short lines (Quark follows these answers when a lesson touches a sensitive subject; there are 24 subjects, each with five ways to handle it; anything can be changed later) and two choices: **Quick start** (tradition + political leaning, about 2 minutes, then review) or **Go through each one** (about 20 minutes). The working prototype is `scripts/pack-compare.mts`.
+
 ## Part 1: starting point (3 minutes)
 
 1. **Pick a starting pack**, or start blank. It is a quick start, not a commitment: the pack fills every point you haven't answered, and each point can later take its answer from any pack. → `values_profiles.pack_id`
