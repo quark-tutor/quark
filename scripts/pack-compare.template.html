@@ -1,4 +1,4 @@
-<title>Quark Pack Chooser</title>
+<title>Our Family's Beliefs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600&display=swap">
@@ -128,53 +128,114 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
 .done-row .num { font-variant-numeric: tabular-nums; color: var(--muted); font-weight: 700; }
 .done-row .name { font-weight: 700; flex: 1 1 200px; min-width: 0; }
 .done-row .from { color: var(--muted); font-size: 13px; }
+
+/* Three screens: a start screen that explains and offers two paths, a quick start, and the full list. */
+.screen[hidden] { display: none; }
+.intro { max-width: 640px; margin: 0 auto; padding-block: 4vh 0; display: flex; flex-direction: column; gap: 20px; }
+.intro h1 { font-size: clamp(2rem, 6vw, 2.8rem); }
+.facts { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.facts li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; font-size: 16.5px; }
+.facts .dot { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 700; font-size: 14px; }
+.examples { font-family: var(--font-read); font-style: italic; color: var(--muted); }
+.paths { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-top: 8px; }
+.path { text-align: left; display: flex; flex-direction: column; gap: 6px; padding: 18px; border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.path:hover { border-color: var(--accent); }
+.path strong { font-size: 1.15rem; }
+.path .time { font-size: 13px; font-weight: 700; color: var(--accent); }
+.path span:last-child { color: var(--muted); }
+.fine { color: var(--muted); font-size: 13px; margin: 0; }
+.back { border: 0; background: none; padding: 0; color: var(--accent); font-weight: 700; }
+.step { display: flex; flex-direction: column; gap: 10px; }
+.step h2 { font-size: 1.15rem; }
+.trads { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.trad { text-align: left; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--surface); display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.trad[aria-pressed="true"] { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
+.trad small { color: var(--muted); overflow-wrap: anywhere; }
+.list-head { display: flex; flex-direction: column; gap: 10px; }
+.list-head h1 { font-size: clamp(1.5rem, 4vw, 2rem); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.seg { flex-wrap: wrap; border-radius: 18px; }
 </style>
 
 <div class="wrap">
-  <header>
-    <h1>Which pack fits us?</h1>
-    <p class="lede">Each pack is one community's starting answers to the 24 points Quark handles carefully. Pick the pack you'll start from, then change any answer you like in the values interview. Tap your own answer on the points you care most about, and the packs re-rank by how many match.</p>
-    <span class="draft" id="draft-note"></span>
-  </header>
-
-  <div class="controls">
-    <div class="control">
-      <span class="label" id="lean-label">Political lean</span>
-      <div class="seg" role="group" aria-labelledby="lean-label" id="lean"></div>
+  <!-- 1. Start -->
+  <section class="screen intro" id="screen-start">
+    <h1>Our Family's Beliefs</h1>
+    <ul class="facts">
+      <li><span class="dot">1</span><span>Quark writes your kids' lessons. When a lesson touches a sensitive subject, it follows the answers you give here.</span></li>
+      <li><span class="dot">2</span><span>There are 24 sensitive subjects, like <span class="examples">"Is God real?"</span> or <span class="examples">"Where do babies come from?"</span> For each one, you choose how Quark handles it: answer from what you believe, show several views, wait until your child is older, send them to you, or leave it alone.</span></li>
+      <li><span class="dot">3</span><span>You can change any answer later. Nothing reaches your kids until you've finished.</span></li>
+    </ul>
+    <div class="paths">
+      <button type="button" class="path" data-go="quick">
+        <strong>Quick start</strong>
+        <span class="time">About 2 minutes</span>
+        <span>Pick the religious tradition closest to yours and your political leaning. We fill in all 24 answers for you to look over.</span>
+      </button>
+      <button type="button" class="path" data-go="list">
+        <strong>Go through each one</strong>
+        <span class="time">About 20 minutes</span>
+        <span>See each subject and how different traditions handle it, then choose your own answer.</span>
+      </button>
     </div>
-    <label class="check control"><input type="checkbox" id="diff-only"> Only points where the packs differ</label>
-    <div class="control">
-      <span class="label">The five answers</span>
-      <div class="legend" id="legend"></div>
-    </div>
-  </div>
-
-  <section class="yours" aria-labelledby="yours-title">
-    <div class="progress-row">
-      <h2 id="yours-title">Your answers</h2>
-      <span class="progress-count" id="progress-count"></span>
-    </div>
-    <div class="progress"><span id="progress-bar"></span></div>
-    <div class="quick">
-      <label for="quick-pack" class="label">Quick start</label>
-      <select id="quick-pack"></select>
-      <button type="button" class="btn" id="quick-fill">Fill the rest</button>
-      <button type="button" class="btn warn" id="clear-all">Clear all</button>
-    </div>
-    <p class="hint">Under each point, tap the answer you'd give, or tap a pack's answer on its card to take that pack's answer and wording. Answered points fold up; tap Change to reopen one. Quick start fills only the points you haven't answered.</p>
+    <p class="fine">The traditions' answers are drafts made from each tradition's own published teaching or, where there is none, from surveys. Members of each tradition haven't reviewed them yet.</p>
   </section>
 
-  <section class="ranking" aria-live="polite">
-    <h2>How the packs match you</h2>
-    <p id="rank-note"></p>
-    <div class="ranks" id="ranks"></div>
+  <!-- 2. Quick start -->
+  <section class="screen intro" id="screen-quick" hidden>
+    <button type="button" class="back" data-go="start">&larr; Back</button>
+    <h1>Quick start</h1>
+    <div class="step">
+      <h2>1. Which tradition is closest to your family's?</h2>
+      <div class="trads" id="trads" role="group" aria-label="Tradition"></div>
+    </div>
+    <div class="step">
+      <h2>2. Your political leaning</h2>
+      <p class="fine">It changes how a few traditions handle 8 subjects, like politics and how history is told.</p>
+      <div class="seg" role="group" aria-label="Political leaning" id="quick-lean"></div>
+    </div>
+    <div class="step">
+      <button type="button" class="btn" id="quick-go">Fill in our answers</button>
+      <p class="fine" id="quick-note"></p>
+    </div>
   </section>
 
-  <main id="points"></main>
+  <!-- 3. The list -->
+  <section class="screen" id="screen-list" hidden>
+    <div class="list-head">
+      <button type="button" class="back" data-go="start">&larr; How this works</button>
+      <h1>Our Family's Beliefs</h1>
+      <p class="lede">For each subject, tap the answer you'd give, or tap a tradition's answer to use its wording too. Answered subjects fold up. Tap Change to look again.</p>
+    </div>
 
-  <footer>
-    Drafted from each community's own published documents, or from surveys where a community has no official body, with sources on every card. These are drafts by outsiders, not yet reviewed by members of each community, and they record official teaching, not what every family in it believes. Your answers on this page are saved only in this browser.
-  </footer>
+    <section class="yours" aria-labelledby="yours-title">
+      <div class="progress-row">
+        <h2 id="yours-title">Your answers</h2>
+        <span class="progress-count" id="progress-count"></span>
+      </div>
+      <div class="progress"><span id="progress-bar"></span></div>
+      <div class="controls">
+        <div class="control">
+          <span class="label" id="lean-label">Political leaning</span>
+          <div class="seg" role="group" aria-labelledby="lean-label" id="lean"></div>
+        </div>
+        <label class="check control"><input type="checkbox" id="diff-only"> Hide subjects where every tradition agrees</label>
+        <button type="button" class="btn warn" id="clear-all">Clear all</button>
+      </div>
+    </section>
+
+    <section class="ranking" aria-live="polite">
+      <h2>Traditions closest to your answers</h2>
+      <p id="rank-note"></p>
+      <div class="ranks" id="ranks"></div>
+    </section>
+
+    <main id="points"></main>
+
+    <footer>
+      The traditions' answers are drafts made from each tradition's own published documents, or from surveys where it has no official body, with sources on every card. Members of each tradition haven't reviewed them yet, and they describe official teaching, not what every family in a tradition believes. Your answers here are saved only in this browser.
+    </footer>
+  </section>
 </div>
 
 <script type="application/json" id="data">/*__DATA__*/null</script>
@@ -188,15 +249,30 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
     { id: "us", label: "Send them to us" },
     { id: "never", label: "Don't bring it up" },
   ];
-  const LEANS = [["progressive", "Progressive"], ["moderate", "Moderate"], ["conservative", "Conservative"]];
+  const LEANS = [["progressive", "Progressive"], ["moderate", "Moderate"], ["conservative", "Conservative"], ["unset", "Rather not say"]];
+  const SHORT = {
+    "evangelical": ["Evangelical", "Including non-denominational and Southern Baptist"],
+    "nothing-in-particular": ["Nothing in particular", "Spiritual or not, without a religion"],
+    "catholic": ["Catholic", ""],
+    "mainline-protestant": ["Mainline Protestant", "Methodist, Episcopal, Lutheran (ELCA), Presbyterian (PCUSA)"],
+    "humanist": ["Atheist or agnostic", "Secular humanist"],
+    "black-protestant": ["Historically Black Protestant", "National Baptist, AME, COGIC"],
+    "jewish-reform": ["Reform Jewish", ""],
+    "jewish-orthodox": ["Orthodox Jewish", ""],
+    "latter-day-saint": ["Latter-day Saint", ""],
+    "muslim-sunni": ["Muslim", "Sunni"],
+  };
+  const shortName = (p) => (SHORT[p.pack] || [p.name])[0];
+  const subName = (p) => (SHORT[p.pack] || [, ""])[1];
   const KEY = "quark-pack-chooser";
 
   // mine[point] = { a: answer id, pack: slug the answer was taken from, or null if picked directly }
-  let state = { lean: "moderate", mine: {}, hidden: [], diffOnly: false, quick: "" };
+  let state = { lean: "moderate", mine: {}, hidden: [], diffOnly: false, quick: "", screen: "" };
   try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch {}
   for (const [k, v] of Object.entries(state.mine)) if (typeof v === "string") state.mine[k] = { a: v, pack: null };
+  if (!["start", "quick", "list"].includes(state.screen)) state.screen = Object.keys(state.mine).length ? "list" : "start";
   const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {} };
-  const open = new Set(); // answered points reopened with Change; not saved
+  const open = new Set(); // answered subjects reopened with Change; not saved
 
   const el = (tag, attrs = {}, ...kids) => {
     const n = document.createElement(tag);
@@ -226,34 +302,55 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
   };
   const packBySlug = (slug) => packs.find((p) => p.pack === slug);
   const visible = () => packs.filter((p) => !state.hidden.includes(p.pack));
+  const answeredCount = () => points.filter((p) => state.mine[p.number]).length;
   const choose = (n, a, pack) => { state.mine[n] = { a, pack }; open.delete(n); save(); render(); };
   const clearPoint = (n) => { delete state.mine[n]; save(); render(); };
 
-  // Header controls
-  document.getElementById("draft-note").textContent =
-    `${packs.length} packs, all marked "draft by outsiders" until members of each community review them.`;
-  const leanBox = document.getElementById("lean");
-  for (const [id, label] of LEANS) {
-    leanBox.append(el("button", { type: "button", "data-lean": id, onclick: () => { state.lean = id; save(); render(); } }, label));
+  // Screens
+  function go(screen) {
+    state.screen = screen; save();
+    for (const s of ["start", "quick", "list"]) document.getElementById(`screen-${s}`).hidden = s !== screen;
+    render();
+    window.scrollTo(0, 0);
   }
-  const legend = document.getElementById("legend");
-  for (const a of ANSWERS) legend.append(el("span", { class: `chip a-${a.id}` }, a.label));
-  const diff = document.getElementById("diff-only");
-  diff.addEventListener("change", () => { state.diffOnly = diff.checked; save(); render(); });
+  for (const b of document.querySelectorAll("[data-go]")) b.addEventListener("click", () => go(b.dataset.go));
 
-  const quick = document.getElementById("quick-pack");
-  for (const p of packs) quick.append(el("option", { value: p.pack }, p.name));
-  if (state.quick && packBySlug(state.quick)) quick.value = state.quick;
-  quick.addEventListener("change", () => { state.quick = quick.value; save(); });
-  document.getElementById("quick-fill").addEventListener("click", () => {
-    const p = packBySlug(quick.value);
+  // Lean pickers (quick start and list share the same setting)
+  const leanBoxes = [document.getElementById("lean"), document.getElementById("quick-lean")];
+  for (const box of leanBoxes) for (const [id, label] of LEANS) {
+    box.append(el("button", { type: "button", "data-lean": id, onclick: () => { state.lean = id; save(); render(); } }, label));
+  }
+
+  // Quick start
+  const trads = document.getElementById("trads");
+  function renderQuick() {
+    trads.replaceChildren(...packs.map((p) =>
+      el("button", { type: "button", class: "trad", "aria-pressed": String(state.quick === p.pack),
+        onclick: () => { state.quick = p.pack; save(); render(); } },
+        el("strong", {}, shortName(p)), subName(p) ? el("small", {}, subName(p)) : null)));
+    const n = answeredCount();
+    const goBtn = document.getElementById("quick-go");
+    goBtn.disabled = !state.quick;
+    document.getElementById("quick-note").textContent = !state.quick
+      ? "Pick a tradition first."
+      : n
+        ? `Fills the ${points.length - n} subjects you haven't answered and keeps your ${n} answers.`
+        : `Fills all ${points.length} subjects from the ${shortName(packBySlug(state.quick))} answers. You can change any of them next.`;
+  }
+  document.getElementById("quick-go").addEventListener("click", () => {
+    const p = packBySlug(state.quick);
+    if (!p) return;
     for (const pt of points) {
       if (state.mine[pt.number]) continue;
       const id = answerOf(entryFor(p, pt.number));
       if (id) state.mine[pt.number] = { a: id, pack: p.pack };
     }
-    save(); render();
+    go("list");
   });
+
+  // List controls
+  const diff = document.getElementById("diff-only");
+  diff.addEventListener("change", () => { state.diffOnly = diff.checked; save(); render(); });
   const clearBtn = document.getElementById("clear-all");
   let clearArmed = false;
   clearBtn.addEventListener("click", () => {
@@ -275,16 +372,16 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
   }
 
   function renderProgress() {
-    const n = points.filter((p) => state.mine[p.number]).length;
-    document.getElementById("progress-count").textContent = `${n} of ${points.length} chosen`;
+    const n = answeredCount();
+    document.getElementById("progress-count").textContent = `${n} of ${points.length} answered`;
     document.getElementById("progress-bar").style.width = `${(n / points.length) * 100}%`;
   }
 
   function renderRanking() {
     const answered = points.filter((p) => state.mine[p.number]);
     document.getElementById("rank-note").textContent = answered.length
-      ? `Out of the ${answered.length} point${answered.length === 1 ? "" : "s"} you've answered, with a ${state.lean} lean.`
-      : "Tap your own answer under any point below. The packs will rank here by how many of your answers they share.";
+      ? `How many of your ${answered.length} answer${answered.length === 1 ? "" : "s"} each tradition shares. Tap a name to hide or show its cards.`
+      : "As you answer, the traditions that share the most of your answers rise to the top.";
     const scored = packs.map((p) => ({
       p,
       score: answered.filter((pt) => answerOf(entryFor(p, pt.number)) === state.mine[pt.number].a).length,
@@ -293,8 +390,8 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
       const pct = answered.length ? Math.round((score / answered.length) * 100) : 0;
       const shown = !state.hidden.includes(p.pack);
       return el("div", { class: "rank" },
-        el("button", { type: "button", "aria-pressed": String(shown), title: shown ? "Hide this pack's cards" : "Show this pack's cards",
-          onclick: () => { state.hidden = shown ? [...state.hidden, p.pack] : state.hidden.filter((x) => x !== p.pack); save(); render(); } }, p.name),
+        el("button", { type: "button", "aria-pressed": String(shown), title: shown ? "Hide this tradition's cards" : "Show this tradition's cards",
+          onclick: () => { state.hidden = shown ? [...state.hidden, p.pack] : state.hidden.filter((x) => x !== p.pack); save(); render(); } }, shortName(p)),
         el("span", { class: "score" }, answered.length ? `${score} of ${answered.length}` : ""),
         el("div", { class: "bar" }, el("span", { style: `width:${pct}%` })));
     }));
@@ -302,8 +399,6 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
 
   function renderPoint(pt, entries) {
     const mine = state.mine[pt.number];
-    const head = el("div", { class: "point-head" }, el("span", { class: "num" }, `${pt.number}`), el("h3", {}, pt.name));
-
     if (mine && !open.has(pt.number)) {
       const src = mine.pack ? packBySlug(mine.pack) : null;
       const e = src ? entryFor(src, pt.number) : null;
@@ -312,40 +407,42 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
           el("span", { class: "num" }, `${pt.number}`),
           el("span", { class: "name" }, pt.name),
           el("span", { class: `chip a-${mine.a}` }, labelOf(mine.a, e)),
-          el("span", { class: "from" }, src ? `from ${src.name.replace(/\s*\(.*\)$/, "")}` : "your own pick"),
+          el("span", { class: "from" }, src ? `from ${shortName(src)}` : "your own pick"),
           el("button", { type: "button", class: "btn quiet", onclick: () => { open.add(pt.number); render(); } }, "Change")));
     }
 
-    const mineRow = el("div", { class: "mine", role: "group", "aria-label": `Your answer on point ${pt.number}` },
+    const mineRow = el("div", { class: "mine", role: "group", "aria-label": `Your answer on subject ${pt.number}` },
       el("span", { class: "label" }, "Your answer"),
       ANSWERS.map((a) => el("button", { type: "button", class: `a-${a.id}`, "aria-pressed": String(!!mine && mine.a === a.id && !mine.pack),
         onclick: () => (mine && mine.a === a.id && !mine.pack ? clearPoint(pt.number) : choose(pt.number, a.id, null)) }, a.label)),
       mine ? el("button", { type: "button", class: "btn quiet", onclick: () => { open.delete(pt.number); render(); } }, "Done") : null);
 
     const cards = el("div", { class: "cards" }, entries.map(([p, e]) => {
-      if (!e) return el("div", { class: "card" }, el("strong", {}, p.name), el("span", { class: "meta" }, "No entry for this point."));
+      if (!e) return el("div", { class: "card" }, el("strong", {}, shortName(p)), el("span", { class: "meta" }, "No answer for this subject."));
       const id = answerOf(e);
       const chosen = !!mine && mine.pack === p.pack;
       const match = !!mine && mine.a === id;
       return el("article", { class: `card a-${id}${chosen ? " chosen" : match ? " match" : ""}` },
-        el("div", { class: "card-head" }, el("strong", {}, p.name),
-          chosen ? el("span", { class: "tick" }, "Your pick") : match ? el("span", { class: "tick" }, "Matches you") : null),
+        el("div", { class: "card-head" }, el("strong", {}, shortName(p)),
+          chosen ? el("span", { class: "tick" }, "Your pick") : match ? el("span", { class: "tick" }, "Same as yours") : null),
         el("div", {},
           el("button", { type: "button", class: `chip a-${id}`, "aria-pressed": String(chosen),
-            title: chosen ? "Tap to undo" : "Use this pack's answer for this point",
+            title: chosen ? "Tap to undo" : "Use this tradition's answer for this subject",
             onclick: () => (chosen ? clearPoint(pt.number) : choose(pt.number, id, p.pack)) }, labelOf(id, e)),
           chosen ? null : el("span", { class: "use-hint" }, " tap to use")),
         el("p", { class: "position" }, e.position || ""),
         e.split && e.split !== "none" ? el("div", { class: "meta" }, el("strong", {}, "Split: "), e.split) : null,
         e.needs_check ? el("div", { class: "flag" }, "Needs checking: the drafter wasn't sure of this one.") : null,
         el("details", {},
-          el("summary", {}, "What the child hears, notes for parents, sources"),
-          el("div", { class: "meta" }, el("strong", {}, "Hand-off: "), e.handoff || "None"),
-          e.parent_note ? el("div", { class: "meta" }, el("strong", {}, "For parents: "), e.parent_note) : null,
+          el("summary", {}, "What your child would hear, notes for you, sources"),
+          el("div", { class: "meta" }, el("strong", {}, "Your child hears: "), e.handoff || "None"),
+          e.parent_note ? el("div", { class: "meta" }, el("strong", {}, "For you: "), e.parent_note) : null,
           el("div", { class: "meta" }, el("strong", {}, "Sources: "), sourceLinks(p, e))));
     }));
 
-    return el("div", { class: "point", id: `p${pt.number}` }, head, el("p", { class: "kidq" }, pt.question), mineRow, cards);
+    return el("div", { class: "point", id: `p${pt.number}` },
+      el("div", { class: "point-head" }, el("span", { class: "num" }, `${pt.number}`), el("h3", {}, pt.name)),
+      el("p", { class: "kidq" }, pt.question), mineRow, cards);
   }
 
   function renderPoints() {
@@ -365,16 +462,15 @@ button.chip[aria-pressed="true"]::before { background: var(--bg); }
       }
       section.append(renderPoint(pt, entries));
     }
-    if (!count) main.append(el("p", { class: "hidden-note" }, "Every shown pack gives the same answer on every point. Show more packs, or untick the filter."));
+    if (!count) main.append(el("p", { class: "hidden-note" }, "Every shown tradition gives the same answer on every subject. Show more traditions, or untick the filter."));
   }
 
   function render() {
-    for (const b of leanBox.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.lean === state.lean));
+    for (const box of leanBoxes) for (const b of box.querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.lean === state.lean));
     diff.checked = state.diffOnly;
-    renderProgress();
-    renderRanking();
-    renderPoints();
+    if (state.screen === "quick") renderQuick();
+    if (state.screen === "list") { renderProgress(); renderRanking(); renderPoints(); }
   }
-  render();
+  go(state.screen);
 })();
 </script>
