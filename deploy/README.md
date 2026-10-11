@@ -4,18 +4,17 @@ One family, one copy: a Supabase project for the data and a Vercel project for t
 
 ## 1. Supabase
 
-1. Create a project at [supabase.com](https://supabase.com). Pick the region closest to you.
+1. Create a project at [supabase.com](https://supabase.com). Pick the region closest to you. Under **Security**, keep **Enable Data API** on, turn **Automatically expose new tables** off (the migrations grant access table by table), and turn **Enable automatic RLS** on.
 2. **Authentication → Sign In / Providers → Email**: leave Email on and turn **Allow new users to sign up** off. Guardians are added by the seed script below, never by signing up.
-3. **Authentication → Emails → Magic Link**: replace the template body with the one below, so the email carries a code you can type as well as a link.
+3. **Authentication → URL Configuration**: set **Site URL** to your Vercel address (step 3), and add both `http://localhost:3000/**` and `https://<your-app>.vercel.app/**` to **Redirect URLs**.
+4. Leave the email templates alone for now. With Supabase's built-in sender, the sign-in email holds only a link, so open it in the same browser you signed in from. That sender allows only a few emails an hour, which is enough for two guardians.
+5. Later (phase 5, when Resend is set up for the digest), add Resend as custom SMTP under **Authentication → Emails → SMTP**. Then the **Magic link or OTP** template becomes editable, and you can add the code so it can be typed instead:
 
    ```html
    <h2>Sign in to Quark</h2>
    <p>Your code: <strong>{{ .Token }}</strong></p>
-   <p>Or <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email">sign in with this link</a>.</p>
+   <p>Or <a href="{{ .ConfirmationURL }}">sign in with this link</a>.</p>
    ```
-
-4. **Authentication → URL Configuration**: set **Site URL** to your Vercel address (step 3) and add `http://localhost:3000/**` to **Redirect URLs**.
-5. Supabase's built-in email sender allows only a few messages an hour. That's enough for two guardians. Later, set up custom SMTP with Resend under **Authentication → Emails → SMTP**.
 
 ## 2. Local setup and the database
 

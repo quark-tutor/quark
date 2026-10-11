@@ -27,7 +27,7 @@ export function SignInForm() {
         </label>
         {emailState.error && <p className={styles.error}>{emailState.error}</p>}
         <button className={styles.button} disabled={sending}>
-          {sending ? "Sending…" : "Email me a code"}
+          {sending ? "Sending…" : "Email me a sign-in link"}
         </button>
       </form>
     );
@@ -36,11 +36,11 @@ export function SignInForm() {
   return (
     <form action={codeAction} className={styles.form}>
       <p className={styles.note}>
-        We sent a code to <strong>{emailState.email}</strong>. You can also tap the link in that email.
+        Check <strong>{emailState.email}</strong> and open the sign-in link in this browser.
       </p>
       <input type="hidden" name="email" value={emailState.email} />
       <label className={styles.label}>
-        Code
+        Or type the code, if your email has one
         <input
           className={styles.input}
           name="code"
@@ -48,7 +48,6 @@ export function SignInForm() {
           autoComplete="one-time-code"
           pattern="[0-9 ]{6,12}"
           required
-          autoFocus
         />
       </label>
       {codeState.error && <p className={styles.error}>{codeState.error}</p>}

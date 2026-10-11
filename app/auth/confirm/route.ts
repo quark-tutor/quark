@@ -2,8 +2,8 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-// The link in the sign-in email. Works with the template in deploy/README.md (token_hash),
-// and with Supabase's default template (code).
+// The link in the sign-in email. Handles Supabase's default template (code, same browser)
+// and a custom template that links here with token_hash.
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = request.nextUrl;
   const tokenHash = searchParams.get("token_hash");

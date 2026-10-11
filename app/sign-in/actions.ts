@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
@@ -9,14 +10,19 @@ export type SignInState = {
   error?: string;
 };
 
-// Step 1: email a sign-in code. Only guardians already in the family can get one;
-// sign-ups are off in Supabase and shouldCreateUser is false here.
+// Step 1: email a sign-in link (and a code, once the email template includes one). Only
+// guardians already in the family can get one; sign-ups are off in Supabase and
+// shouldCreateUser is false here. The link lands on /auth/confirm in this same browser.
 export async function sendCode(_prev: SignInState, formData: FormData): Promise<SignInState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   if (!email.includes("@")) return { step: "email", email, error: "Enter your email address." };
 
+  const origin = (await headers()).get("origin") ?? "";
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false } });
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: { shouldCreateUser: false, emailRedirectTo: `${origin}/auth/confirm` },
+  });
   if (error) {
     const unknown = /signups? not allowed|not found/i.test(error.message);
     return {
