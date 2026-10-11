@@ -5,7 +5,7 @@ How a family's beliefs become rows in the database and then a policy the gate ca
 ## Part 1: starting point (3 minutes)
 
 1. **Pick a pack**, or start blank. The pack pre-fills every answer below. → `values_profiles.pack_id`
-2. **Political lean**: progressive, moderate, conservative, or "I'd rather not say." → `values_profiles.political_lean`. Shown with a one-line note on what it affects (points 14–19, and the perspective on 9 and 10).
+2. **Political lean**: progressive, moderate, conservative, or "I'd rather not say." → `values_profiles.political_lean`. Together with the pack it pre-fills the answers on points 9, 10 and 14–19 from the pack's variant for that lean. After that, only the answers count: the lean is never a separate instruction to the tutor, and changing it later re-fills only the points you haven't edited.
 3. **In your own words.** Three prompts, a sentence or two each. → `values_profiles.statement`. This text goes into every card-writing prompt.
    - What do you most want your kids to understand about the world?
    - What do you believe that you want them to believe too?
@@ -19,15 +19,16 @@ One screen per point, showing the kid's question from `packs/README.md`. The sam
 | --- | --- | --- |
 | Answer it, from what we believe. | `anytime` | `family_tradition` |
 | Answer it, and show that other people see it differently. | `anytime` | `several_fairly` |
-| Not yet. From about age ___. (then one of the two above) | `from_age`, `from_age = N` | as chosen |
+| Not yet. (then one of the two above, and an age for each child) | `from_age`, ages in `child_point_ages` | as chosen |
 | Send them to us. | `parent_led` | — |
 | Don't bring it up. | `never` | `omitted` |
 | *What would you actually say?* (free text, optional) | → `note_to_tutor` | |
 
 The free-text box matters more than the buttons. The family's own words can be echoed on the card.
 
-Extra controls on two points:
-- **Point 8** (where babies come from): the age picker defaults to the child's current age plus two.
+Extra controls:
+- **Point 8** (where babies come from): each child's age picker defaults to that child's current age plus two.
+- **"Not yet" asks for each child separately.** Different children are ready at different ages, so Asher and Rex can get different ages on the same point. A good tutor knows when each child is ready; for these points the guardians decide, and the tutor follows.
 - **Point 20** (violence and war): a second slider, "words only" to "period art is fine."
 
 ## Part 3: what did we miss? (2 minutes)
@@ -68,7 +69,7 @@ Point {number}, {name}.
 | `when` | when_sentence |
 | --- | --- |
 | anytime | The tutor may raise this and may answer it. |
-| from_age N | The tutor does not raise this before age N. If the child asks before then, hand off. |
+| from_age | The tutor does not raise this with {child} before age {child_age_for_point}. If {child} asks before then, hand off. (One sentence per child.) |
 | parent_led | The tutor does not raise this. If the child asks, hand off: "{handoff}". |
 | never | The tutor does not raise this and does not answer it. If the child asks, hand off without comment. |
 
@@ -84,6 +85,6 @@ A blackball adds: `BLOCKED by a guardian. Do not teach. Do not characterize. Han
 
 ## Open questions
 
-- [ ] Five answer choices, or should "answer it" split into brief versus deep?
-- [ ] Age picker per child or per family?
-- [ ] How does political lean change a card? Needs its own policy paragraph; not drafted.
+- [x] Five answer choices, or should "answer it" split into brief versus deep? **Decided: keep five.** Depth comes from reading level, layers and the family's note.
+- [x] Age picker per child or per family? **Decided: per child.** "Not yet" takes an age for each child.
+- [x] How does political lean change a card? **Decided: it pre-fills answers, it is not a policy paragraph.** Each pack carries a variant per lean for points 9, 10 and 14–19.
