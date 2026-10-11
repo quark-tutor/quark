@@ -1,0 +1,80 @@
+/* The kid view: big type, big targets, calm. Sized for an iPad held or propped up. */
+
+.center {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.hello {
+  margin: 0;
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+}
+
+.heading {
+  margin: 0;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+.muted {
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+}
+
+.slots {
+  display: flex;
+  gap: 10px;
+  margin: 8px 0;
+}
+
+.slot {
+  width: 56px;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 88px);
+  gap: 12px;
+}
+
+.key,
+.keySmall {
+  height: 72px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-weight: 700;
+  touch-action: manipulation;
+}
+
+.key {
+  font-size: 1.75rem;
+}
+
+.keySmall {
+  font-size: 1.1rem;
+  color: var(--muted);
+}
+
+.key:active,
+.keySmall:active {
+  background: var(--line);
+}

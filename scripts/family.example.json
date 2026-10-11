@@ -1,0 +1,11 @@
+{
+  "family": { "name": "Our family", "timezone": "Pacific/Honolulu" },
+  "guardians": [
+    { "display_name": "Parent One", "email": "parent.one@example.com" },
+    { "display_name": "Parent Two", "email": "parent.two@example.com" }
+  ],
+  "children": [
+    { "nickname": "Kiddo", "birth_month": "2017-03", "sex": "boy", "reading": "chapter_books", "interests": ["sharks", "volcanoes", "Lego"] },
+    { "nickname": "Bug", "birth_month": "2019-06", "sex": "boy", "reading": "reads_alone", "interests": ["trucks", "space", "drawing"] }
+  ]
+}

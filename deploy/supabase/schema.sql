@@ -9,6 +9,9 @@
 --   ask box, digests, parent steering notes, audit log, experiments
 --
 -- Conventions: uuid keys, timestamptz, snake_case, every family-scoped table has family_id for RLS.
+--
+-- This file is the readable model. What a Supabase project actually runs is supabase/migrations/,
+-- which starts from this draft and adds changes in order (the RLS fix below, devices, ...).
 
 create extension if not exists "pgcrypto";
 
@@ -427,8 +430,9 @@ create table experiment_assignments (
 -- Row-level security: a guardian sees only their own family
 -- ---------------------------------------------------------------------------
 
+-- security definer: the guardians policy calls this function, so it must skip RLS for this lookup.
 create or replace function current_family_id() returns uuid
-language sql stable as $$
+language sql stable security definer set search_path = public as $$
   select family_id from guardians where auth_user_id = auth.uid() limit 1
 $$;
 
@@ -479,8 +483,9 @@ create policy family_via_child on mastery for all
 create policy family_via_child on review_schedule for all
   using (exists (select 1 from children ch where ch.id = child_id and ch.family_id = current_family_id()));
 
--- The kid-facing app uses a scoped key that can only read today's passed cards and write attempts.
--- That's a separate policy set, not drafted yet.
+-- The kid-facing app holds no Supabase key. A paired iPad sends a device cookie to the app's own
+-- server routes, which check it against the devices table and read or write only for that child.
+-- See supabase/migrations/20261010000001_family_lookup_and_devices.sql.
 
 -- ---------------------------------------------------------------------------
 -- Seed: the 24 controversial points
