@@ -1,7 +1,8 @@
 import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { ageFrom, type LeanChoice } from "@/lib/beliefs";
-import type { Perspective, When } from "@/lib/values";
+import type { ConductAnswer } from "@/lib/conduct";
+import type { LearnsToAct, Perspective, When } from "@/lib/values";
 
 // What the beliefs page shows, shaped for the browser.
 
@@ -24,6 +25,8 @@ export type PackView = {
   slug: string;
   shortName: string;
   subtitle: string | null;
+  learns: LearnsToAct | null;
+  match: boolean | null;
   sources: { id: string; title: string; url: string }[];
   // entries[point][lean]; lean "unset" is the base entry, other leans only where the pack varies.
   entries: Record<number, Partial<Record<LeanChoice, EntryView>>>;
@@ -46,6 +49,9 @@ export type ChildView = { id: string; nickname: string; age: number };
 
 export type Words = { understand: string; believe: string; decide: string };
 
+// How the kids learn to act: the guardian's own choice, null where they follow their tradition.
+export type Acts = { learns: LearnsToAct | null; match: boolean | null };
+
 export type BeliefsData = {
   points: PointView[];
   packs: PackView[];
@@ -54,6 +60,8 @@ export type BeliefsData = {
   packId: string | null;
   lean: LeanChoice;
   words: Words;
+  conduct: ConductAnswer[];
+  acts: Acts;
 };
 
 function check<T>(result: { data: T | null; error: { message: string } | null }): T {
@@ -87,19 +95,20 @@ export async function loadAnswers(supabase: SupabaseClient, guardianId: string):
 }
 
 export async function loadBeliefs(supabase: SupabaseClient, guardianId: string): Promise<BeliefsData> {
-  const [points, packs, entries, kids, mine, answers] = await Promise.all([
+  const [points, packs, entries, kids, mine, answers, conduct] = await Promise.all([
     supabase.from("values_points").select("number, area, name, kid_question").order("number"),
-    supabase.from("values_packs").select("id, slug, name, short_name, subtitle, sources").order("sort_order"),
+    supabase.from("values_packs").select("id, slug, name, short_name, subtitle, sources, learns_to_act, match_exemplars_to_sex").order("sort_order"),
     supabase
       .from("values_pack_entries")
       .select("pack_id, point_number, lean, when_setting, from_age, perspective, position, source, split, handoff, parent_note, needs_check"),
     supabase.from("children").select("id, nickname, birth_month").order("birth_month"),
     supabase
       .from("guardian_values")
-      .select("pack_id, political_lean, want_understand, want_believe, want_decide")
+      .select("pack_id, political_lean, want_understand, want_believe, want_decide, learns_to_act, match_exemplars_to_sex")
       .eq("guardian_id", guardianId)
       .maybeSingle(),
     loadAnswers(supabase, guardianId),
+    supabase.from("guardian_conduct").select("key, child_id, value, note").eq("guardian_id", guardianId),
   ]);
 
   const packViews: PackView[] = (check(packs) ?? []).map((p) => ({
@@ -107,6 +116,8 @@ export async function loadBeliefs(supabase: SupabaseClient, guardianId: string):
     slug: p.slug,
     shortName: p.short_name ?? p.name,
     subtitle: p.subtitle,
+    learns: p.learns_to_act,
+    match: p.match_exemplars_to_sex,
     sources: p.sources ?? [],
     entries: {},
   }));
@@ -140,5 +151,7 @@ export async function loadBeliefs(supabase: SupabaseClient, guardianId: string):
       believe: profile?.want_believe ?? "",
       decide: profile?.want_decide ?? "",
     },
+    conduct: (check(conduct) ?? []).map((c) => ({ key: c.key, childId: c.child_id, value: c.value, note: c.note })),
+    acts: { learns: profile?.learns_to_act ?? null, match: profile?.match_exemplars_to_sex ?? null },
   };
 }

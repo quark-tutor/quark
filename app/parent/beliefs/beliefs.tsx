@@ -15,6 +15,7 @@ import {
 } from "@/lib/beliefs";
 import * as actions from "./actions";
 import type { Result } from "./actions";
+import { ActsPanel, ConductPanel } from "./conduct";
 import type { AnswerView, Answers, BeliefsData, EntryView, PackView, PointView, Words } from "./data";
 import styles from "./beliefs.module.css";
 
@@ -346,6 +347,9 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
             How this works
           </button>
         </p>
+        <p className={styles.fine}>
+          <Link href="/parent/beliefs/compare">Compare with the other parent and read the rulebook &rarr;</Link>
+        </p>
       </div>
 
       <section className={styles.panel} aria-labelledby="yours-title">
@@ -487,6 +491,10 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
         ))}
       </div>
 
+      <ConductPanel kids={children} initial={initial.conduct} save={(call) => run(call)} />
+
+      <ActsPanel initial={initial.acts} tradition={packById(quickPack)} save={(call) => run(call)} />
+
       <section className={cls(styles.panel, styles.words)}>
         <h2>Last: in your own words</h2>
         <p className={styles.fine}>
@@ -512,8 +520,8 @@ export function Beliefs({ initial }: { initial: BeliefsData }) {
       </section>
 
       <footer className={styles.footer}>
-        Your answers are saved as you go. The other parent can see them, and you&rsquo;ll compare answers together
-        before anything reaches your kids. The traditions&rsquo; answers are drafts made from each tradition&rsquo;s own
+        Your answers are saved as you go. The other parent can see them, and you&rsquo;ll{" "}
+        <Link href="/parent/beliefs/compare">compare answers together</Link> before anything reaches your kids. The traditions&rsquo; answers are drafts made from each tradition&rsquo;s own
         published documents, or from surveys where it has no official body, with sources on every card. Members of each
         tradition haven&rsquo;t reviewed them yet, and they describe official teaching, not what every family in a
         tradition believes.

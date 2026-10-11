@@ -693,3 +693,106 @@ button.chip[aria-pressed="true"]::before {
     transition: width 200ms ease;
   }
 }
+
+/* Part 2b and how the kids learn to act */
+.conduct {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.conduct h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.conduct .note {
+  font-weight: 400;
+}
+
+.words label.check {
+  flex-direction: row;
+  font-weight: 400;
+}
+
+/* Compare (Part 4) */
+.summary {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+}
+
+.compare {
+  gap: 10px;
+}
+
+.differ {
+  border-color: var(--flag);
+}
+
+.sides {
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.sides > div {
+  display: grid;
+  grid-template-columns: minmax(90px, 140px) 1fr;
+  gap: 4px 12px;
+  align-items: baseline;
+}
+
+.sides dt {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.sides dd {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+  align-items: baseline;
+}
+
+.sides .chip {
+  white-space: normal;
+}
+
+.result {
+  padding-top: 6px;
+  border-top: 1px dashed var(--line);
+}
+
+.result dt {
+  color: var(--ink);
+}
+
+.blackball {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+/* The rulebook */
+.rulebook {
+  max-width: 72ch;
+}
+
+.rulebook p,
+.rulebook li {
+  line-height: 1.55;
+}
+
+.rulebook h2 {
+  margin-top: 32px;
+}

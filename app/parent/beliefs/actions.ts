@@ -16,12 +16,16 @@ import {
   type LeanChoice,
   type Setting,
 } from "@/lib/beliefs";
+import { isChoice, isChoiceKey, isConductKey, PER_CHILD, type ConductKey } from "@/lib/conduct";
+import { saveFamilyValues } from "@/lib/family-save";
 import { requireGuardian, type Guardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
+import { isLearnsToAct, type LearnsToAct } from "@/lib/values";
 import { loadAnswers, type Answers, type Origin, type Words } from "./data";
 
-// Each guardian's own answers (guardian_answers). The compare step, later, turns both guardians'
-// answers into the family's values_settings. Every change is audit-logged.
+// Each guardian's own answers (guardian_answers, guardian_conduct). After every change the server
+// re-merges all guardians' answers into the family's values (lib/family-save.ts), which is what
+// the compare page and the rulebook show. Every change is audit-logged.
 
 export type Result = { answers?: Answers; error?: string };
 
@@ -44,7 +48,17 @@ async function audit({ guardian, supabase }: Ctx, action: string, target: Record
 }
 
 async function done(ctx: Ctx): Promise<Result> {
-  return { answers: await loadAnswers(ctx.supabase, ctx.guardian.id) };
+  const error = await refresh(ctx);
+  return { answers: await loadAnswers(ctx.supabase, ctx.guardian.id), ...(error ? { error } : {}) };
+}
+
+// Re-merge the family's values. The guardian's own answer is already saved if this fails.
+async function refresh({ guardian }: Ctx): Promise<string | undefined> {
+  try {
+    await saveFamilyValues(guardian.familyId, guardian.id);
+  } catch (e) {
+    return `Your answer is saved, but the family rulebook didn't update: ${e instanceof Error ? e.message : String(e)}`;
+  }
 }
 
 const fail = (error: unknown): Result => ({
@@ -350,7 +364,8 @@ export async function setWords(field: keyof Words, text: string): Promise<{ erro
   try {
     await saveProfile(ctx, { [column]: value || null });
     await audit(ctx, "beliefs.words", { field, text: value });
-    return {};
+    const error = await refresh(ctx);
+    return error ? { error } : {};
   } catch (e) {
     return fail(e);
   }
@@ -393,3 +408,58 @@ export async function importAnswers(text: string): Promise<Result> {
   }
 }
 
+
+// Part 2b: one conduct answer. value is for questions with fixed answers (undefined leaves it
+// as is); note is the free-text line (undefined leaves it as is). childId is set only for
+// conduct.speak_first's per-child answers.
+export async function setConduct(
+  key: ConductKey,
+  childId: string | null,
+  change: { value?: string | null; note?: string },
+): Promise<{ error?: string }> {
+  if (!isConductKey(key) || (childId !== null && !UUID.test(childId))) return { error: "Bad request." };
+  if (childId !== null && !PER_CHILD.includes(key)) return { error: "Bad request." };
+  const { value, note } = change ?? {};
+  if (value !== undefined && value !== null && !(isChoiceKey(key) && isChoice(key, value))) return { error: "Bad request." };
+  if (note !== undefined && typeof note !== "string") return { error: "Bad request." };
+  const ctx = await context();
+  if (!ctx) return { error: "This account isn't a guardian." };
+  try {
+    const row: Record<string, unknown> = {
+      guardian_id: ctx.guardian.id,
+      family_id: ctx.guardian.familyId,
+      key,
+      child_id: childId,
+      updated_at: new Date().toISOString(),
+    };
+    if (value !== undefined) row.value = value;
+    if (note !== undefined) row.note = note.trim().slice(0, NOTE_MAX) || null;
+    const { error } = await ctx.supabase.from("guardian_conduct").upsert(row, { onConflict: "guardian_id,key,child_id" });
+    if (error) throw new Error(error.message);
+    await audit(ctx, "beliefs.conduct", { key, child_id: childId, ...change });
+    const failed = await refresh(ctx);
+    return failed ? { error: failed } : {};
+  } catch (e) {
+    return fail(e);
+  }
+}
+
+// How the kids learn to act. null goes back to the quick-start tradition's setting.
+export async function setActs(change: { learns?: LearnsToAct | null; match?: boolean | null }): Promise<{ error?: string }> {
+  const { learns, match } = change ?? {};
+  if (learns !== undefined && learns !== null && !isLearnsToAct(learns)) return { error: "Bad request." };
+  if (match !== undefined && match !== null && typeof match !== "boolean") return { error: "Bad request." };
+  const ctx = await context();
+  if (!ctx) return { error: "This account isn't a guardian." };
+  try {
+    const fields: Record<string, unknown> = {};
+    if (learns !== undefined) fields.learns_to_act = learns;
+    if (match !== undefined) fields.match_exemplars_to_sex = match;
+    await saveProfile(ctx, fields);
+    await audit(ctx, "beliefs.acts", { ...change });
+    const failed = await refresh(ctx);
+    return failed ? { error: failed } : {};
+  } catch (e) {
+    return fail(e);
+  }
+}
