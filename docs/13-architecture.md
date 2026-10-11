@@ -88,7 +88,9 @@ The full architecture above is the community vision. One family can start much s
 
 **Rough cost:** hosting on free or lowest tiers, plus model usage. About $5–20 a month, depending on how much kids use the Ask box.
 
-## Suggested repo layout (when code starts)
+**What version one actually uses.** Everything is TypeScript in one Next.js app at the repo root, not Python services. The code lives in `app/` (the `/kid` and `/parent` views and the server routes), `lib/` and `supabase/migrations/`, with `core/` (model adapter, prompts, curation) arriving in phase 3. The kid view holds no database key: an iPad is paired from `/parent` with a six-digit code and then sends a device cookie to the app's own server routes. Setup steps are in [`deploy/README.md`](../deploy/README.md).
+
+## Suggested repo layout (for the full architecture)
 
 ```
 quark/
