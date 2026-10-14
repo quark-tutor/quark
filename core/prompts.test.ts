@@ -7,7 +7,7 @@ const { kidFacingPrompt, readPrompt } = await import("./prompts");
 
 describe("manner.md", () => {
   it("carries every manner rule from docs/12", () => {
-    const doc = readFileSync(join(__dirname, "..", "docs", "12-teaching-that-tests-itself.md"), "utf8");
+    const doc = readFileSync(join(__dirname, "..", "docs", "12-teaching-that-tests-itself.md"), "utf8").replace(/\r\n/g, "\n");
     const section = doc.split("The manner rules")[1].split("\n\n**Why")[0];
     const rules = [...section.matchAll(/^- (.+)$/gm)].map((m) => m[1].trim());
     expect(rules).toHaveLength(5);
