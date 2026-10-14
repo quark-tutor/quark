@@ -53,7 +53,8 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 6. **Checks and difficulty** — delayed recall via `review_schedule`, hint-count difficulty dial, results in the digest.
 7. **Pilot** — four weeks with the boys.
 
-**Where we are:** phases 1 and 2 are merged to `main`; phase 2's twenty-question test run was not built and moves to phase 3 step 5, after the gate.
-Phase 3 is open on `phase-3-curation`: step 1 done (lenses spec, model adapter, 13 Oct 2026 decisions); step 2 done (plan_topics keys, `plan/ancient-egypt.yaml`, `npm run plan:import`); step 3 done (content adapters, flags, the approval rule, `npm run content:fetch`, `/parent/content`); step 4 done (ideas, the lens picker, cards and questions, `npm run week:build`, `/parent/week/[theme]`); step 4c done (pictures, credits and sound on the week preview; stray braces cleaned).
+**Where we are (end of 14 Oct 2026):** phases 1 and 2 are merged to `main`. Phase 3 is on `phase-3-curation`, not merged, and nothing is on the iPads yet.
+- Done: step 1 (model adapter, lenses spec), 2 (the plan), 3 (content), 4 (ideas and cards), 4c (the week preview with pictures and sound). A real day was built for both children on 14 Oct 2026 for $0.76, and is in review at `/parent/week/[theme]`.
+- Next, in order: 2b, a picture for every topic; 4b, a models and costs page; 5, the policy gate, the twenty-question test run, `careful_about` to the gate only, `learns_to_act` into the card prompt; 6, the Sunday cron and the Looks-good page.
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.
