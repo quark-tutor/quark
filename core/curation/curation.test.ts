@@ -109,6 +109,9 @@ describe("ideas", () => {
   it("refuses a chain that isn't four complete layers", () => {
     expect(() => parseIdeas(ideas([rawLayer(1), rawLayer(2), rawLayer(3), rawLayer(4, { statement: " " })]), [])).toThrow(/layer 4 has no statement/);
     expect(() => parseIdeas(ideas([rawLayer(1, { accept: [] }), rawLayer(2), rawLayer(3), rawLayer(4)]), [])).toThrow(/no acceptable answers/);
+    // Layer 4 is open: the second real run (14 Oct 2026) returned it with no fixed answers, rightly.
+    const open = parseIdeas(ideas([rawLayer(1), rawLayer(2), rawLayer(3), rawLayer(4, { accept: [], rubric: "Any reason that uses the flood counts." })]), []);
+    expect(open[3].answer_key).toEqual({ accept: [], rubric: "Any reason that uses the flood counts." });
   });
 
   it("refuses the reply the real model gave on 14 Oct 2026 (one layer), naming the missing layers", () => {

@@ -89,7 +89,9 @@ export function parseIdeas(raw: RawIdeas, offered: OfferedItem[]): IdeaLayer[] {
       if (!text(l[key])) throw new Error(`layer ${i + 1} has no ${key}`);
     }
     const accept = (l.accept ?? []).map((a) => a.trim()).filter(Boolean);
-    if (accept.length === 0) throw new Error(`layer ${i + 1} has no acceptable answers`);
+    // Layer 4 is a question to talk about with a person, with more than one good answer, so its
+    // list may be empty and the rubric says what a good answer includes.
+    if (accept.length === 0 && i < 3) throw new Error(`layer ${i + 1} has no acceptable answers`);
     const item = l.content_item_id?.trim() ?? "";
     const answer_key: AnswerKey = { accept, rubric: l.rubric.trim() };
     return {

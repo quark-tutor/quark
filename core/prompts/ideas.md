@@ -1,4 +1,4 @@
-<!-- ideas v2 (14 Oct 2026: four named layers, not an array). Used by core/curation/ideas.ts (use: "curate"): one call per day and slot of a week. Not kid-facing:
+<!-- ideas v3 (14 Oct 2026: four named layers, not an array; layer 4 may have no fixed answers). Used by core/curation/ideas.ts (use: "curate"): one call per day and slot of a week. Not kid-facing:
      the ideas are for the tutor, and core/curation/cards.ts turns them into each child's cards. Source: docs/04, "How a
      week is built". -->
 
@@ -22,7 +22,7 @@ Always return all four, as `layer_1`, `layer_2`, `layer_3` and `layer_4`, in tha
 - **title**: a few words.
 - **statement**: the fact or concept in plain words, two or three sentences, with the mechanism named (not just "the Nile flooded" but why it flooded). Keep the names of people and works exact. Use only what the topic summaries say or what is well established; never invent a fact, a date, a quotation or a name. Where historians disagree or the evidence is thin, say so in the statement.
 - **question**: one question the child can reach by thinking about this idea, with one clear answer for layers 1 to 3. It must not be answerable only by recalling a name or date the child was never told.
-- **accept**: the acceptable answers, in plain words, short (one to five words each). Include the obvious ways a child might say it.
+- **accept**: the acceptable answers, in plain words, short (one to five words each). Include the obvious ways a child might say it. For layer 4, whose question has more than one good answer, this may be empty; the rubric then says what a good answer includes.
 - **rubric**: one line on what counts as right, and what nearly right looks like.
 - **content_item_id**: the id of one approved item from the list that this idea is about, or that a child should look at or listen to with it. Use an item only where it fits; leave it as an empty string when none does. Never use an id that isn't in the list.
 
