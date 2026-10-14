@@ -32,6 +32,8 @@ Tying the subjects together is what makes knowledge stick.
 
 ## Open technical questions
 
-- Can a content item be stored as a portable format (JSON or Markdown with metadata) so families and contributors can share themes?
-- How is the long-term plan represented: a shared, versioned file anyone can improve?
-- Which parts need a live AI model, and which can be pre-generated and reviewed by people?
+- [ ] Can a content item be stored as a portable format (JSON or Markdown with metadata) so families and contributors can share themes?
+- [x] How is the long-term plan represented: a shared, versioned file anyone can improve? **Decided (13 Oct 2026): YAML under `plan/` in the repo,** imported into `plan_topics` by a script, the way packs are.
+- [ ] Which parts need a live AI model, and which can be pre-generated and reviewed by people?
+- [x] Which outside content items need a person to approve them? **Decided (13 Oct 2026): items from open-access APIs that are CC0 or public domain and carry no model-tagged flag (`nudity`, `violence`, `needs_review`) are approved automatically.** Flagged items wait for a guardian on a review page in `/parent`.
+- [x] Does a week go live on its own? **Decided (13 Oct 2026): no.** The weekly job leaves a theme in status `review`. A guardian sees each child's cards and what the gate changed, and taps once to make it live. Nothing goes live on its own.

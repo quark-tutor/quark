@@ -8,7 +8,7 @@ Add to this list, or pick one up and open a discussion.
 - [ ] How much self-directed exploration versus parent moments? Is the wall the main event or a supplement?
 - [ ] Where exactly are the limits on "Ask"?
 - [ ] Do two parents share one digest, or does each get their own role?
-- [ ] Should a family start with the full plan, or with a single theme to test what sticks?
+- [x] Should a family start with the full plan, or with a single theme to test what sticks? **Decided (13 Oct 2026): one theme, Ancient Egypt,** as four weekly themes for grade bands 2-3 and 4-5. The full sequence comes after the pilot.
 - [ ] What does a great parent digest look like? (Mockups welcome.)
 
 ## Content
