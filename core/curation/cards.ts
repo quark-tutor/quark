@@ -38,28 +38,29 @@ export type CardContext = {
   valuesPoints: { number: number; name: string }[];
 };
 
-export const CARD_SCHEMA = {
+export const CARD_KEYS = ["card_1", "card_2", "card_3", "card_4"] as const;
+
+const ONE_CARD_SCHEMA = {
   type: "object",
   properties: {
-    cards: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          title: { type: "string" },
-          text: { type: "string" },
-          image_alt: { type: "string" },
-          read_aloud: { type: "string" },
-          question: { type: "string" },
-          hints: { type: "array", items: { type: "string" } },
-          handoff: { type: "string" },
-        },
-        required: ["title", "text", "image_alt", "read_aloud", "question", "hints", "handoff"],
-        additionalProperties: false,
-      },
-    },
+    title: { type: "string" },
+    text: { type: "string" },
+    image_alt: { type: "string" },
+    read_aloud: { type: "string" },
+    question: { type: "string" },
+    hints: { type: "array", items: { type: "string" } },
+    handoff: { type: "string" },
   },
-  required: ["cards"],
+  required: ["title", "text", "image_alt", "read_aloud", "question", "hints", "handoff"],
+  additionalProperties: false,
+};
+
+// Four named, required cards rather than an array, for the same reason as the ideas (an array let
+// the real model stop after one).
+export const CARD_SCHEMA = {
+  type: "object",
+  properties: Object.fromEntries(CARD_KEYS.map((k) => [k, ONE_CARD_SCHEMA])),
+  required: [...CARD_KEYS],
   additionalProperties: false,
 };
 
@@ -134,7 +135,13 @@ export function givesAway(text: string, key: AnswerKey): boolean {
 
 const BRILLIANCE = /\b(smart|clever|genius|brilliant|gifted|talented)\b/i;
 
-export type RawCards = { cards: CardBody[] };
+export type RawCards = Partial<Record<(typeof CARD_KEYS)[number], CardBody>>;
+
+// The four cards in order, or which ones are missing.
+export function cardsOf(raw: RawCards): { cards: CardBody[]; missing: number[] } {
+  const missing = CARD_KEYS.map((k, i) => (raw?.[k] && typeof raw[k] === "object" ? null : i + 1)).filter((n) => n !== null);
+  return { cards: missing.length ? [] : CARD_KEYS.map((k) => raw[k]!), missing };
+}
 
 // Everything wrong with one card, in plain words. Empty when it is right.
 export function checkCard(c: CardBody, layer: IdeaChain["layers"][number], reading: Reading): string[] {
@@ -162,8 +169,11 @@ export function checkCard(c: CardBody, layer: IdeaChain["layers"][number], readi
 
 // Problems per card (index = layer - 1), or one problem for the whole reply when it isn't four cards.
 export function checkCards(raw: RawCards, chain: IdeaChain, reading: Reading): { whole: string | null; cards: string[][] } {
-  const cards = raw?.cards;
-  if (!Array.isArray(cards) || cards.length !== 4) return { whole: `expected 4 cards, got ${cards?.length ?? 0}`, cards: [] };
+  const { cards, missing } = cardsOf(raw);
+  if (missing.length) {
+    const got = CARD_KEYS.length - missing.length;
+    return { whole: `expected 4 cards, got ${got}: card${missing.length === 1 ? "" : "s"} ${missing.join(", ")} missing`, cards: [] };
+  }
   return { whole: null, cards: cards.map((c, i) => checkCard(c, chain.layers[i], reading)) };
 }
 
@@ -206,6 +216,6 @@ export async function writeCards(ctx: CardContext, deps: { complete: Complete; s
     asked = 2;
   }
   if (check.whole) throw new Error(`${ctx.child.nickname}, day ${ctx.chain.day} ${ctx.chain.slot}: ${check.whole}`);
-  const cards = raw.cards.map((c) => ({ ...c, hints: (c.hints ?? []).map((h) => h.trim()).filter(Boolean) }));
+  const cards = cardsOf(raw).cards.map((c) => ({ ...c, hints: (c.hints ?? []).map((h) => h.trim()).filter(Boolean) }));
   return { cards, asked, problems: check.cards };
 }

@@ -5,33 +5,33 @@ import type { AnswerKey, IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic 
 // four layers on that slot's topic for that day. Ideas are shared by every child, so nothing here
 // knows about a child. Only approved content items are offered.
 
-export const IDEA_SCHEMA = {
+export const LAYER_KEYS = ["layer_1", "layer_2", "layer_3", "layer_4"] as const;
+
+const LAYER_SCHEMA = {
   type: "object",
   properties: {
-    layers: {
-      type: "array",
-      items: {
-        type: "object",
-        properties: {
-          title: { type: "string" },
-          statement: { type: "string" },
-          question: { type: "string" },
-          accept: { type: "array", items: { type: "string" } },
-          rubric: { type: "string" },
-          content_item_id: { type: "string" },
-        },
-        required: ["title", "statement", "question", "accept", "rubric", "content_item_id"],
-        additionalProperties: false,
-      },
-    },
+    title: { type: "string" },
+    statement: { type: "string" },
+    question: { type: "string" },
+    accept: { type: "array", items: { type: "string" } },
+    rubric: { type: "string" },
+    content_item_id: { type: "string" },
   },
-  required: ["layers"],
+  required: ["title", "statement", "question", "accept", "rubric", "content_item_id"],
   additionalProperties: false,
 };
 
-export type RawIdeas = {
-  layers: { title: string; statement: string; question: string; accept: string[]; rubric: string; content_item_id: string }[];
+// Four named, required layers rather than an array: an array schema let the real model stop after
+// one layer (14 Oct 2026), and structured outputs can't require an array's length.
+export const IDEA_SCHEMA = {
+  type: "object",
+  properties: Object.fromEntries(LAYER_KEYS.map((k) => [k, LAYER_SCHEMA])),
+  required: [...LAYER_KEYS],
+  additionalProperties: false,
 };
+
+export type RawLayer = { title: string; statement: string; question: string; accept: string[]; rubric: string; content_item_id: string };
+export type RawIdeas = Partial<Record<(typeof LAYER_KEYS)[number], RawLayer>>;
 
 // Which topic a slot uses on a day: the week's topics for that slot taken in turn, so each is met
 // more than once in a seven-day week.
@@ -77,8 +77,12 @@ const text = (v: unknown) => typeof v === "string" && v.trim() !== "";
 // Check the model's chain and turn it into layers. Throws, naming what's wrong, rather than store a
 // half-made chain.
 export function parseIdeas(raw: RawIdeas, offered: OfferedItem[]): IdeaLayer[] {
-  const layers = raw?.layers;
-  if (!Array.isArray(layers) || layers.length !== 4) throw new Error(`expected 4 layers, got ${layers?.length ?? 0}`);
+  const missing = LAYER_KEYS.map((k, i) => (raw?.[k] && typeof raw[k] === "object" ? null : i + 1)).filter((n) => n !== null);
+  if (missing.length) {
+    const got = LAYER_KEYS.length - missing.length;
+    throw new Error(`expected 4 layers, got ${got}: layer${missing.length === 1 ? "" : "s"} ${missing.join(", ")} missing`);
+  }
+  const layers = LAYER_KEYS.map((k) => raw[k]!);
   const ids = new Set(offered.map((i) => i.id));
   return layers.map((l, i) => {
     for (const key of ["title", "statement", "question", "rubric"] as const) {

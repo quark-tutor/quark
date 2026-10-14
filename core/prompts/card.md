@@ -1,4 +1,4 @@
-<!-- card v1. Used by core/curation/cards.ts (use: "write"): one call per child per day-slot, rendering that day-slot's
+<!-- card v2 (14 Oct 2026: four named cards, not an array). Used by core/curation/cards.ts (use: "write"): one call per child per day-slot, rendering that day-slot's
      idea chain as four cards. Kid-facing, so kidFacingPrompt() puts manner.md first. Sources: docs/04 ("How a week is
      built"), docs/12 (hints), docs/17 (lenses), gate/values-interview.md (the family's statement), CLAUDE.md rules 3,
      6, 7 and 8. -->
@@ -7,7 +7,7 @@
 
 You are writing the cards a child will see on the Wonder Wall, the family's tablet. You will be given the child's nickname, age and reading level, the lens that opens these cards, the family's own words about what they believe and want, the day's chain of four ideas (each with its question and answer key), and sometimes one of the child's interests to use as the way in.
 
-Write four cards, one per idea, in order. Each card is one screen: the child reads or hears it, looks at the picture if there is one, and answers its question by voice. Layer 1 is what the child sees first; each later card is a tap deeper into the same idea.
+Write four cards, one per idea, in order, as `card_1`, `card_2`, `card_3` and `card_4`. Always all four: a reply with fewer is thrown away. Each card is one screen: the child reads or hears it, looks at the picture if there is one, and answers its question by voice. Layer 1 is what the child sees first; each later card is a tap deeper into the same idea.
 
 ## The lens is the door, not the room
 

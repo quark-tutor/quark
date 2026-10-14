@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { cardPrompt, checkCards, givesAway, planDoors, writeCards, type CardBody, type CardChild, type CardContext, type RawCards } from "./cards";
-import { ideasPrompt, parseIdeas, sourceRefs, topicForDay, writeIdeaChain, type RawIdeas } from "./ideas";
+import { CARD_SCHEMA, cardPrompt, checkCards, givesAway, planDoors, writeCards, type CardBody, type CardChild, type CardContext, type RawCards } from "./cards";
+import { IDEA_SCHEMA, ideasPrompt, parseIdeas, sourceRefs, topicForDay, writeIdeaChain, type RawIdeas, type RawLayer } from "./ideas";
 import type { IdeaChain, WeekPlan, WeekTopic } from "./types";
 import { addDays, buildWeek, type CardRow, type WeekChild, type WeekDeps } from "./week";
 
@@ -40,7 +40,11 @@ const plan: WeekPlan = {
   ],
 };
 
-const rawLayer = (n: number, over: Partial<RawIdeas["layers"][number]> = {}) => ({
+// What the schema asks for: four named layers, and four named cards.
+const ideas = (layers: RawLayer[]): RawIdeas => Object.fromEntries(layers.map((l, i) => [`layer_${i + 1}`, l]));
+const asRaw = (cards: CardBody[]): RawCards => Object.fromEntries(cards.map((c, i) => [`card_${i + 1}`, c]));
+
+const rawLayer = (n: number, over: Partial<RawLayer> = {}): RawLayer => ({
   title: `Idea ${n}`,
   statement: `Statement ${n}, with its mechanism.`,
   question: `Question ${n}?`,
@@ -52,7 +56,7 @@ const rawLayer = (n: number, over: Partial<RawIdeas["layers"][number]> = {}) => 
 
 function chainFor(day: number, slot: WeekTopic["slot"]): IdeaChain {
   const t = topicForDay(plan, slot, day);
-  const layers = parseIdeas({ layers: [1, 2, 3, 4].map((n) => rawLayer(n, { content_item_id: t.items[0]?.id ?? "" })) }, t.items);
+  const layers = parseIdeas(ideas([1, 2, 3, 4].map((n) => rawLayer(n, { content_item_id: t.items[0]?.id ?? "" }))), t.items);
   return { day, slot, topic: t, layers };
 }
 
@@ -67,7 +71,8 @@ const goodCard = (n: number): CardBody => ({
   hints: ["Where did the water come from?", "What was the ground like after the water went away?"],
   handoff: "Ask Dad what the farmers planted.",
 });
-const goodCards = (): RawCards => ({ cards: [1, 2, 3, 4].map(goodCard) });
+const goodList = (): CardBody[] => [1, 2, 3, 4].map(goodCard);
+const goodCards = (): RawCards => asRaw(goodList());
 
 // --- Ideas ---
 
@@ -95,16 +100,30 @@ describe("ideas", () => {
   });
 
   it("parses four layers, keeps the answer key, and drops an item that wasn't offered", () => {
-    const layers = parseIdeas({ layers: [rawLayer(1, { content_item_id: "item-1" }), rawLayer(2, { content_item_id: "made-up" }), rawLayer(3), rawLayer(4)] }, [item]);
+    const layers = parseIdeas(ideas([rawLayer(1, { content_item_id: "item-1" }), rawLayer(2, { content_item_id: "made-up" }), rawLayer(3), rawLayer(4)]), [item]);
     expect(layers.map((l) => l.layer)).toEqual([1, 2, 3, 4]);
     expect(layers[0]).toMatchObject({ content_item_id: "item-1", answer_key: { accept: ["silt", "mud"], rubric: "Silt or mud counts." } });
     expect(layers[1].content_item_id).toBeNull();
   });
 
   it("refuses a chain that isn't four complete layers", () => {
-    expect(() => parseIdeas({ layers: [rawLayer(1)] }, [])).toThrow(/expected 4 layers/);
-    expect(() => parseIdeas({ layers: [rawLayer(1), rawLayer(2), rawLayer(3), rawLayer(4, { statement: " " })] }, [])).toThrow(/layer 4 has no statement/);
-    expect(() => parseIdeas({ layers: [rawLayer(1, { accept: [] }), rawLayer(2), rawLayer(3), rawLayer(4)] }, [])).toThrow(/no acceptable answers/);
+    expect(() => parseIdeas(ideas([rawLayer(1), rawLayer(2), rawLayer(3), rawLayer(4, { statement: " " })]), [])).toThrow(/layer 4 has no statement/);
+    expect(() => parseIdeas(ideas([rawLayer(1, { accept: [] }), rawLayer(2), rawLayer(3), rawLayer(4)]), [])).toThrow(/no acceptable answers/);
+  });
+
+  it("refuses the reply the real model gave on 14 Oct 2026 (one layer), naming the missing layers", () => {
+    // Recorded from .quark-debug: the old array schema let claude-opus-5-5 stop after one layer.
+    const real = { layers: [rawLayer(1, { title: "Pictures for numbers", accept: ["13", "thirteen", "ten and three"] })] };
+    expect(() => parseIdeas(real as unknown as RawIdeas, [])).toThrow("expected 4 layers, got 0: layers 1, 2, 3, 4 missing");
+    expect(() => parseIdeas(ideas([rawLayer(1)]), [])).toThrow("expected 4 layers, got 1: layers 2, 3, 4 missing");
+    expect(() => parseIdeas({ layer_1: rawLayer(1), layer_2: rawLayer(2), layer_4: rawLayer(4) }, [])).toThrow("expected 4 layers, got 3: layer 3 missing");
+  });
+
+  it("asks for exactly four layers and four cards in the schema itself, by name", () => {
+    expect(IDEA_SCHEMA.required).toEqual(["layer_1", "layer_2", "layer_3", "layer_4"]);
+    expect(Object.keys(IDEA_SCHEMA.properties)).toEqual(IDEA_SCHEMA.required);
+    expect(CARD_SCHEMA.required).toEqual(["card_1", "card_2", "card_3", "card_4"]);
+    expect(JSON.stringify([IDEA_SCHEMA, CARD_SCHEMA])).not.toContain('"layers"');
   });
 
   it("anchors each idea to the plan topic and its item with attribution", () => {
@@ -113,12 +132,12 @@ describe("ideas", () => {
   });
 
   it("asks the curation model with the schema", async () => {
-    const complete = vi.fn(async () => ({ layers: [1, 2, 3, 4].map((n) => rawLayer(n)) }) as never);
+    const complete = vi.fn(async () => ideas([1, 2, 3, 4].map((n) => rawLayer(n))) as never);
     const chain = await writeIdeaChain(plan, "wonder", 1, [], { complete, system: "SYSTEM" });
     expect(chain.layers).toHaveLength(4);
     const call = (complete.mock.calls[0] as unknown as [{ use: string; system: string; json: { required: string[] } }])[0];
     expect(call).toMatchObject({ use: "curate", system: "SYSTEM" });
-    expect(call.json.required).toEqual(["layers"]);
+    expect(call.json.required).toEqual(["layer_1", "layer_2", "layer_3", "layer_4"]);
   });
 });
 
@@ -173,11 +192,11 @@ describe("the hint check", () => {
   });
 
   it("flags a card whose last hint gives the answer, and the other rules", () => {
-    const raw = goodCards();
-    raw.cards[1] = { ...raw.cards[1], hints: ["Where did the water go?", "It's silt, isn't it?"] };
-    raw.cards[2] = { ...raw.cards[2], hints: ["Only one hint."], text: "You're so smart!" };
-    raw.cards[3] = { ...raw.cards[3], handoff: " ", text: "See www.example.org" };
-    const check = checkCards(raw, chainFor(1, "look"), "reads_alone");
+    const list = goodList();
+    list[1] = { ...list[1], hints: ["Where did the water go?", "It's silt, isn't it?"] };
+    list[2] = { ...list[2], hints: ["Only one hint."], text: "You're so smart!" };
+    list[3] = { ...list[3], handoff: " ", text: "See www.example.org" };
+    const check = checkCards(asRaw(list), chainFor(1, "look"), "reads_alone");
     expect(check.cards[0]).toEqual([]);
     expect(check.cards[1]).toEqual(['hint 2 (the last) gives the answer away: "It\'s silt, isn\'t it?"']);
     expect(check.cards[2]).toEqual(expect.arrayContaining(["needs two or three hints, has 1", 'uses a brilliance word ("smart"); use effort words']));
@@ -185,11 +204,11 @@ describe("the hint check", () => {
   });
 
   it("wants a picture described, and the whole card read aloud for a child who is read to", () => {
-    const raw = goodCards();
-    raw.cards[0] = { ...raw.cards[0], image_alt: "" };
-    expect(checkCards(raw, chainFor(1, "look"), "reads_alone").cards[0]).toEqual(["the idea has a picture but image_alt is empty"]);
+    const list = goodList();
+    list[0] = { ...list[0], image_alt: "" };
+    expect(checkCards(asRaw(list), chainFor(1, "look"), "reads_alone").cards[0]).toEqual(["the idea has a picture but image_alt is empty"]);
     expect(checkCards(goodCards(), chainFor(1, "look"), "read_to").cards[0]).toEqual(["the child is read to, so read_aloud must carry the whole card"]);
-    expect(checkCards({ cards: [goodCard(1)] }, chainFor(1, "look"), "reads_alone").whole).toBe("expected 4 cards, got 1");
+    expect(checkCards(asRaw([goodCard(1)]), chainFor(1, "look"), "reads_alone").whole).toBe("expected 4 cards, got 1: cards 2, 3, 4 missing");
   });
 });
 
@@ -203,9 +222,9 @@ describe("writeCards", () => {
   });
 
   it("asks again once, naming the problem, when a hint gives the answer away", async () => {
-    const leaky = goodCards();
-    leaky.cards[0] = { ...leaky.cards[0], hints: ["Hmm?", "It's mud."] };
-    const complete = vi.fn().mockResolvedValueOnce(leaky).mockResolvedValueOnce(goodCards());
+    const list = goodList();
+    list[0] = { ...list[0], hints: ["Hmm?", "It's mud."] };
+    const complete = vi.fn().mockResolvedValueOnce(asRaw(list)).mockResolvedValueOnce(goodCards());
     const out = await writeCards(ctx(), { complete, system: "s" });
     expect(complete).toHaveBeenCalledTimes(2);
     expect(complete.mock.calls[1][0].prompt).toContain('card 1: hint 2 (the last) gives the answer away: "It\'s mud."');
@@ -214,9 +233,9 @@ describe("writeCards", () => {
   });
 
   it("returns what's still wrong after the second try, and never asks a third time", async () => {
-    const leaky = goodCards();
-    leaky.cards[2] = { ...leaky.cards[2], hints: ["Hmm?", "It's mud."] };
-    const complete = vi.fn(async () => leaky as never);
+    const list = goodList();
+    list[2] = { ...list[2], hints: ["Hmm?", "It's mud."] };
+    const complete = vi.fn(async () => asRaw(list) as never);
     const out = await writeCards(ctx(), { complete, system: "s" });
     expect(complete).toHaveBeenCalledTimes(2);
     expect(out.problems[2]).toHaveLength(1);
@@ -276,7 +295,7 @@ function fakeDb(existingTheme: { id: string } | null = null) {
     },
     saveQuestion: async (row) => void db.questions.push(row),
     writeIdeaChain: vi.fn(async (slot, day) => chainFor(day, slot)),
-    writeCards: vi.fn(async () => ({ cards: goodCards().cards, asked: 1, problems: [[], [], [], []] })),
+    writeCards: vi.fn(async () => ({ cards: goodList(), asked: 1, problems: [[], [], [], []] })),
   };
   return { db, deps };
 }
@@ -355,7 +374,7 @@ describe("buildWeek", () => {
 
   it("holds back a card that still fails the checks, as blocked with the reason", async () => {
     const { db, deps } = fakeDb();
-    vi.mocked(deps.writeCards).mockResolvedValue({ cards: goodCards().cards, asked: 2, problems: [[], ["hint 2 (the last) gives the answer away"], [], []] });
+    vi.mocked(deps.writeCards).mockResolvedValue({ cards: goodList(), asked: 2, problems: [[], ["hint 2 (the last) gives the answer away"], [], []] });
     const report = await buildWeek({ ...options, days: 1, children: [boys[0]] }, deps);
     const blocked = db.cards.filter((c) => c.policy === "blocked");
     expect(blocked).toHaveLength(5);

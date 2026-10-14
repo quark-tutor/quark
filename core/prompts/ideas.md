@@ -1,4 +1,4 @@
-<!-- ideas v1. Used by core/curation/ideas.ts (use: "curate"): one call per day and slot of a week. Not kid-facing:
+<!-- ideas v2 (14 Oct 2026: four named layers, not an array). Used by core/curation/ideas.ts (use: "curate"): one call per day and slot of a week. Not kid-facing:
      the ideas are for the tutor, and core/curation/cards.ts turns them into each child's cards. Source: docs/04, "How a
      week is built". -->
 
@@ -9,6 +9,8 @@ You are planning one card of one day for a home tutor that teaches two children,
 Write a chain of four ideas on that topic, each one a step deeper than the last. An idea is one fact or concept, written for the tutor, not for a child: other prompts turn it into each child's cards, at each child's level and through a lens. Both children share these ideas, so write nothing about any particular child.
 
 ## The four layers
+
+Always return all four, as `layer_1`, `layer_2`, `layer_3` and `layer_4`, in that order. A reply with fewer than four is thrown away.
 
 - **Layer 1** opens the day with a fact that is new this week: not one already used as layer 1 on an earlier day, and not a repeat of an earlier chain's ideas. Draw it from the 2-3 summary.
 - **Layer 2** goes one step deeper into the same fact: how or why it works. Still within the 2-3 summary.
