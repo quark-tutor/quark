@@ -37,6 +37,16 @@ Roughly three-quarters of what a child sees comes from the plan. A child's inter
 
 The tutor looks as hard for new interests as it serves old ones. A child who only ever gets what they already like stops finding anything new to like.
 
+## How the picker works
+
+`lib/lenses.ts` picks a lens for each day-slot card of a child's week. It is a pure function of the child's sex, the child's week number in the pilot and the child's lens history (deep taps per lens, recorded from phase 4; empty until then). Nothing is random, so the same child and history always get the same week.
+
+- **Every lens, every week.** Each lens starts with a weight of 1 and, in any week of two days or more, at least one card. No lens is ever withheld from any child.
+- **Week one.** The shared lenses (explore, collect, humor, story) get 2 more, and the one lens leaned by the sex prior gets 2 more: build for a boy, care for a girl (story, the other lens docs allow for a girl, is already shared). For a boy's first week of 35 cards that comes to six each for explore, collect, humor, story and build, and two or three each for compete and care. The week opens with explore.
+- **The prior fades** at full strength in week 1, half in week 2 and nothing from week 3, and the shared lenses' extra weight fades with it once the child has history.
+- **History.** Each lens gets up to 4 more in proportion to its deep taps against the child's most-tapped lens. The week opens (day 1, look) with the child's strongest lens; every third week (3, 6, 9...) it opens with the least-chosen lens instead, and the tutor watches.
+- **Dealing.** The week's slots are split by weight, then dealt day by day so the most-weighted lenses come round most often and no day repeats a lens while another is still waiting.
+
 ## Open questions
 
 - [ ] How many deep taps make a lens "strongest," and over what window?
