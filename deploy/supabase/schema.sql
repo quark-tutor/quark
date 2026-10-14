@@ -151,6 +151,9 @@ create table values_settings (
 -- The plan adds, in supabase/migrations/20261013000000_plan_keys.sql: plan_topics.key (unique,
 --   replacing unique (sequence, subject)), week, slot, sources, perspective, values_points and
 --   parent_note, so plan/*.yaml can be imported by npm run plan:import.
+-- Content review adds, in supabase/migrations/20261013000001_content_review.sql: the four
+--   content_sources rows; content_items.approved_how ('auto' | 'guardian'), rejected_at and
+--   rejected_by; the 'frightening' flag.
 
 -- Any one guardian can place one. Only that guardian can lift it. Lifted rows stay for the audit.
 create table blackballs (
@@ -224,7 +227,7 @@ create table content_items (
   attribution   text,
   approved      boolean not null default false,    -- CC0/public domain with no flags: automatic; flagged: a guardian
   approved_by   uuid references guardians(id),
-  flags         text[] not null default '{}',      -- 'nudity', 'violence', 'needs_review'
+  flags         text[] not null default '{}',      -- 'nudity', 'violence', 'frightening', 'needs_review'
   metadata      jsonb,
   unique (source_id, external_id)
 );
