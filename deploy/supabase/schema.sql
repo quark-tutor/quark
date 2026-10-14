@@ -154,6 +154,8 @@ create table values_settings (
 -- Content review adds, in supabase/migrations/20261013000001_content_review.sql: the four
 --   content_sources rows; content_items.approved_how ('auto' | 'guardian'), rejected_at and
 --   rejected_by; the 'frightening' flag.
+-- The week build adds, in supabase/migrations/20261014000000_week_build.sql: ideas.day (1-7) and
+--   cards.door (the interest that opened a layer-1 card).
 
 -- Any one guardian can place one. Only that guardian can lift it. Lifted rows stay for the audit.
 create table blackballs (
