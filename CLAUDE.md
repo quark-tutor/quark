@@ -41,15 +41,19 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - Every outside content item carries its source and license. Nothing unapproved is shown to a child.
 - When a design question comes up that the docs don't settle, write the options into `docs/open-questions.md` and ask Brandon rather than guessing.
 - Don't rename "Quark" or "Wonder Wall". Don't add "AI" to any user-facing name.
+- Keep the "Where we are" note under the build order current at every merge.
 
 ## Build order
 
-1. **Foundation** — Next.js app, Supabase project wired up, schema applied, guardian sign-in, empty `/kid` and `/parent` views, iPad in Guided Access can open it. ← start here
+1. **Foundation** — Next.js app, Supabase project wired up, schema applied, guardian sign-in, empty `/kid` and `/parent` views, iPad in Guided Access can open it.
 2. **Values interview + policy gate** — the interview UI per `gate/values-interview.md`, rows written, policy document generated, the 20-question test run shown to parents.
 3. **Curation engine v1** — weekly cron: pick theme from `plan_topics`, generate ideas (source-anchored), render cards per child per lens, gate them, load the week.
 4. **Wonder Wall** — five daily cards, layers 1–4, voice answers, hints as conversation, profiles, explorer stamps, calm session end on rushing.
 5. **Digest and audio** — Sunday email, RSS feed, art-of-the-week.
 6. **Checks and difficulty** — delayed recall via `review_schedule`, hint-count difficulty dial, results in the digest.
 7. **Pilot** — four weeks with the boys.
+
+**Where we are:** phases 1 and 2 are merged to `main`.
+Phase 3 is open on `phase-3-curation`, at step 1 (lenses spec, model adapter, 13 Oct 2026 decisions).
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.
