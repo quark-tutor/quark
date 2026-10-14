@@ -191,6 +191,17 @@ describe("the hint check", () => {
     expect(givesAway("Where does the rain fall first?", key)).toBe(false); // "rain" alone isn't "monsoon rain"
   });
 
+  it("judges the hints from the first real run (14 Oct 2026) fairly", () => {
+    const north = { accept: ["north", "northward", "to the north", "up the map", "toward the Mediterranean"], rubric: "" };
+    const zero = { accept: ["none", "0", "zero", "no coils"], rubric: "" };
+    // Held back wrongly: "up the map" was cut to "map", and "no coils" to "coil".
+    expect(givesAway("Find Egypt on a map or a globe. Which edge of Egypt touches the Mediterranean Sea?", north)).toBe(false);
+    expect(givesAway("Look at the signs we used for 2026 on the last card. Is a coil of rope one of them?", zero)).toBe(false);
+    // Held back rightly: the answer is in the list, or said outright.
+    expect(givesAway("Which of the four compass words, north, south, east or west, names the way the river is heading?", north)).toBe(true);
+    expect(givesAway("Picture a map with the top as the way up. Where is that sea compared with the rest of Egypt?", north)).toBe(true);
+  });
+
   it("flags a card whose last hint gives the answer, and the other rules", () => {
     const list = goodList();
     list[1] = { ...list[1], hints: ["Where did the water go?", "It's silt, isn't it?"] };

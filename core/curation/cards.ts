@@ -125,10 +125,12 @@ const words = (s: string) =>
 
 // Does this text give away an acceptable answer? True when every meaningful word of some accepted
 // answer appears in it ("silt" in "Is it silt?"; "monsoon rain" in "the rain of the monsoon").
+// Meaningful means not a stop word; two-letter words like "up" and "no" count, because dropping
+// them turned "up the map" into "map" and "no coils" into "coil" (first real run, 14 Oct 2026).
 export function givesAway(text: string, key: AnswerKey): boolean {
   const have = new Set(words(text));
   return key.accept.some((answer) => {
-    const need = words(answer).filter((w) => !STOP.has(w) && (w.length > 2 || /\d/.test(w)));
+    const need = words(answer).filter((w) => !STOP.has(w) && (w.length > 1 || /\d/.test(w)));
     return need.length > 0 && need.every((w) => have.has(w));
   });
 }
