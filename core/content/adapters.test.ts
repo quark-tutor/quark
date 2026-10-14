@@ -91,6 +91,11 @@ describe("commons", () => {
 
   it("strips HTML from extmetadata", () => {
     expect(plain('unknown (<a href="x">c. 2000 B.C</a>) &amp; more')).toBe("unknown (c. 2000 B.C) & more");
+    // The Aida file's Artist field links the band to Wikipedia as "w:United States Marine Corps Band".
+    expect(plain('Giuseppe Verdi, performed by the <a href="https://en.wikipedia.org/wiki/United_States_Marine_Corps_Band">w:United States Marine Corps Band</a>')).toBe(
+      "Giuseppe Verdi, performed by the United States Marine Corps Band",
+    );
+    expect(plain("Time: 10:30, ratio 3:4")).toBe("Time: 10:30, ratio 3:4");
   });
 });
 

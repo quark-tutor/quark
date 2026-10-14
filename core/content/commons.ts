@@ -21,6 +21,8 @@ export function plain(html: string | undefined): string {
   return (html ?? "")
     .replace(/<[^>]*>/g, "")
     .replace(/&(amp|quot|#0?39|lt|gt|nbsp);/g, (e) => entities[e] ?? e)
+    // A link to another wiki keeps its prefix as text: "the w:United States Marine Corps Band".
+    .replace(/(^|[\s(])(?:w|wikt|wikipedia|en|d|c|s):(?=\S)/gi, "$1")
     .replace(/\s+/g, " ")
     .trim();
 }
