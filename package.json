@@ -11,9 +11,11 @@
     "typecheck": "next typegen && tsc --noEmit",
     "db:push": "node --env-file=.env.local scripts/db-push.mts",
     "seed": "node --env-file=.env.local scripts/seed-family.mts scripts/family.local.json",
-    "packs:import": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-packs.mts"
+    "packs:import": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-packs.mts",
+    "model:smoke": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/model-smoke.mts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
     "next": "16.4.0",
