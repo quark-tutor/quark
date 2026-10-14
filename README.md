@@ -1,6 +1,6 @@
 # Quark
 
-*"Three quarks for Muster Mark!" — James Joyce, Finnegans Wake. The word for the smallest pieces everything is built from came from a book before it came from physics.*
+*"A way a lone a last a loved a long the riverrun, past Eve and Adam's, from swerve of shore to bend of bay, brings us by a commodius vicus of recirculation back to Howth Castle and Environs." — James Joyce, Finnegans Wake, its last line running into its first. The book that gave physics the word "quark" is a circle: it ends where it begins, and each pass through it goes a little deeper.*
 
 **An open project to build Quark, an AI tutor that helps parents give their kids a rich, challenging education at home, even when parents are short on time.**
 
