@@ -29,6 +29,17 @@ npm run dev                     # http://localhost:3000/parent
 
 `scripts/family.local.json` is gitignored. Keep children to a nickname, birth month, sex, reading level and interests. Never a full name, photo, school or address.
 
+Then load the values packs, the plan and the pictures and recordings it uses. `content:fetch` calls the model, so add `ANTHROPIC_API_KEY` and `QUARK_MODEL_GATE` to `.env.local` first and check them with `model:smoke`:
+
+```sh
+npm run packs:import            # packs/*.yaml into the database
+npm run plan:import             # plan/*.yaml into plan_topics
+npm run model:smoke -- gate     # one short call to the gate model
+npm run content:fetch           # fetches, copies, flags and approves what the plan names
+```
+
+**Storage needs no dashboard setting.** `content:fetch` creates a private bucket called `content` the first time it runs and keeps a copy of every picture there, so the wall never loads images from museum sites. The Egypt plan's copies come to about 45 MB, well inside the free plan's 1 GB, and the largest file is 7 MB, under Supabase's default 50 MB limit per file. Items that weren't approved automatically wait at `/parent/content`.
+
 ## 3. Vercel
 
 1. Import the GitHub repo at [vercel.com/new](https://vercel.com/new). The defaults for Next.js are right.
