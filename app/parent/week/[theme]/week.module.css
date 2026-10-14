@@ -1,0 +1,53 @@
+/* /parent/week/[theme]. Built on the beliefs pages' styles (../../beliefs/beliefs.module.css). */
+
+.child {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.child h2 {
+  font-size: 1.3rem;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.day h3 {
+  font-size: 1rem;
+  color: var(--muted);
+}
+
+.layer {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+
+.layer summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.layer p {
+  margin: 6px 0;
+}
+
+.picture {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--bg);
+  border-radius: calc(var(--radius) - 6px);
+  margin-top: 6px;
+}
+
+.hints {
+  margin: 4px 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: var(--muted);
+}

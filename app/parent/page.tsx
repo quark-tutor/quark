@@ -39,7 +39,7 @@ async function ParentHome() {
     .select("id", { count: "exact", head: true })
     .eq("approved", false)
     .is("rejected_at", null);
-  const [family, guardians, kids, devices, answers, content] = await Promise.all([
+  const [family, guardians, kids, devices, answers, content, themes] = await Promise.all([
     supabase.from("families").select("name, timezone").single(),
     supabase.from("guardians").select("id, display_name").eq("active", true).order("created_at"),
     supabase.from("children").select("id, nickname, birth_month").order("birth_month"),
@@ -50,8 +50,9 @@ async function ParentHome() {
       .order("created_at"),
     supabase.from("guardian_answers").select("guardian_id"),
     waiting,
+    supabase.from("themes").select("id, title, week_start, status").order("week_start"),
   ]);
-  for (const result of [family, guardians, kids, devices, answers, content]) if (result.error) throw result.error;
+  for (const result of [family, guardians, kids, devices, answers, content, themes]) if (result.error) throw result.error;
 
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const when = (iso: string | null) =>
@@ -125,6 +126,23 @@ async function ParentHome() {
           <Link href="/parent/beliefs/rulebook">Read the rulebook</Link>
         </p>
       </section>
+
+      {themes.data?.length ? (
+        <section className={styles.section}>
+          <h2>Weeks</h2>
+          <ul className={styles.list}>
+            {themes.data.map((t) => (
+              <li key={t.id}>
+                <Link href={`/parent/week/${t.id}`}>{t.title}</Link>{" "}
+                <span className={styles.muted}>
+                  from {new Date(`${t.week_start}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", month: "short", day: "numeric" })},{" "}
+                  {t.status === "review" ? "ready for you to read" : t.status}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <section className={styles.section}>
         <h2>Pictures and recordings</h2>
