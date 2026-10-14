@@ -414,3 +414,17 @@ describe("addDays", () => {
     expect(addDays("2026-12-29", 4)).toBe("2027-01-02");
   });
 });
+
+describe("stray braces", () => {
+  it("cleans them off the ends before checking, and re-asks when one is left inside", async () => {
+    const list = goodList();
+    list[0] = { ...list[0], handoff: "Ask Dad where the Nile begins.}" };
+    list[1] = { ...list[1], text: "The river {rose} every summer." };
+    const complete = vi.fn().mockResolvedValueOnce(asRaw(list)).mockResolvedValueOnce(goodCards());
+    const out = await writeCards(ctx(), { complete, system: "s" });
+    expect(complete).toHaveBeenCalledTimes(2);
+    expect(complete.mock.calls[1][0].prompt).toContain("card 2: has a stray { or } in its words");
+    expect(complete.mock.calls[1][0].prompt).not.toContain("card 1:");
+    expect(out.cards[0].handoff).toBe("Ask Dad what the farmers planted.");
+  });
+});

@@ -1,5 +1,6 @@
 import { LENS_QUESTIONS, type Lens } from "../../lib/lenses.ts";
 import type { Perspective } from "../../lib/values.ts";
+import { cleanEnds, hasBrace } from "./clean.ts";
 import type { AnswerKey, IdeaChain } from "./types.ts";
 
 // Cards: one model call per child per day-slot (use: "write", kidFacingPrompt("card.md")) renders
@@ -164,6 +165,7 @@ export function checkCard(c: CardBody, layer: IdeaChain["layers"][number], readi
     problems.push("the child is read to, so read_aloud must carry the whole card");
   }
   const all = [c?.title, c?.text, c?.read_aloud, c?.question, c?.handoff, ...hints].join(" ");
+  if (hasBrace([all, c?.image_alt ?? ""].join(" "))) problems.push("has a stray { or } in its words");
   const brilliance = all.match(BRILLIANCE);
   if (brilliance) problems.push(`uses a brilliance word ("${brilliance[0]}"); use effort words`);
   if (/https?:|www\./i.test(all)) problems.push("contains a link");
@@ -197,6 +199,27 @@ export type WrittenCards = { cards: CardBody[]; asked: number; problems: string[
 
 // Write the four cards, asking once more if the first try fails the checks. If the second try still
 // fails, the problems come back with the cards so the caller can hold them back from the child.
+// Every field and hint with its ends tidied (see clean.ts). Cards that aren't there stay missing.
+export function cleanCards(raw: RawCards): RawCards {
+  const out: RawCards = {};
+  for (const k of CARD_KEYS) {
+    const c = raw?.[k];
+    if (!c || typeof c !== "object") continue;
+    const tidy = (v: unknown) => (typeof v === "string" ? cleanEnds(v) : v);
+    out[k] = {
+      ...c,
+      title: tidy(c.title),
+      text: tidy(c.text),
+      image_alt: tidy(c.image_alt),
+      read_aloud: tidy(c.read_aloud),
+      question: tidy(c.question),
+      handoff: tidy(c.handoff),
+      hints: Array.isArray(c.hints) ? c.hints.map((h) => tidy(h) as string) : c.hints,
+    } as CardBody;
+  }
+  return out;
+}
+
 export async function writeCards(ctx: CardContext, deps: { complete: Complete; system: string }): Promise<WrittenCards> {
   const prompt = cardPrompt(ctx);
   const ask = (extra: string) =>
@@ -209,12 +232,12 @@ export async function writeCards(ctx: CardContext, deps: { complete: Complete; s
       label: `cards-${ctx.child.nickname}-day${ctx.chain.day}-${ctx.chain.slot}${extra ? "-again" : ""}`,
     });
 
-  let raw = await ask("");
+  let raw = cleanCards(await ask(""));
   let check = checkCards(raw, ctx.chain, ctx.child.reading);
   let asked = 1;
   if (listProblems(check).length) {
     const fix = listProblems(check).join("\n- ");
-    raw = await ask(`\n\nYour last try had these problems. Write all four cards again and fix them:\n- ${fix}`);
+    raw = cleanCards(await ask(`\n\nYour last try had these problems. Write all four cards again and fix them:\n- ${fix}`));
     check = checkCards(raw, ctx.chain, ctx.child.reading);
     asked = 2;
   }

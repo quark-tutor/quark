@@ -1,4 +1,5 @@
 import type { DaySlot } from "../../lib/lenses.ts";
+import { cleanEnds } from "./clean.ts";
 import type { AnswerKey, IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic } from "./types.ts";
 
 // Ideas: one model call per day and slot (use: "curate", core/prompts/ideas.md) returns a chain of
@@ -88,17 +89,17 @@ export function parseIdeas(raw: RawIdeas, offered: OfferedItem[]): IdeaLayer[] {
     for (const key of ["title", "statement", "question", "rubric"] as const) {
       if (!text(l[key])) throw new Error(`layer ${i + 1} has no ${key}`);
     }
-    const accept = (l.accept ?? []).map((a) => a.trim()).filter(Boolean);
+    const accept = (l.accept ?? []).map(cleanEnds).filter(Boolean);
     // Layer 4 is a question to talk about with a person, with more than one good answer, so its
     // list may be empty and the rubric says what a good answer includes.
     if (accept.length === 0 && i < 3) throw new Error(`layer ${i + 1} has no acceptable answers`);
     const item = l.content_item_id?.trim() ?? "";
-    const answer_key: AnswerKey = { accept, rubric: l.rubric.trim() };
+    const answer_key: AnswerKey = { accept, rubric: cleanEnds(l.rubric) };
     return {
       layer: (i + 1) as IdeaLayer["layer"],
-      title: l.title.trim(),
-      statement: l.statement.trim(),
-      question: l.question.trim(),
+      title: cleanEnds(l.title),
+      statement: cleanEnds(l.statement),
+      question: cleanEnds(l.question),
       answer_key,
       content_item_id: item && ids.has(item) ? item : null,
     };
