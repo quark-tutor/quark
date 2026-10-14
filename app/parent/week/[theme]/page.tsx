@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import styles from "../../beliefs/beliefs.module.css";
 import own from "./week.module.css";
+import { Zoom } from "./zoom";
 
 export const metadata: Metadata = { title: "This week's cards · Quark" };
 
 // A read-only look at a built week before the gate checks it: each child's cards by day and slot,
-// with the lens and all four layers. Step 6 builds the "looks good" page on this one.
+// with the lens and all four layers, and each card's picture or recording with its credit line.
+// Step 6 builds the "looks good" page on this one.
 export default function WeekPage({ params }: { params: Promise<{ theme: string }> }) {
   return (
     <main className={styles.page}>
@@ -39,7 +41,26 @@ type Card = {
   policy: string;
   policy_notes: { validation?: string[] } | null;
   body: Body;
-  ideas: { content_item_id: string | null } | null;
+  ideas: { content_item_id: string | null; topic_id: string | null; plan_topics: { key: string } | null } | null;
+};
+
+// An approved item as a card shows it. file is a signed URL to the stored copy, when there is one.
+type Media = {
+  type: string;
+  title: string;
+  creator: string | null;
+  date: string | null;
+  source: string | null;
+  license: string;
+  attribution: string | null;
+  url: string;
+  file: string | null;
+};
+
+// Wikimedia keeps an MP3 of each sound file, which iPad Safari plays where it may not play Ogg.
+const commonsMp3 = (url: string) => {
+  const m = url.match(/^https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/(\w\/\w\w)\/([^/]+\.(?:ogg|oga|opus|flac|wav))$/);
+  return m ? `https://upload.wikimedia.org/wikipedia/commons/transcoded/${m[1]}/${m[2]}/${m[2]}.mp3` : null;
 };
 
 async function Week({ params }: { params: Promise<{ theme: string }> }) {
@@ -58,7 +79,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
     supabase.from("children").select("id, nickname").order("birth_month"),
     supabase
       .from("cards")
-      .select("id, child_id, day, slot, lens, layer, door, level, policy, policy_notes, body, ideas(content_item_id)")
+      .select("id, child_id, day, slot, lens, layer, door, level, policy, policy_notes, body, ideas(content_item_id, topic_id, plan_topics(key))")
       .eq("theme_id", themeId)
       .order("day")
       .order("layer")
@@ -67,18 +88,52 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
   for (const r of [theme, kids, cards]) if (r.error) throw new Error(r.error.message);
   if (!theme.data) return <p>No such week.</p>;
 
-  // Pictures: the approved items' stored copies, through short-lived signed URLs.
+  // Pictures and recordings: the approved items, with their stored copies through signed URLs that
+  // last an hour. The bucket is private; nothing here is a public URL to it.
   const itemIds = [...new Set((cards.data ?? []).map((c) => c.ideas?.content_item_id).filter((id): id is string => !!id))];
   const items = itemIds.length
-    ? await supabase.from("content_items").select("id, type, title, url, metadata").in("id", itemIds)
+    ? await supabase
+        .from("content_items")
+        .select("id, type, title, creator, url, license, attribution, metadata, content_sources(name)")
+        .in("id", itemIds)
+        .returns<
+          {
+            id: string;
+            type: string;
+            title: string | null;
+            creator: string | null;
+            url: string;
+            license: string;
+            attribution: string | null;
+            metadata: { storage_path?: string; date?: string } | null;
+            content_sources: { name: string } | null;
+          }[]
+        >()
     : { data: [], error: null };
   if (items.error) throw new Error(items.error.message);
   const paths = (items.data ?? []).map((i) => i.metadata?.storage_path).filter((p): p is string => !!p);
-  const signed = paths.length ? await createAdminClient().storage.from("content").createSignedUrls(paths, 60 * 60) : { data: [] };
+  const signed = paths.length ? await createAdminClient().storage.from("content").createSignedUrls(paths, 60 * 60) : { data: [], error: null };
+  if (signed.error) throw new Error(signed.error.message);
   const signedBy = new Map((signed.data ?? []).filter((s) => s.signedUrl).map((s) => [s.path, s.signedUrl]));
-  const media = new Map(
-    (items.data ?? []).map((i) => [i.id, { type: i.type as string, title: i.title as string, url: i.url as string, picture: signedBy.get(i.metadata?.storage_path) ?? undefined }]),
+  const media = new Map<string, Media>(
+    (items.data ?? []).map((i) => [
+      i.id,
+      {
+        type: i.type,
+        title: i.title ?? "Untitled",
+        creator: i.creator,
+        date: i.metadata?.date ?? null,
+        source: i.content_sources?.name ?? null,
+        license: i.license,
+        attribution: i.attribution,
+        url: i.url,
+        file: (i.metadata?.storage_path && signedBy.get(i.metadata.storage_path)) || null,
+      },
+    ]),
   );
+  // Topics that have an approved item on some layer this week, so a layer without one can say
+  // whether the plan has a gap or the picture is simply on another layer.
+  const topicsWithMedia = new Set((cards.data ?? []).filter((c) => c.ideas?.content_item_id).map((c) => c.ideas!.topic_id));
 
   const days = [...new Set((cards.data ?? []).map((c) => c.day))].sort();
   const weekday = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long", month: "short", day: "numeric" });
@@ -124,7 +179,12 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
                           </span>
                         </div>
                         {layers.map((c) => (
-                          <Layer key={c.id} card={c} media={c.ideas?.content_item_id ? media.get(c.ideas.content_item_id) : undefined} />
+                          <Layer
+                            key={c.id}
+                            card={c}
+                            media={c.ideas?.content_item_id ? media.get(c.ideas.content_item_id) : undefined}
+                            topicHasMedia={topicsWithMedia.has(c.ideas?.topic_id ?? null)}
+                          />
                         ))}
                       </article>
                     );
@@ -139,23 +199,26 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
   );
 }
 
-function Layer({ card, media }: { card: Card; media?: { type: string; title: string; url: string; picture?: string } }) {
+function Layer({ card, media, topicHasMedia }: { card: Card; media?: Media; topicHasMedia: boolean }) {
   const b = card.body;
+  const key = card.ideas?.plan_topics?.key;
   return (
     <details className={own.layer} open={card.layer === 1}>
       <summary>
         {card.layer}. {b.title}
         {card.policy === "blocked" ? <span className={styles.flag}> held back</span> : null}
       </summary>
-      {media?.picture ? (
-        // eslint-disable-next-line @next/next/no-img-element -- a short-lived signed URL from private storage
-        <img className={own.picture} src={media.picture} alt={b.image_alt || media.title} loading="lazy" />
-      ) : media ? (
+      {media ? (
+        <MediaBlock media={media} alt={b.image_alt} />
+      ) : topicHasMedia ? (
         <p className={styles.meta}>
-          With it: {media.type} &ldquo;{media.title}&rdquo;
+          No {card.slot === "listen" ? "recording" : "picture"} on this layer; this topic&rsquo;s{" "}
+          {card.slot === "listen" ? "recording" : "picture"} is on another.
         </p>
       ) : (
-        <p className={styles.meta}>No picture.</p>
+        <p className={styles.meta}>
+          No approved {card.slot === "listen" ? "recording" : "picture"} for this topic yet{key ? <> (<code>{key}</code>)</> : null}.
+        </p>
       )}
       <p>{b.text}</p>
       {b.read_aloud && b.read_aloud !== b.text ? <p className={styles.meta}>Read aloud: {b.read_aloud}</p> : null}
@@ -170,5 +233,47 @@ function Layer({ card, media }: { card: Card; media?: { type: string; title: str
       <p className={styles.meta}>Then: {b.handoff}</p>
       {card.policy_notes?.validation?.length ? <p className={styles.flag}>{card.policy_notes.validation.join(" ")}</p> : null}
     </details>
+  );
+}
+
+function MediaBlock({ media, alt }: { media: Media; alt: string }) {
+  let shown: ReactNode;
+  if (media.type === "audio") {
+    const src = media.file ?? media.url;
+    const mp3 = media.file ? null : commonsMp3(media.url);
+    // Never autoplays: the player waits for a tap, and loads nothing until then.
+    shown = (
+      <audio className={own.audio} controls preload="none">
+        {mp3 ? <source src={mp3} type="audio/mpeg" /> : null}
+        <source src={src} />
+      </audio>
+    );
+  } else if (media.file) {
+    shown = <Zoom src={media.file} alt={alt || media.title} />;
+  } else {
+    shown = <p className={styles.meta}>The stored copy of this {media.type} is missing. Run npm run content:fetch.</p>;
+  }
+  return (
+    <figure className={own.media}>
+      {shown}
+      <figcaption className={styles.meta}>
+        <strong>{media.title}</strong>
+        {[media.creator, media.date].filter(Boolean).length ? `, ${[media.creator, media.date].filter(Boolean).join(", ")}` : ""}
+        <br />
+        {[media.source, media.license].filter(Boolean).join(" · ")}
+        {/* Required for CC BY and CC BY-SA items; shown for every item. */}
+        {media.attribution ? (
+          <>
+            <br />
+            {media.attribution}
+          </>
+        ) : /^cc by/i.test(media.license) ? (
+          <>
+            <br />
+            <span className={styles.flag}>The credit line is missing, and this license requires one.</span>
+          </>
+        ) : null}
+      </figcaption>
+    </figure>
   );
 }

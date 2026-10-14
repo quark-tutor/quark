@@ -51,3 +51,43 @@
   font-size: 14px;
   color: var(--muted);
 }
+
+.media {
+  margin: 6px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.thumbButton {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+
+.audio {
+  width: 100%;
+}
+
+.zoom {
+  max-width: 96vw;
+  max-height: 96vh;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-out;
+}
+
+.zoom::backdrop {
+  background: rgb(0 0 0 / 0.85);
+}
+
+.zoom img {
+  display: block;
+  max-width: 96vw;
+  max-height: 96vh;
+  object-fit: contain;
+}
