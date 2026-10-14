@@ -41,7 +41,7 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - Every outside content item carries its source and license. Nothing unapproved is shown to a child.
 - When a design question comes up that the docs don't settle, write the options into `docs/08-open-questions.md` (or the open questions of the page it belongs to) and ask Brandon rather than guessing.
 - Don't rename "Quark" or "Wonder Wall". Don't add "AI" to any user-facing name.
-- Keep the "Where we are" note under the build order current at every merge.
+- End every build session the same way, before the last commit: update the Where we are note under Build order (date, what's merged, what's on which branch, what's next), then update the Status line in README.md so it agrees with it. The README status is for visitors and stays short; CLAUDE.md carries the detail. If a session ends without this, the next session does it first.
 
 ## Build order
 
