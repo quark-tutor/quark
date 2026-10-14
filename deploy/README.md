@@ -36,6 +36,7 @@ npm run packs:import            # packs/*.yaml into the database
 npm run plan:import             # plan/*.yaml into plan_topics
 npm run model:smoke -- gate     # one short call to the gate model
 npm run content:fetch           # fetches, copies, flags and approves what the plan names
+npm run week:build -- --week 1 --days 1   # a cheap one-day trial of the first week (needs QUARK_MODEL_CURATE and QUARK_MODEL_WRITE)
 ```
 
 **Storage needs no dashboard setting.** `content:fetch` creates a private bucket called `content` the first time it runs and keeps a copy of every picture there, so the wall never loads images from museum sites. The Egypt plan's copies come to about 45 MB, well inside the free plan's 1 GB, and the largest file is 7 MB, under Supabase's default 50 MB limit per file. Items that weren't approved automatically wait at `/parent/content`.
