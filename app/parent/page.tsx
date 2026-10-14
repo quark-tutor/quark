@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { ageFrom } from "@/lib/beliefs";
 import { requireGuardian } from "@/lib/guardian";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { forgetDevice, signOut } from "./actions";
 import { PairIpad } from "./pair-ipad";
@@ -32,7 +33,13 @@ async function ParentHome() {
   }
 
   const supabase = await createClient();
-  const [family, guardians, kids, devices, answers] = await Promise.all([
+  // Waiting content items aren't readable through row-level security, so the server counts them.
+  const waiting = createAdminClient()
+    .from("content_items")
+    .select("id", { count: "exact", head: true })
+    .eq("approved", false)
+    .is("rejected_at", null);
+  const [family, guardians, kids, devices, answers, content] = await Promise.all([
     supabase.from("families").select("name, timezone").single(),
     supabase.from("guardians").select("id, display_name").eq("active", true).order("created_at"),
     supabase.from("children").select("id, nickname, birth_month").order("birth_month"),
@@ -42,8 +49,9 @@ async function ParentHome() {
       .is("revoked_at", null)
       .order("created_at"),
     supabase.from("guardian_answers").select("guardian_id"),
+    waiting,
   ]);
-  for (const result of [family, guardians, kids, devices, answers]) if (result.error) throw result.error;
+  for (const result of [family, guardians, kids, devices, answers, content]) if (result.error) throw result.error;
 
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const when = (iso: string | null) =>
@@ -115,6 +123,20 @@ async function ParentHome() {
           </Link>
           <Link href="/parent/beliefs/compare">Compare answers</Link>
           <Link href="/parent/beliefs/rulebook">Read the rulebook</Link>
+        </p>
+      </section>
+
+      <section className={styles.section}>
+        <h2>Pictures and recordings</h2>
+        <p className={styles.muted}>
+          {content.count
+            ? `${content.count} waiting for one of you to look at.`
+            : "Nothing waiting. Quark approves an item by itself only when it is free of copyright and nothing in it was flagged."}
+        </p>
+        <p className={styles.row}>
+          <Link href="/parent/content" className={styles.button}>
+            {content.count ? "Review them" : "See them all"}
+          </Link>
         </p>
       </section>
 

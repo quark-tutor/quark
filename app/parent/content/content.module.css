@@ -1,0 +1,32 @@
+/* /parent/content. Built on the beliefs pages' styles (../beliefs/beliefs.module.css); these are
+   the few things only this page needs. */
+
+.section {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section h2 {
+  font-size: 1.15rem;
+}
+
+.thumb {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--bg);
+  border-radius: calc(var(--radius) - 6px);
+}
+
+.audio {
+  width: 100%;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: auto;
+}
