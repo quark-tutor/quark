@@ -148,6 +148,9 @@ create table values_settings (
 --   conduct answers (guardian_conduct, conduct_settings); values_settings.disputed; how a child
 --   learns to act on packs, guardians and the profile; values_profiles.policy_document; family
 --   values writable only by the server (replace_family_values); blackballs lifted only by their placer.
+-- The plan adds, in supabase/migrations/20261013000000_plan_keys.sql: plan_topics.key (unique,
+--   replacing unique (sequence, subject)), week, slot, sources, perspective, values_points and
+--   parent_note, so plan/*.yaml can be imported by npm run plan:import.
 
 -- Any one guardian can place one. Only that guardian can lift it. Lifted rows stay for the audit.
 create table blackballs (
