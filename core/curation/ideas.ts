@@ -105,7 +105,14 @@ export function sourceRefs(topic: WeekTopic, layer: IdeaLayer): string[] {
   return [...topic.keys.map((k) => `plan:${k}`), ...(item ? [`content:${item.id} ${item.attribution}`] : [])];
 }
 
-export type Complete = <T>(options: { system: string; prompt: string; maxTokens: number; use: "curate" | "write"; json: Record<string, unknown> }) => Promise<T>;
+export type Complete = <T>(options: {
+  system: string;
+  prompt: string;
+  maxTokens: number;
+  use: "curate" | "write";
+  json: Record<string, unknown>;
+  label?: string;
+}) => Promise<T>;
 
 export async function writeIdeaChain(
   plan: WeekPlan,
@@ -121,6 +128,7 @@ export async function writeIdeaChain(
     maxTokens: 16000,
     use: "curate",
     json: IDEA_SCHEMA,
+    label: `ideas-day${day}-${slot}`,
   });
   try {
     return { day, slot, topic, layers: parseIdeas(raw, topic.items) };

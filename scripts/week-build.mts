@@ -2,7 +2,7 @@
 //   npm run week:build -- --week 1
 //   npm run week:build -- --week 1 --child Rex --days 2     (one child, the first two days)
 //   npm run week:build -- --week 1 --rebuild                (replace a week already built)
-// Options: --stretch (default: the plan's first), --start YYYY-MM-DD (default: next Monday, or
+// Options: --debug (write each model request and reply to .quark-debug/), --stretch (default: the plan's first), --start YYYY-MM-DD (default: next Monday, or
 // counted on from week 1's start). The theme ends in status 'review'; nothing goes live here.
 // Cards are written with policy 'pending': the gate (step 5) checks them.
 
@@ -13,7 +13,7 @@ import { writeCards } from "../core/curation/cards.ts";
 import { writeIdeaChain } from "../core/curation/ideas.ts";
 import type { IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic } from "../core/curation/types.ts";
 import { addDays, buildWeek, type WeekChild, type WeekDeps } from "../core/curation/week.ts";
-import { complete, modelFor, usageSoFar } from "../core/model.ts";
+import { complete, debugTo, modelFor, usageSoFar } from "../core/model.ts";
 import { costOf } from "../core/prices.ts";
 import { kidFacingPrompt, readPrompt } from "../core/prompts.ts";
 import { sourceRefs } from "../core/curation/ideas.ts";
@@ -28,6 +28,7 @@ const { values: args } = parseArgs({
     days: { type: "string", default: "7" },
     start: { type: "string" },
     rebuild: { type: "boolean", default: false },
+    debug: { type: "boolean", default: false },
   },
 });
 const week = Number(args.week);
@@ -49,6 +50,12 @@ function must<R extends Reply>(r: R, what: string): NonNullable<R["data"]> {
   const data = maybe(r, what);
   if (data === null || data === undefined) throw new Error(`${what}: nothing came back`);
   return data as NonNullable<R["data"]>;
+}
+// --debug: every model request and reply goes to .quark-debug/<run>/ (gitignored) as it came back.
+if (args.debug) {
+  const dir = `.quark-debug/week${week}-${new Date().toISOString().replace(/[:.]/g, "-")}`;
+  debugTo(dir);
+  console.log(`Writing every model request and reply to ${dir}/`);
 }
 // Fail before spending anything if a model isn't set.
 const models = { ideas: modelFor("curate"), cards: modelFor("write") };

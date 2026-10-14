@@ -170,7 +170,14 @@ export function checkCards(raw: RawCards, chain: IdeaChain, reading: Reading): {
 const listProblems = (check: ReturnType<typeof checkCards>) =>
   check.whole ? [check.whole] : check.cards.flatMap((p, i) => p.map((x) => `card ${i + 1}: ${x}`));
 
-export type Complete = <T>(options: { system: string; prompt: string; maxTokens: number; use: "curate" | "write"; json: Record<string, unknown> }) => Promise<T>;
+export type Complete = <T>(options: {
+  system: string;
+  prompt: string;
+  maxTokens: number;
+  use: "curate" | "write";
+  json: Record<string, unknown>;
+  label?: string;
+}) => Promise<T>;
 
 // problems[i] holds what is still wrong with card i after the second try (empty when it passed).
 export type WrittenCards = { cards: CardBody[]; asked: number; problems: string[][] };
@@ -180,7 +187,14 @@ export type WrittenCards = { cards: CardBody[]; asked: number; problems: string[
 export async function writeCards(ctx: CardContext, deps: { complete: Complete; system: string }): Promise<WrittenCards> {
   const prompt = cardPrompt(ctx);
   const ask = (extra: string) =>
-    deps.complete<RawCards>({ system: deps.system, prompt: prompt + extra, maxTokens: 16000, use: "write", json: CARD_SCHEMA });
+    deps.complete<RawCards>({
+      system: deps.system,
+      prompt: prompt + extra,
+      maxTokens: 16000,
+      use: "write",
+      json: CARD_SCHEMA,
+      label: `cards-${ctx.child.nickname}-day${ctx.chain.day}-${ctx.chain.slot}${extra ? "-again" : ""}`,
+    });
 
   let raw = await ask("");
   let check = checkCards(raw, ctx.chain, ctx.child.reading);

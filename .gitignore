@@ -45,3 +45,6 @@ next-env.d.ts
 
 # family seed data (real nicknames and emails)
 /scripts/family.local.json
+
+# model requests and replies from week:build --debug
+/.quark-debug/

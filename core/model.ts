@@ -1,5 +1,7 @@
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 
 // The thin model adapter (CLAUDE.md). Everything that calls a language model goes through
 // complete(), so the provider can be swapped by rewriting this one file. Curation (ideas), writing
@@ -29,6 +31,7 @@ export type CompleteOptions = {
   maxTokens: number;
   use?: ModelUse; // which env var names the model; defaults to curate
   images?: ModelImage[]; // shown before the prompt
+  label?: string; // names the debug file: "ideas-day1-puzzle"
 };
 
 let client: Anthropic | undefined;
@@ -38,6 +41,22 @@ export type Usage = { input: number; output: number; calls: number };
 const usage = new Map<string, Usage>();
 export const usageSoFar = (): Map<string, Usage> => new Map([...usage].map(([m, u]) => [m, { ...u }]));
 export const resetUsage = () => usage.clear();
+
+// With a debug folder set, every request and its reply are written there as JSON, one file per
+// call, before anything is checked, so a reply that fails can be read as it came back. Image
+// bytes are left out.
+let debugDir: string | null = null;
+let debugCount = 0;
+export function debugTo(dir: string | null) {
+  debugDir = dir;
+  if (dir) mkdirSync(dir, { recursive: true });
+}
+function writeDebug(label: string | undefined, request: unknown, reply: unknown) {
+  if (!debugDir) return;
+  const name = `${String(++debugCount).padStart(3, "0")}-${(label ?? "call").replace(/[^a-z0-9-]+/gi, "-")}.json`;
+  const scrub = (_k: string, v: unknown) => (typeof v === "string" && v.length > 2000 && /^[A-Za-z0-9+/=]+$/.test(v) ? `<${v.length} base64 chars>` : v);
+  writeFileSync(join(debugDir, name), JSON.stringify({ request, reply }, scrub, 2));
+}
 
 export function modelFor(use: ModelUse): string {
   const name = process.env[modelEnv[use]];
@@ -64,13 +83,21 @@ export async function complete(options: CompleteOptions & { json?: Record<string
   const content: string | Anthropic.ContentBlockParam[] = images.length
     ? [...images.map(imageBlock), { type: "text", text: prompt }]
     : prompt;
-  const response = await client.messages.create({
+  const request: Anthropic.MessageCreateParamsNonStreaming = {
     model,
     max_tokens: maxTokens,
     system,
     messages: [{ role: "user", content }],
     ...(json && { output_config: { format: { type: "json_schema", schema: json } } }),
-  });
+  };
+  let response: Anthropic.Message;
+  try {
+    response = await client.messages.create(request);
+  } catch (e) {
+    writeDebug(options.label, request, { error: e instanceof Error ? e.message : String(e) });
+    throw e;
+  }
+  writeDebug(options.label, request, response);
 
   const tally = usage.get(model) ?? { input: 0, output: 0, calls: 0 };
   const u = response.usage;
