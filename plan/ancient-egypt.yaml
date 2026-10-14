@@ -1,0 +1,532 @@
+# Ancient Egypt: the first stretch of the plan, four weeks for grade bands 2-3 and 4-5.
+# Decided 13 Oct 2026 (docs/08): the pilot starts with this one theme.
+#
+# Format: lib/plan.ts. Import with npm run plan:import.
+# Summaries are for the tutor, not the child: plain facts, the mechanism named. The tutor writes
+# the child's card from them, through a lens (docs/17-lenses.md). Every week covers the five wall
+# slots; literature feeds the "then" card beside history or geography.
+
+stretch: ancient-egypt
+title: Ancient Egypt
+sequence: 1
+
+sources:
+  - id: met-nakht-agriculture
+    title: East Wall, South Side of Nakht's Offering Chapel (facsimile by Norman de Garis Davies)
+    publisher: The Metropolitan Museum of Art, 15.5.19b
+    url: https://www.metmuseum.org/art/collection/search/548438
+    license: CC0
+  - id: met-nakht-marsh
+    title: North Side of the West Wall of Nakht's Offering Chapel (facsimile by Norman de Garis Davies)
+    publisher: The Metropolitan Museum of Art, 15.5.19e
+    url: https://www.metmuseum.org/art/collection/search/548578
+    license: CC0
+  - id: commons-aida-march
+    title: Triumphal March from Aida (Verdi), United States Marine Band, Timothy Foley conducting
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Triumphal_March_from_Aida.ogg
+    license: public domain (US federal government work)
+  - id: met-hatshepsut-seated
+    title: Seated Statue of Hatshepsut
+    publisher: The Metropolitan Museum of Art, 29.3.2
+    url: https://www.metmuseum.org/art/collection/search/544450
+    license: CC0
+  - id: met-hatshepsut-kneeling
+    title: Kneeling statue of Hatshepsut
+    publisher: The Metropolitan Museum of Art, 23.3.1
+    url: https://www.metmuseum.org/art/collection/search/546756
+    license: CC0
+  - id: met-hatshepsut-sphinx
+    title: Sphinx of Hatshepsut
+    publisher: The Metropolitan Museum of Art, 31.3.166
+    url: https://www.metmuseum.org/art/collection/search/544442
+    license: CC0
+  - id: met-book-of-the-dead-nany
+    title: Book of the Dead for the Chantress of Amun, Nauny
+    publisher: The Metropolitan Museum of Art, 30.3.31
+    url: https://www.metmuseum.org/art/collection/search/548344
+    license: CC0
+  - id: met-weighing-the-heart
+    title: Anubis Weighing the Heart, Tomb of Nakhtamun (facsimile)
+    publisher: The Metropolitan Museum of Art, 33.8.21
+    url: https://www.metmuseum.org/art/collection/search/557830
+    license: CC0
+  - id: met-canopic-jar
+    title: Canopic Jar
+    publisher: The Metropolitan Museum of Art, 12.183.1a.1, .2
+    url: https://www.metmuseum.org/art/collection/search/550773
+    license: CC0
+  - id: met-cat-statuette
+    title: Cat Statuette intended to contain a mummified cat
+    publisher: The Metropolitan Museum of Art, 56.16.1
+    url: https://www.metmuseum.org/art/collection/search/544118
+    license: CC0
+  - id: met-cat-bastet
+    title: Cat with image of Bastet on breast
+    publisher: The Metropolitan Museum of Art, 04.2.471
+    url: https://www.metmuseum.org/art/collection/search/570719
+    license: CC0
+  - id: musopen-israel-in-egypt
+    title: Israel in Egypt, HWV 54 (Handel)
+    publisher: Musopen
+    url: https://musopen.org/music/5871-israel-in-egypt-hwv-54/
+    license: unconfirmed
+    check: >-
+      Musopen's page could not be read on 13 Oct 2026, so its license and performer are not
+      confirmed, and no open recording of the plague choruses alone was found. Check before use.
+  - id: met-head-of-tutankhamun
+    title: Head of Tutankhamun
+    publisher: The Metropolitan Museum of Art, 50.6
+    url: https://www.metmuseum.org/art/collection/search/544690
+    license: CC0
+  - id: met-haremhab-scribe
+    title: Haremhab as a Scribe of the King
+    publisher: The Metropolitan Museum of Art, 23.10.1
+    url: https://www.metmuseum.org/art/collection/search/544692
+    license: CC0
+  - id: met-scribal-palette
+    title: Model of a Scribe's Palette Inscribed for Amenhotep
+    publisher: The Metropolitan Museum of Art, 37.2.1
+    url: https://www.metmuseum.org/art/collection/search/548596
+    license: CC0
+  - id: commons-rosetta-stone
+    title: Rosetta Stone (photograph by Hans Hillewaert)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Rosetta_Stone.JPG
+    license: CC BY-SA 4.0
+  - id: commons-rhind-papyrus
+    title: Rhind Mathematical Papyrus (detail of British Museum EA10057)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Rhind_Mathematical_Papyrus.jpg
+    license: public domain
+
+weeks:
+  - week: 1
+    title: The river
+    why: Everything in Egypt starts with the Nile.
+    topics:
+      - subject: geography
+        slot: then
+        title: The Nile, from source to sea
+        summary:
+          "2-3": >-
+            The Nile flows north, from Lake Victoria and the Ethiopian highlands, through Egypt, to
+            the Mediterranean Sea, where it spreads into a fan of channels called the delta. On both
+            sides of the river is desert, where it almost never rains, so nearly everyone lived
+            within a few miles of the water they needed to drink and to farm.
+          "4-5": >-
+            The Nile has two main branches: the White Nile from the Lake Victoria region and the
+            Blue Nile from Lake Tana in the Ethiopian highlands. They join at Khartoum and flow north
+            through Egypt to the delta and the Mediterranean, so "Upper Egypt" is the south, upriver,
+            and "Lower Egypt" the north. Egyptians called the dark, watered land beside the river
+            Kemet, the black land, and the Western and Eastern Deserts Deshret, the red land; with
+            almost no rain, the river was the only water, which is why towns lined its banks.
+      - subject: science
+        slot: wonder
+        title: Why the Nile flooded
+        summary:
+          "2-3": >-
+            Every summer, monsoon rains fell on the Ethiopian highlands far to the south, and the
+            water rushed down the Nile, so the river rose and spread over the fields in Egypt. When
+            it went down, it left a layer of dark, rich mud called silt that made the soil good for
+            crops. The farming year had three seasons: flood, growing, and harvest.
+          "4-5": >-
+            Summer monsoon rain on the Ethiopian highlands swelled the Blue Nile and the Atbara, and
+            the flood reached Egypt around July to September, covering the fields and dropping silt
+            that renewed the soil each year. The Egyptian year had three seasons: Akhet (flood),
+            Peret (growing) and Shemu (harvest), and officials measured each flood on stone gauges
+            called nilometers to predict the harvest. The Aswan High Dam, finished in 1970, holds the
+            water back in Lake Nasser: no more flood, year-round irrigation and electricity, but the
+            silt now settles behind the dam, so farmers use fertilizer and the delta is wearing away.
+      - subject: art
+        slot: look
+        title: Life on the river in Nakht's tomb
+        sources: [met-nakht-agriculture, met-nakht-marsh]
+        summary:
+          "2-3": >-
+            Nakht was a scribe who lived about 3,400 years ago, and his tomb near Thebes is painted
+            with life on the Nile: men plowing, sowing and cutting grain, and Nakht hunting birds and
+            fish in the papyrus marsh. These are careful copies the Met's artists painted in the
+            tomb about a hundred years ago. Look for the animals: fish and birds fill the marsh, and
+            crocodiles and hippos, the river's real dangers, appear in other Egyptian marsh scenes.
+          "4-5": >-
+            The tomb of Nakht (Theban Tomb 52, about 1400 BCE) belonged to a scribe and astronomer of
+            Amun; its offering chapel shows the farming year (plowing, sowing, harvesting and
+            winnowing grain) and a marsh scene of fowling with a throwstick and spearing fish. The
+            Met's copies are facsimiles painted by Norman de Garis Davies around 1915. The paintings
+            were meant to give Nakht this life forever, so they show the river at its most plentiful;
+            crocodiles and hippos, the river's real dangers, appear in other marsh scenes.
+      - subject: music
+        slot: listen
+        title: Egyptian instruments, and Verdi's Aida
+        sources: [commons-aida-march]
+        summary:
+          "2-3": >-
+            Egyptians played harps, reed flutes, drums and the sistrum, a metal rattle shaken in
+            temples. We know the instruments from paintings and from real ones found in tombs, but
+            nobody wrote the tunes down in a way we can read, so we can't know exactly how their music
+            sounded. Composer of the month: Giuseppe Verdi, whose opera Aida is set in ancient Egypt;
+            this week, the Triumphal March.
+          "4-5": >-
+            Paintings and surviving instruments show harps, reed flutes and double pipes, frame drums,
+            clappers and the sistrum, a rattle shaken in the worship of the goddess Hathor. No musical
+            notation survives from pharaonic Egypt, so the instruments are known but the melodies are
+            lost; anything called "ancient Egyptian music" today is a guess. Composer of the month:
+            Giuseppe Verdi, whose opera Aida premiered at the Khedivial Opera House in Cairo in 1871,
+            on a story by the Egyptologist Auguste Mariette; the Triumphal March in Act 2 uses long,
+            straight trumpets made for the opera.
+      - subject: literature
+        slot: then
+        title: Ra and the sun boat
+        parent_note: >-
+          Bedtime pick to fetch from the library: The Golden Goblet by Eloise Jarvis McGraw for the
+          9-year-old, and a picture book set on the Nile for the 7-year-old.
+        summary:
+          "2-3": >-
+            Egyptians told that the sun god Ra sailed a boat across the sky every day, which is why
+            the sun moves from east to west. Each night his boat traveled through the dark underworld,
+            where he fought the giant serpent Apophis, and each morning he came out again as the
+            sunrise. It is a myth: a story people used to explain what they saw.
+          "4-5": >-
+            In Egyptian myth, Ra crossed the sky by day in one boat and passed through the Duat, the
+            underworld, by night in another, defeating the chaos serpent Apophis so the sun could be
+            reborn at dawn. The story explained the sun's daily path and made each sunrise a victory
+            of order over chaos, the idea Egyptians called maat. It is a myth, and the tutor tells it
+            as what Egyptians believed.
+      - subject: math
+        slot: puzzle
+        title: Egyptian number signs
+        summary:
+          "2-3": >-
+            Egyptians wrote numbers with pictures: a stroke for 1, a heel bone for 10, a coil of rope
+            for 100 and a lotus flower for 1,000. To write a number you draw each sign as many times
+            as you need and add them up: 13 is one heel bone and three strokes, and 2026 is two lotus
+            flowers, two heel bones and six strokes. Today's date makes a good puzzle.
+          "4-5": >-
+            Egyptian hieroglyphic numbers use a sign for each power of ten (a stroke for 1, a heel
+            bone for 10, a coil of rope for 100, a lotus for 1,000, a finger for 10,000, a tadpole
+            for 100,000 and the god Heh for 1,000,000) repeated and added together. Because each sign
+            carries its own value wherever it sits, the system needs no zero: an empty place is simply
+            left out. Our numbers use place value (the 2 in 20 means twenty because of where it sits),
+            which only works with a zero to hold an empty place.
+
+  - week: 2
+    title: The builders
+    why: How ordinary people moved stones the size of cars.
+    topics:
+      - subject: history
+        slot: then
+        title: Khufu, Giza and the people who built the pyramids
+        summary:
+          "2-3": >-
+            In the Old Kingdom, more than 4,500 years ago, pharaohs built pyramids as their tombs.
+            The biggest, the Great Pyramid at Giza, was built for the pharaoh Khufu from more than two
+            million stone blocks. It was built by crews of paid workers, not slaves: archaeologists
+            found the town where they lived, their bakeries, and the bread and beer they were given.
+          "4-5": >-
+            Old Kingdom pharaohs (about 2686 to 2181 BCE) were buried in pyramids, from Djoser's step
+            pyramid at Saqqara to Khufu's Great Pyramid at Giza, about 146 meters tall when finished
+            and built from roughly 2.3 million blocks. Excavations led by Mark Lehner and Zahi Hawass
+            found the workers' town south of the Giza plateau, with bakeries and cattle bones, and the
+            workers' own tombs nearby: rotating crews of paid laborers, fed with bread and beer.
+            Herodotus' story of 100,000 slaves is not supported by the evidence, and the Diary of
+            Merer, a logbook found at Wadi al-Jarf, records a crew shipping limestone to Giza.
+      - subject: science
+        slot: wonder
+        title: Levers, ramps, sledges and the rope that makes a right angle
+        summary:
+          "2-3": >-
+            Egyptians had no wheels for heavy loads and no machines with engines, so they used simple
+            machines: levers to lift a block's edge, ramps so they could push up a long gentle slope
+            instead of lifting straight up, and wooden sledges dragged over sand. Pouring water on the
+            sand in front of a sledge makes it much easier to pull, because damp sand is firm and
+            doesn't pile up in front. A rope with twelve equal knots, pulled into a triangle with
+            sides of 3, 4 and 5, makes a perfect square corner.
+          "4-5": >-
+            A lever trades distance for force: a long bar on a pivot lets a small push lift a heavy
+            edge, and a ramp (an inclined plane) does the same by making the path longer. A 2014 study
+            at the University of Amsterdam found that wetting desert sand by the right amount roughly
+            halves the force needed to drag a sledge, because water binds the grains so they don't
+            pile up; a painting in the tomb of Djehutihotep shows a man pouring water in front of a
+            sledge carrying a giant statue. Egyptian surveyors were called rope stretchers; a rope
+            knotted into 3, 4 and 5 equal parts makes a right angle, though whether they used that
+            trick is not proven.
+      - subject: art
+        slot: look
+        title: The Great Sphinx and the statues of Hatshepsut
+        sources: [met-hatshepsut-seated, met-hatshepsut-kneeling, met-hatshepsut-sphinx]
+        summary:
+          "2-3": >-
+            The Great Sphinx at Giza has a lion's body and a king's head, and was carved from the
+            rock of the ground itself, probably for the pharaoh Khafre. The Met has statues of
+            Hatshepsut, a woman who ruled as pharaoh, sitting, kneeling with offerings, and as a
+            sphinx with her face. To read a statue, look at the pose, the size, and what the person
+            is holding.
+          "4-5": >-
+            The Great Sphinx, about 73 meters long, was carved from the Giza bedrock, most likely for
+            Khafre, with a lion's body and a king's head wearing the striped nemes headdress. The
+            Met's statues of Hatshepsut come from her temple at Deir el-Bahri, where they were later
+            smashed and buried; they were found and pieced back together in the 1920s. Reading a
+            statue: the pose says what the person is doing (seated to rule, kneeling to offer to a
+            god), the size says how important they are, and what they hold or wear says who they are.
+      - subject: music
+        slot: listen
+        title: Aida continues, and songs for hauling
+        sources: [commons-aida-march]
+        summary:
+          "2-3": >-
+            More of Verdi's Aida this week. When many people pull one rope, they need to pull at the
+            same moment, so workers sang or chanted together to keep time. In one Egyptian painting
+            of men dragging a huge statue, a man stands on the statue clapping the beat for them.
+          "4-5": >-
+            Aida continues: the Triumphal March welcomes the army home in Act 2, and its steady beat
+            is music for many people moving together. Hauling crews had the same need: a rope pulled
+            by many hands only works if everyone pulls on the same beat, and in the tomb of
+            Djehutihotep a man stands on the colossal statue clapping the rhythm for the haulers.
+            Work songs keep time the way a drummer does.
+      - subject: literature
+        slot: then
+        title: Hatshepsut, the woman who ruled as pharaoh
+        summary:
+          "2-3": >-
+            Hatshepsut was a queen who became pharaoh about 3,500 years ago and ruled Egypt for about
+            twenty years. She sent ships to a faraway land called Punt for incense and built a great
+            temple at Deir el-Bahri. Years after she died, many of her statues were smashed and her
+            name was chipped off walls, and historians still ask why.
+          "4-5": >-
+            Hatshepsut, daughter of Thutmose I, ruled first for her young stepson Thutmose III and
+            then was crowned pharaoh herself, reigning about 1479 to 1458 BCE; her statues often show
+            her with a pharaoh's headdress and false beard. Her reign was peaceful and rich: an
+            expedition to Punt and her temple at Deir el-Bahri. Some twenty years after her death,
+            late in Thutmose III's reign, her images and name were removed from monuments; historians
+            think it was more likely about who would be king next than personal anger, but nobody
+            knows for sure.
+      - subject: math
+        slot: puzzle
+        title: Building a pyramid, layer by layer
+        summary:
+          "2-3": >-
+            A pyramid built from cubes has one block on top, a 2-by-2 layer of 4 under it, a 3-by-3
+            layer of 9 under that, and so on, so each layer is a square. A pyramid of 4 layers needs
+            1 + 4 + 9 + 16 = 30 blocks. A wide square base is stable because the weight sits low and
+            spread out, so it doesn't tip.
+          "4-5": >-
+            Each layer of a stepped pyramid is a square number of blocks (1, 4, 9, 16...), so the total
+            is a sum of squares: 4 layers take 30 blocks, 5 take 55. A square base keeps the center of
+            weight low and in the middle, so the pyramid can't tip. Egyptians multiplied by doubling:
+            to work out 13 x 12, double 12 to get 24, 48, 96 (for 2, 4, 8), pick the doublings that add
+            up to 13 (1 + 4 + 8), and add 12 + 48 + 96 = 156.
+
+  - week: 3
+    title: The gods and the afterlife
+    why: What Egyptians believed shaped nearly everything they made.
+    perspective: several_fairly
+    values_points: [1, 2, 3, 4, 12]
+    topics:
+      - subject: history
+        slot: then
+        title: The gods of Egypt, temples and the pharaoh
+        summary:
+          "2-3": >-
+            Egyptians believed in many gods, each with a job and an animal: Ra the sun, Osiris ruler
+            of the dead, Isis his wife, Horus the falcon, Anubis the jackal who guarded the dead,
+            Thoth the ibis god of writing, Bastet the cat, and more. Each god had a temple, a house
+            where priests cared for the god's statue every day. Egyptians believed the pharaoh was the
+            link between the people and the gods.
+          "4-5": >-
+            Egyptians worshipped many gods, often shown with animal heads; the collect lens's twelve
+            are Ra, Osiris, Isis, Horus, Anubis, Thoth, Bastet, Hathor, Set, Amun, Ptah and Sobek.
+            A temple was the god's house, not a place for crowds: only priests entered the inner rooms
+            to wash, dress and feed the statue each day. Egyptians believed the pharaoh was the son of
+            Ra and the living Horus, whose duty was to keep maat, the right order of the world; the
+            tutor teaches all of this as what Egyptians believed.
+      - subject: science
+        slot: wonder
+        title: How a mummy was made, and why it worked
+        parent_note: >-
+          Weekend experiment: cover one apple slice in a mix of salt and baking soda in a cup and
+          leave another in the open; compare them after a week. An adult does the cutting; nobody
+          eats the slices.
+        summary:
+          "2-3": >-
+            To make a mummy, embalmers took out the inside organs, then covered the body in natron, a
+            natural salt, for about forty days. Natron pulls out water, and the tiny living things
+            that make bodies rot can't grow without water, so the dried body lasted. A slice of apple
+            buried in salt and baking soda dries out and lasts the same way.
+          "4-5": >-
+            Mummification took about seventy days: the brain and most organs were removed (the lungs,
+            liver, stomach and intestines went into canopic jars; the heart stayed in), and the body
+            was packed in natron, a natural mix of salts, for about forty days, then wrapped in linen
+            with resin. Decay is the work of bacteria and fungi, which need water; natron draws water
+            out, so a dried body doesn't rot. Weighing the apple slice before and after the experiment
+            shows how much water left it.
+      - subject: art
+        slot: look
+        title: The weighing of the heart, canopic jars and the cats of Bastet
+        sources: [met-book-of-the-dead-nany, met-weighing-the-heart, met-canopic-jar, met-cat-statuette, met-cat-bastet]
+        summary:
+          "2-3": >-
+            The Book of the Dead was a scroll of spells buried with a person. Its famous picture shows
+            the dead person's heart weighed on a scale against a feather: Anubis works the scale, Thoth
+            writes down the result, and a monster waits nearby. Canopic jars held the organs taken out
+            of a mummy, and the Met has bronze cat statues made for Bastet, the cat goddess.
+          "4-5": >-
+            The Book of the Dead is a collection of spells written on papyrus; in Spell 125 the dead
+            person's heart is weighed against the feather of Maat, truth, while Anubis tends the
+            scale, Thoth records the verdict, and Ammit, part crocodile, lion and hippo, waits to eat
+            a heart heavy with wrongdoing. Canopic jars were guarded by the four sons of Horus: Imsety
+            (human, liver), Hapy (baboon, lungs), Duamutef (jackal, stomach) and Qebehsenuef (falcon,
+            intestines). Cat statues like the Met's were offered to Bastet, and some held a mummified
+            cat.
+      - subject: music
+        slot: listen
+        title: Handel's Israel in Egypt
+        sources: [musopen-israel-in-egypt]
+        summary:
+          "2-3": >-
+            Composer of the month: George Frideric Handel. His Israel in Egypt is a work for choir that
+            tells the Bible's story of the plagues of Egypt, and the music acts out the words: quick
+            buzzing notes for swarms of flies, loud crashing chords for hailstones. Listen for the
+            sounds that match the words.
+          "4-5": >-
+            Handel's oratorio Israel in Egypt (1739) sets words from Exodus and the Psalms; the plague
+            choruses include "They loathed to drink of the river," "He spake the word," "He gave them
+            hailstones for rain" and "He sent a thick darkness." Handel uses word painting, music that
+            imitates its text: rapid violin figures for flies and lice, crashing chords for hail, slow
+            dark harmonies for the darkness. The story is told from the Israelites' side, from the
+            Hebrew Bible, so it sits under the family's settings on scripture.
+      - subject: literature
+        slot: then
+        title: Isis and Osiris, and the cat in Egypt
+        summary:
+          "2-3": >-
+            In the myth, Osiris was a good king whose jealous brother Set got rid of him. His wife Isis
+            searched everywhere, found him and brought him back, and Osiris became king of the land of
+            the dead, while their son Horus grew up to defeat Set. Egyptians loved cats, which kept
+            mice and snakes away from the grain, and when a family's cat died they mourned it.
+          "4-5": >-
+            In the myth (told in full only later, by the Greek writer Plutarch), Set killed his brother
+            Osiris and scattered his body; Isis, with Nephthys and Anubis, gathered and restored him,
+            and Osiris became ruler of the dead while their son Horus fought Set for the throne. How
+            much of the killing to tell is a family setting the gate applies. Cats protected grain
+            stores from mice and snakes and were linked to Bastet; Greek writers report that families
+            shaved their eyebrows in mourning for a cat and that killing one could be punished by death.
+      - subject: math
+        slot: puzzle
+        title: A balance scale, and a cartouche for your name
+        summary:
+          "2-3": >-
+            A balance scale is level only when both sides weigh the same, just like the scale in the
+            weighing of the heart. A cartouche is an oval rope loop drawn around a pharaoh's name to
+            protect it. Children can write their own name inside one using the hieroglyph signs for
+            sounds.
+          "4-5": >-
+            A balance scale is level when both sides are equal, the same idea as the = sign: add to
+            one side and you must add the same to the other to keep it level. A cartouche is an oval
+            rope loop around a royal name, a sign of protection. Hieroglyphs for single sounds can
+            spell a name, but Egyptians mostly didn't write vowels, so a name is spelled by its sounds,
+            not letter for letter.
+
+  - week: 4
+    title: The writers and the finders
+    why: The people who wrote it down, and the people who dug it up 3,000 years later.
+    topics:
+      - subject: history
+        slot: then
+        title: Scribes, the Rosetta Stone and Tutankhamun's tomb
+        sources: [commons-rosetta-stone]
+        summary:
+          "2-3": >-
+            Scribes were people trained for years to read and write hieroglyphs. After Egypt's old
+            writing was forgotten, the Rosetta Stone, found in 1799, had the same message in
+            hieroglyphs and in Greek, and in 1822 Jean-François Champollion used it to read
+            hieroglyphs again. In 1922 Howard Carter found the tomb of the young pharaoh Tutankhamun,
+            still full of treasure, and much of ancient Egypt is still buried.
+          "4-5": >-
+            Hieroglyphs were used for over three thousand years, written by trained scribes, who used a
+            faster script called hieratic for everyday writing. The Rosetta Stone, found by French
+            soldiers near Rashid in 1799, carries a decree of Ptolemy V from 196 BCE in hieroglyphs,
+            Demotic and Greek; in 1822 Jean-François Champollion showed that hieroglyphs stand for both
+            sounds and ideas, starting from the royal names in cartouches. Howard Carter, funded by
+            Lord Carnarvon, found Tutankhamun's tomb (KV62) in the Valley of the Kings in November 1922;
+            new tombs are still found, such as Thutmose II's, announced in 2025.
+      - subject: science
+        slot: wonder
+        title: How papyrus is made, and how archaeologists date what they find
+        summary:
+          "2-3": >-
+            Papyrus is paper made from a tall water plant: the soft inside of the stem is cut into
+            strips, laid in two layers crossing each other, pressed and dried into a sheet. To tell how
+            old things are, archaeologists dig in layers: the deeper a layer, the older it usually is,
+            because newer dirt and buildings pile up on top.
+          "4-5": >-
+            Papyrus sheets are made from the pith of the papyrus reed, sliced into strips, laid in two
+            layers at right angles, then pressed and dried, the plant's own sap helping them bind.
+            Archaeologists date finds by stratigraphy: layers build up over time, so what lies beneath
+            is older than what lies on top, and an object is about as old as the layer it's found in.
+            For things that were once alive, radiocarbon dating measures how much carbon-14 is left,
+            since it decays at a steady rate (half is gone after about 5,730 years).
+      - subject: art
+        slot: look
+        title: Tutankhamun's time, scribes' palettes, and what tomb walls were for
+        sources: [met-head-of-tutankhamun, met-haremhab-scribe, met-scribal-palette]
+        summary:
+          "2-3": >-
+            The Met has a stone head of Tutankhamun, and a statue of Haremhab, a powerful man in
+            Tutankhamun's time, sitting as a scribe with a scroll on his lap. A scribe's palette is a
+            slim board with dips for black and red ink and a slot for reed pens. Tomb walls were not
+            decoration for visitors: Egyptians believed the pictures and words gave the dead person
+            food and a good life forever.
+          "4-5": >-
+            The Met's Head of Tutankhamun and its statue of Haremhab, the general who later became
+            pharaoh, shown cross-legged as a scribe with a papyrus on his lap, both date to
+            Tutankhamun's reign. A palette held cakes of black ink (soot) and red ink (ochre) and a
+            slot for reed pens; the scribe added water and wrote. Egyptians believed a tomb's paintings
+            and inscriptions worked on their own for the dead person's spirit, the ka, supplying food,
+            drink and life forever, which is why the tomb was sealed rather than visited.
+      - subject: music
+        slot: listen
+        title: How a reed flute makes a note, and the family's pick
+        parent_note: Ask the boys which composer of the month to hear again this week, Verdi or Handel.
+        summary:
+          "2-3": >-
+            A reed flute makes sound when you blow across its edge and the air inside starts to shake.
+            A long flute has a long column of air and a low note; covering and uncovering the holes
+            changes how long the column is, so the note goes up and down. This week the family picks
+            which composer of the month to hear again.
+          "4-5": >-
+            Blowing across a flute's sharp edge makes the column of air inside vibrate, and the length
+            of that column sets the pitch: longer is lower, shorter is higher. Covering every hole
+            uses the whole tube; uncovering a hole lets the air out early and shortens the column, so
+            the note rises. Egyptian end-blown reed flutes, like the ney still played today, work the
+            same way. This week the family picks which composer of the month to hear again.
+      - subject: literature
+        slot: then
+        title: A day as a scribe's child
+        summary:
+          "2-3": >-
+            A scribe's child, usually a boy, went to school to learn hundreds of signs by copying them
+            again and again, on broken pieces of pottery and flat stones because papyrus cost too much
+            to practice on. Lunch might be bread, onions, figs, dates and fish, with thick, weak beer
+            that everyone drank. Scribes were respected because so few people could write.
+          "4-5": >-
+            Scribal pupils, mostly boys, trained for years, copying model texts onto ostraca (pottery
+            shards and flakes of limestone) and wooden boards, and reciting them aloud. One famous
+            school text, the Satire of the Trades, mocks every other job to persuade pupils that being a
+            scribe is best. The everyday diet was bread and thick, weak beer, with onions, figs, dates,
+            lentils and fish.
+      - subject: math
+        slot: puzzle
+        title: A secret message in hieroglyphs, and sharing bread like a scribe
+        sources: [commons-rhind-papyrus]
+        summary:
+          "2-3": >-
+            Some hieroglyphs stand for single sounds, like letters: a foot for "b", an owl for "m",
+            water for "n". A short message written in these sound signs makes a decoding puzzle, with a
+            chart of the signs to work from.
+          "4-5": >-
+            Hieroglyphs for single sounds (a foot for "b", an owl for "m", water for "n") work like an
+            alphabet, so a short message can be decoded with a chart. The Rhind Mathematical Papyrus,
+            copied by the scribe Ahmes about 1550 BCE, opens with sharing loaves among ten workers.
+            Egyptians wrote fractions as sums of different unit fractions (one over a number), so 9
+            loaves shared among 10 people is 2/3 + 1/5 + 1/30 for each.
