@@ -69,3 +69,26 @@ describe("complete", () => {
     expect(create).not.toHaveBeenCalled();
   });
 });
+
+describe("complete with images", () => {
+  it("puts URL and byte images before the prompt", async () => {
+    create.mockResolvedValue(reply("A cat."));
+    await complete({
+      system: "s",
+      prompt: "What is it?",
+      maxTokens: 50,
+      images: [{ url: "https://example.org/cat.jpg" }, { data: new Uint8Array([1, 2, 3]), mediaType: "image/png" }],
+    });
+    expect(create.mock.calls[0][0].messages[0].content).toEqual([
+      { type: "image", source: { type: "url", url: "https://example.org/cat.jpg" } },
+      { type: "image", source: { type: "base64", media_type: "image/png", data: "AQID" } },
+      { type: "text", text: "What is it?" },
+    ]);
+  });
+
+  it("sends a plain string when there are no images", async () => {
+    create.mockResolvedValue(reply("ok"));
+    await complete({ system: "s", prompt: "p", maxTokens: 10, images: [] });
+    expect(create.mock.calls[0][0].messages[0].content).toBe("p");
+  });
+});
