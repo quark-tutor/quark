@@ -2,13 +2,14 @@ import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
 
 // The thin model adapter (CLAUDE.md). Everything that calls a language model goes through
-// complete(), so the provider can be swapped by rewriting this one file. Curation and the policy
-// gate read their model names from separate env vars so they can run on different models.
+// complete(), so the provider can be swapped by rewriting this one file. Curation (ideas), writing
+// (cards) and the policy gate read their model names from separate env vars so each can run on the
+// model that suits it: facts on the strongest, writing on a cheaper one (decided 14 Oct 2026).
 //
 // Prompt text never lives inline: `system` comes from core/prompts/ via readPrompt() or
 // kidFacingPrompt() (core/prompts.ts), and `prompt` carries the data for this one call.
 
-export type ModelUse = "curate" | "gate";
+export type ModelUse = "curate" | "write" | "gate";
 
 export type ImageType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
 export const IMAGE_TYPES: readonly ImageType[] = ["image/jpeg", "image/png", "image/gif", "image/webp"];
@@ -18,6 +19,7 @@ export type ModelImage = { url: string } | { data: Uint8Array; mediaType: ImageT
 
 const modelEnv: Record<ModelUse, string> = {
   curate: "QUARK_MODEL_CURATE",
+  write: "QUARK_MODEL_WRITE",
   gate: "QUARK_MODEL_GATE",
 };
 
@@ -30,6 +32,12 @@ export type CompleteOptions = {
 };
 
 let client: Anthropic | undefined;
+
+// Tokens used so far in this process, per model, so a script can report what a run cost.
+export type Usage = { input: number; output: number; calls: number };
+const usage = new Map<string, Usage>();
+export const usageSoFar = (): Map<string, Usage> => new Map([...usage].map(([m, u]) => [m, { ...u }]));
+export const resetUsage = () => usage.clear();
 
 export function modelFor(use: ModelUse): string {
   const name = process.env[modelEnv[use]];
@@ -63,6 +71,13 @@ export async function complete(options: CompleteOptions & { json?: Record<string
     messages: [{ role: "user", content }],
     ...(json && { output_config: { format: { type: "json_schema", schema: json } } }),
   });
+
+  const tally = usage.get(model) ?? { input: 0, output: 0, calls: 0 };
+  const u = response.usage;
+  tally.input += (u?.input_tokens ?? 0) + (u?.cache_creation_input_tokens ?? 0) + (u?.cache_read_input_tokens ?? 0);
+  tally.output += u?.output_tokens ?? 0;
+  tally.calls += 1;
+  usage.set(model, tally);
 
   if (response.stop_reason === "refusal") {
     throw new Error(`The model declined (${response.stop_details?.category ?? "no category"}).`);

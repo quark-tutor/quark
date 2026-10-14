@@ -7,7 +7,7 @@ vi.mock("@anthropic-ai/sdk", () => ({
     messages = { create };
   },
 }));
-const { complete, modelFor } = await import("./model");
+const { complete, modelFor, resetUsage, usageSoFar } = await import("./model");
 
 function reply(text: string, stop_reason = "end_turn") {
   return { content: [{ type: "text", text }], stop_reason, stop_details: null };
@@ -16,6 +16,7 @@ function reply(text: string, stop_reason = "end_turn") {
 beforeEach(() => {
   vi.stubEnv("QUARK_MODEL_CURATE", "curate-model");
   vi.stubEnv("QUARK_MODEL_GATE", "gate-model");
+  vi.stubEnv("QUARK_MODEL_WRITE", "write-model");
   create.mockReset();
 });
 afterEach(() => vi.unstubAllEnvs());
@@ -90,5 +91,17 @@ describe("complete with images", () => {
     create.mockResolvedValue(reply("ok"));
     await complete({ system: "s", prompt: "p", maxTokens: 10, images: [] });
     expect(create.mock.calls[0][0].messages[0].content).toBe("p");
+  });
+});
+
+describe("usage", () => {
+  it("counts tokens per model, cache included, and reads the write model", async () => {
+    resetUsage();
+    const usage = { input_tokens: 100, cache_creation_input_tokens: 20, cache_read_input_tokens: 5, output_tokens: 300 };
+    create.mockResolvedValue({ ...reply("ok"), usage });
+    await complete({ system: "s", prompt: "p", maxTokens: 10, use: "write" });
+    await complete({ system: "s", prompt: "p", maxTokens: 10, use: "write" });
+    expect(create.mock.calls[0][0].model).toBe("write-model");
+    expect(usageSoFar().get("write-model")).toEqual({ input: 250, output: 600, calls: 2 });
   });
 });
