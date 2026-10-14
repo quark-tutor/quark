@@ -4,7 +4,7 @@
 
 **An open project to build Quark, an AI tutor that helps parents give their kids a rich, challenging education at home, even when parents are short on time.**
 
-> Status: early concept. Nothing is built yet. We're working out the idea in the open and looking for parents, educators, designers and developers to help.
+> Status: being built for one family first; the foundation and values interview are done, the weekly curation engine is in progress on a branch, nothing is on the kids' iPads yet, and we're looking for parents, educators, designers and developers to help. Current detail: the Where we are note in CLAUDE.md.
 
 ## The idea in one paragraph
 
