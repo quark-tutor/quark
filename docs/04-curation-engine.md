@@ -1,6 +1,6 @@
 # Curation engine
 
-The engine follows a multi-year plan, not a random stream. It runs every week on its own and only needs a short reply from a parent to steer it.
+The engine follows a multi-year plan, not a random stream. It runs every week on its own, and a guardian taps once to make the week live.
 
 ## The long-term plan
 

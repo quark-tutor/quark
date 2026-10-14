@@ -63,7 +63,7 @@ The core writes cards, hints and the digest. Every one of them passes through th
 - **Cost of model calls.** The weekly curation job and the tutoring sessions are the main costs. Pre-generating cards once a week and caching them keeps it to a few dollars a month per family. Live sessions can run on a cheaper or local model.
 - **Offline by default.** The wall should work with no internet. Cards, audio and images download once a week. The Ask box is the only live piece.
 - **Children's privacy law.** Any hosted version must meet COPPA in the US and similar laws elsewhere. Local-first avoids most of this, which is another reason to start there.
-- **Content pipeline and licensing.** Every item in the library carries its source and license, and goes through the allowlist before a child can see it.
+- **Content pipeline and licensing.** Every item in the library carries its source and license, and is approved before a child can see it. CC0 and public-domain items with no model-tagged flag (nudity, violence, needs_review) are approved automatically; flagged items wait for a guardian (decided 13 Oct 2026).
 - **Portability.** Standard formats (xAPI, H5P, a documented plan format) so a family can leave with their data, and so other tools can plug in.
 
 ## A minimal single-family stack

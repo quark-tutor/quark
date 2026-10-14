@@ -49,6 +49,6 @@ Worth reading: "Homeroom: A Value-Aligned and Community-Centered Homeschooling P
 - **Building this isn't a duplicate effort.** We'd be assembling an orchestrator plus a values layer on top of existing open parts, not starting from scratch.
 - **Talk to Praeceptor's author first.** It's the closest open project, and it's MIT-licensed.
 - **The Core Knowledge Sequence is NonCommercial.** We can follow its topic order, since a list of topics isn't copyrightable, but we can't bundle its text. AmblesideOnline can only be linked to, and the same goes for Beast Academy.
-- **Museum art collections include nudity and violence,** so art needs a hand-curated allowlist rather than raw search results.
+- **Museum art collections include nudity and violence,** so art is never shown straight from search results. Each item is tagged by a model first; CC0 and public-domain items with no flag are approved automatically, and flagged items wait for a guardian.
 
 The search and license checks were done in October 2026. Confirm star counts and any licenses marked as unverified before relying on them.

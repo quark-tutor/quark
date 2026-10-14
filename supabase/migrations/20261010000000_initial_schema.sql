@@ -207,7 +207,7 @@ create table content_items (
   thumbnail_url text,
   license       text not null,                     -- 'CC0', 'public domain', 'CC BY 4.0', ...
   attribution   text,
-  approved      boolean not null default false,    -- the hand-curated allowlist
+  approved      boolean not null default false,    -- CC0/public domain with no flags: automatic; flagged: a guardian
   approved_by   uuid references guardians(id),
   flags         text[] not null default '{}',      -- 'nudity', 'violence', 'needs_review'
   metadata      jsonb,

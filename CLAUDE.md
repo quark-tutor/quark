@@ -20,7 +20,7 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 ## Where things are
 
 - `docs/` — the concept, one page per topic. `13-architecture.md` has the stack. `12-teaching-that-tests-itself.md` has the hint/difficulty rules. `09-family-values.md` and `packs/README.md` have the values system and the 24 controversial points.
-- `deploy/supabase/schema.sql` — the data model, 28 tables, validated on Postgres 16. Read it before touching data. Key chain: `plan_topics → themes → ideas (shared, source-anchored) → cards (per child, per lens, layers 1–4) → questions → attempts`.
+- `supabase/migrations/` — the data model as it actually runs, applied in order. Read it before touching data. `deploy/supabase/schema.sql` is the readable model the migrations started from. Key chain: `plan_topics → themes → ideas (shared, source-anchored) → cards (per child, per lens, layers 1–4) → questions → attempts`.
 - `gate/values-interview.md` — how a family's answers become `values_settings` rows and a plain-English policy document the gate reads.
 - The private working doc (not in the repo) has more detail on lenses, the learner model, and the reward engine. Brandon can paste sections on request.
 
@@ -39,7 +39,7 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - Small commits with plain messages. Branch per phase (`phase-1-foundation`, …); merge to `main` when it runs.
 - Secrets in `.env.local` only; never commit them. Add `.env.example` with placeholder names.
 - Every outside content item carries its source and license. Nothing unapproved is shown to a child.
-- When a design question comes up that the docs don't settle, write the options into `docs/open-questions.md` and ask Brandon rather than guessing.
+- When a design question comes up that the docs don't settle, write the options into `docs/08-open-questions.md` (or the open questions of the page it belongs to) and ask Brandon rather than guessing.
 - Don't rename "Quark" or "Wonder Wall". Don't add "AI" to any user-facing name.
 - Keep the "Where we are" note under the build order current at every merge.
 
@@ -53,7 +53,7 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 6. **Checks and difficulty** — delayed recall via `review_schedule`, hint-count difficulty dial, results in the digest.
 7. **Pilot** — four weeks with the boys.
 
-**Where we are:** phases 1 and 2 are merged to `main`.
-Phase 3 is open on `phase-3-curation`, at step 1 (lenses spec, model adapter, 13 Oct 2026 decisions).
+**Where we are:** phases 1 and 2 are merged to `main`; phase 2's twenty-question test run was not built and moves to phase 3 step 5, after the gate.
+Phase 3 is open on `phase-3-curation`: step 1 done (lenses spec, model adapter, 13 Oct 2026 decisions); step 2 (the plan) in progress.
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.
