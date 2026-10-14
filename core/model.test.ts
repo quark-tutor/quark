@@ -7,7 +7,7 @@ vi.mock("@anthropic-ai/sdk", () => ({
     messages = { create };
   },
 }));
-const { complete, modelFor, resetUsage, usageSoFar } = await import("./model");
+const { complete, debugTo, modelFor, resetUsage, usageSoFar } = await import("./model");
 
 function reply(text: string, stop_reason = "end_turn") {
   return { content: [{ type: "text", text }], stop_reason, stop_details: null };
@@ -103,5 +103,26 @@ describe("usage", () => {
     await complete({ system: "s", prompt: "p", maxTokens: 10, use: "write" });
     expect(create.mock.calls[0][0].model).toBe("write-model");
     expect(usageSoFar().get("write-model")).toEqual({ input: 250, output: 600, calls: 2 });
+  });
+});
+
+describe("debugTo", () => {
+  it("writes each request and reply, without image bytes, and still when the reply is refused", async () => {
+    const { mkdtempSync, readdirSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const { join } = await import("node:path");
+    const dir = mkdtempSync(join(tmpdir(), "quark-debug-"));
+    debugTo(dir);
+    create.mockResolvedValueOnce(reply("A cat."));
+    await complete({ system: "s", prompt: "p", maxTokens: 10, label: "flag one/item", images: [{ data: new Uint8Array(3000), mediaType: "image/png" }] });
+    create.mockResolvedValueOnce({ ...reply(""), stop_reason: "refusal", stop_details: { category: "cyber" } });
+    await expect(complete({ system: "s", prompt: "p", maxTokens: 10, label: "second" })).rejects.toThrow(/declined/);
+    debugTo(null);
+    const files = readdirSync(dir).sort();
+    expect(files).toEqual(["001-flag-one-item.json", "002-second.json"]);
+    const first = JSON.parse(readFileSync(join(dir, files[0]), "utf8"));
+    expect(first.request.messages[0].content[0].source.data).toBe("<4000 base64 chars>");
+    expect(first.reply.content[0].text).toBe("A cat.");
+    expect(JSON.parse(readFileSync(join(dir, files[1]), "utf8")).reply.stop_reason).toBe("refusal");
   });
 });
