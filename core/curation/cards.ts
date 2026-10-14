@@ -121,7 +121,8 @@ const STOP = new Set(
   "a an and are as at be by for from has have in is it its of on or that the their them they this to was were with what which who why how you your".split(" "),
 );
 const words = (s: string) =>
-  (s.toLowerCase().normalize("NFKD").match(/[a-z0-9]+/g) ?? []).map((w) => (w.length > 3 && w.endsWith("s") ? w.slice(0, -1) : w));
+  // A trailing s is dropped only from longer words, so "rains" meets "rain" but "tens" isn't "ten".
+  (s.toLowerCase().normalize("NFKD").match(/[a-z0-9]+/g) ?? []).map((w) => (w.length > 4 && w.endsWith("s") ? w.slice(0, -1) : w));
 
 // Does this text give away an acceptable answer? True when every meaningful word of some accepted
 // answer appears in it ("silt" in "Is it silt?"; "monsoon rain" in "the rain of the monsoon").

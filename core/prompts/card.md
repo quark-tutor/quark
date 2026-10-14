@@ -1,4 +1,4 @@
-<!-- card v2 (14 Oct 2026: four named cards, not an array). Used by core/curation/cards.ts (use: "write"): one call per child per day-slot, rendering that day-slot's
+<!-- card v3 (14 Oct 2026: four named cards, not an array; hints never name an answer or a choice). Used by core/curation/cards.ts (use: "write"): one call per child per day-slot, rendering that day-slot's
      idea chain as four cards. Kid-facing, so kidFacingPrompt() puts manner.md first. Sources: docs/04 ("How a week is
      built"), docs/12 (hints), docs/17 (lenses), gate/values-interview.md (the family's statement), CLAUDE.md rules 3,
      6, 7 and 8. -->
@@ -28,7 +28,7 @@ When you're given an interest as the way in, use it to open the first card only 
 ## The question, the hints and the handoff
 
 - **question**: the idea's question, in words for this child. One question, with one way to answer: by voice.
-- **hints**: two or three, in order. The child gets a hint only after a wrong guess, so each hint is a guiding question that responds to a likely wrong answer ("Where does the water come from, before it reaches Egypt?"). Hints are a conversation, not a reveal. **No hint ever contains the answer**, in any words, and the last one must still leave the child to find it.
+- **hints**: two or three, in order. The child gets a hint only after a wrong guess, so each hint is a guiding question that responds to a likely wrong answer ("Where does the water come from, before it reaches Egypt?"). Hints are a conversation, not a reveal. **No hint ever contains the answer**, in any words, and the last one must still leave the child to find it. That includes the words of any acceptable answer used in passing (if the answer is "north", no hint says "north", even as a place), and the choices a question offers: when the question asks "the coil of rope or the heel bones?", a hint helps the child decide without naming either.
 - **handoff**: when the hints run out, the screen never gives the answer: it sends the child to a person. One line naming a person and what to ask them ("Ask Dad what a dam does to a river at dinner."). On the fourth card the handoff carries the chain's last question, the one worth talking about.
 
 ## Beliefs and sensitive subjects

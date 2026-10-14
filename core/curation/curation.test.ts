@@ -200,6 +200,9 @@ describe("the hint check", () => {
     // Held back wrongly: "up the map" was cut to "map", and "no coils" to "coil".
     expect(givesAway("Find Egypt on a map or a globe. Which edge of Egypt touches the Mediterranean Sea?", north)).toBe(false);
     expect(givesAway("Look at the signs we used for 2026 on the last card. Is a coil of rope one of them?", zero)).toBe(false);
+    // Second real run: "tens" was read as "ten".
+    expect(givesAway("Split 2026 into thousands, hundreds, tens and ones. Which sign goes with each part?", { accept: ["10", "ten", "ten signs"], rubric: "" })).toBe(false);
+    expect(givesAway("Think about the rains of the monsoon.", { accept: ["monsoon rain"], rubric: "" })).toBe(true);
     // Held back rightly: the answer is in the list, or said outright.
     expect(givesAway("Which of the four compass words, north, south, east or west, names the way the river is heading?", north)).toBe(true);
     expect(givesAway("Picture a map with the top as the way up. Where is that sea compared with the rest of Egypt?", north)).toBe(true);
