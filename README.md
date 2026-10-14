@@ -29,6 +29,7 @@ flowchart LR
 | [How it works](docs/02-how-it-works.md) | The tutor, its parts and the weekly loop |
 | [Touch points](docs/03-touch-points.md) | Where kids and parents meet the material |
 | [Curation engine](docs/04-curation-engine.md) | Long-term plan, weekly cycle, adapting to each child |
+| [Lenses](docs/17-lenses.md) | The seven doors into a theme, and how the tutor picks which one opens first |
 | [Teaching that tests itself](docs/12-teaching-that-tests-itself.md) | Every lesson is also a measurement; the evidence comes from the kids it teaches |
 | [Reward engine](docs/15-reward-engine.md) | Whether and how to reward effort without hollowing out the learning. Needs a deep dive. |
 | [Resources](docs/05-resources.md) | Free, high-quality material to build on |

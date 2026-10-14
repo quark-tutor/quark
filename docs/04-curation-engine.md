@@ -19,7 +19,7 @@ Tying the subjects together is what makes knowledge stick.
 1. Read last week's activity and the results of delayed checks (see [Teaching that tests itself](12-teaching-that-tests-itself.md)), the questions kids asked and any notes from parents.
 2. Choose next week's theme from the plan, adjusted for what caught each child's interest.
 3. Pull material only from trusted, free, public-domain or museum sources (see [Resources](05-resources.md)).
-4. Write explanations at each child's level. For example, one version for a 7-year-old and another for a 9-year-old.
+4. Write explanations at each child's level, through the [lenses](17-lenses.md) that open the theme for that child. For example, one version for a 7-year-old who likes building things and another for a 9-year-old who likes stories. The lens changes the way in, never the facts.
 5. Load the touch points, queue the audio and send the parent digest.
 
 ## Per-child profile (draft)
