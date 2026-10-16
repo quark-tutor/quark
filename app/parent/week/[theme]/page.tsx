@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
+import { credit } from "@/core/content/credit";
 import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -253,21 +254,20 @@ function MediaBlock({ media, alt }: { media: Media; alt: string }) {
   } else {
     shown = <p className={styles.meta}>The stored copy of this {media.type} is missing. Run npm run content:fetch.</p>;
   }
+  const credited = credit(media);
   return (
     <figure className={own.media}>
       {shown}
       <figcaption className={styles.meta}>
-        <strong>{media.title}</strong>
-        {[media.creator, media.date].filter(Boolean).length ? `, ${[media.creator, media.date].filter(Boolean).join(", ")}` : ""}
-        <br />
-        {[media.source, media.license].filter(Boolean).join(" · ")}
-        {/* Required for CC BY and CC BY-SA items; shown for every item. */}
-        {media.attribution ? (
-          <>
+        {/* Title, maker, source and license: the credit CC BY and CC BY-SA ask for, on every item. */}
+        <strong>{credited.title}</strong>
+        {credited.lines.map((line) => (
+          <span key={line}>
             <br />
-            {media.attribution}
-          </>
-        ) : /^cc by/i.test(media.license) ? (
+            {line}
+          </span>
+        ))}
+        {!media.attribution && /^cc by/i.test(media.license) ? (
           <>
             <br />
             <span className={styles.flag}>The credit line is missing, and this license requires one.</span>
