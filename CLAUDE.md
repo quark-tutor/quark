@@ -42,6 +42,17 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - When a design question comes up that the docs don't settle, write the options into `docs/open-questions.md` and ask Brandon rather than guessing.
 - Don't rename "Quark" or "Wonder Wall". Don't add "AI" to any user-facing name.
 
+## Before a consequential action
+
+`.claude/settings.json` lists what stops and asks first: a push to `main` or any force push, `git add -A`, `git add .` and `git commit -a` (the repo is public), any Supabase CLI use and `npm run db:push`, the scripts that write to the live database or spend API money, deletes and kills, secrets, Vercel, and outbound web writes. Nothing is blocked; it is asked. Brandon sees only the prompt, so **the command's description line carries all three plain-words facts itself, compressed**: what it does, what it touches on live (write LIVE in capitals when it is the live database), and whether it can be undone. Chat lines above the command are extra, never the rule. Say first if it cannot be undone. Never show a bare command as the question.
+
+- There is one Supabase project and it is the boys' live copy, so every migration command is on the list, and a new migration always stops, inside a fix too.
+- The live project is never used to prove a rule. Do not run `db:push`, `supabase` or any script that reads `SUPABASE_DB_URL` to test a permission, not even with `--dry-run`.
+- A stop that fired and was approved is still a stop: say so in the report.
+- Claude Code runs as one writer per working tree: the chat never edits files in this folder while a session is open in it; a second parallel job uses `claude --worktree`. Sonnet for a briefed job; Opus or `opusplan` when the brief leaves a design choice open.
+- Every job's last message is the full report, unchanged, for the records and the next session, then the read-back from the `readback` reader (`/readback <brief>`, Sonnet): four lines, under 25 words each. Brandon answers the read-back. The reader never says Brandon approved or decided something the report does not quote him on. See docs/08, "How Quark is built with Claude".
+- A bug seen is one line under Bugs in `docs/08-open-questions.md`, not a brief. When a handful have gathered, one sweep job fixes a batch.
+
 ## Build order
 
 1. **Foundation** — Next.js app, Supabase project wired up, schema applied, guardian sign-in, empty `/kid` and `/parent` views, iPad in Guided Access can open it. ← start here
@@ -51,5 +62,7 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 5. **Digest and audio** — Sunday email, RSS feed, art-of-the-week.
 6. **Checks and difficulty** — delayed recall via `review_schedule`, hint-count difficulty dial, results in the digest.
 7. **Pilot** — four weeks with the boys.
+
+**Where we are (16 Oct 2026):** phases 1 and 2 are merged to `main`. Tooling slice "working with Claude, slice 1" is on `working-with-claude` (ask-list, `/readback`, the plain-words rule), merged to `main` when it runs; it is not phase work. Phase 3 is on `phase-3-curation`, not merged, with its own, fuller Where we are note: when it merges, keep that note and add this line. Migrations 13–16 Oct are live but exist only on `phase-3-curation`, so `db:push` cannot run from this branch. Nothing is on the iPads yet.
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.
