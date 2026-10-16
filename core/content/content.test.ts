@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { decide, isOpenLicense, type Flag } from "./rule";
-import { extensionFor, syncItem, type Row, type SyncDeps } from "./sync";
+import { extensionFor, STORE_MAX_BYTES, syncItem, type Row, type SyncDeps } from "./sync";
 import type { FetchedItem } from "./types";
 
 const complete = vi.hoisted(() => vi.fn());
@@ -94,6 +94,16 @@ describe("syncItem", () => {
       url: image.url,
       metadata: { storage_path: "met/544118.jpg", flag_note: "A note.", page_url: image.metadata.page_url },
     });
+  });
+
+  it("stores the source's preview instead of an original too big for Storage, and says so", async () => {
+    const { deps, rows, uploads } = fakeDeps(image);
+    deps.download.mockImplementation(async (url) => ({ data: new Uint8Array(url === image.url ? STORE_MAX_BYTES + 1 : 10), contentType: "image/jpeg" }));
+    await syncItem(ref, { title: "Cat" }, deps);
+    expect(deps.download.mock.calls.map((c) => c[0])).toEqual([image.url, image.thumbnail_url]);
+    expect(deps.upload.mock.calls[0][1].data.byteLength).toBe(10);
+    expect(uploads).toEqual(["met/544118.jpg"]);
+    expect(rows.get("met/544118")).toMatchObject({ url: image.url, metadata: { storage_path: "met/544118.jpg", stored_from: "preview" } });
   });
 
   it("changes nothing the second time, and doesn't call the source, storage or model again", async () => {

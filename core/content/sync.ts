@@ -47,6 +47,10 @@ export type SyncResult = {
 type ModelImageType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
 const MODEL_TYPES = new Set<string>(["image/jpeg", "image/png", "image/gif", "image/webp"]);
 const MODEL_MAX_BYTES = 5 * 1024 * 1024; // the model API's limit for one image
+// Storage takes at most 50 MB a file, and the wall never needs a 30,000-pixel scan (the Van Gogh
+// Museum's Bedroom on Commons, 16 Oct 2026). Past this size the stored copy is the source's large
+// preview (1280 pixels wide for Commons) instead of the original.
+export const STORE_MAX_BYTES = 20 * 1024 * 1024;
 
 const EXT: Record<string, string> = { "image/jpeg": "jpg", "image/png": "png", "image/gif": "gif", "image/webp": "webp", "image/tiff": "tif" };
 
@@ -82,11 +86,15 @@ export async function syncItem(ref: SourceRef, known: { title?: string }, deps: 
 
     if (item.type === "image") {
       const original = await deps.download(item.url);
-      const path = storagePath(ref.source, ref.externalId, extensionFor(original.contentType, item.url));
-      await deps.upload(path, original);
+      const preview = item.thumbnail_url && item.thumbnail_url !== item.url ? item.thumbnail_url : null;
+      const tooBig = original.data.byteLength > STORE_MAX_BYTES && preview;
+      const stored = tooBig ? await deps.download(preview) : original;
+      const path = storagePath(ref.source, ref.externalId, extensionFor(stored.contentType, tooBig ? preview : item.url));
+      await deps.upload(path, stored);
       metadata.storage_path = path;
+      if (tooBig) metadata.stored_from = "preview";
 
-      const look = item.thumbnail_url && item.thumbnail_url !== item.url ? await deps.download(item.thumbnail_url) : original;
+      const look = tooBig ? stored : preview ? await deps.download(preview) : original;
       if (MODEL_TYPES.has(mime(look.contentType)) && look.data.byteLength <= MODEL_MAX_BYTES) {
         image = { data: look.data, mediaType: mime(look.contentType) as ModelImageType };
       }

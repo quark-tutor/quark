@@ -61,7 +61,10 @@ const deps: SyncDeps = {
   },
   fetchItem: fetchFromSource,
   async download(fileUrl) {
-    const res = await fetch(fileUrl, { headers: { "User-Agent": USER_AGENT } });
+    // The Art Institute's image server refuses a download without its AIC-User-Agent header (403,
+    // first seen 16 Oct 2026), the same header its API asks for.
+    const aic: Record<string, string> = new URL(fileUrl).hostname.endsWith("artic.edu") ? { "AIC-User-Agent": USER_AGENT } : {};
+    const res = await fetch(fileUrl, { headers: { "User-Agent": USER_AGENT, ...aic } });
     if (!res.ok) throw new Error(`${fileUrl} answered ${res.status}`);
     return { data: new Uint8Array(await res.arrayBuffer()), contentType: res.headers.get("content-type") ?? "" };
   },
