@@ -49,3 +49,5 @@ next-env.d.ts
 # Claude Code worktrees and debug output (the debug files name the children)
 /.claude/worktrees/
 /.quark-debug/
+
+plan/candidates/*.json
