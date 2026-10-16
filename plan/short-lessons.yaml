@@ -1,0 +1,809 @@
+# Short lessons: one idea chain on one slot, not tied to a stretch or a week.
+# Decided 16 Oct 2026 (docs/08): a week is a mix, one slot a day for the running thread and four
+# for short lessons, taken in this file's order, the next unused lesson for each open slot.
+# Drafted by Claude Code, picked by Brandon and June; the candidates and why each picture was
+# picked are in plan/candidates/short-lessons.md.
+#
+# Format: lib/plan.ts (ShortLesson). Import with npm run plan:import. Summaries are for the tutor,
+# not the child: plain facts, the mechanism named. Every lesson says which values points it
+# touches (packs/README.md), [] for none; the gate reads them (step 5). Keys are never reused.
+
+library: short-lessons
+title: Short lessons
+
+sources:
+  # look
+  - id: aic-great-wave
+    title: Under the Wave off Kanagawa (The Great Wave), Katsushika Hokusai
+    publisher: The Art Institute of Chicago, 1925.3245
+    url: https://www.artic.edu/artworks/24645
+    license: CC0
+  - id: met-sadahide-line-block-proof
+    title: Proof Line-Block Print for Fan, Utagawa Sadahide
+    publisher: The Metropolitan Museum of Art, 2007.49.287
+    url: https://www.metmuseum.org/art/collection/search/73642
+    license: CC0
+  - id: met-bruegel-harvesters
+    title: The Harvesters, Pieter Bruegel the Elder
+    publisher: The Metropolitan Museum of Art, 19.164
+    url: https://www.metmuseum.org/art/collection/search/435809
+    license: CC0
+  - id: commons-audubon-flamingo-nga
+    title: American Flamingo, Robert Havell after John James Audubon, 1838 (National Gallery of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Robert_Havell_after_John_James_Audubon,_American_Flamingo,_1838,_NGA_32572.jpg
+    license: CC0
+  - id: aic-grande-jatte
+    title: A Sunday on La Grande Jatte — 1884, Georges Seurat
+    publisher: The Art Institute of Chicago, 1926.224
+    url: https://www.artic.edu/artworks/27992
+    license: CC0
+  - id: commons-seurat-parade-detail
+    title: Parade de cirque (detail of the central figure), Georges Seurat
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Georges_Seurat,_Parade_de_cirque,_detail_of_central_figure.jpg
+    license: public domain
+  - id: commons-arcimboldo-summer
+    title: Summer, Giuseppe Arcimboldo, 1563
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Giuseppe_Arcimboldo_-_Summer_-_Google_Art_Project.jpg
+    license: public domain
+  - id: commons-arcimboldo-vertumnus
+    title: Rudolf II as Vertumnus, Giuseppe Arcimboldo, 1591
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Giuseppe_Arcimboldo_-_Rudolf_II_of_Habsburg_as_Vertumnus_-_Google_Art_Project.jpg
+    license: public domain
+  - id: aic-van-gogh-bedroom
+    title: The Bedroom, Vincent van Gogh, 1889
+    publisher: The Art Institute of Chicago, 1926.417
+    url: https://www.artic.edu/artworks/28560
+    license: CC0
+  - id: commons-van-gogh-bedroom-amsterdam
+    title: The Bedroom (first version, 1888), Vincent van Gogh (Van Gogh Museum)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Vincent_van_Gogh_-_De_slaapkamer_-_Google_Art_Project.jpg
+    license: public domain
+  # wonder
+  - id: commons-wright-orrery
+    title: A Philosopher Lecturing on the Orrery, Joseph Wright of Derby, about 1766
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Wright_of_Derby,_The_Orrery.jpg
+    license: public domain
+  - id: met-calendrier-1784-bissextile
+    title: Le calendrier de la cour, pour l'année bissextile 1784
+    publisher: The Metropolitan Museum of Art, AY831 .Z7 1784
+    url: https://www.metmuseum.org/art/collection/search/681357
+    license: CC0
+  - id: commons-nps-lava-enters-ocean-torrent
+    title: Lava enters the ocean, Hawaii Volcanoes National Park (NPS, Janice Wei), 2017
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Lava_enters_ocean_in_torrent-Hawaii_Volcanoes_National_Park_(33706635605).jpg
+    license: public domain (US National Park Service)
+  - id: commons-iss38-hawaiian-chain
+    title: The Hawaiian island chain from the International Space Station, 2014
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:ISS-38_Hawaiian_Island_chain.jpg
+    license: public domain (NASA)
+  - id: met-mellan-moon-first-quarter
+    title: The Moon in its First Quarter, Claude Mellan, 1635
+    publisher: The Metropolitan Museum of Art, 60.634.38
+    url: https://www.metmuseum.org/art/collection/search/393278
+    license: CC0
+  - id: commons-al-biruni-lunar-phases
+    title: The phases of the Moon, from a copy of al-Biruni's Kitab al-Tafhim
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Lunar_phases_al-Biruni.jpg
+    license: public domain
+  - id: commons-dispersive-prism
+    title: Sunlight through a dispersive prism (Kelvinsong)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Dispersive_prism.png
+    license: CC0
+  - id: commons-sunset-from-iss
+    title: Sunset over the Indian Ocean from the International Space Station, 2010
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Sunset_from_the_ISS.JPG
+    license: public domain (NASA)
+  - id: commons-leeuwenhoek-duckweed-animalcules
+    title: Leeuwenhoek's animalcules found on duckweed, plate from his letter of 1702
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Plate_XXVIII_-_Illustrations_to_Leeuwenhoeks_Letter_on_the_animalcules_found_on_Duckweed.jpg
+    license: public domain
+  - id: commons-leeuwenhoek-microscope-baker-1753
+    title: A Leeuwenhoek microscope, drawn by Henry Baker, 1753
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Leeuwenhoek_microscope_drawn_by_Baker,_1753.jpg
+    license: public domain
+  - id: commons-ammonite-pavement
+    title: Ammonite pavement (RealGatba)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Ammonite_Pavement.jpg
+    license: CC0
+  - id: commons-fossil-trilobite-todd
+    title: Fossil trilobite, Henan Geological Museum (Gary Todd)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Fossil_Trilobite.jpg
+    license: CC0
+  # listen
+  - id: commons-bokor-le-cygne-1925
+    title: The Swan (Saint-Saëns), Judith Bokor, cello, 1925
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Judith_Bokor_plays_Le_Cygne_by_Saint-Saëns.flac
+    license: public domain (US recording of 1925)
+  - id: met-vuillaume-cello
+    title: Violoncello, Jean Baptiste Vuillaume
+    publisher: The Metropolitan Museum of Art, 1984.114.1
+    url: https://www.metmuseum.org/art/collection/search/505461
+    license: CC0
+  - id: commons-usmb-stars-stripes-2017
+    title: The Stars and Stripes Forever (Sousa), United States Marine Band, 2017
+    publisher: Wikimedia Commons
+    url: "https://commons.wikimedia.org/wiki/File:Sousa's_\"The_Stars_and_Stripes_Forever\"_-_United_States_Marine_Band_(2017).mp3"
+    license: public domain (US Marine Corps)
+  - id: commons-sousa-1895-loc
+    title: John Philip Sousa, 1895 (Library of Congress)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:John_Philip_Sousa,_three-quarter_length_portrait,_standing,_facing_front_LCCN2005676156.jpg
+    license: public domain
+  - id: commons-nps-humpback-moo-2001
+    title: Humpback whale calls, Glacier Bay, Alaska (National Park Service hydrophone), 2001
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Humpback_whale_moo.ogg
+    license: public domain (US National Park Service)
+  - id: commons-noaa-humpback-breach-2015
+    title: Humpback breaching, Hawaiian Islands Humpback Whale National Marine Sanctuary (NOAA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:HIHWNMS_-_Humpback_Breaching_(33591142200).jpg
+    license: public domain (NOAA)
+  - id: commons-beethoven5-autograph
+    title: Symphony No. 5, first page, in Beethoven's hand
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:BeethovenSinfonia5autografo.jpg
+    license: public domain
+  - id: commons-usaf-strolling-strings-canon-2004
+    title: Canon (Pachelbel), Strolling Strings, United States Air Force Band, 2004
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Canon_(2004)_-_Strolling_Strings_-_United_States_Air_Force_Band.mp3
+    license: public domain (US Air Force)
+  - id: commons-pachelbel-canon-ms
+    title: Pachelbel's Canon, first page of the oldest copy (Staatsbibliothek zu Berlin, Mus.ms. 16481/8)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Pachelbel's_Canon_-_Mus.MS_16481-8_Page_1.jpg
+    license: public domain
+  - id: commons-alapai-aloha-oe-1911
+    title: Aloha Oe (Liliʻuokalani), Madam Alapai with Henry N. Clark, 1911
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Madam_Alapai,_Henry_N._Clark_-_Aloha_Oe.ogg
+    license: public domain (US recording of 1911)
+  - id: commons-liliuokalani-c1891
+    title: Liliʻuokalani, about 1891 (James J. Williams, Library of Congress)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Liliuokalani,_c._1891.jpg
+    license: public domain
+  # then
+  - id: commons-budd-shepherd-boy
+    title: The Shepherd Boy and the Wolf (Old Fables Brought Up to Date), Charles Jay Budd, St. Nicholas
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:St._Nicholas-Vol_1.1-395.jpg
+    license: public domain
+  - id: commons-wright-first-flight
+    title: First flight, 17 December 1903 (John T. Daniels, Library of Congress)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Wright_First_Flight_1903Dec17_(full_restore_115).jpg
+    license: public domain
+  - id: commons-wright-1902-glider
+    title: Wilbur Wright gliding at Kitty Hawk, 10 October 1902 (Orville Wright)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:1902-10-10_KittyHawk_WilburWrightGliding.jpg
+    license: public domain
+  - id: commons-mercator-1569
+    title: World map, Gerardus Mercator, 1569 (all sheets joined)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Mercator_1569_world_map_composite.jpg
+    license: public domain
+  - id: commons-blue-marble-as17
+    title: The Blue Marble, Apollo 17, 7 December 1972
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:The_Blue_Marble,_AS17-148-22727.jpg
+    license: public domain (NASA)
+  - id: commons-hokulea-yokohama-2007
+    title: Hōkūleʻa arriving in Yokohama, 2007
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hokulea2.jpg
+    license: public domain (released by the photographer)
+  - id: commons-loc-stick-chart-rebbelib
+    title: Marshall Islands stick chart, Rebbelib type (Library of Congress)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Marshall_Islands_stick_chart,_Rebbelib_type._LOC_2010586182.jpg
+    license: public domain
+  # puzzle
+  - id: met-die-egypt
+    title: Die, Roman Period Egypt
+    publisher: The Metropolitan Museum of Art, 10.130.1156
+    url: https://www.metmuseum.org/art/collection/search/551069
+    license: CC0
+  - id: commons-bentley-snowflakes-1902
+    title: Snow flakes, Wilson Bentley, 1902 (NOAA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:SnowflakesWilsonBentley.jpg
+    license: public domain
+  - id: commons-bentley-snowflake-mopa-1905
+    title: Snowflake, Wilson Bentley, about 1905 (Museum of Photographic Arts)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Snowflake_-_By_Wilson_Bentley_ca._1905_-_MoPA.jpg
+    license: public domain
+  - id: met-chess-knight
+    title: Chess Piece in the Form of a Knight, about 1350-60
+    publisher: The Metropolitan Museum of Art, 68.95
+    url: https://www.metmuseum.org/art/collection/search/27389
+    license: CC0
+  - id: commons-libro-juegos-two-men-chess
+    title: Two men playing chess, Libro de los juegos (Alfonso X), 1283
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Two_men_playing_chess_-_Libro_de_los_juegos.jpg
+    license: public domain
+  - id: met-chessboard
+    title: Chessboard, 19th century
+    publisher: The Metropolitan Museum of Art, 53.71.176
+    url: https://www.metmuseum.org/art/collection/search/201546
+    license: CC0
+  - id: commons-tangram-two-wooden-sets
+    title: Two wooden tangram sets (Gorkaazk)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Tangram_2.png
+    license: CC0
+  - id: commons-dudeney-tangram-figures-1917
+    title: A Tangram Paradox, diagram 10, H. E. Dudeney, Amusements in Mathematics, 1917
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Amusements_in_mathematics_-_A_Tangram_Paradox_Diagram_10.png
+    license: public domain
+  - id: commons-sunflower-closeup-nm
+    title: Close-up of a sunflower head, New Mexico (NathanScientific)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Close-up_sunflower_head,_New_Mexico,_U.S.jpg
+    license: CC0
+  - id: commons-seeding-sunflower
+    title: Seeding sunflower (Morgan Sessions)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Seeding_sunflower_(Unsplash).jpg
+    license: CC0
+
+lessons:
+  # --- look ---
+  - key: great-wave
+    subject: art
+    slot: look
+    title: The Great Wave, and how a woodblock print is made
+    sources: [aic-great-wave, met-sadahide-line-block-proof]
+    values_points: []
+    summary:
+      "2-3": >-
+        Hokusai's Great Wave, made in Japan about 190 years ago, is a print, not a painting. The
+        picture was carved into wooden blocks, one block for each color, and each block was inked
+        and pressed onto the paper in turn, so the same picture could be printed thousands of times
+        and sold cheaply. Mount Fuji is the small mountain in the dip of the wave.
+      "4-5": >-
+        A Japanese woodblock print took a team: the artist drew it, a carver cut a block for the
+        black outline and one more block for each color, and a printer inked each block and pressed
+        the paper onto it by hand, lining the sheet up with notches cut into every block so the
+        colors landed in place. The outline block alone prints a picture with no color at all.
+        Hokusai used Prussian blue, a new imported pigment that didn't fade, and put Mount Fuji tiny
+        in the trough of the wave, which makes the wave look huge. Thousands of copies were printed
+        about 1830-33, which is why museums around the world each have one.
+
+  - key: harvesters
+    subject: art
+    slot: look
+    title: The Harvesters, and why far things look small and pale
+    sources: [met-bruegel-harvesters]
+    values_points: []
+    summary:
+      "2-3": >-
+        In 1565, Pieter Bruegel painted farm workers cutting wheat on a hot summer day. People close
+        to us are big, and people far away are tiny; the hills and the sea in the distance are pale
+        and bluish. That is how a painter makes a flat picture look deep. The painting is full of
+        small stories to find, like a man asleep under the tree and people eating lunch.
+      "4-5": >-
+        Bruegel uses two kinds of perspective: things shrink the farther away they are (linear
+        perspective), and air makes far things paler and bluer (aerial perspective), so the bay at
+        the back almost fades into the sky. The Harvesters is one of six paintings of the times of
+        the year he made for a merchant in Antwerp; five survive. It shows real work in order: men
+        cutting wheat with scythes, women tying it into sheaves, people carrying it away, and a
+        group resting and eating bread, porridge and pears in the field.
+
+  - key: audubon-birds
+    subject: art
+    slot: look
+    title: Audubon painted every bird life-size
+    sources: [commons-audubon-flamingo-nga]
+    values_points: []
+    summary:
+      "2-3": >-
+        John James Audubon wanted to paint every bird in America at its real size, so he used the
+        biggest paper there was. Small birds fit easily, but the big ones had to bend: his flamingo
+        has its long neck curved all the way down to the ground so the whole bird fits on the page.
+      "4-5": >-
+        Audubon travelled for years to watch birds where they lived, and painted them life-size and
+        doing what birds do: feeding, hunting, calling. His book, The Birds of America (1827-1838),
+        had 435 pictures on pages about three feet tall; each was engraved on copper by Robert Havell
+        in London, printed, and colored by hand. To paint a tall bird life-size on one page, he had
+        to pose it bent, like the flamingo reaching down to feed.
+
+  - key: dots-that-mix
+    subject: art
+    slot: look
+    title: Seurat's dots mix in your eye
+    sources: [aic-grande-jatte, commons-seurat-parade-detail]
+    values_points: []
+    summary:
+      "2-3": >-
+        Georges Seurat painted people relaxing in a park by a river in Paris, and up close the
+        painting is made of thousands of tiny dots of color. Step back and your eye mixes them, so
+        dots of blue and yellow side by side can look green. Look for the dog, the monkey on a
+        leash and the boats.
+      "4-5": >-
+        Seurat (A Sunday on La Grande Jatte, 1884-86) put small dots of pure color next to each
+        other instead of mixing paints on his palette, following the science of color of his day;
+        the colors blend in the viewer's eye and stay brighter than mixed paint. The method is
+        called pointillism. The painting is about ten feet wide and took him two years. His later
+        painting of a circus parade shows the dots even more plainly.
+
+  - key: arcimboldo-faces
+    subject: art
+    slot: look
+    title: Faces made of fruit and vegetables
+    sources: [commons-arcimboldo-summer, commons-arcimboldo-vertumnus]
+    values_points: []
+    summary:
+      "2-3": >-
+        About 450 years ago, Giuseppe Arcimboldo painted faces made entirely of fruit, vegetables
+        and flowers: a pear for a nose, a pea pod for a mouth. Our brains are so quick to find faces
+        that we see the person first and the vegetables second.
+      "4-5": >-
+        Arcimboldo was a painter at the court of the Habsburg emperors, and he built portraits out of
+        things that belong together: Summer from the fruit and vegetables that ripen in summer, and
+        the emperor Rudolf II as Vertumnus, the Roman god of the seasons, from fruit, flowers and
+        grain of the whole year. They were clever jokes the emperors enjoyed. Seeing faces in things
+        that aren't faces has a name, pareidolia; it's why a car's front or an electric socket can
+        look happy or surprised.
+
+  - key: van-gogh-bedroom
+    subject: art
+    slot: look
+    title: Van Gogh painted his bedroom three times
+    sources: [aic-van-gogh-bedroom, commons-van-gogh-bedroom-amsterdam]
+    values_points: []
+    summary:
+      "2-3": >-
+        Vincent van Gogh painted his small bedroom in the town of Arles, France, in bright colors
+        because he wanted the picture to feel restful. He liked it so much he painted it three
+        times. Look for what comes in pairs: two chairs, two pillows, two doors.
+      "4-5": >-
+        Van Gogh chose colors that sit opposite each other on the color wheel, blue walls against
+        orange-brown furniture and a red blanket against green, because opposites make each other
+        look brighter. He left out shadows and painted flat areas of color, like the Japanese prints
+        he collected. He painted the first version in 1888, and two more in 1889, after the first
+        was damaged by damp; the one in Chicago is the second, and comparing two versions shows
+        what he changed.
+
+  # --- wonder ---
+  - key: leap-years
+    subject: science
+    slot: wonder
+    title: Why we have leap years
+    sources: [commons-wright-orrery, met-calendrier-1784-bissextile]
+    values_points: []
+    summary:
+      "2-3": >-
+        A year is how long the Earth takes to go once around the Sun: 365 days and about six hours.
+        The calendar only has whole days, so the extra six hours are saved up, and every four years
+        they make one more day, February 29th. That year is called a leap year.
+      "4-5": >-
+        Earth's trip around the Sun takes about 365.2422 days, a little less than 365 and a quarter,
+        so adding a day every four years overshoots by about 11 minutes a year. Over centuries that
+        pushed the calendar out of step with the seasons, so in 1582 the calendar was reformed: a
+        century year is a leap year only if it divides by 400, so 1900 wasn't one and 2000 was. An
+        orrery is a model that shows the planets going around the Sun, and a printed calendar for a
+        leap year has the extra day in it.
+
+  - key: new-land-from-lava
+    subject: science
+    slot: wonder
+    title: Hawaii is still being made
+    sources: [commons-nps-lava-enters-ocean-torrent, commons-iss38-hawaiian-chain]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Hawaiian islands were made by volcanoes. Kīlauea, on the Big Island, is one of the most
+        active volcanoes in the world: hot, melted rock called lava comes up from deep inside the
+        Earth, and when it flows into the ocean it cools and hardens into black rock, so the island
+        grows a little bigger.
+      "4-5": >-
+        The islands sit over a hot spot, a place where hot rock rises from deep in the Earth's
+        mantle, while the Pacific plate slides slowly northwest, a few inches a year. Each volcano
+        is carried away from the hot spot and goes quiet, and a new one grows behind it, so the
+        islands get older to the northwest: Kauaʻi is the oldest of the main islands and the Big
+        Island the youngest. Smooth, ropy lava is called pāhoehoe and rough, broken lava ʻaʻā,
+        Hawaiian words geologists use everywhere.
+
+  - key: moon-phases
+    subject: science
+    slot: wonder
+    title: Why the Moon changes shape
+    sources: [met-mellan-moon-first-quarter, commons-al-biruni-lunar-phases]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Moon doesn't make its own light: the Sun always lights up half of it, the half facing
+        the Sun. As the Moon travels around the Earth each month, we see more or less of that lit
+        half, so it looks like it grows from a thin sliver to a full circle and shrinks again.
+      "4-5": >-
+        The cycle from new moon through full moon and back takes about 29 and a half days, which is
+        where the word "month" comes from. At a quarter moon we see exactly half the Moon's face
+        lit, because we're looking at its lit half from the side. The Earth's shadow has nothing to
+        do with the phases; that only happens in an eclipse. Astronomers have drawn the phases for
+        a thousand years, from al-Biruni in Central Asia to Claude Mellan, who engraved the Moon
+        from a telescope in 1635.
+
+  - key: blue-sky-red-sunset
+    subject: science
+    slot: wonder
+    title: Why the sky is blue and sunsets are red
+    sources: [commons-dispersive-prism, commons-sunset-from-iss]
+    values_points: []
+    summary:
+      "2-3": >-
+        Sunlight looks white, but it's made of all the colors of the rainbow, which a glass prism
+        can split apart. The air bounces blue light around the sky much more than the other colors,
+        so the sky looks blue. At sunset, the light has to come through much more air to reach us,
+        so most of the blue is bounced away and the reds and oranges are left.
+      "4-5": >-
+        Air molecules scatter short wavelengths of light (blue and violet) far more than long ones
+        (red); this is called Rayleigh scattering. We see a blue sky rather than a violet one
+        because the Sun gives off less violet and our eyes are less sensitive to it. When the Sun is
+        low, its light crosses many times more air, so the blue is scattered out before it reaches
+        us. From space, the air shows as a thin glowing layer along the edge of the Earth. Isaac
+        Newton showed with prisms in the 1660s that white light is a mix of colors.
+
+  - key: tiny-animals-in-water
+    subject: science
+    slot: wonder
+    title: The first person to see germs
+    sources: [commons-leeuwenhoek-duckweed-animalcules, commons-leeuwenhoek-microscope-baker-1753]
+    values_points: []
+    summary:
+      "2-3": >-
+        About 350 years ago, a Dutch cloth seller named Antonie van Leeuwenhoek made tiny
+        magnifying glasses and looked at a drop of pond water. He saw "little animals" swimming in
+        it: living things too small to see with our eyes. Some kinds of these tiny living things,
+        called germs, can make us sick, which is why we wash our hands with soap.
+      "4-5": >-
+        Leeuwenhoek's microscopes were a single tiny glass bead held in a small metal plate, and
+        they magnified about 270 times, better than anyone else's then. He described bacteria and
+        other microbes in letters to the Royal Society in London from the 1670s, with drawings made
+        for him. About two hundred years later, scientists showed that some microbes cause disease.
+        Soap works by breaking up the oily layer around many germs and letting water wash them away.
+
+  - key: how-fossils-form
+    subject: science
+    slot: wonder
+    title: How a living thing turns to stone
+    sources: [commons-ammonite-pavement, commons-fossil-trilobite-todd]
+    values_points: [5]
+    perspective: several_fairly
+    summary:
+      "2-3": >-
+        When a sea animal like an ammonite, a kind of shellfish with a coiled shell, died and was
+        quickly buried in mud, the mud slowly hardened into rock. Minerals in the water filled in
+        the shell's shape, so the shape lasted in the stone long after the animal was gone. That
+        stone shape is a fossil.
+      "4-5": >-
+        Most fossils form when a body is buried fast in sediment such as mud or sand; the soft
+        parts rot, and water carrying minerals fills the spaces, or the shell dissolves and leaves
+        a mold that fills in later. Layer after layer of sediment piles up and hardens into rock, so
+        lower layers are older. Geologists date these layers as many millions of years old. In
+        1811-12, Mary Anning, aged 12, and her brother dug an ichthyosaur, a sea reptile, out of the
+        cliffs of an English beach, one of the first that scientists studied.
+
+  # --- listen ---
+  - key: carnival-of-the-animals
+    subject: music
+    slot: listen
+    title: The Swan, from The Carnival of the Animals
+    sources: [commons-bokor-le-cygne-1925, met-vuillaume-cello]
+    values_points: []
+    summary:
+      "2-3": >-
+        In The Carnival of the Animals, the French composer Camille Saint-Saëns made instruments
+        play animals. In The Swan, the cello plays one long, smooth tune, like a swan gliding on
+        the water, while the piano ripples underneath like the water itself. This recording is
+        about 100 years old.
+      "4-5": >-
+        Saint-Saëns wrote The Carnival of the Animals in 1886 as a joke for friends and wouldn't let
+        it be published while he lived, except The Swan, which he was proud of. Composers pick an
+        instrument for an animal by its range, speed and sound: the cello's smooth, singing middle
+        voice for the swan, the low, heavy double bass for an elephant, quick high notes for birds.
+        The piano's rippling broken chords stand for the water. The recording was made in 1925 by
+        the cellist Judith Bokor.
+
+  - key: stars-and-stripes
+    subject: music
+    slot: listen
+    title: A march has a beat for your feet
+    sources: [commons-usmb-stars-stripes-2017, commons-sousa-1895-loc]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Stars and Stripes Forever by John Philip Sousa is a march: its steady beat goes
+        left-right, left-right, so a band can play it while walking. Near the end, listen for the
+        piccolo, the smallest and highest flute, whistling its own tune above everyone else.
+      "4-5": >-
+        A march has two (or four) beats in each bar at walking speed, about 120 steps a minute, so
+        soldiers and bands keep in step. Sousa led the United States Marine Band and later his own
+        band, and wrote this march in 1896; it became the national march of the United States in
+        1987. The famous piccolo part is a countermelody, a second tune played over the main one,
+        and the low brass answers it. This recording is by the Marine Band, Sousa's old band.
+
+  - key: whale-song
+    subject: science
+    slot: listen
+    title: Whales call across the ocean
+    sources: [commons-nps-humpback-moo-2001, commons-noaa-humpback-breach-2015]
+    values_points: []
+    summary:
+      "2-3": >-
+        Humpback whales make moans, whoops and grunts that carry a long way under the water. This
+        recording was made with a microphone lowered into the sea in Alaska, where the humpbacks
+        that visit Hawaii every winter spend the summer feeding.
+      "4-5": >-
+        Sound travels about four times faster in water than in air and much farther, so whales can
+        hear each other over miles of ocean. Humpbacks make many kinds of calls; in winter, in
+        warm waters like Hawaii's, the males also sing long songs made of repeating themes. This
+        recording is calls, not a song, picked up by an underwater microphone called a hydrophone in
+        Glacier Bay, Alaska, in 2001. Humpbacks swim about 3,000 miles from Alaska to Hawaii each
+        winter to have their calves.
+
+  - key: four-notes
+    subject: music
+    slot: listen
+    title: A whole movement from four notes
+    sources: [commons-beethoven5-autograph]
+    values_points: []
+    parent_note: Play the first movement for him (it's on the family Spotify).
+    summary:
+      "2-3": >-
+        Ludwig van Beethoven's Fifth Symphony starts with four notes: short-short-short-long. He
+        keeps bringing them back, higher and lower, louder and softer, played by different
+        instruments, so the whole first part of the symphony is built from that one little pattern.
+        Quark has no recording of it: a parent plays it.
+      "4-5": >-
+        The four-note motif returns in almost every bar of the first movement (first performed in
+        1808), passed between the instruments and changed in pitch and loudness, which is how a
+        composer turns a tiny idea into a long piece. Beethoven was losing his hearing while he wrote
+        it. His handwritten first page shows the three quick notes and the long one in several
+        lines at once. Quark has no recording of it: a parent plays it.
+
+  - key: round-and-canon
+    subject: music
+    slot: listen
+    title: A tune that fits on top of itself
+    sources: [commons-usaf-strolling-strings-canon-2004, commons-pachelbel-canon-ms]
+    values_points: []
+    summary:
+      "2-3": >-
+        In a round like Row, Row, Row Your Boat, everyone sings the same tune, but each group starts
+        a little later, and it still fits together. Johann Pachelbel's Canon works the same way:
+        violins play the same tune a little apart, over a short bass part that repeats again and
+        again.
+      "4-5": >-
+        A canon fits because the tune is built over a repeating bass line, a ground bass; in
+        Pachelbel's Canon it is eight notes played 28 times, so every part of the tune sits on the
+        same chords whenever it comes in. Pachelbel wrote it for three violins and bass about 1700,
+        and it was nearly forgotten until it was recorded in the 1960s and became famous. On the
+        oldest copy, the same tune can be seen written again in each violin's line, starting later.
+
+  - key: aloha-oe
+    subject: music
+    slot: listen
+    title: A queen's song, Aloha ʻOe
+    sources: [commons-alapai-aloha-oe-1911, commons-liliuokalani-c1891]
+    values_points: []
+    summary:
+      "2-3": >-
+        Aloha ʻOe, "farewell to you", was written by Liliʻuokalani, who later became Queen of
+        Hawaii. It's a goodbye song with a slow chorus, so people can sing it together, and it's
+        still sung at partings in Hawaii today. This recording is more than 100 years old.
+      "4-5": >-
+        Liliʻuokalani wrote Aloha ʻOe in 1878, after seeing two people say goodbye on a ride home.
+        She was a trained musician who wrote more than 160 songs, and she became queen in 1891. The
+        song has a verse and a slow, gentle chorus that repeats, which makes it easy for a crowd to
+        join in, and it became one of the best-known Hawaiian songs in the world. This recording
+        was made in 1911 by the Hawaiian singer Madam Alapai.
+
+  # --- then ---
+  - key: boy-who-cried-wolf
+    subject: literature
+    slot: then
+    title: A lie and a mistake
+    sources: [commons-budd-shepherd-boy]
+    values_points: []
+    summary:
+      "2-3": >-
+        In Aesop's fable, a shepherd boy shouts "Wolf!" for fun, and the villagers run to help, but
+        there is no wolf. He does it again. When a real wolf comes, nobody believes him, and nobody
+        comes. A lie is saying something you know isn't true; a mistake is saying something wrong
+        that you believed was true.
+      "4-5": >-
+        What makes a lie is what the speaker knows and means, not whether the words turn out true:
+        someone who says "it's raining" believing it is making a mistake if it isn't, and someone
+        who says it knowing it isn't is lying. A mistake is fixed by finding out; a lie costs trust,
+        and trust is slow to come back, which is the fable's point. Aesop's fables were told in
+        Greece about 2,500 years ago, and people still retell them, sometimes with new details like
+        a telephone.
+
+  - key: first-flight
+    subject: history
+    slot: then
+    title: Twelve seconds at Kitty Hawk
+    sources: [commons-wright-first-flight, commons-wright-1902-glider]
+    values_points: []
+    summary:
+      "2-3": >-
+        On 17 December 1903, on a windy beach at Kitty Hawk, North Carolina, Orville Wright flew an
+        airplane with an engine for 12 seconds while his brother Wilbur ran alongside. It was the
+        first flight like it, and the brothers took turns flying three more times that day.
+      "4-5": >-
+        The Wright brothers, bicycle makers from Ohio, solved steering before power: they flew kites
+        and gliders for three years, built a small wind tunnel to test wing shapes, and steered by
+        twisting the tips of the wings, which they called wing-warping. The first flight went 120
+        feet, shorter than a jumbo jet's wings; the longest that day went 852 feet in 59 seconds.
+        The photograph was taken by John Daniels, a lifesaving station worker the brothers had
+        asked to work their camera.
+
+  - key: why-greenland-looks-huge
+    subject: geography
+    slot: then
+    title: Why Greenland looks as big as Africa
+    sources: [commons-mercator-1569, commons-blue-marble-as17]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Earth is round, like a ball, and you can't flatten a ball's skin, like an orange peel,
+        without stretching or tearing it. On the most common kind of world map, places near the top
+        and bottom get stretched, so Greenland looks as big as Africa. Really, Africa is about 14
+        times bigger.
+      "4-5": >-
+        Gerardus Mercator's world map of 1569 keeps directions true, so a sailor can draw a straight
+        line and steer along it with a compass; to do that, it stretches everything more and more
+        the farther it is from the equator. Every flat map gives up something: true size, shape,
+        distance or direction. Only a globe keeps them all, and a photograph of the whole Earth from
+        space shows Africa at its real size.
+
+  - key: wayfinding-to-hawaii
+    subject: history
+    slot: then
+    title: Finding Hawaii without a map
+    sources: [commons-hokulea-yokohama-2007, commons-loc-stick-chart-rebbelib]
+    values_points: []
+    summary:
+      "2-3": >-
+        The first people to reach Hawaii sailed thousands of miles across the open ocean in double
+        canoes, finding their way by the stars, the shape of the waves and the birds. In 1976, a
+        canoe called Hōkūleʻa sailed from Hawaii to Tahiti the same way, with no compass and no map.
+      "4-5": >-
+        Polynesian navigators kept a star compass in their heads, knowing where each star rises and
+        sets on the horizon; they read the ocean swells, which bend around islands too far away to
+        see, and watched birds that fly out to fish in the morning and home to land at dusk. People
+        reached Hawaii roughly a thousand years ago. Hōkūleʻa's 1976 voyage, guided by the
+        Micronesian navigator Mau Piailug, showed it could be done without instruments. In the
+        Marshall Islands, navigators made charts of sticks and shells to learn the swells.
+
+  # --- puzzle ---
+  - key: two-dice
+    subject: math
+    slot: puzzle
+    title: Why 7 comes up most with two dice
+    sources: [met-die-egypt]
+    values_points: []
+    summary:
+      "2-3": >-
+        Roll two dice and add them. You can make 2 only one way, with 1 and 1, but you can make 7
+        six ways: 1 and 6, 2 and 5, 3 and 4, and each of those the other way round. So 7 comes up
+        more often than any other total.
+      "4-5": >-
+        Each die has 6 faces, so two dice make 6 times 6, 36 pairs, each as likely as the others. Six
+        of those pairs add to 7, so 7 comes up about 1 time in 6, while 2 and 12 each come up only 1
+        time in 36. People have played with dice for at least 5,000 years; on most dice, opposite
+        faces add up to 7, as on this one from Roman Egypt.
+
+  - key: snowflake-six
+    subject: math
+    slot: puzzle
+    title: Why a snowflake has six arms
+    sources: [commons-bentley-snowflakes-1902, commons-bentley-snowflake-mopa-1905]
+    values_points: []
+    summary:
+      "2-3": >-
+        Every snowflake has six arms, because the tiny bits of water that make ice fit together in
+        six-sided rings. No two snowflakes are quite alike, but all of them have six. Fold a paper
+        circle into sixths, cut shapes along the edges, and open it to make one.
+      "4-5": >-
+        Ice crystals grow in a hexagonal pattern, so a snowflake has six-fold symmetry: turn it a
+        sixth of a full turn and it looks the same. All six arms grow at the same moment in the same
+        air, so they match each other, while each flake falls through different air and so grows
+        differently from every other. Wilson Bentley, a farmer in Vermont, photographed more than
+        5,000 snowflakes through a microscope, starting in 1885.
+
+  - key: knights-and-knaves
+    subject: math
+    slot: puzzle
+    title: Who's telling the truth?
+    sources: [met-chess-knight]
+    values_points: []
+    summary:
+      "2-3": >-
+        On a puzzle island, knights always tell the truth and knaves always lie. If someone says
+        "I am a knave", there's a problem: a knight wouldn't say it, because it isn't true, and a
+        knave wouldn't say it, because it would be true. So nobody on the island can ever say it.
+      "4-5": >-
+        Puzzles like this, named by the logician Raymond Smullyan, are solved by trying each case
+        and keeping the one that fits every clue. If A says "B is a knave" and B says "We are both
+        knights", B can't be a knight (then A would be a knight lying about B), so B is a knave, B's
+        claim is false, and A told the truth: A is a knight. It uses the same thinking as the lie
+        and the mistake: what does the speaker know, and what are they saying?
+
+  - key: doubling-grains
+    subject: math
+    slot: puzzle
+    title: One grain, then double
+    sources: [commons-libro-juegos-two-men-chess, met-chessboard]
+    values_points: [24]
+    perspective: family_tradition
+    summary:
+      "2-3": >-
+        In an old story, a wise man asks a king for one grain of rice on the first square of a
+        chessboard, two on the second, four on the third, doubling every time. The king laughs at
+        such a small prize, but there are 64 squares, and by the last one it's more rice than the
+        whole world grows. Doubling starts small and grows very fast.
+      "4-5": >-
+        Doubling 63 times gives more than 9 quintillion grains on the last square. Money saved in a
+        bank grows the same way, only more slowly: the bank pays interest on the money, and then
+        interest on the interest, which is called compound interest. At 7 percent a year, money
+        doubles in about 10 years and doubles again in the next 10. The chessboard in a 1283 book of
+        games has the same 64 squares.
+
+  - key: tangram
+    subject: math
+    slot: puzzle
+    title: Seven pieces, many shapes
+    sources: [commons-tangram-two-wooden-sets, commons-dudeney-tangram-figures-1917]
+    values_points: []
+    summary:
+      "2-3": >-
+        A tangram is a square cut into seven pieces: five triangles, a small square and a slanted
+        shape called a parallelogram. Using all seven pieces every time, you can make a cat, a boat,
+        a running person and hundreds of other shapes.
+      "4-5": >-
+        Every tangram figure has the same area, because it's always the same seven pieces moved
+        around: the two big triangles are each a quarter of the square, and the two small ones a
+        sixteenth each. The puzzle came from China and became a craze in Europe and America around
+        1817, and puzzle books printed hundreds of silhouettes to copy, some of them tricks where two
+        figures look different but use the same pieces.
+
+  - key: sunflower-spirals
+    subject: math
+    slot: puzzle
+    title: Counting the spirals in a sunflower
+    sources: [commons-sunflower-closeup-nm, commons-seeding-sunflower]
+    values_points: []
+    summary:
+      "2-3": >-
+        The seeds in a sunflower's head sit in spirals going both ways, clockwise and
+        counterclockwise. Count them and you often get numbers like 34 one way and 55 the other.
+        They come from a pattern where each number is the two before it added together: 1, 1, 2, 3,
+        5, 8, 13, 21, 34, 55.
+      "4-5": >-
+        Each new seed grows at the same turn from the one before it, about 137.5 degrees (the golden
+        angle), which packs the seeds with no gaps, and the spirals that show come in Fibonacci
+        numbers. Pinecones and pineapples follow the same rule. Leonardo of Pisa, called Fibonacci,
+        wrote about the sequence in 1202, in a puzzle about how fast rabbits multiply.
