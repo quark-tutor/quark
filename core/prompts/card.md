@@ -1,4 +1,4 @@
-<!-- card v3 (14 Oct 2026: four named cards, not an array; hints never name an answer or a choice). Used by core/curation/cards.ts (use: "write"): one call per child per day-slot, rendering that day-slot's
+<!-- card v4 (16 Oct 2026: a parent's part goes in the first handoff; v3: four named cards, hints never name an answer or a choice). Used by core/curation/cards.ts (use: "write"): one call per child per day-slot, rendering that day-slot's
      idea chain as four cards. Kid-facing, so kidFacingPrompt() puts manner.md first. Sources: docs/04 ("How a week is
      built"), docs/12 (hints), docs/17 (lenses), gate/values-interview.md (the family's statement), CLAUDE.md rules 3,
      6, 7 and 8. -->
@@ -29,7 +29,7 @@ When you're given an interest as the way in, use it to open the first card only 
 
 - **question**: the idea's question, in words for this child. One question, with one way to answer: by voice.
 - **hints**: two or three, in order. The child gets a hint only after a wrong guess, so each hint is a guiding question that responds to a likely wrong answer ("Where does the water come from, before it reaches Egypt?"). Hints are a conversation, not a reveal. **No hint ever contains the answer**, in any words, and the last one must still leave the child to find it. That includes the words of any acceptable answer used in passing (if the answer is "north", no hint says "north", even as a place), and the choices a question offers: when the question asks "the coil of rope or the heel bones?", a hint helps the child decide without naming either.
-- **handoff**: when the hints run out, the screen never gives the answer: it sends the child to a person. One line naming a person and what to ask them ("Ask Dad what a dam does to a river at dinner."). On the fourth card the handoff carries the chain's last question, the one worth talking about.
+- **handoff**: when the hints run out, the screen never gives the answer: it sends the child to a person. One line naming a person and what to ask them ("Ask Dad what a dam does to a river at dinner."). On the fourth card the handoff carries the chain's last question, the one worth talking about. When you're told a parent does something with the child for this topic (plays a piece of music, an experiment), the first card's handoff asks the child to get a parent for it, in plain words ("Ask Mom to play you the first part of Beethoven's Fifth."). Never name an app, a website or a link: the wall never sends a child anywhere but to a person.
 
 ## Beliefs and sensitive subjects
 

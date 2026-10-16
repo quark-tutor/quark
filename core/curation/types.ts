@@ -1,5 +1,6 @@
 import type { DaySlot } from "../../lib/lenses.ts";
 import type { Perspective } from "../../lib/values.ts";
+import type { DayPlan } from "./schedule.ts";
 
 // The pieces a week is built from (docs/04, "How a week is built"): the plan's week as both grade
 // bands have it, the approved content offered with it, and what the model writes.
@@ -14,27 +15,33 @@ export type OfferedItem = {
   storagePath?: string;
 };
 
-// One plan topic, both grade bands together. Ideas hang off the 2-3 row (topic_id).
+// One plan topic (a thread topic or a short lesson), both grade bands together. Ideas hang off the
+// 2-3 row (topic_id).
 export type WeekTopic = {
   id: string; // plan_topics.id of the 2-3 row
   keys: string[]; // both bands' keys
+  kind: "thread" | "short";
   subject: string;
   slot: DaySlot;
   title: string;
   younger: string; // the 2-3 summary
   older: string; // the 4-5 summary
   items: OfferedItem[]; // approved content for this topic
+  perspective: Perspective | null; // a thread topic's from its week, a short lesson's its own
+  valuesPoints: number[];
+  parentNote: string | null; // something a parent does with the child: play a recording, an experiment
+  chapter?: { title: string; why: string }; // a thread topic's week in its stretch
+  earlierInThread?: string[]; // the titles of the thread's topics before this one, most recent last
 };
 
+// One week of the family's plan, mixed: the thread on one slot a day, short lessons on the rest.
 export type WeekPlan = {
-  stretch: string;
-  week: number;
-  title: string;
-  why: string;
-  perspective: Perspective | null;
-  valuesPoints: number[];
-  topicIds: string[]; // every plan_topics row of the week, both bands, for themes.topic_ids
+  week: number; // the family's week in the plan
+  title: string; // the theme's title
+  thread: { stretch: string; title: string } | null; // null once the thread has run out
+  topicIds: string[]; // every plan_topics row the week uses, both bands, for themes.topic_ids
   topics: WeekTopic[];
+  schedule: DayPlan[]; // all seven days, even when fewer are built
 };
 
 export type AnswerKey = { accept: string[]; rubric: string };

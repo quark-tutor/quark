@@ -1,8 +1,10 @@
 // Build one week of the plan: the theme, its shared ideas, and every child's cards and questions.
+// A week is mixed (docs/04, "How a week is mixed"): the thread on one slot a day, short lessons on
+// the other four. --week N is the family's week N of the plan.
 //   npm run week:build -- --week 1
 //   npm run week:build -- --week 1 --child Rex --days 2     (one child, the first two days)
 //   npm run week:build -- --week 1 --rebuild                (replace a week already built)
-// Options: --debug (write each model request and reply to .quark-debug/), --stretch (default: the plan's first), --start YYYY-MM-DD (default: next Monday, or
+// Options: --debug (write each model request and reply to .quark-debug/), --stretch (the thread; default: the plan's first stretch), --start YYYY-MM-DD (default: next Monday, or
 // counted on from week 1's start). The theme ends in status 'review'; nothing goes live here.
 // Cards are written with policy 'pending': the gate (step 5) checks them.
 
@@ -17,8 +19,10 @@ import { complete, debugTo, modelFor, usageSoFar } from "../core/model.ts";
 import { kidFacingPrompt, readPrompt } from "../core/prompts.ts";
 import { runRow } from "../core/runs.ts";
 import { sourceRefs } from "../core/curation/ideas.ts";
-import type { DaySlot } from "../lib/lenses.ts";
-import type { PlanSource } from "../lib/plan.ts";
+import { weekSchedule, type Scheduled } from "../core/curation/schedule.ts";
+import { SLOT_ORDER, type DaySlot } from "../lib/lenses.ts";
+import { otherBand, type PlanSource } from "../lib/plan.ts";
+import type { Perspective } from "../lib/values.ts";
 
 const { values: args } = parseArgs({
   options: {
@@ -91,24 +95,55 @@ const profile = maybe(await db.from("values_profiles").select("statement").eq("f
 const points = must(await db.from("values_points").select("number, name"), "values_points");
 const pointNames = new Map(points.map((p) => [p.number as number, p.name as string]));
 
-// --- The week, from plan_topics, with the approved content its topics name ---
+// --- The week, mixed: the thread on one slot a day, short lessons on the rest (docs/04, "How a week is mixed") ---
 
-const firstWeekRow = must(
-  await db.from("plan_topics").select("key").eq("subject", "week").eq("week", 1).eq("grade_band", "2-3").order("sequence").limit(1),
+type PlanRowDb = {
+  id: string;
+  key: string;
+  kind: "week" | "thread" | "short";
+  position: number | null;
+  grade_band: string;
+  subject: string;
+  slot: DaySlot | null;
+  title: string;
+  summary: string;
+  sources: PlanSource[];
+  perspective: Perspective | null;
+  values_points: number[] | null;
+  parent_note: string | null;
+  parent_id: string | null;
+};
+const COLUMNS = "id, key, kind, position, grade_band, subject, slot, title, summary, sources, perspective, values_points, parent_note, parent_id";
+
+const firstStretch = must(
+  await db.from("plan_topics").select("key").eq("kind", "week").eq("grade_band", "2-3").order("sequence").limit(1),
   "plan_topics",
 );
-const stretch = args.stretch ?? firstWeekRow[0]?.key.split("/")[0];
-if (!stretch) throw new Error("plan_topics is empty. Run npm run plan:import.");
-const rows = must(
-  await db
-    .from("plan_topics")
-    .select("id, key, grade_band, subject, slot, title, summary, sources, perspective, values_points")
-    .like("key", `${stretch}/w${week}/%`)
-    .order("key"),
-  "plan_topics",
-);
-const weekRow = rows.find((r) => r.subject === "week" && r.grade_band === "2-3");
-if (!weekRow) throw new Error(`${stretch} has no week ${week}. Check plan/${stretch}.yaml and npm run plan:import.`);
+const stretch = args.stretch ?? firstStretch[0]?.key.split("/")[0];
+if (!stretch) throw new Error("plan_topics has no stretch. Run npm run plan:import.");
+const stretchRows = must(await db.from("plan_topics").select(COLUMNS).like("key", `${stretch}/%`), "plan_topics") as PlanRowDb[];
+if (stretchRows.length === 0) throw new Error(`No stretch "${stretch}" in plan_topics. Check plan/${stretch}.yaml and npm run plan:import.`);
+const shortRows = must(await db.from("plan_topics").select(COLUMNS).eq("kind", "short"), "plan_topics") as PlanRowDb[];
+if (shortRows.length === 0) throw new Error("No short lessons in plan_topics. Check plan/short-lessons.yaml and npm run plan:import.");
+
+const byKey = new Map([...stretchRows, ...shortRows].map((r) => [r.key, r]));
+const chapters = new Map(stretchRows.filter((r) => r.kind === "week").map((r) => [r.id, r]));
+const inOrder = (rows: PlanRowDb[], kind: "thread" | "short") => {
+  const young = rows.filter((r) => r.kind === kind && r.grade_band === "2-3");
+  if (young.some((r) => r.position === null)) throw new Error("Some plan topics have no position. Run npm run plan:import.");
+  return young.sort((a, b) => a.position! - b.position!);
+};
+const threadRows = inOrder(stretchRows, "thread");
+const lessonRows = inOrder(shortRows, "short");
+const scheduled = (r: PlanRowDb): Scheduled => ({ id: r.id, slot: r.slot!, title: r.title });
+
+// The family's weeks so far: lessons used by earlier weeks are skipped, and a rebuild keeps its own.
+const themes = must(await db.from("themes").select("id, week_start, plan_week, topic_ids").eq("family_id", family.id), "themes");
+const existing = themes.find((t) => t.plan_week === week) ?? null;
+const lessonIds = new Set(lessonRows.map((r) => r.id));
+const used = new Set(themes.filter((t) => t.plan_week !== null && t.plan_week < week).flatMap((t) => t.topic_ids as string[]).filter((id) => lessonIds.has(id)));
+const own = new Set(((existing?.topic_ids ?? []) as string[]).filter((id) => lessonIds.has(id)));
+const schedule = weekSchedule({ week, thread: threadRows.map(scheduled), lessons: lessonRows.map(scheduled), used, own });
 
 const items = must(
   await db
@@ -120,70 +155,77 @@ const items = must(
 ) as unknown as { id: string; external_id: string; type: string; title: string | null; creator: string | null; attribution: string | null; metadata: { description?: string; storage_path?: string } | null; content_sources: { slug: string } }[];
 const approved = new Map(items.map((i) => [`${i.content_sources.slug}/${i.external_id}`, i]));
 
-const topics: WeekTopic[] = rows
-  .filter((r) => r.subject !== "week" && r.grade_band === "2-3")
-  .map((young) => {
-    const old = rows.find((r) => r.subject === young.subject && r.grade_band === "4-5" && r.subject !== "week");
-    const offered: OfferedItem[] = [];
-    for (const s of young.sources as PlanSource[]) {
-      const ref = sourceRef(s.url);
-      const i = approved.get(`${ref.source}/${ref.externalId}`);
-      if (i) {
-        offered.push({
-          id: i.id,
-          type: i.type,
-          title: i.title ?? s.title,
-          creator: i.creator,
-          attribution: i.attribution ?? s.title,
-          description: i.metadata?.description,
-          storagePath: i.metadata?.storage_path,
-        });
-      }
+const threadTitles = threadRows.map((r) => r.title);
+function weekTopic(young: PlanRowDb): WeekTopic {
+  const old = byKey.get(otherBand(young.key));
+  const offered: OfferedItem[] = [];
+  for (const s of young.sources) {
+    const ref = sourceRef(s.url);
+    const i = approved.get(`${ref.source}/${ref.externalId}`);
+    if (i) {
+      offered.push({
+        id: i.id,
+        type: i.type,
+        title: i.title ?? s.title,
+        creator: i.creator,
+        attribution: i.attribution ?? s.title,
+        description: i.metadata?.description,
+        storagePath: i.metadata?.storage_path,
+      });
     }
-    return {
-      id: young.id,
-      keys: [young.key, ...(old ? [old.key] : [])],
-      subject: young.subject,
-      slot: young.slot as DaySlot,
-      title: young.title,
-      younger: young.summary,
-      older: old?.summary ?? young.summary,
-      items: offered,
-    };
-  });
+  }
+  const chapter = young.parent_id ? chapters.get(young.parent_id) : undefined;
+  return {
+    id: young.id,
+    keys: [young.key, ...(old ? [old.key] : [])],
+    kind: young.kind === "short" ? "short" : "thread",
+    subject: young.subject,
+    slot: young.slot!,
+    title: young.title,
+    younger: young.summary,
+    older: old?.summary ?? young.summary,
+    items: offered,
+    perspective: young.perspective,
+    valuesPoints: young.values_points ?? [],
+    parentNote: young.parent_note,
+    ...(young.kind === "thread"
+      ? { chapter: chapter && { title: chapter.title, why: chapter.summary }, earlierInThread: threadTitles.slice(0, young.position! - 1).slice(-6) }
+      : {}),
+  };
+}
+
+const scheduledIds = new Set(schedule.flatMap((d) => Object.values(d.topics)));
+const weekRows = [...threadRows, ...lessonRows].filter((r) => scheduledIds.has(r.id));
+const topics = weekRows.map(weekTopic);
+// themes.topic_ids: every row the week uses, both bands, and the thread's chapter rows.
+const topicIds = [
+  ...new Set(
+    weekRows.flatMap((r) => {
+      const chapter = r.parent_id ? chapters.get(r.parent_id) : undefined;
+      return [r.key, otherBand(r.key), ...(chapter ? [chapter.key, otherBand(chapter.key)] : [])].map((k) => byKey.get(k)?.id).filter((id): id is string => !!id);
+    }),
+  ),
+];
+const threadToday = schedule.find((d) => d.thread)?.topics;
+const firstThread = topics.find((t) => t.kind === "thread" && threadToday && Object.values(threadToday).includes(t.id));
+const stretchTitle = stretch.split("-").map((w: string) => w[0].toUpperCase() + w.slice(1)).join(" ");
 
 const plan: WeekPlan = {
-  stretch,
   week,
-  title: weekRow.title,
-  why: weekRow.summary,
-  perspective: weekRow.perspective,
-  valuesPoints: weekRow.values_points ?? [],
-  topicIds: rows.map((r) => r.id),
+  title: firstThread?.chapter ? `Week ${week}: ${firstThread.chapter.title}, with short lessons` : `Week ${week}: short lessons`,
+  thread: schedule.some((d) => d.thread) ? { stretch, title: stretchTitle } : null,
+  topicIds,
   topics,
+  schedule,
 };
 
 // --- When the week starts ---
 
 const todayThere = new Intl.DateTimeFormat("en-CA", { timeZone: family.timezone }).format(new Date()); // YYYY-MM-DD
 const nextMonday = (date: string) => addDays(date, (8 - new Date(`${date}T00:00:00Z`).getUTCDay()) % 7 || 7);
-async function weekStart(): Promise<string> {
-  if (args.start) return args.start;
-  const w1 = rows.length && week > 1
-    ? maybe(await db.from("plan_topics").select("id").eq("key", `${stretch}/w1/2-3`).maybeSingle(), "plan_topics")
-    : null;
-  if (w1) {
-    const first = maybe(await db.from("themes").select("week_start").eq("family_id", family.id).contains("topic_ids", [w1.id]).maybeSingle(), "themes");
-    if (first) return addDays(first.week_start, (week - 1) * 7);
-  }
-  return addDays(nextMonday(todayThere), (week - 1) * 7);
-}
-
-const existing = maybe(
-  await db.from("themes").select("id, week_start").eq("family_id", family.id).contains("topic_ids", [weekRow.id]).maybeSingle(),
-  "themes",
-);
-const start = existing?.week_start ?? (await weekStart());
+const firstWeek = themes.find((t) => t.plan_week === 1);
+const start: string =
+  existing?.week_start ?? args.start ?? (firstWeek ? addDays(firstWeek.week_start, (week - 1) * 7) : addDays(nextMonday(todayThere), (week - 1) * 7));
 
 // --- The database and the model, for buildWeek ---
 
@@ -197,18 +239,18 @@ const deps: WeekDeps = {
     const theme = must(
       await db
         .from("themes")
-        .insert({ family_id: family.id, week_start: start, title: plan.title, topic_ids: plan.topicIds, status: "generating", method: null })
+        .insert({ family_id: family.id, week_start: start, plan_week: week, title: plan.title, topic_ids: plan.topicIds, status: "generating", method: null })
         .select("id")
         .single(),
       "themes",
     );
     return theme.id;
   },
+  // A rebuild starts by setting 'generating': the theme takes this run's title and topics then, so a
+  // week first built before mixed weeks (15 Oct 2026) becomes a mixed one.
   async setStatus(themeId, status) {
-    maybe(
-      await db.from("themes").update({ status, ...(status === "review" ? { generated_at: new Date().toISOString() } : {}) }).eq("id", themeId),
-      "themes",
-    );
+    const update = status === "review" ? { status, generated_at: new Date().toISOString() } : { status, title: plan.title, topic_ids: plan.topicIds };
+    maybe(await db.from("themes").update(update).eq("id", themeId), "themes");
   },
   async deleteIdeas(themeId) {
     maybe(await db.from("ideas").delete().eq("theme_id", themeId), "ideas"); // cascades to cards and questions
@@ -279,7 +321,12 @@ const deps: WeekDeps = {
 
 // --- Run it, and report ---
 
-console.log(`${plan.title}: week ${week} of ${stretch}, starting ${start}, ${days} day${days === 1 ? "" : "s"}.`);
+console.log(`${plan.title}: starting ${start}, ${days} day${days === 1 ? "" : "s"}.`);
+const titleOf = new Map(topics.map((t) => [t.id, t]));
+for (const d of schedule.filter((d) => d.day <= days)) {
+  const lessons = SLOT_ORDER.filter((s) => s !== d.thread).map((s) => `${s} ${titleOf.get(d.topics[s])?.keys[0].split("/")[1]}`);
+  console.log(`  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread])?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}.`);
+}
 console.log(`Ideas on ${models.ideas}; cards on ${models.cards}. ${only ? `Only ${only.nickname}.` : `${children.length} children.`}`);
 const started = Date.now();
 let report;

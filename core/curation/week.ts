@@ -4,7 +4,8 @@ import { firstLayerProblem } from "./ideas.ts";
 import type { IdeaChain, WeekPlan } from "./types.ts";
 
 // One week of the plan into a theme, its shared ideas, and every child's cards and questions
-// (docs/04, "How a week is built"). The database and the model come in as deps so this can be
+// (docs/04, "How a week is built"). The week is already mixed (plan.schedule, "How a week is mixed"):
+// each day-slot's topic is a thread topic or a short lesson, with its own perspective and points. The database and the model come in as deps so this can be
 // tested. The theme is 'generating' while this runs and 'review' when it's done; nothing here
 // makes a week live.
 
@@ -165,8 +166,8 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
         lens,
         door,
         statement: opts.statement,
-        perspective: plan.perspective,
-        valuesPoints: plan.valuesPoints.map((n) => ({ number: n, name: opts.pointNames.get(n) ?? `point ${n}` })),
+        perspective: chain.topic.perspective,
+        valuesPoints: chain.topic.valuesPoints.map((n) => ({ number: n, name: opts.pointNames.get(n) ?? `point ${n}` })),
       });
       if (written.asked > 1) report.reasked += 1;
       report.lenses[lens] = (report.lenses[lens] ?? 0) + 1; // per day-slot

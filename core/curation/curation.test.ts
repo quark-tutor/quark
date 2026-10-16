@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { CARD_SCHEMA, cardPrompt, checkCards, givesAway, planDoors, writeCards, type CardBody, type CardChild, type CardContext, type RawCards } from "./cards";
 import { firstLayerProblem, IDEA_SCHEMA, ideasPrompt, parseIdeas, sourceRefs, topicForDay, writeIdeaChain, type RawIdeas, type RawLayer } from "./ideas";
 import type { IdeaChain, WeekPlan, WeekTopic } from "./types";
+import { weekSchedule } from "./schedule";
 import { addDays, buildWeek, type CardRow, type WeekChild, type WeekDeps } from "./week";
 
 // --- A small week to work with ---
@@ -12,32 +13,53 @@ function topic(subject: string, slot: WeekTopic["slot"], over: Partial<WeekTopic
   return {
     id: `t-${subject}`,
     keys: [`egypt/w1/${subject}/2-3`, `egypt/w1/${subject}/4-5`],
+    kind: "thread",
     subject,
     slot,
     title: `${subject} topic`,
     younger: `Younger ${subject} summary.`,
     older: `Older ${subject} summary.`,
     items: [],
+    perspective: null,
+    valuesPoints: [],
+    parentNote: null,
+    chapter: { title: "The river", why: "Everything starts with the Nile." },
     ...over,
   };
 }
 
+// A short lesson for a slot: seven per slot, so a whole week can be mixed.
+const SUBJECT_OF = { look: "art", wonder: "science", listen: "music", then: "history", puzzle: "math" } as const;
+function lesson(slot: WeekTopic["slot"], i: number, over: Partial<WeekTopic> = {}): WeekTopic {
+  return topic(SUBJECT_OF[slot], slot, {
+    id: `l-${slot}-${i}`,
+    keys: [`short/${slot}-${i}/2-3`, `short/${slot}-${i}/4-5`],
+    kind: "short",
+    title: `${slot} lesson ${i}`,
+    chapter: undefined,
+    ...over,
+  });
+}
+
+// The thread runs in Egypt's order: then, wonder, look, listen, then, puzzle, then.
+const thread = [
+  topic("geography", "then"),
+  topic("science", "wonder"),
+  topic("art", "look", { items: [item] }),
+  topic("music", "listen"),
+  topic("literature", "then"),
+  topic("math", "puzzle"),
+  topic("history", "then", { keys: ["egypt/w2/history/2-3", "egypt/w2/history/4-5"], chapter: { title: "The pyramids", why: "How they were built." } }),
+];
+const lessons = (["look", "wonder", "listen", "then", "puzzle"] as const).flatMap((slot) => [1, 2, 3, 4, 5, 6, 7].map((i) => lesson(slot, i)));
+
 const plan: WeekPlan = {
-  stretch: "egypt",
   week: 1,
-  title: "The river",
-  why: "Everything starts with the Nile.",
-  perspective: null,
-  valuesPoints: [],
+  title: "Week 1: The river, with short lessons",
+  thread: { stretch: "egypt", title: "Ancient Egypt" },
   topicIds: [],
-  topics: [
-    topic("geography", "then"),
-    topic("science", "wonder"),
-    topic("art", "look", { items: [item] }),
-    topic("music", "listen"),
-    topic("literature", "then"),
-    topic("math", "puzzle"),
-  ],
+  topics: [...thread, ...lessons],
+  schedule: weekSchedule({ week: 1, thread, lessons, used: new Set() }),
 };
 
 // What the schema asks for: four named layers, and four named cards.
@@ -77,22 +99,35 @@ const goodCards = (): RawCards => asRaw(goodList());
 // --- Ideas ---
 
 describe("ideas", () => {
-  it("takes a slot's topics in turn, so each is met more than once", () => {
-    const then = [1, 2, 3, 4, 5, 6, 7].map((d) => topicForDay(plan, "then", d).subject);
-    expect(then).toEqual(["geography", "literature", "geography", "literature", "geography", "literature", "geography"]);
-    expect(topicForDay(plan, "look", 5).subject).toBe("art");
+  it("takes each day-slot's topic from the schedule: the thread on its slot, short lessons on the rest", () => {
+    expect([1, 2, 3, 4, 5, 6, 7].map((d) => topicForDay(plan, "then", d).id)).toEqual(["t-geography", "l-then-1", "l-then-2", "l-then-3", "t-literature", "l-then-4", "t-history"]);
+    expect(topicForDay(plan, "look", 3).id).toBe("t-art");
+    expect(topicForDay(plan, "look", 5).id).toBe("l-look-4");
   });
 
-  it("builds the prompt from the plan and the earlier days, and nothing about any child", () => {
-    const earlier = [chainFor(1, "look")];
-    const prompt = ideasPrompt(plan, "look", 2, earlier);
-    expect(prompt).toContain("Day 2 of the week, the look card. Subject: art.");
+  it("builds a thread topic's prompt from the thread, its chapter and the topic, and nothing about any child", () => {
+    const art = thread[2];
+    const earlier = [chainFor(1, "look"), { ...chainFor(3, "look"), day: 1 }]; // the second is on the same topic
+    const prompt = ideasPrompt({ ...plan, topics: plan.topics.map((t) => (t.id === art.id ? { ...t, earlierInThread: ["The Nile", "The flood"] } : t)) }, "look", 3, earlier);
+    expect(prompt).toContain("Part of the running thread, Ancient Egypt: one day of it, on this card. This part of the thread: The river. Everything starts with the Nile.");
+    expect(prompt).toContain("Earlier in the thread (the children have met these; build on them, don't repeat them): The Nile; The flood.");
+    expect(prompt).toContain("Day 3 of the week, the look card. Subject: art.");
     expect(prompt).toContain("Grade 2-3 summary: Younger art summary.");
     expect(prompt).toContain("Grade 4-5 summary: Older art summary.");
     expect(prompt).toContain('- id item-1: image, "Nakht\'s chapel", Norman de Garis Davies.');
-    expect(prompt).toContain("layer 1 must be new");
-    expect(prompt).toContain("Day 1: 1. Idea 1");
+    expect(prompt).toContain("Already written on this topic on earlier days (don't repeat these; layer 1 must be new):");
+    expect(prompt.match(/- Day 1: /g)).toHaveLength(1); // only the chain on this topic, not day 1's short lesson
     expect(prompt).not.toMatch(/Rex|sharks|\bboy\b|\bgirl\b/);
+  });
+
+  it("says a short lesson stands on its own, with its own perspective and a parent's part", () => {
+    const swan = lesson("listen", 1, { perspective: "family_tradition", valuesPoints: [24], parentNote: "Play the first movement for him." });
+    const p = ideasPrompt({ ...plan, topics: plan.topics.map((t) => (t.id === swan.id ? swan : t)) }, "listen", 1, []);
+    expect(p).toContain("A short lesson: one day on its own, not part of a thread.");
+    expect(p).not.toContain("running thread");
+    expect(p).toContain("This topic is marked perspective family_tradition, touching values points 24.");
+    expect(p).toContain("A parent does this with the child (for the parent, not the card): Play the first movement for him.");
+    expect(p).toContain("Nothing has been written on this topic earlier this week.");
   });
 
   it("says when a topic has no approved item", () => {
@@ -130,7 +165,7 @@ describe("ideas", () => {
   });
 
   it("anchors each idea to the plan topic and its item with attribution", () => {
-    const chain = chainFor(1, "look");
+    const chain = chainFor(3, "look");
     expect(sourceRefs(chain.topic, chain.layers[0])).toEqual(["plan:egypt/w1/art/2-3", "plan:egypt/w1/art/4-5", "content:item-1 Davies. The Met."]);
   });
 
@@ -164,19 +199,19 @@ describe("layer 1 has a picture (decided 15 Oct 2026)", () => {
       .fn()
       .mockResolvedValueOnce(ideas([1, 2, 3, 4].map((n) => rawLayer(n))))
       .mockResolvedValueOnce(ideas([rawLayer(1, { content_item_id: "item-1" }), rawLayer(2), rawLayer(3), rawLayer(4)]));
-    const chain = await writeIdeaChain(plan, "look", 1, [], { complete, system: "SYSTEM" });
+    const chain = await writeIdeaChain(plan, "look", 3, [], { complete, system: "SYSTEM" });
     expect(complete).toHaveBeenCalledTimes(2);
     const again = (complete.mock.calls[1] as [{ prompt: string; label: string }])[0];
     expect(again.prompt).toContain("Your last try had this problem");
     expect(again.prompt).toContain("Layer 1 must use one of them (item-1)");
-    expect(again.label).toBe("ideas-day1-look-again");
+    expect(again.label).toBe("ideas-day3-look-again");
     expect(chain).toMatchObject({ asked: 2 });
     expect(chain.layers[0].content_item_id).toBe("item-1");
   });
 
   it("keeps the chain when the second try still has no item, and asks no third time", async () => {
     const complete = vi.fn(async () => ideas([1, 2, 3, 4].map((n) => rawLayer(n))) as never);
-    const chain = await writeIdeaChain(plan, "look", 1, [], { complete, system: "SYSTEM" });
+    const chain = await writeIdeaChain(plan, "look", 3, [], { complete, system: "SYSTEM" });
     expect(complete).toHaveBeenCalledTimes(2);
     expect(chain.asked).toBe(2);
     expect(chain.layers[0].content_item_id).toBeNull();
@@ -186,7 +221,7 @@ describe("layer 1 has a picture (decided 15 Oct 2026)", () => {
     const none = vi.fn(async () => ideas([1, 2, 3, 4].map((n) => rawLayer(n))) as never);
     expect((await writeIdeaChain(plan, "wonder", 1, [], { complete: none, system: "S" })).asked).toBe(1);
     const firstOnly = vi.fn(async () => ideas([rawLayer(1, { content_item_id: "item-1" }), rawLayer(2), rawLayer(3), rawLayer(4)]) as never);
-    expect((await writeIdeaChain(plan, "look", 1, [], { complete: firstOnly, system: "S" })).asked).toBe(1);
+    expect((await writeIdeaChain(plan, "look", 3, [], { complete: firstOnly, system: "S" })).asked).toBe(1);
     expect(none).toHaveBeenCalledTimes(1);
     expect(firstOnly).toHaveBeenCalledTimes(1);
   });
@@ -196,7 +231,7 @@ describe("layer 1 has a picture (decided 15 Oct 2026)", () => {
 
 const ctx = (over: Partial<CardContext> = {}): CardContext => ({
   child: kid,
-  chain: chainFor(1, "look"),
+  chain: chainFor(3, "look"),
   lens: "build",
   door: null,
   statement: "We want the kids to love history and to be kind.",
@@ -228,6 +263,13 @@ describe("cardPrompt", () => {
     expect(p).toContain("Pair how it works with who it helps.");
     expect(p).toContain("Perspective: several_fairly. Values points touched: 12 (What happens after we die).");
     expect(p).toContain("No picture or recording with this one.");
+  });
+
+  it("asks the first handoff to send the child to a parent when the topic has a parent's part", () => {
+    const chain = chainFor(1, "listen");
+    const p = cardPrompt(ctx({ chain: { ...chain, topic: { ...chain.topic, parentNote: "Play the first movement for him." } } }));
+    expect(p).toContain("A parent does this with the child: Play the first movement for him. Let the first card's handoff ask the child to get a parent for it. Never name an app, a website or a link.");
+    expect(cardPrompt(ctx())).not.toContain("A parent does this");
   });
 });
 
@@ -261,7 +303,7 @@ describe("the hint check", () => {
     list[1] = { ...list[1], hints: ["Where did the water go?", "It's silt, isn't it?"] };
     list[2] = { ...list[2], hints: ["Only one hint."], text: "You're so smart!" };
     list[3] = { ...list[3], handoff: " ", text: "See www.example.org" };
-    const check = checkCards(asRaw(list), chainFor(1, "look"), "reads_alone");
+    const check = checkCards(asRaw(list), chainFor(3, "look"), "reads_alone");
     expect(check.cards[0]).toEqual([]);
     expect(check.cards[1]).toEqual(['hint 2 (the last) gives the answer away: "It\'s silt, isn\'t it?"']);
     expect(check.cards[2]).toEqual(expect.arrayContaining(["needs two or three hints, has 1", 'uses a brilliance word ("smart"); use effort words']));
@@ -271,9 +313,9 @@ describe("the hint check", () => {
   it("wants a picture described, and the whole card read aloud for a child who is read to", () => {
     const list = goodList();
     list[0] = { ...list[0], image_alt: "" };
-    expect(checkCards(asRaw(list), chainFor(1, "look"), "reads_alone").cards[0]).toEqual(["the idea has a picture but image_alt is empty"]);
-    expect(checkCards(goodCards(), chainFor(1, "look"), "read_to").cards[0]).toEqual(["the child is read to, so read_aloud must carry the whole card"]);
-    expect(checkCards(asRaw([goodCard(1)]), chainFor(1, "look"), "reads_alone").whole).toBe("expected 4 cards, got 1: cards 2, 3, 4 missing");
+    expect(checkCards(asRaw(list), chainFor(3, "look"), "reads_alone").cards[0]).toEqual(["the idea has a picture but image_alt is empty"]);
+    expect(checkCards(goodCards(), chainFor(3, "look"), "read_to").cards[0]).toEqual(["the child is read to, so read_aloud must carry the whole card"]);
+    expect(checkCards(asRaw([goodCard(1)]), chainFor(3, "look"), "reads_alone").whole).toBe("expected 4 cards, got 1: cards 2, 3, 4 missing");
   });
 });
 
@@ -382,7 +424,7 @@ describe("buildWeek", () => {
     expect(db.cards).toHaveLength(280);
     expect(db.questions).toHaveLength(280);
     expect(report.children.map((c) => c.cards)).toEqual([140, 140]);
-    expect(report.textOnly).toHaveLength(28); // only the look topic has an approved item
+    expect(report.textOnly).toHaveLength(34); // only the art topic, on day 3, has an approved item
   });
 
   it("dates, chains and labels the cards, with the door on layer 1 only", async () => {
@@ -452,12 +494,26 @@ describe("buildWeek", () => {
     const { deps } = fakeDb();
     vi.mocked(deps.writeIdeaChain).mockImplementation(async (slot, day) => {
       const chain = chainFor(day, slot);
-      if (slot !== "look" || day !== 2) return chain;
+      if (slot !== "look" || day !== 3) return chain;
       return { ...chain, asked: 2, layers: chain.layers.map((l) => (l.layer === 1 ? { ...l, content_item_id: null } : l)) };
     });
     const report = await buildWeek({ ...options, days: 3, children: [boys[0]] }, deps);
-    expect(report.firstWithoutPicture).toEqual(["day 2 look (art topic)"]);
+    expect(report.firstWithoutPicture).toEqual(["day 3 look (art topic)"]);
     expect(report.ideasReasked).toBe(1);
+  });
+
+  it("gives each card its own topic's perspective and values points, not the week's", async () => {
+    const { deps } = fakeDb();
+    const marked = lesson("puzzle", 1, { perspective: "family_tradition", valuesPoints: [24] });
+    const mixed = { ...plan, topics: plan.topics.map((t) => (t.id === marked.id ? marked : t)) };
+    vi.mocked(deps.writeIdeaChain).mockImplementation(async (slot, day) => {
+      const t = topicForDay(mixed, slot, day);
+      return { day, slot, topic: t, layers: parseIdeas(ideas([1, 2, 3, 4].map((n) => rawLayer(n))), []) };
+    });
+    await buildWeek({ ...options, plan: mixed, days: 1, children: [boys[0]], pointNames: new Map([[24, "Money, work and generosity"]]) }, deps);
+    const calls = vi.mocked(deps.writeCards).mock.calls.map(([c]) => c);
+    expect(calls.find((c) => c.chain.slot === "puzzle")).toMatchObject({ perspective: "family_tradition", valuesPoints: [{ number: 24, name: "Money, work and generosity" }] });
+    expect(calls.find((c) => c.chain.slot === "look")).toMatchObject({ perspective: null, valuesPoints: [] });
   });
 
   it("builds fewer days when asked", async () => {

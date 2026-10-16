@@ -34,12 +34,13 @@ export const IDEA_SCHEMA = {
 export type RawLayer = { title: string; statement: string; question: string; accept: string[]; rubric: string; content_item_id: string };
 export type RawIdeas = Partial<Record<(typeof LAYER_KEYS)[number], RawLayer>>;
 
-// Which topic a slot uses on a day: the week's topics for that slot taken in turn, so each is met
-// more than once in a seven-day week.
+// Which topic a slot uses on a day, from the week's schedule (core/curation/schedule.ts): the
+// thread on its slot, a short lesson on each of the others.
 export function topicForDay(plan: WeekPlan, slot: DaySlot, day: number): WeekTopic {
-  const topics = plan.topics.filter((t) => t.slot === slot);
-  if (topics.length === 0) throw new Error(`Week ${plan.week} has no topic for the ${slot} card`);
-  return topics[(day - 1) % topics.length];
+  const id = plan.schedule.find((d) => d.day === day)?.topics[slot];
+  const topic = plan.topics.find((t) => t.id === id);
+  if (!topic) throw new Error(`Week ${plan.week} has no topic for day ${day}'s ${slot} card`);
+  return topic;
 }
 
 const itemLine = (i: OfferedItem) =>
@@ -49,26 +50,30 @@ const itemLine = (i: OfferedItem) =>
 export function ideasPrompt(plan: WeekPlan, slot: DaySlot, day: number, earlier: IdeaChain[]): string {
   const topic = topicForDay(plan, slot, day);
   const lines = [
-    `Week ${plan.week}: ${plan.title}. ${plan.why}`,
-    plan.perspective
-      ? `This week is marked perspective ${plan.perspective}, touching values points ${plan.valuesPoints.join(", ") || "none"}.`
-      : "This week isn't marked with a perspective.",
+    topic.kind === "thread" && plan.thread
+      ? `Part of the running thread, ${plan.thread.title}: one day of it, on this card. This part of the thread: ${topic.chapter?.title ?? ""}. ${topic.chapter?.why ?? ""}`.trim()
+      : "A short lesson: one day on its own, not part of a thread. Make it whole in four layers.",
+    ...(topic.earlierInThread?.length ? [`Earlier in the thread (the children have met these; build on them, don't repeat them): ${topic.earlierInThread.join("; ")}.`] : []),
+    topic.perspective
+      ? `This topic is marked perspective ${topic.perspective}, touching values points ${topic.valuesPoints.join(", ") || "none"}.`
+      : "This topic isn't marked with a perspective.",
     "",
     `Day ${day} of the week, the ${slot} card. Subject: ${topic.subject}.`,
     `Plan topic: ${topic.title} (${topic.keys.join(", ")})`,
     `Grade 2-3 summary: ${topic.younger}`,
     `Grade 4-5 summary: ${topic.older}`,
+    ...(topic.parentNote ? [`A parent does this with the child (for the parent, not the card): ${topic.parentNote}`] : []),
     "",
     topic.items.length ? "Approved items for this topic:" : "No approved items for this topic: leave content_item_id empty in every layer.",
     ...topic.items.map(itemLine),
     "",
   ];
-  const before = earlier.filter((c) => c.slot === slot && c.day < day);
+  const before = earlier.filter((c) => c.topic.id === topic.id && c.day < day);
   if (before.length) {
-    lines.push("Already written for this slot on earlier days (don't repeat these; layer 1 must be new):");
+    lines.push("Already written on this topic on earlier days (don't repeat these; layer 1 must be new):");
     for (const c of before) lines.push(`- Day ${c.day}: ${c.layers.map((l) => `${l.layer}. ${l.title}: ${l.statement}`).join(" | ")}`);
   } else {
-    lines.push("Nothing has been written for this slot earlier this week.");
+    lines.push("Nothing has been written on this topic earlier this week.");
   }
   return lines.join("\n");
 }

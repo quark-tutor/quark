@@ -99,6 +99,9 @@ export function cardPrompt(ctx: CardContext): string {
     ctx.perspective
       ? `Perspective: ${ctx.perspective}. Values points touched: ${ctx.valuesPoints.map((p) => `${p.number} (${p.name})`).join(", ") || "none"}.`
       : "No perspective marked: these cards don't touch the family's values points.",
+    chain.topic.parentNote
+      ? `A parent does this with the child: ${chain.topic.parentNote} Let the first card's handoff ask the child to get a parent for it. Never name an app, a website or a link.`
+      : "",
     `The family's own words: ${ctx.statement?.trim() || "(none given yet)"}`,
     "",
     "The idea chain:",
