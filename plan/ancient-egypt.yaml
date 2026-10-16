@@ -100,6 +100,174 @@ sources:
     url: https://commons.wikimedia.org/wiki/File:Rhind_Mathematical_Papyrus.jpg
     license: public domain
 
+  # Added 15 Oct 2026 (phase 3 step 2b): a picture for every topic. The candidates and why each
+  # was picked are in plan/candidates/ancient-egypt.md.
+  - id: commons-nile-night
+    title: Nile River Delta at Night (ISS Expedition 25)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Nile_River_Delta_at_Night_cropped.JPG
+    license: public domain (NASA)
+  - id: commons-nile-green-strip
+    title: The Nile and its delta, green in the desert (NASA/NOAA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:NileDelta_-_Green_earth.png
+    license: public domain (NASA)
+  - id: met-ipuy-garden-shaduf
+    title: Garden Scene, Tomb of Ipuy (facsimile by Norman de Garis Davies)
+    publisher: The Metropolitan Museum of Art, 30.4.115
+    url: https://www.metmuseum.org/art/collection/search/557816
+    license: CC0
+  - id: commons-elephantine-nilometer-plate
+    title: Île d'Éléphantine, plan, elevation and details of a nilometer (Description de l'Égypte)
+    publisher: Wikimedia Commons
+    url: "https://commons.wikimedia.org/wiki/File:Île_d'Éléphantine._Plan,_élévation,_coupe_et_détails_d'un_nilometre_(NYPL_b14212718-1267862).jpg"
+    license: public domain
+  - id: met-solar-boat-papyrus
+    title: Papyrus fragment with a painting of Khepri, Shu, Tefnut, Thoth, and Isis in a solar boat
+    publisher: The Metropolitan Museum of Art, 31.3.130
+    url: https://www.metmuseum.org/art/collection/search/553484
+    license: CC0
+  - id: met-meketre-travelling-boat
+    title: Travelling Boat being Rowed (model from the tomb of Meketre)
+    publisher: The Metropolitan Museum of Art, 20.3.2
+    url: https://www.metmuseum.org/art/collection/search/544213
+    license: CC0
+  - id: met-seventy-deben-weight
+    title: Seventy deben weight
+    publisher: The Metropolitan Museum of Art, 15.3.233
+    url: https://www.metmuseum.org/art/collection/search/546696
+    license: CC0
+  - id: commons-sethe-numeral-table
+    title: Egyptian numerals, hieroglyphic, hieratic and demotic (Cajori, 1928, table by Kurt Sethe)
+    publisher: Wikimedia Commons
+    url: "https://commons.wikimedia.org/wiki/File:A_History_Of_Mathematical_Notations_Vol_I_-_Egyptian_numerals._Hieroglyphic,_hieratic,_and_demotic_numeral_symbols._(This_table,_was_compiled_by_Kurt_Sethe.).png"
+    license: public domain
+  - id: commons-bonfils-khufu
+    title: The pyramid of Khufu at Giza (Félix Bonfils, Museo Egizio photo archive)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Giza,_Pyramids,_Pictures,_F._Bonfils,_photo_4_of_27_-_Archivio_fotografico_Museo_Egizio,_Turin_INV01_006.jpg
+    license: CC0
+  - id: commons-giza-excavation-1903
+    title: Workmen excavating at Giza, 1903 (Museo Egizio photo archive)
+    publisher: Wikimedia Commons
+    url: "https://commons.wikimedia.org/wiki/File:Schiaparelli's_excavations_-_Giza,_Landscape_and_unknown_mastabas,_Landscape_and_unknown_areas,_1903,_photo_8_of_22_-_Archivio_fotografico_Museo_Egizio,_Turin_INV87_006.jpg"
+    license: CC0
+  - id: commons-djehutihotep-colossus
+    title: Dragging the colossus of Djehutihotep (Encyclopaedia Biblica, 1903)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:C+B-Egypt-Fig8-DraggingDhnthotepStatue.PNG
+    license: public domain
+  - id: met-senwosret-sledge
+    title: Sledge from mortuary complex of Senwosret I
+    publisher: The Metropolitan Museum of Art, 24.1.84
+    url: https://www.metmuseum.org/art/collection/search/545485
+    license: CC0
+  - id: commons-punt-relief-cast
+    title: Queen Hatshepsut's expedition to Punt, plaster cast (Royal Ontario Museum)
+    publisher: Wikimedia Commons
+    url: "https://commons.wikimedia.org/wiki/File:Queen_Hatshepsut's_expedition_to_Punt,_plaster_cast_of_her_mortuary_temple_at_Deir_el-Bahri,_Western_Thebes,_Egypt_-_Royal_Ontario_Museum_-_DSC09766.JPG"
+    license: CC0
+  - id: commons-deir-el-bahri-beato
+    title: Deir el-Bahari, 1870-1888 (Antonio Beato, Museo Egizio photo archive)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Theban_region,_Deir_el-Bahari,_19th_century_pictures,_1870-1888,_photo_1_of_1_-_Archivio_fotografico_Museo_Egizio,_Turin_INV27_006.jpg
+    license: CC0
+  - id: commons-djoser-step-pyramid
+    title: The Step Pyramid of Djoser at Saqqara (Félix Bonfils, Museo Egizio photo archive)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Saqqara,_Pyramid_of_Djoser_and_nearby_tombs,_Pictures,_F._Bonfils,_photo_3_of_8_-_Archivio_fotografico_Museo_Egizio,_Turin_INV01_002.jpg
+    license: CC0
+  - id: met-pyramidion-iufaa
+    title: Pyramidion of Iufaa
+    publisher: The Metropolitan Museum of Art, 21.2.66
+    url: https://www.metmuseum.org/art/collection/search/552805
+    license: CC0
+  - id: met-temple-of-dendur
+    title: The Temple of Dendur
+    publisher: The Metropolitan Museum of Art, 68.154
+    url: https://www.metmuseum.org/art/collection/search/547802
+    license: CC0
+  - id: met-striding-thoth
+    title: Striding Thoth
+    publisher: The Metropolitan Museum of Art, 26.7.860
+    url: https://www.metmuseum.org/art/collection/search/544092
+    license: CC0
+  - id: met-natron-bag
+    title: Bag of Natron from Tutankhamun's Embalming Cache
+    publisher: The Metropolitan Museum of Art, 1988.437.2
+    url: https://www.metmuseum.org/art/collection/search/587568
+    license: CC0
+  - id: met-embalmers-swab
+    title: Embalmer's Swab
+    publisher: The Metropolitan Museum of Art, 31.3.127
+    url: https://www.metmuseum.org/art/collection/search/552545
+    license: CC0
+  - id: met-isis-nursing-horus
+    title: Statuette of Isis nursing Horus
+    publisher: The Metropolitan Museum of Art, 04.2.441
+    url: https://www.metmuseum.org/art/collection/search/553002
+    license: CC0
+  - id: met-osiris-statuette
+    title: Statuette, Osiris
+    publisher: The Metropolitan Museum of Art, 04.2.578
+    url: https://www.metmuseum.org/art/collection/search/553005
+    license: CC0
+  - id: met-nebamun-craftsmen
+    title: Craftsmen, Tomb of Nebamun and Ipuky (facsimile)
+    publisher: The Metropolitan Museum of Art, 30.4.103
+    url: https://www.metmuseum.org/art/collection/search/548568
+    license: CC0
+  - id: met-hatshepsut-tally-cartouche
+    title: Tally stone from Hatshepsut's Valley Temple
+    publisher: The Metropolitan Museum of Art, 32.3.264
+    url: https://www.metmuseum.org/art/collection/search/555098
+    license: CC0
+  - id: commons-israel-in-egypt-1888
+    title: Israel in Egypt (Handel), Crystal Palace Handel Festival, 29 June 1888 (Edison cylinder, restored)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Israel_In_Egypt_1888_06_29_Restored.ogg
+    license: public domain
+  - id: met-blank-papyrus-sheet
+    title: Papyrus sheet (blank)
+    publisher: The Metropolitan Museum of Art, 14.1.393h.1–.3
+    url: https://www.metmuseum.org/art/collection/search/552619
+    license: CC0
+  - id: commons-excavation-layers
+    title: A layer excavation in Augsburg (Anja Mößbauer)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Archäologie_schichtengrabung.jpg
+    license: public domain
+  - id: commons-flute-f-major-scale
+    title: F major scale on a concert flute (CarinaT)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:F-durskala.ogg
+    license: public domain
+  - id: commons-debussy-syrinx
+    title: Syrinx (Debussy), Sarah Bassingthwaite, flute
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Debussy_-_Syrinx.ogg
+    license: public domain
+  - id: commons-rosetta-1985
+    title: Visitors at the Rosetta Stone, British Museum, 1985 (RickDikeman)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Rosetta-stone-display-in-1985.jpg
+    license: CC0
+  - id: commons-carter-in-tomb
+    title: Howard Carter in Tutankhamun's tomb (Harry Burton)
+    publisher: Wikimedia Commons
+    url: "https://commons.wikimedia.org/wiki/File:Howard_Carter_in_the_King_Tutankhamen's_tomb.jpg"
+    license: public domain
+  - id: met-apprentice-writing-board
+    title: Writing board of an apprentice scribe
+    publisher: The Metropolitan Museum of Art, 28.9.5
+    url: https://www.metmuseum.org/art/collection/search/545112
+    license: CC0
+  - id: met-hieratic-account-ostracon
+    title: Hieratic ostracon with account
+    publisher: The Metropolitan Museum of Art, 09.184.757
+    url: https://www.metmuseum.org/art/collection/search/561398
+    license: CC0
+
 weeks:
   - week: 1
     title: The river
@@ -108,6 +276,7 @@ weeks:
       - subject: geography
         slot: then
         title: The Nile, from source to sea
+        sources: [commons-nile-night, commons-nile-green-strip]
         summary:
           "2-3": >-
             The Nile flows north, from Lake Victoria and the Ethiopian highlands, through Egypt, to
@@ -124,6 +293,7 @@ weeks:
       - subject: science
         slot: wonder
         title: Why the Nile flooded
+        sources: [met-ipuy-garden-shaduf, commons-elephantine-nilometer-plate]
         summary:
           "2-3": >-
             Every summer, monsoon rains fell on the Ethiopian highlands far to the south, and the
@@ -178,6 +348,7 @@ weeks:
       - subject: literature
         slot: then
         title: Ra and the sun boat
+        sources: [met-solar-boat-papyrus, met-meketre-travelling-boat]
         parent_note: >-
           Bedtime pick to fetch from the library: The Golden Goblet by Eloise Jarvis McGraw for the
           9-year-old, and a picture book set on the Nile for the 7-year-old.
@@ -196,6 +367,7 @@ weeks:
       - subject: math
         slot: puzzle
         title: Egyptian number signs
+        sources: [met-seventy-deben-weight, commons-sethe-numeral-table]
         summary:
           "2-3": >-
             Egyptians wrote numbers with pictures: a stroke for 1, a heel bone for 10, a coil of rope
@@ -217,6 +389,7 @@ weeks:
       - subject: history
         slot: then
         title: Khufu, Giza and the people who built the pyramids
+        sources: [commons-bonfils-khufu, commons-giza-excavation-1903]
         summary:
           "2-3": >-
             In the Old Kingdom, more than 4,500 years ago, pharaohs built pyramids as their tombs.
@@ -234,6 +407,7 @@ weeks:
       - subject: science
         slot: wonder
         title: Levers, ramps, sledges and the rope that makes a right angle
+        sources: [commons-djehutihotep-colossus, met-senwosret-sledge]
         summary:
           "2-3": >-
             Egyptians had no wheels for heavy loads and no machines with engines, so they used simple
@@ -287,6 +461,7 @@ weeks:
       - subject: literature
         slot: then
         title: Hatshepsut, the woman who ruled as pharaoh
+        sources: [commons-punt-relief-cast, commons-deir-el-bahri-beato]
         summary:
           "2-3": >-
             Hatshepsut was a queen who became pharaoh about 3,500 years ago and ruled Egypt for about
@@ -304,6 +479,7 @@ weeks:
       - subject: math
         slot: puzzle
         title: Building a pyramid, layer by layer
+        sources: [commons-djoser-step-pyramid, met-pyramidion-iufaa]
         summary:
           "2-3": >-
             A pyramid built from cubes has one block on top, a 2-by-2 layer of 4 under it, a 3-by-3
@@ -326,6 +502,7 @@ weeks:
       - subject: history
         slot: then
         title: The gods of Egypt, temples and the pharaoh
+        sources: [met-temple-of-dendur, met-striding-thoth]
         summary:
           "2-3": >-
             Egyptians believed in many gods, each with a job and an animal: Ra the sun, Osiris ruler
@@ -343,6 +520,7 @@ weeks:
       - subject: science
         slot: wonder
         title: How a mummy was made, and why it worked
+        sources: [met-natron-bag, met-embalmers-swab]
         parent_note: >-
           Weekend experiment: cover one apple slice in a mix of salt and baking soda in a cup and
           leave another in the open; compare them after a week. An adult does the cutting; nobody
@@ -381,7 +559,7 @@ weeks:
       - subject: music
         slot: listen
         title: Handel's Israel in Egypt
-        sources: [musopen-israel-in-egypt]
+        sources: [musopen-israel-in-egypt, commons-israel-in-egypt-1888]
         summary:
           "2-3": >-
             Composer of the month: George Frideric Handel. His Israel in Egypt is a work for choir that
@@ -398,6 +576,7 @@ weeks:
       - subject: literature
         slot: then
         title: Isis and Osiris, and the cat in Egypt
+        sources: [met-isis-nursing-horus, met-osiris-statuette]
         summary:
           "2-3": >-
             In the myth, Osiris was a good king whose jealous brother Set got rid of him. His wife Isis
@@ -414,6 +593,7 @@ weeks:
       - subject: math
         slot: puzzle
         title: A balance scale, and a cartouche for your name
+        sources: [met-nebamun-craftsmen, met-hatshepsut-tally-cartouche]
         summary:
           "2-3": >-
             A balance scale is level only when both sides weigh the same, just like the scale in the
@@ -434,7 +614,7 @@ weeks:
       - subject: history
         slot: then
         title: Scribes, the Rosetta Stone and Tutankhamun's tomb
-        sources: [commons-rosetta-stone]
+        sources: [commons-rosetta-stone, commons-rosetta-1985, commons-carter-in-tomb]
         summary:
           "2-3": >-
             Scribes were people trained for years to read and write hieroglyphs. After Egypt's old
@@ -453,6 +633,7 @@ weeks:
       - subject: science
         slot: wonder
         title: How papyrus is made, and how archaeologists date what they find
+        sources: [met-blank-papyrus-sheet, commons-excavation-layers]
         summary:
           "2-3": >-
             Papyrus is paper made from a tall water plant: the soft inside of the stem is cut into
@@ -487,6 +668,7 @@ weeks:
       - subject: music
         slot: listen
         title: How a reed flute makes a note, and the family's pick
+        sources: [commons-flute-f-major-scale, commons-debussy-syrinx]
         parent_note: Ask the boys which composer of the month to hear again this week, Verdi or Handel.
         summary:
           "2-3": >-
@@ -503,6 +685,7 @@ weeks:
       - subject: literature
         slot: then
         title: A day as a scribe's child
+        sources: [met-apprentice-writing-board, met-hieratic-account-ostracon]
         summary:
           "2-3": >-
             A scribe's child, usually a boy, went to school to learn hundreds of signs by copying them
