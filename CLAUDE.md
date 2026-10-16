@@ -53,12 +53,14 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 6. **Checks and difficulty** — delayed recall via `review_schedule`, hint-count difficulty dial, results in the digest.
 7. **Pilot** — four weeks with the boys.
 
-**Where we are (end of 15 Oct 2026):** phases 1 and 2 are merged to `main`. Phase 3 is on `phase-3-curation`, not merged, and nothing is on the iPads yet.
-- Done: step 1 (model adapter, lenses spec), 2 (the plan), 2b (a picture for every topic), 2c (layer 1 always has a picture), 3 (content), 4 (ideas and cards), 4c (the week preview with pictures and sound).
+**Where we are (end of 16 Oct 2026):** phases 1 and 2 are merged to `main`. Phase 3 is on `phase-3-curation`, not merged, and nothing is on the iPads yet.
+- Done: step 1 (model adapter, lenses spec), 2 (the plan), 2b (a picture for every topic), 2c (layer 1 always has a picture), 3 (content), 4 (ideas and cards), 4b (the models and costs page), 4c (the week preview with pictures and sound).
+- 4b: `/parent/models`, read-only, linked from `/parent`: the model per job from the environment, the price table in `core/prices.ts` (checked 16 Oct), every run, and an estimate for a week and a month beside the old $5.70. `week:build` and `content:fetch` now write a row to `model_runs` at the end of each run (counts and money only); migration `20261016000000_model_runs` is applied live. One run is recorded so far, a $0 `content:fetch`; the estimate appears after the next `week:build`. Defaults to settle are in docs/08, "Models and costs".
+- Credit lines on the week preview are clean (`credit()` in `core/content/credit.ts`): no Commons edit trail or repeats, the Met once, and Aida's 1871 kept with Verdi, apart from the Marine Band.
 - 2b: all 24 Egypt topics have sources (Brandon's picks from `plan/candidates/ancient-egypt.md`), plus a Met harp and sistrum for week 1's listen topic; `planWarnings()` names topics without any. 35 new items, all approved automatically. Still waiting at `/parent/content`: the CC BY-SA Rosetta photo and Musopen's Handel, neither in week 1.
 - 2c: `firstLayerProblem()` in `core/curation/ideas.ts` sends a chain back once when layer 1 has no item but the topic has one; the report lists any still missing.
 - Day 1 was rebuilt again on 15 Oct for $0.91 and is in review at `/parent/week/[theme]`. All five first cards have an item, with no second asks needed; 14 of 20 layers use one. Two listen layer 3 cards (one per child) were blocked by the hint check, so they won't be shown. The 14 Oct day 1 is exported to `plan/candidates/day1-2026-10-14.json`, gitignored because it names the children.
-- Open from this session, in docs/08: the 3-4-5 rope as a parent activity; the tutor's voice (proposed as step 4d) and faces.
-- Next, in order: 4b, a models and costs page; 5, the policy gate, the twenty-question test run, `careful_about` to the gate only, `learns_to_act` into the card prompt; 6, the Sunday cron and the Looks-good page.
+- Open, in docs/08: the 3-4-5 rope as a parent activity; the tutor's voice (proposed as step 4d) and faces; the rest of the 2c review (the announced door, too many words, two blocked hints, how much is one day); the plan's shape; the models page defaults.
+- Next, in order: the plan's shape, short lessons and mixed weeks (docs/08, "The plan: short lessons and child-chosen depth"), before step 5; then 5, the policy gate, the twenty-question test run, `careful_about` to the gate only, `learns_to_act` into the card prompt; 6, the Sunday cron and the Looks-good page.
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.
