@@ -125,6 +125,19 @@ export function validatePlan(plan: Plan): string[] {
   return errors;
 }
 
+// What a stretch can still be imported with, but should fix: every topic without a source, whose
+// cards come out text only (docs/04, "How a topic gets its picture"). A warning, not an error, so a
+// plan can be imported while its pictures are still being found.
+export function planWarnings(plan: Plan): string[] {
+  const warnings: string[] = [];
+  for (const w of plan?.weeks ?? []) {
+    for (const t of w?.topics ?? []) {
+      if (!t?.sources?.length) warnings.push(`week ${w.week} ${t?.subject ?? "?"} (${t?.slot ?? "?"}): no sources, so its cards are text only`);
+    }
+  }
+  return warnings;
+}
+
 export type PlanRow = {
   key: string;
   parent_key: string | null;

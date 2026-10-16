@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { parsePlan, planRows, validatePlan, type Plan } from "./plan";
+import { parsePlan, planRows, planWarnings, validatePlan, type Plan } from "./plan";
 
 const dir = join(__dirname, "..", "plan");
 const files = readdirSync(dir).filter((f) => f.endsWith(".yaml"));
@@ -99,6 +99,31 @@ describe("validatePlan", () => {
 
   it("rejects something that isn't a plan", () => {
     expect(validatePlan(null as never)).toEqual(["not a YAML mapping"]);
+  });
+});
+
+describe("planWarnings", () => {
+  it("names every topic without sources, and they don't count as errors", () => {
+    const plan = smallPlan();
+    expect(validatePlan(plan)).toEqual([]);
+    expect(planWarnings(plan)).toEqual([
+      "week 1 geography (then): no sources, so its cards are text only",
+      "week 1 science (wonder): no sources, so its cards are text only",
+      "week 1 music (listen): no sources, so its cards are text only",
+      "week 1 literature (then): no sources, so its cards are text only",
+      "week 1 math (puzzle): no sources, so its cards are text only",
+    ]);
+  });
+
+  it("is empty when every topic has a source", () => {
+    const plan = smallPlan();
+    plan.weeks[0].topics = plan.weeks[0].topics.map((t) => ({ ...t, sources: ["met-1"] }));
+    expect(planWarnings(plan)).toEqual([]);
+  });
+
+  it("finds nothing missing in the Egypt stretch (decided 15 Oct 2026: every topic gets a picture)", () => {
+    const egypt = parsePlan(readFileSync(join(dir, "ancient-egypt.yaml"), "utf8"));
+    expect(planWarnings(egypt)).toEqual([]);
   });
 });
 

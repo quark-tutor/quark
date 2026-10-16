@@ -6,7 +6,7 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
-import { parsePlan, planRows, validatePlan } from "../lib/plan.ts";
+import { parsePlan, planRows, planWarnings, validatePlan } from "../lib/plan.ts";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SECRET_KEY;
@@ -21,6 +21,7 @@ const plans = readdirSync(dir)
     const errors = validatePlan(plan);
     if (errors.length) throw new Error(`plan/${f}:\n  ${errors.join("\n  ")}`);
     if (`${plan.stretch}.yaml` !== f) throw new Error(`plan/${f}: stretch must match the file name`);
+    for (const w of planWarnings(plan)) console.warn(`plan/${f}: warning: ${w}`);
     return plan;
   });
 
