@@ -2,6 +2,8 @@
 
 Phase 3, step 2d, stage 1. A proposal, with nothing imported and nothing built. Brandon and his wife pick; stage 2 builds what they keep.
 
+**Picked (16 Oct 2026):** all 28 lessons, each with its Suggested items, except: aloha-oe leaves the 1893 overthrow out and touches no values point; four-notes keeps the score as its picture, with no recording, and a parent plays the music; whale-song is about calls, with the 2001 NPS recording and the breach photo; carnival-of-the-animals is built round The Swan; the Book of Games is used only for doubling-grains, so two-dice takes the Met die and knights-and-knaves the Met chess knight; the boy-who-cried-wolf and wayfinding-to-hawaii take the gentler Suggested items. Every Proposed option in docs/08 was taken. The picked library is `plan/short-lessons.yaml`; this file stays as the record of why each was picked.
+
 Decided 16 Oct 2026 (docs/08, "The plan: short lessons and child-chosen depth"): a week is a mix, with one slot a day for the running thread (Egypt for now) and four for short lessons; a short lesson is one idea chain on one slot, not tied to a stretch or a week; short lessons run in the plan's order until phase 4; both boys get the same ones, each card at his own level and through his own lens. The real choices left are in docs/08, "Mixed weeks: the format and the build", with the one proposed here marked.
 
 ## The format

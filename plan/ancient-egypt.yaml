@@ -1,10 +1,13 @@
-# Ancient Egypt: the first stretch of the plan, four weeks for grade bands 2-3 and 4-5.
-# Decided 13 Oct 2026 (docs/08): the pilot starts with this one theme.
+# Ancient Egypt: the first stretch of the plan, for grade bands 2-3 and 4-5, run as a thread.
+# Decided 13 Oct 2026 (docs/08): the pilot starts with this theme. Decided 16 Oct 2026: not as four
+# weeks straight. Its 24 topics run one a day, in this file's order, on the slot each names, beside
+# four short lessons a day (plan/short-lessons.yaml; docs/04, "How a week is mixed"). The weeks
+# below are the thread's chapters; a week's perspective and values points go with its topics.
 #
 # Format: lib/plan.ts. Import with npm run plan:import.
 # Summaries are for the tutor, not the child: plain facts, the mechanism named. The tutor writes
-# the child's card from them, through a lens (docs/17-lenses.md). Every week covers the five wall
-# slots; literature feeds the "then" card beside history or geography.
+# the child's card from them, through a lens (docs/17-lenses.md). Every chapter covers the five
+# wall slots; literature feeds the "then" card beside history or geography.
 
 stretch: ancient-egypt
 title: Ancient Egypt
