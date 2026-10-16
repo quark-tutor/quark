@@ -8,7 +8,7 @@ Add to this list, or pick one up and open a discussion.
 - [ ] How much self-directed exploration versus parent moments? Is the wall the main event or a supplement?
 - [ ] Where exactly are the limits on "Ask"?
 - [ ] Do two parents share one digest, or does each get their own role?
-- [x] Should a family start with the full plan, or with a single theme to test what sticks? **Decided (13 Oct 2026): one theme, Ancient Egypt,** as four weekly themes for grade bands 2-3 and 4-5. The full sequence comes after the pilot.
+- [x] Should a family start with the full plan, or with a single theme to test what sticks? **Decided (13 Oct 2026): one theme, Ancient Egypt,** as four weekly themes for grade bands 2-3 and 4-5. The full sequence comes after the pilot. **Replaced (16 Oct 2026): not four weeks straight.** Egypt stays as the first thread, beside short lessons; see "The plan: short lessons and child-chosen depth" below.
 - [ ] What does a great parent digest look like? (Mockups welcome.)
 
 ## Content
@@ -71,3 +71,23 @@ Kids read a lot from very little. Asher can text almost entirely in memes and sm
 
 - [ ] **The tutor shows a face: happy, neutral or frowny.** Proposed limits from the rules: happy is for effort, never for being right (rule 8, or it becomes a brilliance word in picture form); frowny is for behaviour (rushing, tapping through, rudeness), never for a wrong answer (rule 1 on shame, rule 3 on guessing first); neutral is the default, so the happy face stays rare enough to mean something. Risk: a happy face becomes a token the child chases (rule 4). Does the face fit the "guide, not a friend" line, and does it need the reward engine settled first?
 - [ ] **The child answers with a face.** One tap at the end of a card ("how was that one?"): happy, neutral or frowny. It costs the child a second and tells the curation engine what landed, in line with docs/12, teaching that tests itself. Where is it stored, and how much weight does it carry against delayed recall?
+
+## Review of the 2c rebuild of day 1 (16 Oct 2026)
+
+Brandon's notes from `/parent/week/<theme>` after step 2c. Much better than 14 Oct: four different pictures on the first cards, a recording that plays, and the "Then" card pointing at the photo ("the lit-up towns along the river make the long stem of a glowing flower") instead of telling. Still to fix:
+
+- [ ] **The door is still announced, more softly.** Listen layer 1 opens "Asher, imagine you're a painter": his art interest pulled into a music card where it doesn't fit. Same problem as "Asher, you love art". Belongs to 4d (see How the tutor sounds), and is the first entry for the review notebook.
+- [ ] **Too many words.** First cards run about 100 words, and read_aloud repeats nearly all of it. Asher reads chapter books. Should a strong reader get read_aloud at all, or a shorter version? Should layer 1 have a word limit by reading level?
+- [ ] **Credit lines carry clutter.** Commons credits show the file's edit history ("Przykuta → [edit], 2010-11-08 19:27") and repeat the file name; Met credits appear twice (the credit line and the source line say the same thing). Clean up before anything reaches the iPads, like the earlier `w:` prefix fix.
+- [ ] **A date reads wrong.** The Aida credit reads as if the Marine Band played it in 1871; 1871 is when Verdi wrote it. Credit lines should keep a work's date apart from the recording's.
+- [ ] **Two blocked hints may be good hints.** Listen layer 3 was blocked for both boys: "Put the three on a line: the pharaohs, 1871, and today. Which two are nearer together?" The check counts naming a question's choices as a giveaway, but here the choices are only the three things being compared, and the hint gives a way to work it out rather than the answer. Is the check too strict for comparison questions?
+- [ ] **How much is one day?** A day is five cards (look, wonder, listen, then, puzzle), each with four layers: up to 20 cards per child. Layers 2-4 are taps the child chooses, so the floor is five. Is five first cards a day the right amount for a 7-year-old?
+
+## The plan: short lessons and child-chosen depth (16 Oct 2026)
+
+- [x] **Four weeks on Ancient Egypt?** **Decided (16 Oct 2026): no, not four weeks straight.** A 7-year-old won't stay interested in one subject for a month, and a plan made only of month-long themes rules out important things that are short lessons (why we have leap years, how a lie differs from a mistake, what compound interest does). This replaces the 13 Oct decision's shape (four weekly Egypt themes), not its aim of testing what sticks. Egypt stays as the first thread.
+- [ ] **Short lessons as units of their own.** The plan should hold a one-day lesson (one idea chain, one slot) as easily as a stretch, with a library of short lessons beside the stretches. What does the format in `lib/plan.ts` look like for both, and what does a short lesson need (subject, slot, grade bands, sources) that a stretch topic doesn't?
+- [ ] **A week is a mix.** Some slots follow a running thread (for example, one day of Egypt a week), and the rest carry short lessons from anywhere. How many slots or days go to threads and how many to short lessons, and who picks the short lessons: the plan's order, the engine, or the parents?
+- [ ] **The child pulls the thread.** Brandon's example: one day of Egypt in a week, and Asher spends a long time on it, asking questions and going deeper. Next week the engine gives him a little more Egypt, or more lessons of a similar style. Which signals count (time on the card, layers tapped, questions asked, the child's face rating), how strongly does one week's interest move the next, and how does a thread rest when the interest fades? The signals come from the wall, so this is built after phase 4; the plan format can change before then.
+- [ ] **The boys' weeks may diverge.** Ideas are shared by both children today, which keeps cost down. If each child's interest steers his own threads, some slots become per child. How much divergence is allowed, and what does it cost?
+- [ ] **Coming back is a recall check.** A thread that returns after a break gives phase 6 a natural delayed-recall check (docs/12). Should the engine schedule returns on purpose?
