@@ -54,10 +54,11 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 7. **Pilot** — four weeks with the boys.
 
 **Where we are (end of 15 Oct 2026):** phases 1 and 2 are merged to `main`. Phase 3 is on `phase-3-curation`, not merged, and nothing is on the iPads yet.
-- Done: step 1 (model adapter, lenses spec), 2 (the plan), 2b (a picture for every topic), 3 (content), 4 (ideas and cards), 4c (the week preview with pictures and sound).
-- 2b: all 24 Egypt topics have sources (Brandon's picks from `plan/candidates/ancient-egypt.md`); `planWarnings()` names topics without any. 33 new items, all approved automatically. Still waiting at `/parent/content`: the CC BY-SA Rosetta photo and Musopen's Handel, neither in week 1.
-- Day 1 was rebuilt on 15 Oct for $0.92 and is in review at `/parent/week/[theme]`. Every slot had an item; 14 of 20 layers use one. The old day 1 is exported to `plan/candidates/day1-2026-10-14.json`, gitignored because it names the children.
-- Open from this session, in docs/08: should a slot's first card always carry a picture; the 3-4-5 rope as a parent activity; the tutor's voice (proposed as step 4d) and faces.
+- Done: step 1 (model adapter, lenses spec), 2 (the plan), 2b (a picture for every topic), 2c (layer 1 always has a picture), 3 (content), 4 (ideas and cards), 4c (the week preview with pictures and sound).
+- 2b: all 24 Egypt topics have sources (Brandon's picks from `plan/candidates/ancient-egypt.md`), plus a Met harp and sistrum for week 1's listen topic; `planWarnings()` names topics without any. 35 new items, all approved automatically. Still waiting at `/parent/content`: the CC BY-SA Rosetta photo and Musopen's Handel, neither in week 1.
+- 2c: `firstLayerProblem()` in `core/curation/ideas.ts` sends a chain back once when layer 1 has no item but the topic has one; the report lists any still missing.
+- Day 1 was rebuilt again on 15 Oct for $0.91 and is in review at `/parent/week/[theme]`. All five first cards have an item, with no second asks needed; 14 of 20 layers use one. Two listen layer 3 cards (one per child) were blocked by the hint check, so they won't be shown. The 14 Oct day 1 is exported to `plan/candidates/day1-2026-10-14.json`, gitignored because it names the children.
+- Open from this session, in docs/08: the 3-4-5 rope as a parent activity; the tutor's voice (proposed as step 4d) and faces.
 - Next, in order: 4b, a models and costs page; 5, the policy gate, the twenty-question test run, `careful_about` to the gate only, `learns_to_act` into the card prompt; 6, the Sunday cron and the Looks-good page.
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.
