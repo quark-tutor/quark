@@ -45,3 +45,7 @@ next-env.d.ts
 
 # family seed data (real nicknames and emails)
 /scripts/family.local.json
+
+# Claude Code worktrees and debug output (the debug files name the children)
+/.claude/worktrees/
+/.quark-debug/
