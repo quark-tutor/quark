@@ -95,14 +95,18 @@ describe("complete with images", () => {
 });
 
 describe("usage", () => {
-  it("counts tokens per model, cache included, and reads the write model", async () => {
+  it("counts tokens per job and model, cache included, and reads the write model", async () => {
     resetUsage();
     const usage = { input_tokens: 100, cache_creation_input_tokens: 20, cache_read_input_tokens: 5, output_tokens: 300 };
     create.mockResolvedValue({ ...reply("ok"), usage });
     await complete({ system: "s", prompt: "p", maxTokens: 10, use: "write" });
     await complete({ system: "s", prompt: "p", maxTokens: 10, use: "write" });
+    await complete({ system: "s", prompt: "p", maxTokens: 10 });
     expect(create.mock.calls[0][0].model).toBe("write-model");
-    expect(usageSoFar().get("write-model")).toEqual({ input: 250, output: 600, calls: 2 });
+    expect(usageSoFar()).toEqual([
+      { use: "write", model: "write-model", input: 250, output: 600, calls: 2 },
+      { use: "curate", model: "curate-model", input: 125, output: 300, calls: 1 },
+    ]);
   });
 });
 

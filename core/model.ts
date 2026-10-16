@@ -36,10 +36,11 @@ export type CompleteOptions = {
 
 let client: Anthropic | undefined;
 
-// Tokens used so far in this process, per model, so a script can report what a run cost.
-export type Usage = { input: number; output: number; calls: number };
+// Tokens used so far in this process, per job and model, so a script can report and record what a
+// run cost, and the models page can tell ideas from cards even when both run on one model.
+export type Usage = { use: ModelUse; model: string; input: number; output: number; calls: number };
 const usage = new Map<string, Usage>();
-export const usageSoFar = (): Map<string, Usage> => new Map([...usage].map(([m, u]) => [m, { ...u }]));
+export const usageSoFar = (): Usage[] => [...usage.values()].map((u) => ({ ...u }));
 export const resetUsage = () => usage.clear();
 
 // With a debug folder set, every request and its reply are written there as JSON, one file per
@@ -99,12 +100,12 @@ export async function complete(options: CompleteOptions & { json?: Record<string
   }
   writeDebug(options.label, request, response);
 
-  const tally = usage.get(model) ?? { input: 0, output: 0, calls: 0 };
+  const tally = usage.get(`${use} ${model}`) ?? { use, model, input: 0, output: 0, calls: 0 };
   const u = response.usage;
   tally.input += (u?.input_tokens ?? 0) + (u?.cache_creation_input_tokens ?? 0) + (u?.cache_read_input_tokens ?? 0);
   tally.output += u?.output_tokens ?? 0;
   tally.calls += 1;
-  usage.set(model, tally);
+  usage.set(`${use} ${model}`, tally);
 
   if (response.stop_reason === "refusal") {
     throw new Error(`The model declined (${response.stop_details?.category ?? "no category"}).`);

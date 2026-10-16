@@ -14,8 +14,8 @@ import { writeIdeaChain } from "../core/curation/ideas.ts";
 import type { IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic } from "../core/curation/types.ts";
 import { addDays, buildWeek, type WeekChild, type WeekDeps } from "../core/curation/week.ts";
 import { complete, debugTo, modelFor, usageSoFar } from "../core/model.ts";
-import { costOf } from "../core/prices.ts";
 import { kidFacingPrompt, readPrompt } from "../core/prompts.ts";
+import { runRow } from "../core/runs.ts";
 import { sourceRefs } from "../core/curation/ideas.ts";
 import type { DaySlot } from "../lib/lenses.ts";
 import type { PlanSource } from "../lib/plan.ts";
@@ -292,6 +292,7 @@ try {
   console.error(`\nStopped: ${e instanceof Error ? e.message : String(e)}`);
   if (!/already built/.test(String(e))) console.error("The theme is left as 'generating'. Fix the problem and run again with --rebuild.");
   printUsage();
+  await recordRun(false, existing?.id ?? null);
   process.exit(1);
 }
 
@@ -317,17 +318,21 @@ console.log(
     : "Every first card has a picture or recording where its topic has one.",
 );
 printUsage();
+await recordRun(true, report.themeId);
 console.log(`\nPreview it at /parent/week/${report.themeId}.`);
 
 function printUsage() {
-  let total = 0;
-  let known = true;
+  const row = runRow("week:build", usageSoFar(), { ok: true, startedAt: new Date(started) });
   console.log("\nTokens:");
-  for (const [model, u] of usageSoFar()) {
-    const cost = costOf(model, u);
-    if (cost === null) known = false;
-    else total += cost;
-    console.log(`  ${model}: ${u.calls} calls, ${u.input.toLocaleString()} in, ${u.output.toLocaleString()} out${cost === null ? ", price unknown" : `, $${cost.toFixed(2)}`}`);
+  for (const m of row.models) {
+    console.log(`  ${m.use} on ${m.model}: ${m.calls} calls, ${m.input.toLocaleString()} in, ${m.output.toLocaleString()} out${m.cost === null ? ", price unknown" : `, $${m.cost.toFixed(2)}`}`);
   }
-  console.log(`  Total: $${total.toFixed(2)}${known ? "" : " plus models without a known price"}.`);
+  console.log(`  Total: $${row.cost.toFixed(2)}${row.cost_complete ? "" : " plus models without a known price"}.`);
+}
+
+// What the run spent, for /parent/models: counts and money only, never which child (rule 7).
+async function recordRun(ok: boolean, themeId: string | null) {
+  const row = runRow("week:build", usageSoFar(), { ok, startedAt: new Date(started), themeId, week, days, children: only ? 1 : children.length });
+  const { error } = await db.from("model_runs").insert({ family_id: family.id, ...row });
+  if (error) console.error(`Could not record this run for /parent/models: ${error.message}. Run npm run db:push?`);
 }

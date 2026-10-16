@@ -9,6 +9,8 @@ import { flagItem } from "../core/content/flag.ts";
 import { sourceRef, type SourceRef } from "../core/content/sources.ts";
 import { fetchFromSource, syncItem, type SyncDeps, type SyncResult } from "../core/content/sync.ts";
 import { USER_AGENT } from "../core/content/types.ts";
+import { usageSoFar } from "../core/model.ts";
+import { runRow } from "../core/runs.ts";
 import type { PlanSource } from "../lib/plan.ts";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -74,13 +76,31 @@ const deps: SyncDeps = {
   },
 };
 
-const results: SyncResult[] = [];
-for (const { ref, title } of wanted.values()) {
-  const result = await syncItem(ref, { title }, deps);
-  results.push(result);
-  // One item at a time, a second apart, as AIC asks and the Met's firewall prefers.
-  if (result.changed) await new Promise((r) => setTimeout(r, 1000));
+// What the run spent on flagging, for /parent/models, recorded even when a fetch stops the run.
+const families = await db.from("families").select("id");
+if (families.error) throw new Error(families.error.message);
+if (families.data.length !== 1) throw new Error(`Expected one family, found ${families.data.length}. Run npm run seed.`);
+const started = new Date();
+async function recordRun(ok: boolean) {
+  const row = runRow("content:fetch", usageSoFar(), { ok, startedAt: started });
+  const { error } = await db.from("model_runs").insert({ family_id: families.data![0].id, ...row });
+  if (error) console.error(`Could not record this run for /parent/models: ${error.message}. Run npm run db:push?`);
+  else if (row.models.length) console.log(`Flagging cost $${row.cost.toFixed(2)}${row.cost_complete ? "" : " plus models without a known price"}.`);
 }
+
+const results: SyncResult[] = [];
+try {
+  for (const { ref, title } of wanted.values()) {
+    const result = await syncItem(ref, { title }, deps);
+    results.push(result);
+    // One item at a time, a second apart, as AIC asks and the Met's firewall prefers.
+    if (result.changed) await new Promise((r) => setTimeout(r, 1000));
+  }
+} catch (e) {
+  await recordRun(false);
+  throw e;
+}
+await recordRun(true);
 
 const cut = (s: string, n: number) => (s.length > n ? `${s.slice(0, n - 1)}…` : s);
 const table = results.map((r) => [cut(r.item, 52), cut(r.license, 22), r.flags.join(", ") || "-", r.status]);
