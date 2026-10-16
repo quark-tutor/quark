@@ -267,6 +267,17 @@ sources:
     publisher: The Metropolitan Museum of Art, 09.184.757
     url: https://www.metmuseum.org/art/collection/search/561398
     license: CC0
+  # Added 15 Oct 2026 (step 2c): the instruments for week 1's listen topic, so its first card has a picture.
+  - id: met-arched-harp
+    title: Arched Harp (shoulder harp)
+    publisher: The Metropolitan Museum of Art, 43.2.1
+    url: https://www.metmuseum.org/art/collection/search/546194
+    license: CC0
+  - id: met-bronze-sistrum
+    title: Sistrum
+    publisher: The Metropolitan Museum of Art, 19.5
+    url: https://www.metmuseum.org/art/collection/search/545681
+    license: CC0
 
 weeks:
   - week: 1
@@ -329,7 +340,7 @@ weeks:
       - subject: music
         slot: listen
         title: Egyptian instruments, and Verdi's Aida
-        sources: [commons-aida-march]
+        sources: [commons-aida-march, met-arched-harp, met-bronze-sistrum]
         summary:
           "2-3": >-
             Egyptians played harps, reed flutes, drums and the sistrum, a metal rattle shaken in
