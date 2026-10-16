@@ -159,6 +159,14 @@ async function ParentHome() {
       </section>
 
       <section className={styles.section}>
+        <h2>Models and costs</h2>
+        <p className={styles.muted}>Which model does each job, and what each week build has spent.</p>
+        <p className={styles.row}>
+          <Link href="/parent/models">See models and costs</Link>
+        </p>
+      </section>
+
+      <section className={styles.section}>
         <h2>Coming next</h2>
         <p className={styles.muted}>The test run, the weekly theme and the Sunday digest.</p>
       </section>

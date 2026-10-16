@@ -1,0 +1,73 @@
+/* /parent/models. Built on the beliefs pages' styles (../beliefs/beliefs.module.css). */
+
+.section {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 820px;
+}
+
+.section h2 {
+  font-size: 1.2rem;
+}
+
+.section p {
+  margin: 0;
+  max-width: 64ch;
+}
+
+/* Wide tables scroll inside their box, never the page. */
+.scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  vertical-align: top;
+  padding: 8px 12px;
+  border-top: 1px solid var(--line);
+}
+
+.table thead th {
+  border-top: 0;
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.table .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.estimate {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.figure {
+  flex: 1 1 160px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.figure strong {
+  display: block;
+  font-size: 1.5rem;
+  font-variant-numeric: tabular-nums;
+}
