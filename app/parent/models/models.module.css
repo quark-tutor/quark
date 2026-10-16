@@ -47,6 +47,10 @@
   font-weight: 600;
 }
 
+.table code {
+  white-space: nowrap;
+}
+
 .table .num {
   text-align: right;
   white-space: nowrap;
