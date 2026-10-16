@@ -24,7 +24,7 @@ Always return all four, as `layer_1`, `layer_2`, `layer_3` and `layer_4`, in tha
 - **question**: one question the child can reach by thinking about this idea, with one clear answer for layers 1 to 3. It must not be answerable only by recalling a name or date the child was never told.
 - **accept**: the acceptable answers, in plain words, short (one to five words each). Include the obvious ways a child might say it. For layer 4, whose question has more than one good answer, this may be empty; the rubric then says what a good answer includes.
 - **rubric**: one line on what counts as right, and what nearly right looks like.
-- **content_item_id**: the id of one approved item from the list that this idea is about, or that a child should look at or listen to with it. Use an item only where it fits; leave it as an empty string when none does. Never use an id that isn't in the list.
+- **content_item_id**: the id of one approved item from the list that this idea is about, or that a child should look at or listen to with it. Layer 1 is the card a child meets first: when the list has any item, layer 1 must use one, so write layer 1 about something the child can see or hear in it. In layers 2-4, use an item only where it fits, and leave it as an empty string when none does. Never use an id that isn't in the list.
 
 ## Beliefs and sensitive subjects
 

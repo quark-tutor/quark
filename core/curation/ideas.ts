@@ -121,6 +121,16 @@ export type Complete = <T>(options: {
   label?: string;
 }) => Promise<T>;
 
+// Layer 1 is the card a child meets first, so when the topic has an approved item, layer 1 uses one
+// (decided 15 Oct 2026, docs/04 "How a topic gets its picture"). Layers 2-4 may go text only. An id
+// that wasn't offered has already been dropped by parseIdeas, so it counts as missing here.
+export function firstLayerProblem(layers: IdeaLayer[], offered: OfferedItem[]): string | null {
+  if (offered.length === 0 || layers[0]?.content_item_id) return null;
+  return `layer 1 has no content_item_id, but this topic has approved items. Layer 1 must use one of them (${offered.map((i) => i.id).join(", ")}); layers 2-4 may leave it empty.`;
+}
+
+// Write the chain, asking once more if layer 1 has no item when one was offered. If the second try
+// still has none, the chain is kept (chain.asked is 2) and the week report lists it.
 export async function writeIdeaChain(
   plan: WeekPlan,
   slot: DaySlot,
@@ -129,17 +139,31 @@ export async function writeIdeaChain(
   deps: { complete: Complete; system: string },
 ): Promise<IdeaChain> {
   const topic = topicForDay(plan, slot, day);
-  const raw = await deps.complete<RawIdeas>({
-    system: deps.system,
-    prompt: ideasPrompt(plan, slot, day, earlier),
-    maxTokens: 16000,
-    use: "curate",
-    json: IDEA_SCHEMA,
-    label: `ideas-day${day}-${slot}`,
-  });
-  try {
-    return { day, slot, topic, layers: parseIdeas(raw, topic.items) };
-  } catch (e) {
-    throw new Error(`Day ${day} ${slot} ideas: ${e instanceof Error ? e.message : String(e)}`);
+  const prompt = ideasPrompt(plan, slot, day, earlier);
+  const ask = async (extra: string) => {
+    const raw = await deps.complete<RawIdeas>({
+      system: deps.system,
+      prompt: prompt + extra,
+      maxTokens: 16000,
+      use: "curate",
+      json: IDEA_SCHEMA,
+      label: `ideas-day${day}-${slot}${extra ? "-again" : ""}`,
+    });
+    try {
+      return parseIdeas(raw, topic.items);
+    } catch (e) {
+      throw new Error(`Day ${day} ${slot} ideas: ${e instanceof Error ? e.message : String(e)}`);
+    }
+  };
+  let layers = await ask("");
+  let asked = 1;
+  const problem = firstLayerProblem(layers, topic.items);
+  if (problem) {
+    layers = await ask(`
+
+Your last try had this problem. Write all four layers again and fix it:
+- ${problem}`);
+    asked = 2;
   }
+  return { day, slot, topic, layers, asked };
 }

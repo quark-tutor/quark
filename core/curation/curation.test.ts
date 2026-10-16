@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { CARD_SCHEMA, cardPrompt, checkCards, givesAway, planDoors, writeCards, type CardBody, type CardChild, type CardContext, type RawCards } from "./cards";
-import { IDEA_SCHEMA, ideasPrompt, parseIdeas, sourceRefs, topicForDay, writeIdeaChain, type RawIdeas, type RawLayer } from "./ideas";
+import { firstLayerProblem, IDEA_SCHEMA, ideasPrompt, parseIdeas, sourceRefs, topicForDay, writeIdeaChain, type RawIdeas, type RawLayer } from "./ideas";
 import type { IdeaChain, WeekPlan, WeekTopic } from "./types";
 import { addDays, buildWeek, type CardRow, type WeekChild, type WeekDeps } from "./week";
 
@@ -141,6 +141,54 @@ describe("ideas", () => {
     const call = (complete.mock.calls[0] as unknown as [{ use: string; system: string; json: { required: string[] } }])[0];
     expect(call).toMatchObject({ use: "curate", system: "SYSTEM" });
     expect(call.json.required).toEqual(["layer_1", "layer_2", "layer_3", "layer_4"]);
+  });
+});
+
+describe("layer 1 has a picture (decided 15 Oct 2026)", () => {
+  const withItem = (first: string) =>
+    parseIdeas(ideas([rawLayer(1, { content_item_id: first }), rawLayer(2), rawLayer(3), rawLayer(4)]), [item]);
+
+  it("finds no problem when layer 1 uses an item, or when the topic has none to offer", () => {
+    expect(firstLayerProblem(withItem("item-1"), [item])).toBeNull();
+    expect(firstLayerProblem(parseIdeas(ideas([1, 2, 3, 4].map((n) => rawLayer(n))), []), [])).toBeNull();
+  });
+
+  it("names the problem and the ids offered when layer 1 has none, and leaves layers 2-4 free", () => {
+    expect(firstLayerProblem(withItem(""), [item])).toContain("Layer 1 must use one of them (item-1); layers 2-4 may leave it empty.");
+    // An id that wasn't offered is dropped, so it counts as missing.
+    expect(firstLayerProblem(withItem("made-up"), [item])).not.toBeNull();
+  });
+
+  it("asks again once, with the problem named, and keeps the second chain", async () => {
+    const complete = vi
+      .fn()
+      .mockResolvedValueOnce(ideas([1, 2, 3, 4].map((n) => rawLayer(n))))
+      .mockResolvedValueOnce(ideas([rawLayer(1, { content_item_id: "item-1" }), rawLayer(2), rawLayer(3), rawLayer(4)]));
+    const chain = await writeIdeaChain(plan, "look", 1, [], { complete, system: "SYSTEM" });
+    expect(complete).toHaveBeenCalledTimes(2);
+    const again = (complete.mock.calls[1] as [{ prompt: string; label: string }])[0];
+    expect(again.prompt).toContain("Your last try had this problem");
+    expect(again.prompt).toContain("Layer 1 must use one of them (item-1)");
+    expect(again.label).toBe("ideas-day1-look-again");
+    expect(chain).toMatchObject({ asked: 2 });
+    expect(chain.layers[0].content_item_id).toBe("item-1");
+  });
+
+  it("keeps the chain when the second try still has no item, and asks no third time", async () => {
+    const complete = vi.fn(async () => ideas([1, 2, 3, 4].map((n) => rawLayer(n))) as never);
+    const chain = await writeIdeaChain(plan, "look", 1, [], { complete, system: "SYSTEM" });
+    expect(complete).toHaveBeenCalledTimes(2);
+    expect(chain.asked).toBe(2);
+    expect(chain.layers[0].content_item_id).toBeNull();
+  });
+
+  it("doesn't ask again for a text-only topic or for layers 2-4 without items", async () => {
+    const none = vi.fn(async () => ideas([1, 2, 3, 4].map((n) => rawLayer(n))) as never);
+    expect((await writeIdeaChain(plan, "wonder", 1, [], { complete: none, system: "S" })).asked).toBe(1);
+    const firstOnly = vi.fn(async () => ideas([rawLayer(1, { content_item_id: "item-1" }), rawLayer(2), rawLayer(3), rawLayer(4)]) as never);
+    expect((await writeIdeaChain(plan, "look", 1, [], { complete: firstOnly, system: "S" })).asked).toBe(1);
+    expect(none).toHaveBeenCalledTimes(1);
+    expect(firstOnly).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -398,6 +446,18 @@ describe("buildWeek", () => {
     expect(blocked.every((c) => c.layer === 2 && c.policy_notes?.validation[0].includes("gives the answer away"))).toBe(true);
     expect(report.children[0]).toMatchObject({ reasked: 5, cards: 20 });
     expect(report.children[0].heldBack).toHaveLength(5);
+  });
+
+  it("lists the first cards still without a picture and counts the chains sent back", async () => {
+    const { deps } = fakeDb();
+    vi.mocked(deps.writeIdeaChain).mockImplementation(async (slot, day) => {
+      const chain = chainFor(day, slot);
+      if (slot !== "look" || day !== 2) return chain;
+      return { ...chain, asked: 2, layers: chain.layers.map((l) => (l.layer === 1 ? { ...l, content_item_id: null } : l)) };
+    });
+    const report = await buildWeek({ ...options, days: 3, children: [boys[0]] }, deps);
+    expect(report.firstWithoutPicture).toEqual(["day 2 look (art topic)"]);
+    expect(report.ideasReasked).toBe(1);
   });
 
   it("builds fewer days when asked", async () => {

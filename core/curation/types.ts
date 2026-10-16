@@ -55,4 +55,5 @@ export type IdeaChain = {
   topic: WeekTopic;
   layers: IdeaLayer[];
   ids?: string[]; // ideas.id per layer, once saved
+  asked?: number; // idea calls made: 2 when layer 1 was sent back for having no item
 };

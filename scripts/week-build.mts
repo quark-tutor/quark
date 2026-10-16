@@ -310,6 +310,12 @@ console.log(
     ? `\nText only (the topic has no approved item): ${report.textOnly.join(", ")}.`
     : "\nEvery day-slot had an approved item to offer.",
 );
+console.log(`Idea chains sent back because layer 1 had no item: ${report.ideasReasked}.`);
+console.log(
+  report.firstWithoutPicture.length
+    ? `First cards without a picture (the topic had an item; layer 1 still had none after a second try): ${report.firstWithoutPicture.join(", ")}.`
+    : "Every first card has a picture or recording where its topic has one.",
+);
 printUsage();
 console.log(`\nPreview it at /parent/week/${report.themeId}.`);
 

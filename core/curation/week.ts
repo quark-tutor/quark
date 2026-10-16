@@ -1,5 +1,6 @@
 import { pickLenses, SLOT_ORDER, type DaySlot, type Lens, type LensHistory } from "../../lib/lenses.ts";
 import { levelOf, planDoors, type CardBody, type CardChild, type CardContext, type WrittenCards } from "./cards.ts";
+import { firstLayerProblem } from "./ideas.ts";
 import type { IdeaChain, WeekPlan } from "./types.ts";
 
 // One week of the plan into a theme, its shared ideas, and every child's cards and questions
@@ -73,6 +74,8 @@ export type WeekReport = {
   themeId: string;
   ideas: number;
   textOnly: string[]; // day-slots whose topic had no approved item at all
+  firstWithoutPicture: string[]; // day-slots whose topic had an item but whose layer 1 still has none
+  ideasReasked: number; // idea chains sent back once because layer 1 had no item
   children: ChildReport[];
 };
 
@@ -139,6 +142,10 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
   }
   chains = chains.filter((c) => c.day <= days).sort((a, b) => a.day - b.day || SLOT_ORDER.indexOf(a.slot) - SLOT_ORDER.indexOf(b.slot));
   const textOnly = chains.filter((c) => c.topic.items.length === 0).map((c) => `day ${c.day} ${c.slot}`);
+  const firstWithoutPicture = chains
+    .filter((c) => firstLayerProblem(c.layers, c.topic.items))
+    .map((c) => `day ${c.day} ${c.slot} (${c.topic.title})`);
+  const ideasReasked = chains.filter((c) => (c.asked ?? 1) > 1).length;
 
   // 3. Each child's cards: a lens and maybe a door per day-slot, four cards per chain.
   const reports: ChildReport[] = [];
@@ -194,5 +201,5 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
   }
 
   await deps.setStatus(themeId, "review");
-  return { themeId, ideas: chains.length * 4, textOnly, children: reports };
+  return { themeId, ideas: chains.length * 4, textOnly, firstWithoutPicture, ideasReasked, children: reports };
 }
