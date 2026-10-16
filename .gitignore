@@ -48,3 +48,6 @@ next-env.d.ts
 
 # model requests and replies from week:build --debug
 /.quark-debug/
+
+# Exported cards name the children (rule 7): kept on the laptop, never committed.
+/plan/candidates/day1-*.json
