@@ -15,7 +15,8 @@
     "plan:import": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-plan.mts",
     "content:fetch": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content-fetch.mts",
     "week:build": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/week-build.mts",
-    "model:smoke": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/model-smoke.mts"
+    "model:smoke": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/model-smoke.mts",
+    "docs:board": "node scripts/export-board.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",

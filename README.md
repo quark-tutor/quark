@@ -42,7 +42,7 @@ flowchart LR
 | [Values packs: prior art](docs/16-values-packs-prior-art.md) | What AI alignment, media ratings, homeschool labels and education law already define, and what we borrow |
 | [Hosting and privacy](docs/14-hosting-and-privacy.md) | Where a family runs its copy, and why one family per copy keeps privacy law simple |
 | [Family beliefs and values](docs/09-family-values.md) | Letting parents state their beliefs openly and shape how sensitive topics are taught |
-| [Open questions](docs/08-open-questions.md) | What we haven't figured out yet |
+| [Open questions](docs/08-open-questions.md) and [board](docs/board.md) | What we haven't figured out yet, and where every feature stands |
 
 ## Founding rules on beliefs
 

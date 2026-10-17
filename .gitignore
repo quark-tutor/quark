@@ -51,3 +51,11 @@ next-env.d.ts
 
 # Exported cards name the children (rule 7): kept on the laptop, never committed.
 /plan/candidates/day1-*.json
+
+# Claude Code worktrees and debug output (the debug files name the children)
+/.claude/worktrees/
+
+plan/candidates/*.json
+
+# the board page, rewritten by npm run docs:board
+/Quark board.html

@@ -43,6 +43,43 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - Don't rename "Quark" or "Wonder Wall". Don't add "AI" to any user-facing name.
 - End every build session the same way, before the last commit: update the Where we are note under Build order (date, what's merged, what's on which branch, what's next), then update the Status line in README.md so it agrees with it. The README status is for visitors and stays short; CLAUDE.md carries the detail. If a session ends without this, the next session does it first.
 
+### Kinds of session
+
+Each starts with a skill typed in Claude Code (`.claude/skills/`).
+
+- `/idea <words>`: one row in `docs/board.md`, committed on the branch you are on. Never reads, diagnoses or asks.
+- `/ask <question>`: answers from the records, sources named. Read only.
+- `/job <brief>`: reads the records and the brief, says where it stands and which branch is checked out, does step 1 and stops. Every question comes with a recommended answer; it ends "reply go to take all of these".
+- `/side <name>`: opens or resumes `side/<name>` in its own worktree, with `docs/side/<name>.md`. Never touches `main`, a phase branch or the board.
+- `/bugs <words>`: one line under Bugs in docs/08, committed. Never diagnoses; saves no screenshot (the repo is public).
+- `/sweep`: proposes a batch of bugs that fits the branch checked out, stops for a yes, deletes the lines it fixes.
+- `/close`: the end of any job: the records, `npm run docs:board`, the commits, the full report, the read-back, `/cost`.
+
+### The board
+
+- `docs/board.md` is the one list of every feature, from first mention to live or not doing, one row each, with its stage, what it waits on, size, importance and phase. Public: no row names a child.
+- `/idea` adds a row; `/close` moves the rows a job touched; nothing else writes it.
+- `npm run docs:board` writes `Quark board.html` at the repository root (not tracked), to open in a browser at the laptop. Bugs stay in docs/08 and show as a count per phase.
+- A row names one thing that can be briefed and built. Open questions that are decisions for Brandon and June stay in docs/08.
+
+## Before a consequential action
+
+`.claude/settings.json` lists what stops and asks first: a push to `main` or any force push, `git add -A`, `git add .` and `git commit -a` (the repo is public), any Supabase CLI use and `npm run db:push`, the scripts that write to the live database or spend API money, deletes and kills, secrets, Vercel, and outbound web writes. Nothing is blocked; it is asked. Brandon sees only the prompt, so **the command's description line carries all three plain-words facts itself, compressed**: what it does, what it touches on live (write LIVE in capitals when it is the live database), and whether it can be undone. Chat lines above the command are extra, never the rule. Say first if it cannot be undone. Never show a bare command as the question.
+
+- There is one Supabase project and it is the boys' live copy, so every migration command is on the list, and a new migration always stops, inside a fix too.
+- The live project is never used to prove a rule. Do not run `db:push`, `supabase` or any script that reads `SUPABASE_DB_URL` to test a permission, not even with `--dry-run`.
+- A stop that fired and was approved is still a stop: say so in the report.
+- Claude Code runs as one writer per working tree: the chat never edits files in this folder while a session is open in it; a second parallel job uses `claude --worktree`. Sonnet for a briefed job; Opus or `opusplan` when the brief leaves a design choice open.
+- Every job's last message is the full report, unchanged, for the records and the next session, then the read-back from the `readback` reader (`/readback <brief>`, Sonnet): four lines, under 25 words each. Brandon answers the read-back. The reader never says Brandon approved or decided something the report does not quote him on. See docs/08, "How Quark is built with Claude".
+- A bug seen is one line under Bugs in `docs/08-open-questions.md`, not a brief. When a handful have gathered, one sweep job fixes a batch.
+
+### Toolbelt
+
+- At the start of a `/job`, suggest plan mode (`/plan`) for step 1.
+- After a run that has to be undone, mention `/rewind`.
+- At `/close`, remind Brandon to run `/cost` and put the figure in the report.
+- When a brief leaves a design choice open, suggest `opusplan`.
+
 ## Build order
 
 1. **Foundation** — Next.js app, Supabase project wired up, schema applied, guardian sign-in, empty `/kid` and `/parent` views, iPad in Guided Access can open it.
@@ -53,7 +90,7 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 6. **Checks and difficulty** — delayed recall via `review_schedule`, hint-count difficulty dial, results in the digest.
 7. **Pilot** — four weeks with the boys.
 
-**Where we are (end of 16 Oct 2026):** phases 1 and 2 are merged to `main`. Phase 3 is on `phase-3-curation`, not merged, and nothing is on the iPads yet.
+**Where we are (end of 17 Oct 2026):** phases 1 and 2 are merged to `main`. Phase 3 is on `phase-3-curation`, not merged, and nothing is on the iPads yet.
 - Done: step 1 (model adapter, lenses spec), 2 (the plan), 2b (a picture for every topic), 2c (layer 1 always has a picture), 2d (short lessons and mixed weeks), 3 (content), 4 (ideas and cards), 4b (the models and costs page), 4c (the week preview with pictures and sound).
 - 4b: `/parent/models`, read-only, linked from `/parent`: the model per job from the environment, the price table in `core/prices.ts` (checked 16 Oct), every run, and an estimate for a week and a month beside the old $5.70. `week:build` and `content:fetch` now write a row to `model_runs` at the end of each run (counts and money only); migration `20261016000000_model_runs` is applied live. One run is recorded so far, a $0 `content:fetch`; the estimate appears after the next `week:build`. Defaults to settle are in docs/08, "Models and costs".
 - Credit lines on the week preview are clean (`credit()` in `core/content/credit.ts`): no Commons edit trail or repeats, the Met once, and Aida's 1871 kept with Verdi, apart from the Marine Band.
@@ -63,5 +100,6 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - Open, in docs/08: the 3-4-5 rope as a parent activity; the tutor's voice (proposed as step 4d) and faces; the rest of the 2c review (the announced door, too many words, the hint check's false positives, how much is one day); the Hawaiian overthrow as its own lesson; the models page defaults.
 - 2d: a week is mixed (docs/04, "How a week is mixed"): Egypt is a thread, one topic a day on its own slot, and the other four slots take short lessons from `plan/short-lessons.yaml` (28, picked by Brandon and June; candidates in `plan/candidates/short-lessons.md`). `weekSchedule()` in `core/curation/schedule.ts`; migration `20261016000001_mixed_weeks` (`plan_topics.kind` and `position`, `themes.plan_week`) is applied live and the library imported. content:fetch added 50 items, all approved automatically with no flags; only the old Rosetta photo and Musopen Handel still wait at `/parent/content`. Two fetch fixes: the Art Institute's images need its header, and an original over 20 MB is stored as its preview. Four-notes has no recording: a parent plays it (decided 16 Oct).
 - Next, in order: step 5, the policy gate (it reads each topic's values points, now per topic), the twenty-question test run, `careful_about` to the gate only, `learns_to_act` into the card prompt; 6, the Sunday cron and the Looks-good page. Before week 2 is built, the library needs more lessons: week 1 uses all 28.
+- Tooling: slice 2 of "working with Claude" (17 Oct: `docs/board.md`, `npm run docs:board`, the seven session skills, with slice 1's ask-list and `/readback`) is merged into this branch from `main`; it is not phase work. Phase 3 still waits to merge to `main`, and when it does this note stays as the record.
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.
