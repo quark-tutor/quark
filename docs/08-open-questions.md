@@ -66,6 +66,7 @@ Decided (17 Oct 2026), `docs/board-slice.md`; a tooling change on `working-with-
 - **Decided: a Phase column** (`1`–`7`, `tooling`, or `—`) in place of PDERP's Module. The bug panel counts by the first "phase N" or "tooling" in each bug line, so `/bugs` writes it in brackets after *where*.
 - **Decided: the Codex-reads-`AGENTS.md` convention changes nothing in the skills.** `AGENTS.md` is untouched; a second reviewer is a row at *not fully formed*.
 - **Decided: Sonnet for the build.** `/idea` and `/bugs` commit on the branch that is checked out; the page header names the branch and commit.
+- **Decided (17 Oct 2026): `/ask` has no `disallowed-tools` line.** Running it switched Edit, Write, Bash and PowerShell off for the rest of the session. `allowed-tools` only pre-approves tools, it does not remove the others, so `/ask` is read-only by its instructions, like every other skill, not by a lock. *Replaces* the line copied from PDERP.
 - Proven on PDERP, 16 Oct 2026: an ask rule beats an allow rule even in auto, so a skill's `allowed-tools` cannot make a push to `main` run without asking.
 
 ## Bugs
