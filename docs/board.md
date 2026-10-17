@@ -30,7 +30,7 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
-| Working with Claude, Quark: the state board and the seven session skills | building | 17 Oct 2026 | — | a job | — / — | tooling | `docs/board-slice.md` |
+| Working with Claude, Quark: the state board and the seven session skills | on hold | 17 Oct 2026 | merge to main | a job | — / — | tooling | `docs/board-slice.md` |
 | Delete the docs/08 items folded into board rows | raised | 17 Oct 2026 | phase 3 merged | minutes | — / — | tooling | `docs/08-open-questions.md` |
 | A test Supabase project, so a migration from a branch cannot touch the live database | raised | 17 Oct 2026 (seeded) | its own job before phase 4 | a job | high / — | tooling | review §9; `docs/08-open-questions.md` |
 | `docs/decisions.md`, newest first with what each replaced | raised | 17 Oct 2026 (seeded) | its own small job | an hour | — / — | tooling | review, job 8 |
