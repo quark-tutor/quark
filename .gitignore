@@ -51,3 +51,6 @@ next-env.d.ts
 /.quark-debug/
 
 plan/candidates/*.json
+
+# the board page, rewritten by npm run docs:board
+/Quark board.html
