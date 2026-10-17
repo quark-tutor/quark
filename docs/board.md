@@ -30,7 +30,8 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
-| Working with Claude, Quark: the state board and the seven session skills | on hold | 17 Oct 2026 | merge to main | a job | — / — | tooling | `docs/board-slice.md` |
+| Working with Claude, Quark: the state board and the seven session skills | on hold | 17 Oct 2026 | merge to main (already merged into `phase-3-curation`, `2ec4762`) | a job | — / — | tooling | `docs/board-slice.md` |
+| Curation engine v1: weekly cron, ideas, cards, gate, load the week | building | 17 Oct 2026 | merge to `main` when it runs; next is step 5, the gate | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | Delete the docs/08 items folded into board rows | raised | 17 Oct 2026 | phase 3 merged | minutes | — / — | tooling | `docs/08-open-questions.md` |
 | A test Supabase project, so a migration from a branch cannot touch the live database | raised | 17 Oct 2026 (seeded) | its own job before phase 4 | a job | high / — | tooling | review §9; `docs/08-open-questions.md` |
 | `docs/decisions.md`, newest first with what each replaced | raised | 17 Oct 2026 (seeded) | its own small job | an hour | — / — | tooling | review, job 8 |
@@ -45,6 +46,5 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 | A knowledge sequence a family can swap | not fully formed | 17 Oct 2026 (seeded) | — | — | — / — | — | `docs/08-open-questions.md`; `plan_topics` |
 | Sample weeks written so they can be shared and reused | not fully formed | 17 Oct 2026 (seeded) | — | — | — / — | 3 | `docs/08-open-questions.md` |
 | Working with Claude, slice 1: ask-list, readback reader, plain-words rule | live | 16 Oct 2026 | — | — | — / — | tooling | `docs/working-with-claude-slice-1.md` |
-| Curation engine v1: weekly cron, ideas, cards, gate, load the week | building | 13 Oct 2026 | merge to `main` when it runs; next is step 5, the gate | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | Phase 2: Our Family's Beliefs, compare, rulebook, conduct questions and blocks | live | 11 Oct 2026 | — | — | — / — | 2 | `docs/09-family-values.md` |
 | Phase 1: foundation | live | 10 Oct 2026 | — | — | — / — | 1 | `docs/13-architecture.md` |
