@@ -42,6 +42,25 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - When a design question comes up that the docs don't settle, write the options into `docs/open-questions.md` and ask Brandon rather than guessing.
 - Don't rename "Quark" or "Wonder Wall". Don't add "AI" to any user-facing name.
 
+### Kinds of session
+
+Each starts with a skill typed in Claude Code (`.claude/skills/`).
+
+- `/idea <words>`: one row in `docs/board.md`, committed on the branch you are on. Never reads, diagnoses or asks.
+- `/ask <question>`: answers from the records, sources named. Read only.
+- `/job <brief>`: reads the records and the brief, says where it stands and which branch is checked out, does step 1 and stops. Every question comes with a recommended answer; it ends "reply go to take all of these".
+- `/side <name>`: opens or resumes `side/<name>` in its own worktree, with `docs/side/<name>.md`. Never touches `main`, a phase branch or the board.
+- `/bugs <words>`: one line under Bugs in docs/08, committed. Never diagnoses; saves no screenshot (the repo is public).
+- `/sweep`: proposes a batch of bugs that fits the branch checked out, stops for a yes, deletes the lines it fixes.
+- `/close`: the end of any job: the records, `npm run docs:board`, the commits, the full report, the read-back, `/cost`.
+
+### The board
+
+- `docs/board.md` is the one list of every feature, from first mention to live or not doing, one row each, with its stage, what it waits on, size, importance and phase. Public: no row names a child.
+- `/idea` adds a row; `/close` moves the rows a job touched; nothing else writes it.
+- `npm run docs:board` writes `Quark board.html` at the repository root (not tracked), to open in a browser at the laptop. Bugs stay in docs/08 and show as a count per phase.
+- A row names one thing that can be briefed and built. Open questions that are decisions for Brandon and June stay in docs/08.
+
 ## Before a consequential action
 
 `.claude/settings.json` lists what stops and asks first: a push to `main` or any force push, `git add -A`, `git add .` and `git commit -a` (the repo is public), any Supabase CLI use and `npm run db:push`, the scripts that write to the live database or spend API money, deletes and kills, secrets, Vercel, and outbound web writes. Nothing is blocked; it is asked. Brandon sees only the prompt, so **the command's description line carries all three plain-words facts itself, compressed**: what it does, what it touches on live (write LIVE in capitals when it is the live database), and whether it can be undone. Chat lines above the command are extra, never the rule. Say first if it cannot be undone. Never show a bare command as the question.
@@ -53,6 +72,13 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 - Every job's last message is the full report, unchanged, for the records and the next session, then the read-back from the `readback` reader (`/readback <brief>`, Sonnet): four lines, under 25 words each. Brandon answers the read-back. The reader never says Brandon approved or decided something the report does not quote him on. See docs/08, "How Quark is built with Claude".
 - A bug seen is one line under Bugs in `docs/08-open-questions.md`, not a brief. When a handful have gathered, one sweep job fixes a batch.
 
+### Toolbelt
+
+- At the start of a `/job`, suggest plan mode (`/plan`) for step 1.
+- After a run that has to be undone, mention `/rewind`.
+- At `/close`, remind Brandon to run `/cost` and put the figure in the report.
+- When a brief leaves a design choice open, suggest `opusplan`.
+
 ## Build order
 
 1. **Foundation** — Next.js app, Supabase project wired up, schema applied, guardian sign-in, empty `/kid` and `/parent` views, iPad in Guided Access can open it. ← start here
@@ -63,6 +89,6 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 6. **Checks and difficulty** — delayed recall via `review_schedule`, hint-count difficulty dial, results in the digest.
 7. **Pilot** — four weeks with the boys.
 
-**Where we are (16 Oct 2026):** phases 1 and 2 are merged to `main`. Tooling slice "working with Claude, slice 1" is on `working-with-claude` (ask-list, `/readback`, the plain-words rule), merged to `main` when it runs; it is not phase work. Phase 3 is on `phase-3-curation`, not merged, with its own, fuller Where we are note: when it merges, keep that note and add this line. Migrations 13–16 Oct are live but exist only on `phase-3-curation`, so `db:push` cannot run from this branch. Nothing is on the iPads yet.
+**Where we are (17 Oct 2026):** phases 1 and 2 are merged to `main`. Tooling slice "working with Claude, slice 1" (ask-list, `/readback`, the plain-words rule) is merged to `main`; it is not phase work. Tooling slice "working with Claude, slice 2" (17 Oct: `docs/board.md`, `npm run docs:board`, the seven session skills) is on `working-with-claude-2`, merged to `main` when Brandon has opened the page; merge `main` into `phase-3-curation` afterwards so phase 3 has the skills and the board. Phase 3 is on `phase-3-curation`, not merged, with its own, fuller Where we are note: when it merges, keep that note and add this line. Migrations 13–16 Oct are live but exist only on `phase-3-curation`, so `db:push` cannot run from this branch. Nothing is on the iPads yet.
 
 Success for version one: both boys use it unprompted 4+ days a week, sessions of 15+ minutes of real engagement, recall from three weeks earlier without hints, under 30 minutes a week of parent time.

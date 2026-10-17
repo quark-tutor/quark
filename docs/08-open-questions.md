@@ -1,6 +1,6 @@
 # Open questions
 
-Add to this list, or pick one up and open a discussion.
+Add to this list, or pick one up and open a discussion. Features and ideas that can be briefed and built are rows on [`docs/board.md`](board.md), where every feature stands; this page keeps the questions that are decisions for Brandon and June. A few items below were folded into board rows and are deleted from here once phase 3 is merged.
 
 ## Product
 
@@ -54,6 +54,19 @@ Decided (16 Oct 2026), "Working with Claude, slice 1" (`docs/working-with-claude
 - **In Quark a dry run against the live database is not a safe proof.** The live project is never used to prove a rule. There is one Supabase project and it is the boys' live copy. `db:push` stays an ask, not a block.
 - Built differently from the brief, as at PDERP: no `defaultMode` line (Claude Code ignores it in a project file and auto is already the start mode); `/readback` runs in the main session, not as a forked skill.
 - Proven 16 Oct 2026: the pushes to `main`, `Remove-Item` and `npm run db:push` asks all fired and named their rules. The `db:push` one was approved by hand and the command ran, which is why the rule above exists.
+
+### Working with Claude, slice 2: the board and the seven session skills
+
+Decided (17 Oct 2026), `docs/board-slice.md`; a tooling change on `working-with-claude-2`, merged to `main` when it runs.
+
+- **Decided: one board per repository.** `docs/board.md` is Quark's own, a copy of PDERP's shape with Quark's stages; the two boards never read each other. Public: no row names a child or a nickname; "the boys" is the most a row says.
+- **Decided: no Word copies.** `npm run docs:board` writes `Quark board.html` at the repository root (not tracked) and nothing else; there is no `docs:word`.
+- **Decided: seeded from this page and the build order.** Open questions that name something buildable became rows; bugs stay bugs and show on the page as a count per phase. The items folded into rows stay here until phase 3 is merged, because that branch has edited the same lines; deleting them is a row on the board.
+- **Decided: the seven skills are copied from PDERP and adapted** (`/idea`, `/ask`, `/job`, `/side`, `/bugs`, `/sweep`, `/close`) to Quark's records and its branch-per-phase rule; `/readback` is untouched. `/close` calls the `readback` reader directly, because `/readback` is user-only. *Replaces* the starter prompt pasted at the start of a job.
+- **Decided: a Phase column** (`1`–`7`, `tooling`, or `—`) in place of PDERP's Module. The bug panel counts by the first "phase N" or "tooling" in each bug line, so `/bugs` writes it in brackets after *where*.
+- **Decided: the Codex-reads-`AGENTS.md` convention changes nothing in the skills.** `AGENTS.md` is untouched; a second reviewer is a row at *not fully formed*.
+- **Decided: Sonnet for the build.** `/idea` and `/bugs` commit on the branch that is checked out; the page header names the branch and commit.
+- Proven on PDERP, 16 Oct 2026: an ask rule beats an allow rule even in auto, so a skill's `allowed-tools` cannot make a push to `main` run without asking.
 
 ## Bugs
 
