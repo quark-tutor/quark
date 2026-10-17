@@ -73,6 +73,8 @@ Decided (17 Oct 2026), `docs/board-slice.md`; a tooling change on `working-with-
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
 
+- 17 Oct 2026, the board page header (`npm run docs:board`) (tooling): throwaway test line, delete me; the header showed the wrong branch name in a test; expected: the branch that is checked out. Size: minutes.
+
 - 16 Oct 2026, `scripts/db-push.mts` (`npm run db:push`): on failure it prints the full connection string, password included, because it passes `--db-url` on the command line and the error repeats it; expected: never print the URL. Needs a fix in a phase 3 session (that branch has the migrations the script applies). Size: minutes.
 - 16 Oct 2026, hint check in the curation build (phase 3): the two-dice layer 1 card was held back because the hint "Does each one count?" contains "one", an accepted answer; expected: ordinary words like "one" count only as numbers. A second case: a comparison hint that names the things being compared was blocked. Size: an hour.
 - 16 Oct 2026, the week preview's first cards (phase 3): a card announces the child's interest ("imagine you're a painter") where it doesn't fit the lens; expected: the door is never announced. Size: a job (belongs to step 4d).
