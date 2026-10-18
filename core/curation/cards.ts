@@ -133,10 +133,15 @@ const words = (s: string) =>
 // Meaningful means not a stop word; two-letter words like "up" and "no" count, because dropping
 // them turned "up the map" into "map" and "no coils" into "coil" (first real run, 14 Oct 2026).
 export function givesAway(text: string, key: AnswerKey): boolean {
-  const have = new Set(words(text));
+  const have = new Map<string, number>();
+  for (const w of words(text)) have.set(w, (have.get(w) ?? 0) + 1);
   return key.accept.some((answer) => {
     const need = words(answer).filter((w) => !STOP.has(w) && (w.length > 1 || /\d/.test(w)));
-    return need.length > 0 && need.every((w) => have.has(w));
+    // A word the answer uses twice ("one and one") has to be there twice: "Does each one count?"
+    // has one "one", which is only a pronoun, not the sum.
+    const counts = new Map<string, number>();
+    for (const w of need) counts.set(w, (counts.get(w) ?? 0) + 1);
+    return need.length > 0 && [...counts].every(([w, n]) => (have.get(w) ?? 0) >= n);
   });
 }
 

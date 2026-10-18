@@ -298,6 +298,16 @@ describe("the hint check", () => {
     expect(givesAway("Picture a map with the top as the way up. Where is that sea compared with the rest of Egypt?", north)).toBe(true);
   });
 
+  it("counts a repeated word as often as the answer uses it (17 Oct 2026)", () => {
+    const dice = { accept: ["one and one", "1 and 1"], rubric: "" };
+    // Held back wrongly: one "one" is a pronoun here, not the sum.
+    expect(givesAway("Does each one count?", dice)).toBe(false);
+    // Still caught: the answer said outright, in words or digits. This must keep passing.
+    expect(givesAway("Try one and one more.", dice)).toBe(true);
+    expect(givesAway("What is 1 plus 1?", dice)).toBe(true);
+    expect(givesAway("One die shows one dot on top.", dice)).toBe(true);
+  });
+
   it("flags a card whose last hint gives the answer, and the other rules", () => {
     const list = goodList();
     list[1] = { ...list[1], hints: ["Where did the water go?", "It's silt, isn't it?"] };
