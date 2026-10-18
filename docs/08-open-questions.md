@@ -157,5 +157,7 @@ Decided (17 Oct 2026), `docs/board-slice.md`; a tooling change on `working-with-
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
 
+- 17 Oct 2026, Claude Code's own commands during the test database job (tooling): a chained shell command whose text contained `scripts/db-push` fired the `*scripts/db-push*` ask, and the prompt showed a bare command with "Run shell command" as its description, not the three plain-words facts; nothing ran that script. Expected: one action per command near the ask-list, and a description that always says what it does, what it touches (LIVE or not) and whether it can be undone. Fixed by two lines in CLAUDE.md, *Before a consequential action*. Size: minutes.
+
 - 16 Oct 2026, hint check in the curation build (phase 3): a comparison hint that names the things being compared was blocked as giving the answer away. The exact hint and answer key were not recorded; the next held-back hint of this kind needs copying here before it can be fixed (the "each one" case is fixed). Size: an hour.
 - 16 Oct 2026, the week preview's first cards (phase 3): a card announces the child's interest ("imagine you're a painter") where it doesn't fit the lens; expected: the door is never announced. Size: a job (belongs to step 4d).
