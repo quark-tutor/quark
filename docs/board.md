@@ -30,10 +30,10 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
+| A test Supabase project, so a migration from a branch cannot touch the live database | building | 17 Oct 2026 | step 1 confirmed; proof on test at step 3 | a job | high / — | tooling | `docs/test-database-slice.md`; `test-database` |
 | Working with Claude, Quark: the state board and the seven session skills | live | 17 Oct 2026 | — | a job | — / — | tooling | `docs/board-slice.md` |
 | Curation engine v1: weekly cron, ideas, cards, gate, load the week | building | 17 Oct 2026 | merge to `main` when it runs; next is step 5, the gate | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | Delete the docs/08 items folded into board rows | raised | 17 Oct 2026 | phase 3 merged | minutes | — / — | tooling | `docs/08-open-questions.md` |
-| A test Supabase project, so a migration from a branch cannot touch the live database | raised | 17 Oct 2026 (seeded) | its own job before phase 4 | a job | high / — | tooling | review §9; `docs/08-open-questions.md` |
 | `docs/decisions.md`, newest first with what each replaced | raised | 17 Oct 2026 (seeded) | its own small job | an hour | — / — | tooling | review, job 8 |
 | Checks on GitHub: `checks.yml` running typecheck and tests on push | raised | 17 Oct 2026 (seeded) | its own job | an hour | — / — | tooling | review, job 7 |
 | The Claude GitHub app for pull-request review | raised | 17 Oct 2026 (seeded) | — | — | — / — | tooling | review, job 7 |
