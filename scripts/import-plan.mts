@@ -18,10 +18,12 @@ import {
   validatePlan,
   type PlanRow,
 } from "../lib/plan.ts";
+import { announceTarget } from "./target.ts";
 
+announceTarget();
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SECRET_KEY;
-if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY in .env.local.");
+if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY in the env file (.env.local, or .env.live.local for a :live script).");
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
 // Each file as the rows it becomes, with the key prefix its rows share.

@@ -153,6 +153,20 @@ Decided (17 Oct 2026), `docs/board-slice.md`; a tooling change on `working-with-
 - **Decided (17 Oct 2026): `db:push` keeps `--db-url` and scrubs its output.** Brandon asked for the URL to go through the environment if the Supabase CLI allows it; its reference page for `db push` shows no environment route (`SUPABASE_DB_PASSWORD` is for `link` only), so the script captures the CLI's output and removes the URL and password before printing (`scripts/scrub-url.ts`). Not yet run against the real CLI: the live project is never used to test it. The URL can still show in the process list while the command runs. Asked: Brandon, "pass it through the environment ... if the CLI allows it, and scrub the output as well".
 - Proven on PDERP, 16 Oct 2026: an ask rule beats an allow rule even in auto, so a skill's `allowed-tools` cannot make a push to `main` run without asking.
 
+### A test database: the second Supabase project
+
+Decided (17 Oct 2026), `docs/test-database-slice.md`; a tooling change on `test-database`, made from `phase-3-curation` (the newest migrations are only there) and merged back into it at the close.
+
+- **Decided: two projects, `quark` (live) and `quark-test`.** Same organisation and region. Nothing is copied from live to test; test holds invented children and one plus-address guardian. Brandon's step 4 had his own address; the plus-address replaces it so test never holds the live guardian's address (rule 7).
+- **Decided: test is the default, live takes the word.** `.env.local` is test; `.env.live.local` is live and is read only by scripts with `:live` in their name (a Vitest check holds this). `npm run dev` runs on test. *Replaces* the one `.env.local` pointing at live.
+- **Decided: `QUARK_TARGET=test|live` in each env file.** Each script prints its target first and refuses if the file and the script disagree. Not in the brief; added so live values pasted into `.env.local` stop at the script.
+- **Decided: `--db-url` per target, not `supabase link`.** A link is one project per checkout. The sweep's scrub of the output stands; the URL can still show in the process list while the command runs.
+- **Decided: the ask-list narrows to live.** `npm run *live*` and anything naming `env.live` ask, with LIVE in the description. The four test-only scripts (`db:push`, `seed`, `packs:import`, `plan:import`) stop asking; `week:build` and `content:fetch` still ask, since they spend money. *Replaces* asking on every database script.
+- **Decided: a migration reaches live only after it has run on test** from the same branch in the same session, with the result shown. *Adds to* "a new migration always stops".
+- **Decided: other families still run one copy.** `deploy/README.md` gains a *For developers* note.
+- `content:fetch` and `week:build` are not run in this job; they default to test.
+- Tooling note: `scripts/db-push.mts` imported `./scrub-url` without its extension, which Node cannot resolve when the script runs; it now imports `./scrub-url.ts` like every other script.
+
 ## Bugs
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.

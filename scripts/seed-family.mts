@@ -2,14 +2,19 @@
 // Guardians get Supabase Auth accounts here, since sign-ups are off in the app.
 // Safe to run again: it matches the family by name, guardians by email, children by nickname.
 //
-//   node --env-file=.env.local scripts/seed-family.mts scripts/family.local.json
+//   npm run seed          the test project, from scripts/family.test.json
+//   npm run seed:live     the LIVE project, from scripts/family.local.json
 //
-// Copy scripts/family.example.json to scripts/family.local.json first (it's gitignored).
+// Copy scripts/family.example.json to family.test.json or family.local.json first (both gitignored).
+// The test file uses invented children and a plus-address for the one guardian.
 // Children: nickname, birth month, sex, reading level, interests only. Never a full name,
 // photo, school or address.
 
 import { readFileSync } from "node:fs";
 import { createClient } from "@supabase/supabase-js";
+import { announceTarget } from "./target.ts";
+
+announceTarget();
 
 type Seed = {
   family: { name: string; timezone?: string };
@@ -29,7 +34,7 @@ const seed: Seed = JSON.parse(readFileSync(file, "utf8"));
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SECRET_KEY;
-if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY in .env.local.");
+if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY in the env file (.env.local, or .env.live.local for a :live script).");
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
 function must<T>(result: { data: T | null; error: { message: string } | null }, what: string): T {

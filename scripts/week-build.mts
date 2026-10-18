@@ -23,7 +23,9 @@ import { weekSchedule, type Scheduled } from "../core/curation/schedule.ts";
 import { SLOT_ORDER, type DaySlot } from "../lib/lenses.ts";
 import { otherBand, type PlanSource } from "../lib/plan.ts";
 import type { Perspective } from "../lib/values.ts";
+import { announceTarget } from "./target.ts";
 
+announceTarget();
 const { values: args } = parseArgs({
   options: {
     week: { type: "string" },
@@ -43,7 +45,7 @@ if (args.start && !/^\d{4}-\d{2}-\d{2}$/.test(args.start)) throw new Error("--st
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const key = process.env.SUPABASE_SECRET_KEY;
-if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY in .env.local.");
+if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY in the env file (.env.local, or .env.live.local for a :live script).");
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 type Reply = { data: unknown; error: { message: string } | null };
 function maybe<R extends Reply>(r: R, what: string): R["data"] {

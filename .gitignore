@@ -45,6 +45,8 @@ next-env.d.ts
 
 # family seed data (real nicknames and emails)
 /scripts/family.local.json
+# the test copy’s family: invented children, one plus-address guardian
+/scripts/family.test.json
 
 # model requests and replies from week:build --debug
 /.quark-debug/

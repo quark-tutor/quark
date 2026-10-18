@@ -41,6 +41,8 @@ npm run week:build -- --week 1 --days 1   # a cheap one-day trial of the first w
 
 **Storage needs no dashboard setting.** `content:fetch` creates a private bucket called `content` the first time it runs and keeps a copy of every picture there, so the wall never loads images from museum sites. The Egypt plan's copies come to about 45 MB, well inside the free plan's 1 GB, and the largest file is 7 MB, under Supabase's default 50 MB limit per file. Items that weren't approved automatically wait at `/parent/content`.
 
+**For developers.** A family runs one copy, and that is the path above. If you are changing Quark, make a second Supabase project (`quark-test`) with the same settings as step 1, except that Redirect URLs hold only `http://localhost:3000/**`, and keep two env files: `.env.local` for the test project and `.env.live.local` for your own live copy. Each carries `QUARK_TARGET=test` or `QUARK_TARGET=live`, and a script refuses to run if that disagrees with the file it loaded. Every database script and `npm run dev` use `.env.local`; the ones that reach the live copy have `:live` in their name (`npm run db:push:live`). Run a migration on test first. Never copy data from the live project into the test one: seed test from `scripts/family.example.json` (as `scripts/family.test.json`, gitignored, with a plus-address for the one guardian). Free projects pause after a week unused and wake with one click in the dashboard.
+
 ## 3. Vercel
 
 1. Import the GitHub repo at [vercel.com/new](https://vercel.com/new). The defaults for Next.js are right.
