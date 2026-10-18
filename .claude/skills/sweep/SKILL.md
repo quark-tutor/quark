@@ -12,4 +12,4 @@ Sweep the bug list.
 3. Fix them in the order agreed, one commit each, with a test for each where a rule is involved. Run `npm test` and `npm run typecheck` per fix. A new migration always stops for Brandon, inside a fix too. Never run `db:push`, `supabase`, or any script that reads `SUPABASE_DB_URL`, and never use the live project to prove a fix.
 4. When a bug is fixed, delete its line from docs/08; the fix is in the commit and the records. Do not tick it.
 5. Anything that turns out bigger than a fix is not built: add a row to `docs/board.md` at stage *raised*, Size "a job", and leave its bug line.
-6. End with `/close`.
+6. End by asking Brandon to type `/close` (it is user-only, so a sweep cannot call it).
