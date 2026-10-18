@@ -150,6 +150,7 @@ Decided (17 Oct 2026), `docs/board-slice.md`; a tooling change on `working-with-
 - **Decided: the Codex-reads-`AGENTS.md` convention changes nothing in the skills.** `AGENTS.md` is untouched; a second reviewer is a row at *not fully formed*.
 - **Decided: Sonnet for the build.** `/idea` and `/bugs` commit on the branch that is checked out; the page header names the branch and commit.
 - **Decided (17 Oct 2026): `/ask` has no `disallowed-tools` line.** Running it switched Edit, Write, Bash and PowerShell off for the rest of the session. `allowed-tools` only pre-approves tools, it does not remove the others, so `/ask` is read-only by its instructions, like every other skill, not by a lock. *Replaces* the line copied from PDERP.
+- **Decided (17 Oct 2026): `db:push` keeps `--db-url` and scrubs its output.** Brandon asked for the URL to go through the environment if the Supabase CLI allows it; its reference page for `db push` shows no environment route (`SUPABASE_DB_PASSWORD` is for `link` only), so the script captures the CLI's output and removes the URL and password before printing (`scripts/scrub-url.ts`). Not yet run against the real CLI: the live project is never used to test it. The URL can still show in the process list while the command runs. Asked: Brandon, "pass it through the environment ... if the CLI allows it, and scrub the output as well".
 - Proven on PDERP, 16 Oct 2026: an ask rule beats an allow rule even in auto, so a skill's `allowed-tools` cannot make a push to `main` run without asking.
 
 ## Bugs
