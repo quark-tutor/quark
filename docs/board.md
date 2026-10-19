@@ -30,7 +30,7 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
-| Ask-list rewrite: stops at steps, not commands; live actions run by Brandon’s hand | raised | 18 Oct 2026 | its own slice; the 18 Oct dry-run reached live with no ask | a slice | high / — | tooling | `docs/08-open-questions.md` (Bugs) |
+| Ask-list rewrite: stops at steps, not commands; live actions run by Brandon’s hand | building | 18 Oct 2026 | the three proofs; settings file swapped by Brandon | a slice | high / — | tooling | `docs/working-with-claude-4-slice.md`; `working-with-claude-4` |
 | Vercel preview deployments pointed at the test project | raised | 18 Oct 2026 | the test database job merged | an hour | — / — | tooling | `docs/test-database-slice.md` |
 | A test Supabase project, so a migration from a branch cannot touch the live database | on test | 18 Oct 2026 | the live ask proven to stop, in the next slice; merge `test-database` into `phase-3-curation` | a job | high / — | tooling | `docs/test-database-slice.md`; `test-database` |
 | Working with Claude, Quark: the state board and the seven session skills | live | 17 Oct 2026 | — | a job | — / — | tooling | `docs/board-slice.md` |
