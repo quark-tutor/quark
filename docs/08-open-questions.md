@@ -181,6 +181,8 @@ Brief: `docs/working-with-claude-4-slice.md`; branch `working-with-claude-4`. To
 - **Decided (17 Oct 2026): the plain-words description rule stays**, for the backstop and the pre-flight report. *Kept from* slice 1.
 - **Decided (18 Oct 2026): API spend runs freely up to $10 a run**; a brief puts a STOP above it, with the estimate. The old estimate for a full week is $5.70, so $5 would have stopped every normal week. *Replaces* the `week:build` and `content:fetch` asks.
 - **Decided (18 Oct 2026): "under fifteen patterns" counts distinct patterns** (14), each written for Bash and PowerShell, plus two Read rules for the secret files.
+- **Decided (18 Oct 2026): the 13 backstop patterns not seen firing are accepted**, since proof 1 proved the mechanism they share (a leading `*` matching through a `cd … &&` prefix). *Replaces* proving each one. Brandon: "the 13 untested patterns are accepted, since proof 1 proved the mechanism they share." A pattern seen to misbehave later becomes a bug line.
+- **Decided (18 Oct 2026): `working-with-claude-4` is merged into `phase-3-curation` by Brandon's hand; PDERP's half runs as its own session next.**
 - **Proven (18 Oct 2026), on the restarted session:** `cd /c/Users/BrandonReisen/Documents/quark && git push --dry-run origin main` asked and Brandon declined it (his first run was accepted by mistake: a dry run, nothing sent); `cd … && npm run db:push` did not ask and printed `Target: test`; `/job docs/test-database-slice.md` listed its live dry-run as the risky step, said Brandon runs it by hand, and stopped. Closes the 18 Oct live-ask bug and the 17 Oct chained-command bug, and makes moot the `.env.example` over-match and the `/ask` tool line.
 
 ## Bugs
