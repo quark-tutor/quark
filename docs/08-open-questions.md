@@ -169,6 +169,19 @@ Decided (17 Oct 2026), `docs/test-database-slice.md`; a tooling change on `test-
 - `content:fetch` and `week:build` are not run in this job; they default to test.
 - Tooling note: `scripts/db-push.mts` imported `./scrub-url` without its extension, which Node cannot resolve when the script runs; it now imports `./scrub-url.ts` like every other script.
 
+### Working with Claude, slice 4: stops at steps, not commands
+
+Brief: `docs/working-with-claude-4-slice.md`; branch `working-with-claude-4`. Tooling, not phase work.
+
+- **Decided (17 Oct 2026): the report is the control.** Risk is caught by the full report read in the chat, not by permission prompts. *Replaces* slice 1's ask-list as the first line. Brandon, 17 Oct: "I'll sit here and hit approve to every bash request, but I just don't see the value for anyone involved."
+- **Decided (17 Oct 2026): three things are run by Brandon's hand**: any command against the live database, anything that moves money, anything that sends to a real person. *Replaces* "stops and asks first" for those three. The third has no command yet; the phase 5 digest brief adds it when Resend arrives.
+- **Decided (17 Oct 2026): a brief names its risky steps and each gets a STOP**, with a four-line pre-flight report. `/job` lists them at its start and names any the brief missed. *New.*
+- **Decided (17 Oct 2026): everything below that line runs without asking** (deletes, kills, npm, gh, curl, Vercel reads, the test database). *Replaces* the 113-pattern list.
+- **Decided (17 Oct 2026): the ask-list stays only as a backstop**: 14 patterns, each with a leading `*`; a firing is a finding. *Refines* slice 1.
+- **Decided (17 Oct 2026): the plain-words description rule stays**, for the backstop and the pre-flight report. *Kept from* slice 1.
+- **Decided (18 Oct 2026): API spend runs freely up to $10 a run**; a brief puts a STOP above it, with the estimate. The old estimate for a full week is $5.70, so $5 would have stopped every normal week. *Replaces* the `week:build` and `content:fetch` asks.
+- **Decided (18 Oct 2026): "under fifteen patterns" counts distinct patterns** (14), each written for Bash and PowerShell, plus two Read rules for the secret files.
+
 ## Bugs
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
