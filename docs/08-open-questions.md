@@ -181,14 +181,11 @@ Brief: `docs/working-with-claude-4-slice.md`; branch `working-with-claude-4`. To
 - **Decided (17 Oct 2026): the plain-words description rule stays**, for the backstop and the pre-flight report. *Kept from* slice 1.
 - **Decided (18 Oct 2026): API spend runs freely up to $10 a run**; a brief puts a STOP above it, with the estimate. The old estimate for a full week is $5.70, so $5 would have stopped every normal week. *Replaces* the `week:build` and `content:fetch` asks.
 - **Decided (18 Oct 2026): "under fifteen patterns" counts distinct patterns** (14), each written for Bash and PowerShell, plus two Read rules for the secret files.
+- **Proven (18 Oct 2026), on the restarted session:** `cd /c/Users/BrandonReisen/Documents/quark && git push --dry-run origin main` asked and Brandon declined it (his first run was accepted by mistake: a dry run, nothing sent); `cd … && npm run db:push` did not ask and printed `Target: test`; `/job docs/test-database-slice.md` listed its live dry-run as the risky step, said Brandon runs it by hand, and stopped. Closes the 18 Oct live-ask bug and the 17 Oct chained-command bug, and makes moot the `.env.example` over-match and the `/ask` tool line.
 
 ## Bugs
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
-
-- 18 Oct 2026, the ask-list in `.claude/settings.json` (tooling): `npm run db:push:live -- --dry-run`, run as `cd /c/Users/BrandonReisen/Documents/quark && npm run db:push:live -- --dry-run`, reached the live database (read only, "up to date") with no ask; the four test commands before it (`db:push`, `seed`, `packs:import`, `plan:import`) also showed no ask that Claude saw, so every earlier claim that asks fired in this job is unverified. Expected: a live command stops at an ask whose description says LIVE. Not tested further, by order. Size: a slice (the next slice rewrites the list: stops at steps, live run by hand).
-
-- 17 Oct 2026, Claude Code's own commands during the test database job (tooling): a chained shell command whose text contained `scripts/db-push` fired the `*scripts/db-push*` ask, and the prompt showed a bare command with "Run shell command" as its description, not the three plain-words facts; nothing ran that script. Expected: one action per command near the ask-list, and a description that always says what it does, what it touches (LIVE or not) and whether it can be undone. Fixed by two lines in CLAUDE.md, *Before a consequential action*. Size: minutes.
 
 - 16 Oct 2026, hint check in the curation build (phase 3): a comparison hint that names the things being compared was blocked as giving the answer away. The exact hint and answer key were not recorded; the next held-back hint of this kind needs copying here before it can be fixed (the "each one" case is fixed). Size: an hour.
 - 16 Oct 2026, the week preview's first cards (phase 3): a card announces the child's interest ("imagine you're a painter") where it doesn't fit the lens; expected: the door is never announced. Size: a job (belongs to step 4d).

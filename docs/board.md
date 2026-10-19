@@ -30,9 +30,9 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
-| Ask-list rewrite: stops at steps, not commands; live actions run by Brandon’s hand | building | 18 Oct 2026 | the three proofs; settings file swapped by Brandon | a slice | high / — | tooling | `docs/working-with-claude-4-slice.md`; `working-with-claude-4` |
+| Ask-list rewrite: stops at steps, not commands; live actions run by Brandon’s hand | live | 18 Oct 2026 | — (the three proofs held; merge `working-with-claude-4` into `phase-3-curation` by Brandon's hand) | a slice | high / — | tooling | `docs/working-with-claude-4-slice.md`; `working-with-claude-4` |
 | Vercel preview deployments pointed at the test project | raised | 18 Oct 2026 | the test database job merged | an hour | — / — | tooling | `docs/test-database-slice.md` |
-| A test Supabase project, so a migration from a branch cannot touch the live database | on test | 18 Oct 2026 | the live ask proven to stop, in the next slice; merge `test-database` into `phase-3-curation` | a job | high / — | tooling | `docs/test-database-slice.md`; `test-database` |
+| A test Supabase project, so a migration from a branch cannot touch the live database | on test | 18 Oct 2026 | the first real migration proven on test, then live | a job | high / — | tooling | `docs/test-database-slice.md`; `test-database` |
 | Working with Claude, Quark: the state board and the seven session skills | live | 17 Oct 2026 | — | a job | — / — | tooling | `docs/board-slice.md` |
 | Curation engine v1: weekly cron, ideas, cards, gate, load the week | building | 17 Oct 2026 | merge to `main` when it runs; next is step 5, the gate | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | Delete the docs/08 items folded into board rows | raised | 17 Oct 2026 | phase 3 merged | minutes | — / — | tooling | `docs/08-open-questions.md` |
