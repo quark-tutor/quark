@@ -90,6 +90,8 @@ The full architecture above is the community vision. One family can start much s
 
 **What version one actually uses.** Everything is TypeScript in one Next.js app at the repo root, not Python services. The code lives in `app/` (the `/kid` and `/parent` views and the server routes), `lib/` and `supabase/migrations/`, with `core/` (model adapter, prompts, curation) arriving in phase 3. The kid view holds no database key: an iPad is paired from `/parent` with a six-digit code and then sends a device cookie to the app's own server routes. Setup steps are in [`deploy/README.md`](../deploy/README.md). A family runs one Supabase project; the developer's laptop uses two, a test project by default and the live one only through scripts named `:live`.
 
+The policy gate in version one is a second Anthropic call per card through the same adapter (`core/curation/gate.ts`, on `QUARK_MODEL_GATE`), not gpt-oss-safeguard or Llama Guard: the family's rulebook is its policy, `gate/safety-floor.md` its floor, and blackballs, never and too-young subjects are applied in code before the model reads a card (docs/04, "How the gate is built").
+
 ## Suggested repo layout (for the full architecture)
 
 ```

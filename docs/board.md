@@ -30,16 +30,16 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
-| The policy gate: every card approved or blocked before a child could see it | building | 20 Oct 2026 | the build session; then Brandon's own steps on the test copy and his look there; June on the safety floor and the twenty questions | a slice | — / — | 3 | `docs/gate-slice.md`; `phase-3-curation` |
+| The policy gate: every card approved or blocked before a child could see it | on test | 20 Oct 2026 | Brandon's yes to the live migration (`gate_test_runs`) and to `gate:live` on day 1; then the release; June on the safety floor and the twenty questions | a slice | — / — | 3 | `docs/gate-slice.md`; `docs/reports/2026-10-20-gate-slice.md`; `phase-3-curation` |
+| A test Supabase project, so a migration from a branch cannot touch the live database | on test | 20 Oct 2026 | the live push only (the workflow applied a real migration on test, 20 Oct) | a job | high / — | tooling | `docs/test-database-slice.md`; `test-database` |
+| A guardian can enter what to be careful about for each child | not fully formed | 20 Oct 2026 | a brief; the gate reads the note now (proven on test) | — | — / — | 3 | `docs/gate-slice.md`, *To settle* |
+| Prompt caching of the policy document in the model adapter | not fully formed | 20 Oct 2026 | Brandon: the gate measured at $0.026 a card, about $5 to $7 a week | — | — / — | 3 | `docs/gate-slice.md`, *To settle* |
+| Curation engine v1: weekly cron, ideas, cards, gate, load the week | building | 20 Oct 2026 | step 6, the Sunday cron and the Looks-good page; merge to `main` when it runs | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | Safety-floor lessons in the plan: body safety, telling a trusted adult, emergency basics | not fully formed | 20 Oct 2026 | June reading the safety floor | — | — / — | 3 | `docs/gate-slice.md`, decision 8; `docs/09-family-values.md` |
-| A guardian can enter what to be careful about for each child | not fully formed | 20 Oct 2026 | the gate built, which is the first thing to read it | — | — / — | 3 | `docs/gate-slice.md`, *To settle* |
-| Prompt caching of the policy document in the model adapter | not fully formed | 20 Oct 2026 | the gate's measured cost per card | — | — / — | 3 | `docs/gate-slice.md`, *To settle* |
 | Working with Claude, slice 5: the method is the wwc plugin | live | 19 Oct 2026 | — | a slice | — / — | tooling | `BrandonReisen/working-with-claude`, `docs/one-method-slice.md` |
 | Ask-list rewrite: stops at steps, not commands; live actions run by Brandon’s hand | live | 18 Oct 2026 | — (the three proofs held; merge `working-with-claude-4` into `phase-3-curation` by Brandon's hand) | a slice | high / — | tooling | `docs/working-with-claude-4-slice.md`; `working-with-claude-4` |
 | Vercel preview deployments pointed at the test project | raised | 18 Oct 2026 | the test database job merged | an hour | — / — | tooling | `docs/test-database-slice.md` |
-| A test Supabase project, so a migration from a branch cannot touch the live database | on test | 18 Oct 2026 | the first real migration proven on test, then live | a job | high / — | tooling | `docs/test-database-slice.md`; `test-database` |
 | Working with Claude, Quark: the state board and the seven session skills | live | 17 Oct 2026 | — | a job | — / — | tooling | `docs/board-slice.md` |
-| Curation engine v1: weekly cron, ideas, cards, gate, load the week | building | 17 Oct 2026 | merge to `main` when it runs; next is step 5, the gate | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | Delete the docs/08 items folded into board rows | raised | 17 Oct 2026 | phase 3 merged | minutes | — / — | tooling | `docs/08-open-questions.md` |
 | `docs/decisions.md`, newest first with what each replaced | raised | 17 Oct 2026 (seeded) | its own small job | an hour | — / — | tooling | review, job 8 |
 | Checks on GitHub: `checks.yml` running typecheck and tests on push | raised | 17 Oct 2026 (seeded) | its own job | an hour | — / — | tooling | review, job 7 |
