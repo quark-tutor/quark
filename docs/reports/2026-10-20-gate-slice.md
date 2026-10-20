@@ -170,4 +170,6 @@ changes, since the wall is phase 4). The release after step 6.
 
 ## `/cost`
 
-Not yet given.
+From Brandon's `/cost` at the close (this Claude Code session, not Quark's own model spend):
+**$25.60** in all (claude-opus-5-5 $25.39, claude-sonnet-5-5 $0.2152, claude-haiku-5-5
+$0.0003); 49m 33s of API time over 3h 46m 46s of wall time; 2,665 lines added and 455 removed.
