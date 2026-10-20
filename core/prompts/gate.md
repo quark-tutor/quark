@@ -1,4 +1,4 @@
-<!-- gate v1 (20 Oct 2026). Used by core/curation/gate.ts (use: "gate"): one call per card, after the code checks
+<!-- gate v2 (20 Oct 2026: a handoff that names a parent is by design, never a reader note; v1: first version). Used by core/curation/gate.ts (use: "gate"): one call per card, after the code checks
      have already held back what the family's settings decide on their own (a blackballed subject, "Don't bring
      it up", an age the child hasn't reached). Not kid-facing, so readPrompt(), not kidFacingPrompt().
      gate/safety-floor.md is added after this text. Sources: docs/gate-slice.md (decisions 1-8),
@@ -40,5 +40,6 @@ Settings decided in code never reach you: a subject a guardian blocked, a subjec
 - **verdict**: `pass` or `block`.
 - **reasons**: for a block, one or more, each with its rule from the list above, the number of the subject it is about (0 when it is about none), and one plain sentence for the parents saying what in the card broke the rule. For a pass, none.
 - **reader_notes**: none, one or two plain sentences, reading the card as an experienced teacher of young children would: a line that sounds wrong, that tells the child what they are instead of letting them see it, that says too much, or that talks down. They never change the verdict, most cards need none, and they never repeat a reason.
+- A handoff that names a parent ("ask Mom or Dad") is how the family wants cards written, by design: never a reason and never a reader note.
 
 Write every sentence for the parents: plain words, no rule names or numbers inside the sentence, never which guardian set or blocked anything, and never the words of the parents' note.
