@@ -4,6 +4,7 @@
 //   npm run week:build -- --week 1
 //   npm run week:build -- --week 1 --child Rex --days 2     (one child, the first two days)
 //   npm run week:build -- --week 1 --rebuild                (replace a week already built)
+//   npm run week:build -- --week 1 --days 1 --plan          (what would be built, and what the family's settings decide; spends nothing)
 // Options: --debug (write each model request and reply to .quark-debug/), --stretch (the thread; default: the plan's first stretch), --start YYYY-MM-DD (default: next Monday, or
 // counted on from week 1's start). The theme ends in status 'review'; nothing goes live here.
 // Cards are written with policy 'pending', and the gate checks them at the end (scripts/gate-run.ts):
@@ -39,6 +40,7 @@ const { values: args } = parseArgs({
     start: { type: "string" },
     rebuild: { type: "boolean", default: false },
     debug: { type: "boolean", default: false },
+    plan: { type: "boolean", default: false }, // print the week and what the settings decide, then stop: nothing spent or written
   },
 });
 const week = Number(args.week);
@@ -358,6 +360,10 @@ if (!gate.rulebook) {
   );
 }
 console.log(`Ideas on ${models.ideas}; cards on ${models.cards}; the gate on ${models.gate}. ${only ? `Only ${only.nickname}.` : `${children.length} children.`}`);
+if (args.plan) {
+  console.log(`\n--plan: stopped before spending anything; nothing was written.${gate.documentChars !== null ? ` The gate's copy of the rulebook is ${gate.documentChars.toLocaleString()} characters.` : ""}`);
+  process.exit(0);
+}
 const started = Date.now();
 let report;
 try {
