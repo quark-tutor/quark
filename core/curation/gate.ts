@@ -299,6 +299,15 @@ export type GateReport = {
   rulebookChanged: boolean;
 };
 
+// A model error in a few words, the same for every card it hit: without the request id each reply
+// carries, so the report counts one fault forty times rather than listing forty.
+export const faultText = (e: unknown) =>
+  (e instanceof Error ? e.message : String(e))
+    .split("\n")[0]
+    .replace(/,?\s*"request_id"\s*:\s*"[^"]*"/g, "")
+    .replace(/\breq_[A-Za-z0-9]+\b/g, "")
+    .slice(0, 160);
+
 const isUpToDate = (c: GateCard, rulebook: Rulebook, floor: Floor) =>
   (c.policy === "passed" || c.policy === "blocked") && c.notes?.gate?.rulebook === rulebook.hash && c.notes.gate.floor === floor.version;
 
@@ -376,7 +385,7 @@ export async function runGate(opts: GateOptions, deps: GateDeps): Promise<GateRe
           label: `gate-${c.label.replace(/[^a-z0-9]+/gi, "-")}`,
         });
       } catch (e) {
-        return leavePending(c, `the model call failed: ${(e instanceof Error ? e.message : String(e)).split("\n")[0].slice(0, 160)}`);
+        return leavePending(c, `the model call failed: ${faultText(e)}`);
       }
       const read = readVerdict(raw, child.carefulAbout);
       if ("problem" in read) return leavePending(c, read.problem);

@@ -346,6 +346,13 @@ describe("running the gate", () => {
     expect(f.saved).toEqual([{ id: cards[0].id, policy: "pending", notes: { validation: ["kept"] } }]);
   });
 
+  it("counts one model error once, whatever request id each reply carried", async () => {
+    const err = (id: string) => new Error(`404 {"type":"error","error":{"type":"not_found_error","message":"model: no-such-model"},"request_id":"${id}"}`);
+    const f = fake([err("req_011A"), err("req_011B"), err("req_011C")]);
+    const report = await run([gateCard(), gateCard(), gateCard()], f.deps);
+    expect(report.faults).toEqual({ 'the model call failed: 404 {"type":"error","error":{"type":"not_found_error","message":"model: no-such-model"}}': 3 });
+  });
+
   it("stops when the rulebook changes under the run", async () => {
     const f = fake([pass], ["h1", "h2"]);
     const cards = [gateCard(), gateCard(), gateCard()];
