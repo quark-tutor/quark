@@ -126,6 +126,8 @@ The page is read-only (decided 16 Oct 2026; see docs/04, "How the models and cos
 
 ## How Quark is built with Claude
 
+**The method is the `wwc` plugin (19 October 2026):** its skills, the readback agent, the stops and the reports live in `BrandonReisen/working-with-claude` (`docs/working-with-claude.md` there); where this page and that one disagree on stops, that one wins.
+
 Decided (16 Oct 2026), "Working with Claude, slice 1" (`docs/working-with-claude-slice-1.md`); a tooling change, not phase work, so it lives on `working-with-claude` and is merged to `main` when it runs. Nothing here touches a screen.
 
 - **The close-check list.** Money (API spend), anything that communicates with a real person, and any database migration on live get a real look before they happen. Everything else runs under the existing rules.

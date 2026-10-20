@@ -1,5 +1,22 @@
 # Quark — instructions for Claude Code
 
+## Method
+
+The `wwc` plugin (`/wwc:job` and the rest; the method is in `BrandonReisen/working-with-claude`) reads these names; its skills name no project file themselves.
+
+- As built: the *Where we are* note under Build order in this file, and the *How it is built* sections of the spec pages in `docs/`
+- Decisions: the *Decided:* lines in the spec pages a job touched; for a tooling job, under *How Quark is built with Claude* in `docs/08-open-questions.md`
+- To test: none; the board's *on test* rows are the list
+- Board: `docs/board.md`
+- Board page: `npm run docs:board` (writes `Quark board.html` at the repository root, untracked; skip it in a side worktree)
+- Branches: working is the phase branch (`phase-N-...`; a phase job runs on its phase branch, a tooling job on a tooling branch, never `main`); finished `main`, and a push or merge to `main` is Brandon's go
+- Release: Brandon merges the branch to `main`; no skill
+- Tests: `npm test`, and `npm run typecheck`
+- Bugs: `docs/08-open-questions.md`, a bullet at the top of the list under `## Bugs`: `- <date>, <where> (<phase N or tooling>): <what happened>; expected: <what should have happened>. <File, if any.> Size: <minutes, an hour, a job>.` The phase in brackets is what the board page counts by. No screenshot is saved: the repository is public.
+- Also read at /job: the README status line; `docs/08-open-questions.md` (*How Quark is built with Claude* and *Bugs*); by search, the spec pages the brief touches, `deploy/supabase/schema.sql` if it touches data, `gate/values-interview.md` and `packs/README.md` for values
+- Also at close: update the *Where we are* note in this file (date, what is merged, what is on which branch, what is next), then the README status line so it agrees; the spec pages' *How it is built* sections and *Decided:* lines; for a tooling job, the *Decided:* lines in `docs/08-open-questions.md`. The repository is public: nothing written names a child.
+- Read-back adds: the one live database, API spend, anything a child could see, anything naming a child in the public repository; if a choice touches a guardian's say or one of the project's rules, say so
+
 Quark is an AI tutor that works for parents: curated, challenging, values-aware learning at home for kids roughly 6–12. This repo is both the open concept and, from now on, the code. Read this file first, then `README.md`, then the docs it links to. The docs are the spec.
 
 ## The first family
