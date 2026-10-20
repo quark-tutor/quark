@@ -232,6 +232,7 @@ Brief: `docs/working-with-claude-4-slice.md`; branch `working-with-claude-4`. To
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
 
+- 20 Oct 2026, the wwc job skill at a STOP (tooling): the STOP 1 pre-flight was printed in chat twice before it was written to the report file (Brandon: "it is still not in docs/reports/2026-10-20-gate-live.md"); expected: the pre-flight is written to the report file first, then printed once, then the job stops. Size: minutes.
 - 20 Oct 2026, the gate job's commit for its step (b) (tooling): the commit message named the gate scripts the way a command would ("npm run gate and gate:live"), and the backstop asked (Brandon: "the commit message for (b) named "npm run gate and gate:live" and tripped the backstop"); expected: a commit message never quotes a command, so the backstop never matches one, and the brief missed no stop. `cc65c13`. Size: minutes.
 
 - 16 Oct 2026, hint check in the curation build (phase 3): a comparison hint that names the things being compared was blocked as giving the answer away. The exact hint and answer key were not recorded; the next held-back hint of this kind needs copying here before it can be fixed (the "each one" case is fixed). Size: an hour.
