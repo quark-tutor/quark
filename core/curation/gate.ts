@@ -272,7 +272,8 @@ export type GateDeps = {
 export type GateOptions = {
   cards: GateCard[];
   children: GateChild[];
-  rulebook: Rulebook | null; // null: the family has no rulebook yet
+  rulebook: Rulebook | null; // null: none the gate can use
+  missing?: string; // why there is none, for the report
   floor: Floor;
   system: string; // gate.md, then the floor
   model: string;
@@ -336,7 +337,7 @@ export async function runGate(opts: GateOptions, deps: GateDeps): Promise<GateRe
   }
   if (!rulebook) {
     // Nothing to check against: nothing is written, and every card that needed a check stays as it is.
-    if (todo.length) fault("the family has no rulebook yet (take Our Family's Beliefs first)", todo.length);
+    if (todo.length) fault(opts.missing ?? "the family has no rulebook yet (take Our Family's Beliefs first)", todo.length);
     return report;
   }
 

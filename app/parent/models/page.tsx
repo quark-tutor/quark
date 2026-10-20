@@ -27,7 +27,7 @@ export default function ModelsPage() {
 const JOBS = [
   { use: "curate", env: "QUARK_MODEL_CURATE", job: "Ideas", what: "The facts for each day and slot, shared by both children. One call per day-slot." },
   { use: "write", env: "QUARK_MODEL_WRITE", job: "Cards", what: "Each child's cards, written at their level through a lens. One call per child per day-slot." },
-  { use: "gate", env: "QUARK_MODEL_GATE", job: "Gate and content flags", what: "Flags pictures and recordings when they're fetched; from step 5, checks every card against your rulebook." },
+  { use: "gate", env: "QUARK_MODEL_GATE", job: "Gate and content flags", what: "Flags pictures and recordings when they're fetched, and checks every card against your rulebook. One call per card." },
 ] as const;
 
 type Run = RecordedRun & { id: string; started_at: string; theme_id: string | null; week: number | null; cost: number; cost_complete: boolean };
@@ -173,10 +173,17 @@ async function Models() {
               This is an estimate, not a bill. It takes the cost per day of the most recent week builds: ideas at{" "}
               {money(est.ideasPerDay)} a day ({est.ideaDays} day{est.ideaDays === 1 ? "" : "s"} built in {est.ideaRuns} run
               {est.ideaRuns === 1 ? "" : "s"}) and cards at {money(est.cardsPerChildDay)} per child per day ({est.cardChildDays}{" "}
-              child-day{est.cardChildDays === 1 ? "" : "s"} in {est.cardRuns} run{est.cardRuns === 1 ? "" : "s"}), times seven
-              days, with the second asks those runs needed. A month is 52 weeks over 12. It leaves out fetching pictures (a
-              one-off per item) and the gate, which will check every card from step 5. The real bill is in Anthropic&rsquo;s
-              console.
+              child-day{est.cardChildDays === 1 ? "" : "s"} in {est.cardRuns} run{est.cardRuns === 1 ? "" : "s"})
+              {est.gateRuns ? (
+                <>
+                  {" "}and the checker at {money(est.gatePerChildDay)} per child per day ({est.gateChildDays} child-day
+                  {est.gateChildDays === 1 ? "" : "s"} in {est.gateRuns} run{est.gateRuns === 1 ? "" : "s"})
+                </>
+              ) : null}
+              , times seven days, with the second asks those runs needed. A month is 52 weeks over 12. It leaves out fetching
+              pictures (a one-off per item)
+              {est.gateRuns ? "" : " and the checker, which no recorded week build has run yet"}. The real bill is in
+              Anthropic&rsquo;s console.
             </p>
             {est.pricesMissing ? (
               <p className={styles.flag}>Some runs used a model without a known price, so this estimate is too low.</p>

@@ -4,7 +4,7 @@ import { costOf } from "./prices.ts";
 // What a run spent on models, as the scripts record it in model_runs and the models page reads it
 // back (docs/04, "How the models and costs page is built"). Counts and money only (rule 7).
 
-export type RunKind = "week:build" | "content:fetch";
+export type RunKind = "week:build" | "content:fetch" | "gate"; // gate: npm run gate on its own
 
 // One job on one model in a run. cost is null when the model isn't in core/prices.ts.
 export type RunModel = { use: ModelUse; model: string; calls: number; input: number; output: number; cost: number | null };
@@ -52,20 +52,25 @@ export const WEEKS_PER_MONTH = 52 / 12;
 export type Estimate = {
   ideasPerDay: number; // the shared idea chains for one day, both children
   cardsPerChildDay: number; // one child's cards for one day
+  gatePerChildDay: number; // checking one child's cards for one day; 0 until a build has run the gate
   week: number; // seven days for `children` children
   month: number;
   children: number;
   ideaRuns: number; // how many runs each rate is taken from
   cardRuns: number;
+  gateRuns: number;
   ideaDays: number;
   cardChildDays: number;
+  gateChildDays: number;
   pricesMissing: boolean; // some run used a model without a known price, so the rate is low
 };
 
 // A full week and a month, from the cost per day of the most recent successful week:build runs.
 // Ideas are shared, so they are priced per day; cards per child per day. A run that built cards
 // for one child (--child) counts toward cards only, and a run that stopped part way counts toward
-// neither. Null until some run has built both ideas and cards. The gate (step 5) isn't in it yet.
+// neither. Null until some run has built both ideas and cards. The gate runs at the end of a week
+// build, on that build's cards, so it is priced per child per day like cards, from the builds that
+// ran it; `npm run gate` on its own (a re-check) doesn't count.
 export function estimate(runs: RecordedRun[], children: number, recent = 5): Estimate | null {
   const built = runs
     .filter((r) => r.kind === "week:build" && r.ok && r.days && r.children)
@@ -73,25 +78,36 @@ export function estimate(runs: RecordedRun[], children: number, recent = 5): Est
   const spent = (r: RecordedRun, use: ModelUse) => r.models.filter((m) => m.use === use);
   const withIdeas = built.filter((r) => spent(r, "curate").length).slice(0, recent);
   const withCards = built.filter((r) => spent(r, "write").length).slice(0, recent);
+  const withGate = built.filter((r) => spent(r, "gate").length).slice(0, recent);
   if (!withIdeas.length || !withCards.length) return null;
 
   const sum = (list: RecordedRun[], use: ModelUse) => list.reduce((s, r) => s + spent(r, use).reduce((t, m) => t + (m.cost ?? 0), 0), 0);
+  const childDays = (list: RecordedRun[]) => list.reduce((s, r) => s + r.days! * r.children!, 0);
   const ideaDays = withIdeas.reduce((s, r) => s + r.days!, 0);
-  const cardChildDays = withCards.reduce((s, r) => s + r.days! * r.children!, 0);
+  const cardChildDays = childDays(withCards);
+  const gateChildDays = childDays(withGate);
   const ideasPerDay = sum(withIdeas, "curate") / ideaDays;
   const cardsPerChildDay = sum(withCards, "write") / cardChildDays;
-  const week = 7 * (ideasPerDay + children * cardsPerChildDay);
-  const used = [...withIdeas.flatMap((r) => spent(r, "curate")), ...withCards.flatMap((r) => spent(r, "write"))];
+  const gatePerChildDay = gateChildDays ? sum(withGate, "gate") / gateChildDays : 0;
+  const week = 7 * (ideasPerDay + children * (cardsPerChildDay + gatePerChildDay));
+  const used = [
+    ...withIdeas.flatMap((r) => spent(r, "curate")),
+    ...withCards.flatMap((r) => spent(r, "write")),
+    ...withGate.flatMap((r) => spent(r, "gate")),
+  ];
   return {
     ideasPerDay,
     cardsPerChildDay,
+    gatePerChildDay,
     week,
     month: week * WEEKS_PER_MONTH,
     children,
     ideaRuns: withIdeas.length,
     cardRuns: withCards.length,
+    gateRuns: withGate.length,
     ideaDays,
     cardChildDays,
+    gateChildDays,
     pricesMissing: used.some((m) => m.cost === null),
   };
 }

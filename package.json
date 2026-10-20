@@ -21,6 +21,8 @@
     "content:fetch:live": "node --env-file=.env.live.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content-fetch.mts",
     "week:build": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/week-build.mts",
     "week:build:live": "node --env-file=.env.live.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/week-build.mts",
+    "gate": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gate.mts",
+    "gate:live": "node --env-file=.env.live.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gate.mts",
     "model:smoke": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/model-smoke.mts",
     "docs:board": "node ../working-with-claude/scripts/export-board.mjs --name Quark --second June --out ."
   },

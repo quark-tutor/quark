@@ -6,7 +6,9 @@
 //   npm run week:build -- --week 1 --rebuild                (replace a week already built)
 // Options: --debug (write each model request and reply to .quark-debug/), --stretch (the thread; default: the plan's first stretch), --start YYYY-MM-DD (default: next Monday, or
 // counted on from week 1's start). The theme ends in status 'review'; nothing goes live here.
-// Cards are written with policy 'pending': the gate (step 5) checks them.
+// Cards are written with policy 'pending', and the gate checks them at the end (scripts/gate-run.ts):
+// each leaves 'pending' only as 'passed' or 'blocked'. Anything the gate leaves pending ends the run
+// with an error; npm run gate -- --week N checks them again.
 
 import { parseArgs } from "node:util";
 import { createClient } from "@supabase/supabase-js";
@@ -23,6 +25,8 @@ import { weekSchedule, type Scheduled } from "../core/curation/schedule.ts";
 import { SLOT_ORDER, type DaySlot } from "../lib/lenses.ts";
 import { otherBand, type PlanSource } from "../lib/plan.ts";
 import type { Perspective } from "../lib/values.ts";
+import { subjectWatch } from "../core/curation/gate.ts";
+import { gateFailed, gateSetup, gateTheme, printGate } from "./gate-run.ts";
 import { announceTarget } from "./target.ts";
 
 announceTarget();
@@ -64,7 +68,7 @@ if (args.debug) {
   console.log(`Writing every model request and reply to ${dir}/`);
 }
 // Fail before spending anything if a model isn't set.
-const models = { ideas: modelFor("curate"), cards: modelFor("write") };
+const models = { ideas: modelFor("curate"), cards: modelFor("write"), gate: modelFor("gate") };
 
 // --- The family (one per copy, made by npm run seed) ---
 
@@ -329,7 +333,31 @@ for (const d of schedule.filter((d) => d.day <= days)) {
   const lessons = SLOT_ORDER.filter((s) => s !== d.thread).map((s) => `${s} ${titleOf.get(d.topics[s])?.keys[0].split("/")[1]}`);
   console.log(`  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread])?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}.`);
 }
-console.log(`Ideas on ${models.ideas}; cards on ${models.cards}. ${only ? `Only ${only.nickname}.` : `${children.length} children.`}`);
+// Before spending: the gate's rulebook and floor, and what the family's settings already decide for
+// this week's topics, so a guardian sees the blocks before the money (docs/gate-slice.md, To settle).
+const gate = await gateSetup(db, family.id);
+if (!gate.rulebook) {
+  console.log(`\nThe gate: ${gate.missing}. The cards will be built and left pending; run npm run gate -- --week ${week} afterwards.`);
+} else {
+  const watch: string[] = [];
+  for (const kid of only ? [only] : children) {
+    const age = gate.children.find((c) => c.id === kid.id)?.age ?? kid.age;
+    for (const d of schedule.filter((d) => d.day <= days)) {
+      for (const slot of SLOT_ORDER) {
+        const t = topicById.get(d.topics[slot]);
+        if (!t?.valuesPoints.length) continue;
+        const notes = subjectWatch(t.valuesPoints, gate.rulebook.values, { id: kid.id, age }, gate.rulebook.pointNames);
+        if (notes.length) watch.push(`  ${kid.nickname}: day ${d.day} ${slot} (${t.title}): ${notes.join(" ")}`);
+      }
+    }
+  }
+  console.log(
+    watch.length
+      ? `\nWhat the family's settings decide before anything is spent (the gate holds these back in code, or reads them as parent-led):\n${watch.join("\n")}`
+      : "\nNo topic built here touches a subject the family's settings hold back or keep parent-led.",
+  );
+}
+console.log(`Ideas on ${models.ideas}; cards on ${models.cards}; the gate on ${models.gate}. ${only ? `Only ${only.nickname}.` : `${children.length} children.`}`);
 const started = Date.now();
 let report;
 try {
@@ -366,15 +394,26 @@ console.log(
     ? `First cards without a picture (the topic had an item; layer 1 still had none after a second try): ${report.firstWithoutPicture.join(", ")}.`
     : "Every first card has a picture or recording where its topic has one.",
 );
+// The gate, on the cards this run built.
+let gateOk = false;
+try {
+  const gated = await gateTheme(db, family.id, report.themeId, gate, only?.id);
+  printGate(gated, gate);
+  gateOk = !gateFailed(gated);
+} catch (e) {
+  console.error(`\nThe gate stopped: ${e instanceof Error ? e.message : String(e)}. Cards it hadn't reached are left as they were; run npm run gate -- --week ${week}.`);
+}
 printUsage();
 await recordRun(true, report.themeId);
 console.log(`\nPreview it at /parent/week/${report.themeId}.`);
+if (!gateOk) process.exit(1);
 
 function printUsage() {
   const row = runRow("week:build", usageSoFar(), { ok: true, startedAt: new Date(started) });
   console.log("\nTokens:");
   for (const m of row.models) {
     console.log(`  ${m.use} on ${m.model}: ${m.calls} calls, ${m.input.toLocaleString()} in, ${m.output.toLocaleString()} out${m.cost === null ? ", price unknown" : `, $${m.cost.toFixed(2)}`}`);
+    if (m.use === "gate" && m.cost !== null && m.calls) console.log(`    $${(m.cost / m.calls).toFixed(3)} a card the model read.`);
   }
   console.log(`  Total: $${row.cost.toFixed(2)}${row.cost_complete ? "" : " plus models without a known price"}.`);
 }

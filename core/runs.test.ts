@@ -82,6 +82,24 @@ describe("estimate", () => {
     expect(e.cardsPerChildDay).toBeCloseTo(1.7 / 5);
   });
 
+  it("prices the gate per child per day from the builds that ran it, and leaves out re-checks on their own", () => {
+    const runs = [
+      run("14", 1, 2, [m("curate", 0.4), m("write", 0.5)]), // before the gate
+      run("15", 1, 2, [m("curate", 0.4), m("write", 0.5), m("gate", 0.8)]), // gate 0.40 a child-day
+      run("16", 1, 2, [m("gate", 5)], { kind: "gate" }),
+    ];
+    const e = estimate(runs, 2)!;
+    expect(e.gateRuns).toBe(1);
+    expect(e.gateChildDays).toBe(2);
+    expect(e.gatePerChildDay).toBeCloseTo(0.4);
+    expect(e.week).toBeCloseTo(7 * (0.4 + 2 * (0.25 + 0.4)));
+    expect(estimate([runs[0]], 2)!.gatePerChildDay).toBe(0);
+  });
+
+  it("records a gate run on its own", () => {
+    expect(runRow("gate", [], { ok: true, startedAt: new Date(), week: 1, children: 2 }).kind).toBe("gate");
+  });
+
   it("uses only the most recent runs", () => {
     const runs = [run("10", 1, 2, [m("curate", 10), m("write", 10)]), run("15", 1, 2, [m("curate", 0.4), m("write", 0.5)])];
     expect(estimate(runs, 2, 1)!.ideasPerDay).toBeCloseTo(0.4);
