@@ -22,7 +22,7 @@
     "week:build": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/week-build.mts",
     "week:build:live": "node --env-file=.env.live.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/week-build.mts",
     "model:smoke": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/model-smoke.mts",
-    "docs:board": "node scripts/export-board.mjs"
+    "docs:board": "node ../working-with-claude/scripts/export-board.mjs --name Quark --second June --out ."
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",
