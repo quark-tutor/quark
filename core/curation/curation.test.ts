@@ -84,7 +84,7 @@ function chainFor(day: number, slot: WeekTopic["slot"]): IdeaChain {
   return { day, slot, topic: t, layers };
 }
 
-const kid: CardChild = { id: "c1", nickname: "Rex", age: 7, reading: "reads_alone", interests: ["sharks", "trucks"], boredBy: ["dolls"] };
+const kid: CardChild = { id: "c1", nickname: "Pip", age: 7, reading: "reads_alone", interests: ["sharks", "trucks"], boredBy: ["dolls"] };
 
 const goodCard = (n: number): CardBody => ({
   title: `Card ${n}`,
@@ -119,7 +119,7 @@ describe("ideas", () => {
     expect(prompt).toContain('- id item-1: image, "Nakht\'s chapel", Norman de Garis Davies.');
     expect(prompt).toContain("Already written on this topic on earlier days (don't repeat these; layer 1 must be new):");
     expect(prompt.match(/- Day 1: /g)).toHaveLength(1); // only the chain on this topic, not day 1's short lesson
-    expect(prompt).not.toMatch(/Rex|sharks|\bboy\b|\bgirl\b/);
+    expect(prompt).not.toMatch(/Pip|sharks|\bboy\b|\bgirl\b/);
   });
 
   it("says a short lesson stands on its own, with its own perspective and a parent's part", () => {
@@ -246,7 +246,7 @@ const ctx = (over: Partial<CardContext> = {}): CardContext => ({
 describe("cardPrompt", () => {
   it("carries the child's nickname, age and reading level, the lens and its question, and the family's words", () => {
     const p = cardPrompt(ctx({ door: "sharks" }));
-    expect(p).toContain("Child: Rex, age 7. Reading level: reads alone.");
+    expect(p).toContain("Child: Pip, age 7. Reading level: reads alone.");
     expect(p).toContain("Lens: build. Its question: How was it made? What would you make?");
     expect(p).toContain("the child is into sharks");
     expect(p).toContain("Don't use these as a way in: dolls.");
@@ -431,7 +431,7 @@ function fakeDb(existingTheme: { id: string } | null = null) {
 }
 
 const boys: WeekChild[] = [
-  { ...kid, id: "c1", nickname: "Rex", sex: "boy", history: {} },
+  { ...kid, id: "c1", nickname: "Pip", sex: "boy", history: {} },
   { ...kid, id: "c2", nickname: "Ash", age: 9, reading: "chapter_books", interests: ["Lego"], sex: "boy", history: { story: 5 } },
 ];
 const options = { plan, weekStart: "2026-10-19", days: 7, children: boys, statement: "Kind and curious.", learns: null, pointNames: new Map<number, string>(), rebuild: false };

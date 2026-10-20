@@ -2,7 +2,7 @@
 // A week is mixed (docs/04, "How a week is mixed"): the thread on one slot a day, short lessons on
 // the other four. --week N is the family's week N of the plan.
 //   npm run week:build -- --week 1
-//   npm run week:build -- --week 1 --child Rex --days 2     (one child, the first two days)
+//   npm run week:build -- --week 1 --child Pip --days 2     (one child, the first two days)
 //   npm run week:build -- --week 1 --rebuild                (replace a week already built)
 //   npm run week:build -- --week 1 --days 1 --plan          (what would be built, and what the family's settings decide; spends nothing)
 // Options: --debug (write each model request and reply to .quark-debug/), --stretch (the thread; default: the plan's first stretch), --start YYYY-MM-DD (default: next Monday, or

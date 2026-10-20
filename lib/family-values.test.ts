@@ -4,8 +4,8 @@ import { mergeFamily, type GuardianAnswer, type GuardianInput } from "./family-v
 import { renderPolicy, type PolicyContext } from "./policy";
 
 const kids = [
-  { id: "k1", nickname: "Asher", age: 9 },
-  { id: "k2", nickname: "Rex", age: 7 },
+  { id: "k1", nickname: "Wren", age: 9 },
+  { id: "k2", nickname: "Pip", age: 7 },
 ];
 
 const answer = (a: Partial<GuardianAnswer> = {}): GuardianAnswer => ({
@@ -166,13 +166,13 @@ describe("the policy document", () => {
       `**Point 1, Subject 1.** The tutor may raise this and may answer it. Answer from the family's tradition (Catholic), in the family's words where given. Never say other views are foolish. The family's note: "We believe in God."`,
     );
     expect(doc).toContain(`**Point 6, Subject 6.** The tutor does not raise this. If the child asks, hand off: "Ask Dad about that one." Say nothing on this.`);
-    expect(doc).toContain("The tutor does not raise this with Asher before age 10.");
-    expect(doc).toContain("The tutor does not raise this with Rex before age 9.");
+    expect(doc).toContain("The tutor does not raise this with Wren before age 10.");
+    expect(doc).toContain("The tutor does not raise this with Pip before age 9.");
     expect(doc).toContain("From that age: Present the main views fairly");
     expect(doc).toContain("**Point 9, Subject 9.** The parents haven't agreed on this yet, so it is parent-led until they do.");
     expect(doc).toContain("**Point 2, Subject 2.** Not settled yet");
     expect(doc).toContain("## Conduct");
-    expect(doc).toContain("Asher: don't ask for a spoken answer before a hint. (Not settled yet");
+    expect(doc).toContain("Wren: don't ask for a spoken answer before a hint. (Not settled yet");
   });
 
   it("marks a blackballed subject and topic as blocked", () => {

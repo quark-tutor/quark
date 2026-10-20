@@ -1,5 +1,5 @@
 // Tidy the ends of a string the model wrote. Structured output keeps the JSON valid, but the model
-// can still type JSON's own characters into a value: Rex's Wonder card on 19 Oct 2026 ended its
+// can still type JSON's own characters into a value: Pip's Wonder card on 19 Oct 2026 ended its
 // handoff with "begins.}". Braces and brackets at either end are never meant for a child, and a
 // double quote at the end is dropped only when it has no partner.
 

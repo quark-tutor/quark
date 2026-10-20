@@ -32,7 +32,7 @@ The free-text box matters more than the buttons. The family's own words can be e
 
 Extra controls:
 - **Point 8** (where babies come from): each child's age picker defaults to that child's current age plus two.
-- **"Not yet" asks for each child separately.** Different children are ready at different ages, so Asher and Rex can get different ages on the same point. A good tutor knows when each child is ready; for these points the guardians decide, and the tutor follows.
+- **"Not yet" asks for each child separately.** Different children are ready at different ages, so Wren and Pip can get different ages on the same point. A good tutor knows when each child is ready; for these points the guardians decide, and the tutor follows.
 - **Point 20** (violence and war): a second slider, "words only" to "period art is fine."
 
 ## Part 2b: how the tutor conducts itself (3 minutes)
