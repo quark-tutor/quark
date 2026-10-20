@@ -11,11 +11,13 @@ view yet.
 
 **Settled with Brandon on 20 October 2026 ("go"):** every decision below and
 every recommended answer under *To settle*, with three changes, written in
-below: decision 5 (the gate call carries the `careful_about` note and nothing
-else about the child), decision 8 (the safety floor starts with the three items
-in docs/09 and is marked a first guess, pending June), and decision 10 (a new
-run line, measured at step 1, instead of a standing STOP on every full week).
-The decisions are dated for docs/08 at the close.
+below: decision 5 (the gate call carries the `careful_about` note and the
+child's age band, nothing else about the child; the age band was added the same
+day, because the frightening judgement is age-relative), decision 8 (the safety
+floor starts with the three items in docs/09 and is marked a first guess,
+pending June), and decision 10 (a new run line, measured at step 1, instead of
+a standing STOP on every full week). The decisions are dated for docs/08 at
+the close.
 
 ## Why
 
@@ -73,11 +75,12 @@ in `core/runs.ts` prices ideas and cards only).
    (`values_profiles.policy_document`, whole), the safety floor (decision 8),
    the topic's perspective and the family's setting for each subject it
    marks, the card as the child would see it (title, text, read_aloud,
-   question, hints, handoff, image_alt), and, when the parents wrote one, the
-   `careful_about` note (decision 5). Nothing else about the child: no age,
-   reading level, birth month, sex, school, address or interests, and no
-   nickname field. The from-age rule is applied in code, so the model does not
-   need the age; it judges the card as written for its level. Not kid-facing,
+   question, hints, handoff, image_alt), the child's age band, and, when the
+   parents wrote one, the `careful_about` note (decision 5). Nothing else about
+   the child: no exact age, reading level, birth month, sex, school, address or
+   interests, and no nickname field. The age band is there because whether a
+   card is frightening is age-relative; the from-age rule is applied in code,
+   from the exact age, which is never sent. Not kid-facing,
    so `readPrompt`, not `kidFacingPrompt`, in `core/prompts/gate.md` (v1, on
    `QUARK_MODEL_GATE`, like `flag-content.md`). It returns JSON: a verdict,
    reasons (a rule, a subject if any, one plain sentence for parents) and
@@ -85,18 +88,23 @@ in `core/runs.ts` prices ideas and cards only).
    parent-led subject instead of handing off; one that states the family's view
    as the only one when the setting is *several fairly*, or calls other views
    foolish; free-text blackballs (`blackballs.topic`, listed in the document);
-   fear, shame or contempt (rule 1); and the child's caution (decision 5). A
-   test holds the prompt to the rule in decision 5. *Follows rules 1, 6 and 7.*
-   The gate is not told the child's sex and never blocks on it.
+   fear, shame or contempt (rule 1); words likely to frighten a child of this
+   age band (`flag-content.md` already judges the pictures for a 7-year-old;
+   this is the card's own words); and the child's caution (decision 5). A test
+   holds the prompt to the rule in decision 5. *Follows rules 1, 6 and 7.* The
+   gate is not told the child's sex and never blocks on it.
 5. **`careful_about` goes to the gate only** (CLAUDE.md, *Where we are*; docs/08,
    *Building a week*; confirmed by Brandon, 20 October 2026). The card writer
    still does not get it, and its test stays. **The gate call carries the note
-   and nothing else about the child beside it:** the note goes in as "the
-   parents asked for care about: …", with no age, reading level, nickname field,
-   birth month, sex, school, address or interests; the gate's reasons never
-   quote it back; and no `policy_notes` row holds it. A test builds the gate
-   prompt for a child with a note and for one without, and checks the note is
-   there only in the first and that none of those other fields is in either.
+   and the child's age band, and nothing else about the child:** the note goes
+   in as "the parents asked for care about: …", the band as a range, with no
+   exact age, no reading level, no nickname field, birth month, sex, school,
+   address or interests; the gate's reasons never quote the note back; and no
+   `policy_notes` row holds it. The band is a two-year step from code (6 to 7,
+   8 to 9, 10 to 11, 12 and over); step 1 shows the edges and Brandon can move
+   them. A test builds the gate prompt for a child with a note and for one
+   without, and checks that the note is there only in the first, that the band
+   is in both, and that none of the other fields is in either.
    *Touches rule 7:* the note is a sensitive free-text line about a child (a
    fear, a loss) leaving the machine for the model provider, and June's view of
    that is not recorded here. One limit on the line: it governs what the call
@@ -253,8 +261,9 @@ test). No step here is live unless it says so.
    (measured, replacing my guess), the full-week figure with the gate, and the
    run line the rule in decision 10 makes of it, as one number for Brandon to
    confirm; the exact gate input, field by field, with rule 7 checked line by
-   line: the `careful_about` note and nothing else about the child beside it,
-   and how often a card's own text carries the nickname; the verdict schema and
+   line: the `careful_about` note and the age band and nothing else about the
+   child, the band's edges, and how often a card's own text carries the
+   nickname; the verdict schema and
    the `policy_notes.gate` shape; the code checks and what each blocks; the
    first `gate/safety-floor.md`, the three items from docs/09 with its
    "first guess, pending June" line; the twenty questions with the subject each
@@ -394,9 +403,9 @@ test). No step here is live unless it says so.
 - `week:build` and `npm run gate` (and `gate:live`, never run here) do this;
   the gate's cost is in the report, the `model_runs` row and the models page
   estimate; `QUARK_MODEL_GATE` is checked before money is spent.
-- The gate call carries the `careful_about` note and nothing else about the
-  child beside it, and a test holds that; `careful_about` reaches the gate and
-  not the card writer; `learns_to_act` reaches the card writer.
+- The gate call carries the `careful_about` note and the child's age band and
+  nothing else about the child, and a test holds that; `careful_about` reaches
+  the gate and not the card writer; `learns_to_act` reaches the card writer.
 - `gate/safety-floor.md` holds the three items from docs/09 and says it is a
   first guess, pending June; each verdict and the week page say which floor
   version they were checked against.
