@@ -1,4 +1,4 @@
-import { LEANS, PERSPECTIVE, WHEN, type Lean, type Perspective, type When } from "./values";
+import { LEANS, PERSPECTIVE, WHEN, type Lean, type Perspective, type When } from "./values.ts";
 
 // "Our Family's Beliefs": the five ways a family can handle a subject (gate/values-interview.md).
 // Shared by the /parent/beliefs page and its server actions, so it holds no secrets.

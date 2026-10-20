@@ -1,6 +1,6 @@
-import { defaultAge, type LeanChoice } from "./beliefs";
-import { CHOICE_KEYS, gentler, gentlest, PER_CHILD, TEXT_KEYS, type ConductAnswer, type ConductKey } from "./conduct";
-import type { LearnsToAct, Perspective, When } from "./values";
+import { defaultAge, type LeanChoice } from "./beliefs.ts";
+import { CHOICE_KEYS, gentler, gentlest, PER_CHILD, TEXT_KEYS, type ConductAnswer, type ConductKey } from "./conduct.ts";
+import type { LearnsToAct, Perspective, When } from "./values.ts";
 
 // Part 4 of the interview (gate/values-interview.md): every guardian's answers in, the family's
 // values out. Pure, so the compare page shows exactly what the server writes.

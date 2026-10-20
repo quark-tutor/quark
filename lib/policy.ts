@@ -17,6 +17,11 @@ export type PolicyContext = {
   packName: (packId: string | null) => string | null;
 };
 
+// forGate: the copy the gate (and the twenty-question test run) reads. It names no child: the
+// "Not yet" ages are applied in code, per child, before any model sees a card, and the per-child
+// "Saying the answer out loud" lines are about the live tutor, not a card (docs/gate-slice.md, decision 5).
+export type PolicyOptions = { forGate?: boolean };
+
 export const DEFAULT_HANDOFF = "That's a great one to talk about with your parents.";
 
 const BLOCKED = "BLOCKED by a guardian. Do not teach. Do not characterize. Hand off neutrally.";
@@ -38,7 +43,7 @@ const quotes = (texts: string[]) => texts.map(quote).join("; ");
 // A quote that ends a sentence: no second full stop after "Ask Dad."
 const ending = (q: string) => (/[.!?]"$/.test(q) ? q : `${q}.`);
 
-function pointParagraph(p: FamilyPoint, ctx: PolicyContext): string {
+function pointParagraph(p: FamilyPoint, ctx: PolicyContext, opts: PolicyOptions): string {
   const name = ctx.points.find((pt) => pt.number === p.point)?.name ?? `Subject ${p.point}`;
   const head = `**Point ${p.point}, ${name}.**`;
   const handoff = quote(ctx.handoff(p.point, p.setting?.fromPack ?? null) ?? DEFAULT_HANDOFF);
@@ -58,6 +63,12 @@ function pointParagraph(p: FamilyPoint, ctx: PolicyContext): string {
       parts.push("The tutor may raise this and may answer it.");
       break;
     case "from_age":
+      if (opts.forGate) {
+        parts.push(
+          `The tutor does not raise this with a child younger than the age the parents set for that child, and hands off if that child asks: ${ending(handoff)} Each child's age has been checked in code; you are told whether this child is old enough.`,
+        );
+        break;
+      }
       for (const kid of ctx.children) {
         const age = s.ages[kid.id];
         if (age === undefined) continue;
@@ -106,23 +117,25 @@ function settledness(c: FamilyConduct | undefined): string {
 const familyAdds = (c: FamilyConduct | undefined) =>
   c?.notes.length ? ` The family adds: ${quotes(c.notes)}.` : "";
 
-function conductSection(conduct: FamilyConduct[], ctx: PolicyContext): string[] {
+function conductSection(conduct: FamilyConduct[], ctx: PolicyContext, opts: PolicyOptions): string[] {
   const one = (key: ConductKey, childId: string | null = null) =>
     conduct.find((c) => c.key === key && c.childId === childId);
   const out: string[] = ["## Conduct"];
 
-  const speak = ctx.children.map((kid) => {
-    const c = one("conduct.speak_first", kid.id);
-    const value = c?.value ?? "off";
-    const rule =
-      value === "required"
-        ? `ask ${kid.nickname} to say an answer out loud before any hint.`
-        : value === "gentle"
-          ? `before a hint, gently suggest saying the answer out loud first; if ${kid.nickname} doesn't, give the hint anyway.`
-          : "don't ask for a spoken answer before a hint.";
-    return `${kid.nickname}: ${rule}${settledness(c)}`;
-  });
-  out.push(`**Saying the answer out loud.** ${speak.join(" ")}${familyAdds(one("conduct.speak_first"))}`);
+  if (!opts.forGate) {
+    const speak = ctx.children.map((kid) => {
+      const c = one("conduct.speak_first", kid.id);
+      const value = c?.value ?? "off";
+      const rule =
+        value === "required"
+          ? `ask ${kid.nickname} to say an answer out loud before any hint.`
+          : value === "gentle"
+            ? `before a hint, gently suggest saying the answer out loud first; if ${kid.nickname} doesn't, give the hint anyway.`
+            : "don't ask for a spoken answer before a hint.";
+      return `${kid.nickname}: ${rule}${settledness(c)}`;
+    });
+    out.push(`**Saying the answer out loud.** ${speak.join(" ")}${familyAdds(one("conduct.speak_first"))}`);
+  }
 
   const crude = one("conduct.crude_line")?.notes ?? [];
   const decline = `Decline without shaming: "I won't answer that one; try asking it another way."`;
@@ -165,7 +178,7 @@ function conductSection(conduct: FamilyConduct[], ctx: PolicyContext): string[] 
   return out;
 }
 
-export function renderPolicy(values: FamilyValues, ctx: PolicyContext): string {
+export function renderPolicy(values: FamilyValues, ctx: PolicyContext, opts: PolicyOptions = {}): string {
   const out: string[] = ["# Our Family's Beliefs: the rulebook"];
 
   out.push("## In the family's words");
@@ -182,13 +195,13 @@ export function renderPolicy(values: FamilyValues, ctx: PolicyContext): string {
   );
 
   out.push("## The 24 subjects");
-  for (const p of values.points) out.push(pointParagraph(p, ctx));
+  for (const p of values.points) out.push(pointParagraph(p, ctx, opts));
 
   if (values.topics.length) {
     out.push("## Other topics a guardian blocked");
     for (const t of values.topics) out.push(`- ${quote(t.topic ?? "")}: ${BLOCKED}`);
   }
 
-  out.push(...conductSection(values.conduct, ctx));
+  out.push(...conductSection(values.conduct, ctx, opts));
   return out.join("\n\n") + "\n";
 }

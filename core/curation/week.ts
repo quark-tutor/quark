@@ -87,7 +87,7 @@ export function addDays(date: string, n: number): string {
 }
 
 // Run fn over items, n at a time, in order of starting.
-async function pool<T, R>(items: T[], n: number, fn: (item: T) => Promise<R>): Promise<R[]> {
+export async function pool<T, R>(items: T[], n: number, fn: (item: T) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length);
   let next = 0;
   const worker = async () => {
