@@ -97,7 +97,7 @@ const children: WeekChild[] = kidRows.map((k) => ({
 const only = args.child ? children.find((c) => c.id === args.child || c.nickname.toLowerCase() === args.child!.toLowerCase()) : undefined;
 if (args.child && !only) throw new Error(`No child "${args.child}". The family has ${children.map((c) => c.nickname).join(", ")}.`);
 
-const profile = maybe(await db.from("values_profiles").select("statement").eq("family_id", family.id).maybeSingle(), "values_profiles");
+const profile = maybe(await db.from("values_profiles").select("statement, learns_to_act").eq("family_id", family.id).maybeSingle(), "values_profiles");
 const points = must(await db.from("values_points").select("number, name"), "values_points");
 const pointNames = new Map(points.map((p) => [p.number as number, p.name as string]));
 
@@ -362,7 +362,7 @@ const started = Date.now();
 let report;
 try {
   report = await buildWeek(
-    { plan, weekStart: start, days, children, statement: profile?.statement ?? null, pointNames, rebuild: args.rebuild, onlyChild: only?.id },
+    { plan, weekStart: start, days, children, statement: profile?.statement ?? null, learns: profile?.learns_to_act ?? null, pointNames, rebuild: args.rebuild, onlyChild: only?.id },
     deps,
   );
 } catch (e) {

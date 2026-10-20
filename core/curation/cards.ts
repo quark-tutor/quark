@@ -1,5 +1,6 @@
 import { LENS_QUESTIONS, type Lens } from "../../lib/lenses.ts";
-import type { Perspective } from "../../lib/values.ts";
+import { learnsSentence } from "../../lib/policy.ts";
+import type { LearnsToAct, Perspective } from "../../lib/values.ts";
 import { cleanEnds, hasBrace } from "./clean.ts";
 import type { AnswerKey, IdeaChain } from "./types.ts";
 
@@ -35,6 +36,7 @@ export type CardContext = {
   lens: Lens;
   door: string | null; // an interest to open layer 1 with, or none
   statement: string | null; // values_profiles.statement
+  learns: LearnsToAct | null; // values_profiles.learns_to_act (decided 20 Oct 2026: the card writer gets it, the gate doesn't)
   perspective: Perspective | null;
   valuesPoints: { number: number; name: string }[];
 };
@@ -103,6 +105,7 @@ export function cardPrompt(ctx: CardContext): string {
       ? `A parent does this with the child: ${chain.topic.parentNote} Let the first card's handoff ask the child to get a parent for it. Never name an app, a website or a link.`
       : "",
     `The family's own words: ${ctx.statement?.trim() || "(none given yet)"}`,
+    `How the family wants its children to learn to act: ${learnsSentence(ctx.learns)}`,
     "",
     "The idea chain:",
   ];

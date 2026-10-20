@@ -1,4 +1,5 @@
 import { pickLenses, SLOT_ORDER, type DaySlot, type Lens, type LensHistory } from "../../lib/lenses.ts";
+import type { LearnsToAct } from "../../lib/values.ts";
 import { levelOf, planDoors, type CardBody, type CardChild, type CardContext, type WrittenCards } from "./cards.ts";
 import { firstLayerProblem } from "./ideas.ts";
 import type { IdeaChain, WeekPlan } from "./types.ts";
@@ -55,6 +56,7 @@ export type WeekOptions = {
   days: number;
   children: WeekChild[];
   statement: string | null;
+  learns: LearnsToAct | null;
   pointNames: Map<number, string>;
   rebuild: boolean;
   onlyChild?: string; // a child id
@@ -166,6 +168,7 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
         lens,
         door,
         statement: opts.statement,
+        learns: opts.learns,
         perspective: chain.topic.perspective,
         valuesPoints: chain.topic.valuesPoints.map((n) => ({ number: n, name: opts.pointNames.get(n) ?? `point ${n}` })),
       });

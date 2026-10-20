@@ -37,6 +37,12 @@ const LEARNS: Record<LearnsToAct, string> = {
     "in more than one way: from people worth copying, from noticing and thinking before acting, and from practice. Use all three.",
 };
 
+// How the family wants its children to learn to act, in the rulebook's words. The card prompt
+// (core/curation/cards.ts) uses the same sentence, so the card and the rulebook say the same thing.
+export function learnsSentence(learns: LearnsToAct | null): string {
+  return `The family wants the children to learn how to act ${learns ? LEARNS[learns] : "in more than one way. Use people worth copying, noticing and thinking before acting, and practice."}`;
+}
+
 const oneLine = (text: string) => text.replace(/\s+/g, " ").trim();
 const quote = (text: string) => `"${oneLine(text).replace(/"/g, "'")}"`;
 const quotes = (texts: string[]) => texts.map(quote).join("; ");
@@ -185,9 +191,8 @@ export function renderPolicy(values: FamilyValues, ctx: PolicyContext, opts: Pol
   out.push(values.profile.statement ?? "The parents haven't written anything here yet.");
 
   out.push("## Stories and examples");
-  const learns = values.profile.learns;
   out.push(
-    `The family wants the children to learn how to act ${learns ? LEARNS[learns] : "in more than one way. Use people worth copying, noticing and thinking before acting, and practice."}${
+    `${learnsSentence(values.profile.learns)}${
       values.profile.match
         ? " Where a story has a choice of people to follow, start with one of the child's own sex. Never leave a story out because of sex."
         : ""

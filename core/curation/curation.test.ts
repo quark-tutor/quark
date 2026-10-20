@@ -4,6 +4,8 @@ import { firstLayerProblem, IDEA_SCHEMA, ideasPrompt, parseIdeas, sourceRefs, to
 import type { IdeaChain, WeekPlan, WeekTopic } from "./types";
 import { weekSchedule } from "./schedule";
 import { addDays, buildWeek, type CardRow, type WeekChild, type WeekDeps } from "./week";
+import { mergeFamily } from "../../lib/family-values";
+import { learnsSentence, renderPolicy } from "../../lib/policy";
 
 // --- A small week to work with ---
 
@@ -235,6 +237,7 @@ const ctx = (over: Partial<CardContext> = {}): CardContext => ({
   lens: "build",
   door: null,
   statement: "We want the kids to love history and to be kind.",
+  learns: null,
   perspective: null,
   valuesPoints: [],
   ...over,
@@ -256,6 +259,16 @@ describe("cardPrompt", () => {
     const child = { ...kid, sex: "boy", birth_month: "2019-06-01", careful_about: "Grandpa died in May", hidden_strength: "patient", school: "Kailua Elementary" };
     const p = cardPrompt(ctx({ child: child as CardChild }));
     expect(p).not.toMatch(/\bboy\b|2019|Grandpa|patient|Kailua|trucks|sharks/);
+  });
+
+  it("says how the family wants its children to learn to act, in the rulebook's own words", () => {
+    expect(cardPrompt(ctx({ learns: "exemplars" }))).toContain(
+      "How the family wants its children to learn to act: The family wants the children to learn how to act mainly by copying people who acted well. Lean on stories of real people worth copying, and say what they did.",
+    );
+    expect(cardPrompt(ctx())).toContain(`How the family wants its children to learn to act: ${learnsSentence(null)}`);
+    // The same sentence the rulebook carries under "Stories and examples".
+    const doc = renderPolicy(mergeFamily([], [], [], {}), { points: [], children: [], handoff: () => null, packName: () => null });
+    expect(doc).toContain(learnsSentence(null));
   });
 
   it("pairs science with who it helps, and carries the perspective and values points", () => {
@@ -421,7 +434,7 @@ const boys: WeekChild[] = [
   { ...kid, id: "c1", nickname: "Rex", sex: "boy", history: {} },
   { ...kid, id: "c2", nickname: "Ash", age: 9, reading: "chapter_books", interests: ["Lego"], sex: "boy", history: { story: 5 } },
 ];
-const options = { plan, weekStart: "2026-10-19", days: 7, children: boys, statement: "Kind and curious.", pointNames: new Map<number, string>(), rebuild: false };
+const options = { plan, weekStart: "2026-10-19", days: 7, children: boys, statement: "Kind and curious.", learns: null, pointNames: new Map<number, string>(), rebuild: false };
 
 describe("buildWeek", () => {
   it("makes the theme, 35 shared idea chains, and four cards and a question per chain per child", async () => {
