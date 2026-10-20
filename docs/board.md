@@ -30,6 +30,7 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
+| The policy gate: every card approved or blocked before a child could see it | briefed | 19 Oct 2026 | Brandon's go on the brief's decisions and what is left to settle | a slice | — / — | 3 | `docs/gate-slice.md`; `phase-3-curation` |
 | Working with Claude, slice 5: the method is the wwc plugin | live | 19 Oct 2026 | — | a slice | — / — | tooling | `BrandonReisen/working-with-claude`, `docs/one-method-slice.md` |
 | Ask-list rewrite: stops at steps, not commands; live actions run by Brandon’s hand | live | 18 Oct 2026 | — (the three proofs held; merge `working-with-claude-4` into `phase-3-curation` by Brandon's hand) | a slice | high / — | tooling | `docs/working-with-claude-4-slice.md`; `working-with-claude-4` |
 | Vercel preview deployments pointed at the test project | raised | 18 Oct 2026 | the test database job merged | an hour | — / — | tooling | `docs/test-database-slice.md` |
