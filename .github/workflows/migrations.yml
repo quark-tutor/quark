@@ -1,0 +1,206 @@
+# Migrations: applies supabase/migrations to a database, after the tests pass.
+#
+# From the wwc plugin's templates/migrations.yml (BrandonReisen/working-with-claude,
+# docs/ci-migrations-slice.md, 19 October 2026); a fix is made in the template first.
+#
+#   test  A push of a phase branch (phase-N-...) applies to quark-test: SUPABASE_DB_URL_TEST, a
+#         repository secret.
+#   live  A push of main applies to live: SUPABASE_DB_URL_LIVE, a secret of the supabase-live
+#         environment, which only main can use. It applies only when every migration file has
+#         already run on quark-test (it reads quark-test's own history). Live only after test.
+#         Until Brandon sets SUPABASE_DB_URL_LIVE (left unset, 19 October 2026), this job runs the
+#         tests and ends with a warning, and live migrations stay by hand.
+#
+# A push that changes a migration applies it. A push that changes only this file is a dry run: it
+# says what would be applied and applies nothing. A run started by hand is a dry run unless apply is
+# ticked, and on main it is always a dry run: live is applied only by a push of main, which is
+# Brandon's go.
+# A job whose secret is not set runs the tests, ends with a warning and connects to nothing.
+#
+# Never: db reset, --include-all, a seed or a data script. Each secret is a session-pooler connection
+# string (password percent-encoded). It is read from the secret into the environment, never written
+# in this file or a log; GitHub masks it, and the first step also masks its password. This
+# repository is public, and so are its run logs.
+name: Migrations
+
+on:
+  push:
+    branches: ["phase-*", main]
+    paths:
+      - "supabase/migrations/**"
+      - ".github/workflows/migrations.yml"
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Apply what is pending on quark-test (off: a dry run). Never applies on main."
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  SUPABASE_CLI_VERSION: 2.121.0
+
+jobs:
+  test:
+    name: Test database
+    if: startsWith(github.ref, 'refs/heads/phase-')
+    runs-on: ubuntu-latest
+    concurrency:
+      group: migrations-test
+      cancel-in-progress: false
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL_TEST }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply or dry run
+        id: mode
+        env:
+          APPLY_INPUT: ${{ inputs.apply }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          hex='\x'
+          for url in "$SUPABASE_DB_URL"; do
+            userinfo="${url#*://}"; userinfo="${userinfo%@*}"; pw="${userinfo#*:}"
+            if [ -n "$url" ] && [ "$pw" != "$userinfo" ] && [ -n "$pw" ]; then
+              echo "::add-mask::$pw"
+              echo "::add-mask::$(printf '%b' "${pw//%/$hex}")"
+            fi
+          done
+          if [ -n "$SUPABASE_DB_URL" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            if [ "$APPLY_INPUT" = "true" ]; then mode=apply; why="started by hand with apply"; else mode=dry-run; why="started by hand without apply"; fi
+          elif [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            mode=apply; why="a new branch, or a push whose first commit is not in the history"
+          elif git diff --quiet "$BEFORE" "$GITHUB_SHA" -- supabase/migrations; then
+            mode=dry-run; why="this push changed no migration"
+          else
+            mode=apply; why="this push changed supabase/migrations"
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "Mode: $mode ($why)."
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+
+      - uses: supabase/setup-cli@v1
+        if: steps.mode.outputs.ready == 'true'
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+
+      - name: Push to the test database
+        if: steps.mode.outputs.ready == 'true'
+        env:
+          MODE: ${{ steps.mode.outputs.mode }}
+        run: |
+          if [ "$MODE" = "apply" ]; then
+            supabase db push --db-url "$SUPABASE_DB_URL" --yes
+          else
+            supabase db push --db-url "$SUPABASE_DB_URL" --dry-run
+          fi
+
+      - name: No secret
+        if: steps.mode.outputs.ready != 'true'
+        run: echo "::warning::SUPABASE_DB_URL_TEST is not set, so nothing was applied. The tests ran."
+
+  live:
+    name: Live database
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: supabase-live
+    concurrency:
+      group: migrations-live
+      cancel-in-progress: false
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL_LIVE }}
+      SUPABASE_DB_URL_TEST: ${{ secrets.SUPABASE_DB_URL_TEST }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply or dry run
+        id: mode
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          hex='\x'
+          for url in "$SUPABASE_DB_URL" "$SUPABASE_DB_URL_TEST"; do
+            userinfo="${url#*://}"; userinfo="${userinfo%@*}"; pw="${userinfo#*:}"
+            if [ -n "$url" ] && [ "$pw" != "$userinfo" ] && [ -n "$pw" ]; then
+              echo "::add-mask::$pw"
+              echo "::add-mask::$(printf '%b' "${pw//%/$hex}")"
+            fi
+          done
+          if [ -n "$SUPABASE_DB_URL" ] && [ -n "$SUPABASE_DB_URL_TEST" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            mode=dry-run; why="started by hand: live is applied only by a push of main"
+          elif [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+            mode=apply; why="a push whose first commit is not in the history"
+          elif git diff --quiet "$BEFORE" "$GITHUB_SHA" -- supabase/migrations; then
+            mode=dry-run; why="this push changed no migration"
+          else
+            mode=apply; why="this push changed supabase/migrations"
+          fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "Mode: $mode ($why)."
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run typecheck
+
+      - name: Every migration has run on quark-test
+        if: steps.mode.outputs.ready == 'true'
+        run: |
+          applied="$(psql "$SUPABASE_DB_URL_TEST" -Atc "select version from supabase_migrations.schema_migrations")"
+          missing=""
+          for f in supabase/migrations/*.sql; do
+            name="$(basename "$f")"
+            grep -qx "${name%%_*}" <<< "$applied" || missing="$missing $name"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::Not yet run on quark-test, so nothing is applied to live:$missing"
+            exit 1
+          fi
+          echo "Every migration file has run on quark-test."
+
+      - uses: supabase/setup-cli@v1
+        if: steps.mode.outputs.ready == 'true'
+        with:
+          version: ${{ env.SUPABASE_CLI_VERSION }}
+
+      - name: Push to the live database
+        if: steps.mode.outputs.ready == 'true'
+        env:
+          MODE: ${{ steps.mode.outputs.mode }}
+        run: |
+          if [ "$MODE" = "apply" ]; then
+            supabase db push --db-url "$SUPABASE_DB_URL" --yes
+          else
+            supabase db push --db-url "$SUPABASE_DB_URL" --dry-run
+          fi
+
+      - name: No secret
+        if: steps.mode.outputs.ready != 'true'
+        run: echo "::warning::SUPABASE_DB_URL_LIVE or SUPABASE_DB_URL_TEST is not set, so nothing was applied to live. The tests ran."
