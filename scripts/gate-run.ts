@@ -2,11 +2,10 @@
 // family's rulebook (from the same merge the rulebook and compare pages use), the safety floor and a
 // week's cards, run core/curation/gate.ts, write each verdict, and print the gate's part of the report.
 
-import { readFileSync } from "node:fs";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { readFloor, runGate, type Floor, type GateCard, type GateChild, type GateReport, type PolicyNotes, type Rulebook } from "../core/curation/gate.ts";
 import { complete, modelFor } from "../core/model.ts";
-import { readPrompt } from "../core/prompts.ts";
+import { readPrompt, readSafetyFloor } from "../core/prompts.ts";
 import { ageFrom } from "../lib/beliefs.ts";
 import { familyRulebook, loadFamilyInputs, loadHandoffs } from "../lib/family-rulebook.ts";
 import type { Perspective } from "../lib/values.ts";
@@ -33,7 +32,7 @@ function must<R extends Reply>(r: R, what: string): NonNullable<R["data"]> {
 // Everything the gate needs before it spends anything. Throws if QUARK_MODEL_GATE isn't set.
 export async function gateSetup(db: SupabaseClient, familyId: string): Promise<GateSetup> {
   const model = modelFor("gate");
-  const floor = readFloor(readFileSync(new URL("../gate/safety-floor.md", import.meta.url), "utf8"));
+  const floor = readFloor(readSafetyFloor());
   const system = `${readPrompt("gate.md")}\n\n${floor.text}`;
   const [inputs, entries, profile, kids] = await Promise.all([
     loadFamilyInputs(db, familyId),

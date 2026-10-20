@@ -32,6 +32,9 @@ export type CompleteOptions = {
   use?: ModelUse; // which env var names the model; defaults to curate
   images?: ModelImage[]; // shown before the prompt
   label?: string; // names the debug file: "ideas-day1-puzzle"
+  // This one call's tokens, for a caller that prices it on its own (a server action shares the
+  // process with other requests, so usageSoFar() isn't its own).
+  onUsage?: (u: { model: string; input: number; output: number }) => void;
 };
 
 let client: Anthropic | undefined;
@@ -102,10 +105,12 @@ export async function complete(options: CompleteOptions & { json?: Record<string
 
   const tally = usage.get(`${use} ${model}`) ?? { use, model, input: 0, output: 0, calls: 0 };
   const u = response.usage;
-  tally.input += (u?.input_tokens ?? 0) + (u?.cache_creation_input_tokens ?? 0) + (u?.cache_read_input_tokens ?? 0);
+  const input = (u?.input_tokens ?? 0) + (u?.cache_creation_input_tokens ?? 0) + (u?.cache_read_input_tokens ?? 0);
+  tally.input += input;
   tally.output += u?.output_tokens ?? 0;
   tally.calls += 1;
   usage.set(`${use} ${model}`, tally);
+  options.onUsage?.({ model, input, output: u?.output_tokens ?? 0 });
 
   if (response.stop_reason === "refusal") {
     throw new Error(`The model declined (${response.stop_details?.category ?? "no category"}).`);

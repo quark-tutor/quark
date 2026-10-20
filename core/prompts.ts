@@ -17,3 +17,9 @@ export function readPrompt(name: string): string {
 export function kidFacingPrompt(name: string): string {
   return `${readPrompt("manner.md")}\n\n${readPrompt(name)}`;
 }
+
+// The safety floor, as its file stands (gate/safety-floor.md; parse it with readFloor() in
+// core/curation/gate.ts). next.config.ts traces it into the server bundle beside the prompts.
+export function readSafetyFloor(): string {
+  return readFileSync(join(process.cwd(), "gate", "safety-floor.md"), "utf8");
+}

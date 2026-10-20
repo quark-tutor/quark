@@ -25,3 +25,17 @@ describe("manner.md", () => {
     expect(() => readPrompt("../CLAUDE.md")).toThrow();
   });
 });
+
+describe("the gate's prompts", () => {
+  it("puts the manner rules before the test run's answer prompt, which a child-facing answer needs", () => {
+    const prompt = kidFacingPrompt("answer.md");
+    expect(prompt.startsWith("# How you speak to the child")).toBe(true);
+    expect(prompt).toContain("# Answer one question a child asked");
+  });
+
+  it("reads the gate's own prompt plainly: it writes nothing a child sees", () => {
+    const gate = readPrompt("gate.md");
+    expect(gate.startsWith("# Check one card before a child could see it")).toBe(true);
+    for (const rule of ["parent_led", "perspective", "blocked_topic", "rule_1", "rule_6", "frightening", "caution"]) expect(gate).toContain(`**${rule}**`);
+  });
+});

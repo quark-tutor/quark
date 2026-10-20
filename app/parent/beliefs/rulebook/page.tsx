@@ -2,10 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
+import { readFloor } from "@/core/curation/gate";
+import { readSafetyFloor } from "@/core/prompts";
 import { saveFamilyValues } from "@/lib/family-save";
 import { requireGuardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
 import styles from "../beliefs.module.css";
+import type { TestResult } from "./actions";
+import { TestRun, type KeptRun } from "./test-run";
 
 export const metadata: Metadata = { title: "The rulebook · Quark" };
 
@@ -29,11 +33,29 @@ async function Rulebook() {
   }
   await saveFamilyValues(guardian.familyId, guardian.id);
   const supabase = await createClient();
-  const [profile, family] = await Promise.all([
-    supabase.from("values_profiles").select("policy_document, version, saved_at").maybeSingle(),
+  const [profile, family, kids, runs] = await Promise.all([
+    supabase.from("values_profiles").select("policy_document, version, saved_at, source_hash").maybeSingle(),
     supabase.from("families").select("timezone").single(),
+    supabase.from("children").select("id, nickname").order("birth_month"),
+    supabase
+      .from("gate_test_runs")
+      .select("child_id, rulebook_hash, floor_version, results, started_at, finished_at")
+      .order("started_at", { ascending: false }),
   ]);
-  if (profile.error) throw new Error(profile.error.message);
+  for (const r of [profile, kids, runs]) if (r.error) throw new Error(r.error.message);
+  const floor = readFloor(readSafetyFloor());
+  // The most recent run per child.
+  const kept = new Map<string, KeptRun>();
+  for (const r of runs.data ?? []) {
+    if (kept.has(r.child_id)) continue;
+    kept.set(r.child_id, {
+      startedAt: r.started_at,
+      finished: !!r.finished_at,
+      results: r.results as TestResult[],
+      rulebookChanged: r.rulebook_hash !== profile.data?.source_hash,
+      floorVersion: r.floor_version,
+    });
+  }
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const saved = profile.data?.saved_at
     ? new Date(profile.data.saved_at).toLocaleString("en-US", { timeZone, dateStyle: "medium", timeStyle: "short" })
@@ -52,7 +74,20 @@ async function Rulebook() {
         </p>
       </div>
       {profile.data?.policy_document ? (
-        <Document text={profile.data.policy_document} />
+        <>
+          <Document text={profile.data.policy_document} />
+          <h2>Try it: twenty questions</h2>
+          <p>
+            Twenty questions a child might ask, answered the way Quark&rsquo;s tutor would answer them under this rulebook.
+            Beside each answer: what the rulebook says for that subject, and whether the answer follows it. Nothing here
+            reaches the kids, and the run is kept so every guardian sees the same answers.
+          </p>
+          <div className={styles.cards}>
+            {(kids.data ?? []).map((k) => (
+              <TestRun key={k.id} childId={k.id} nickname={k.nickname} kept={kept.get(k.id) ?? null} floorFirstGuess={floor.firstGuess} />
+            ))}
+          </div>
+        </>
       ) : (
         <p className={styles.muted}>Nothing yet. Answer a few subjects first.</p>
       )}
