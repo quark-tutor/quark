@@ -97,12 +97,13 @@ in `core/runs.ts` prices ideas and cards only).
    *Building a week*; confirmed by Brandon, 20 October 2026). The card writer
    still does not get it, and its test stays. **The gate call carries the note
    and the child's age band, and nothing else about the child:** the note goes
-   in as "the parents asked for care about: …", the band as a range, with no
+   in as "the parents asked for care about: …", the band as "2-3" or "4-5", with no
    exact age, no reading level, no nickname field, birth month, sex, school,
    address or interests; the gate's reasons never quote the note back; and no
-   `policy_notes` row holds it. The band is a two-year step from code (6 to 7,
-   8 to 9, 10 to 11, 12 and over); step 1 shows the edges and Brandon can move
-   them. A test builds the gate prompt for a child with a note and for one
+   `policy_notes` row holds it. The band is the plan's grade band (`GRADE_BANDS`
+   in `lib/plan.ts`: 2-3 or 4-5). A child has no grade on file, so code picks the
+   band from the age, proposed 8 and under 2-3 and 9 and over 4-5; step 1 shows
+   the cut and Brandon can move it. A test builds the gate prompt for a child with a note and for one
    without, and checks that the note is there only in the first, that the band
    is in both, and that none of the other fields is in either.
    *Touches rule 7:* the note is a sensitive free-text line about a child (a
@@ -262,7 +263,7 @@ test). No step here is live unless it says so.
    run line the rule in decision 10 makes of it, as one number for Brandon to
    confirm; the exact gate input, field by field, with rule 7 checked line by
    line: the `careful_about` note and the age band and nothing else about the
-   child, the band's edges, and how often a card's own text carries the
+   child, the age cut between the two bands, and how often a card's own text carries the
    nickname; the verdict schema and
    the `policy_notes.gate` shape; the code checks and what each blocks; the
    first `gate/safety-floor.md`, the three items from docs/09 with its
