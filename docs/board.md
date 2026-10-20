@@ -30,7 +30,7 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
-| The policy gate: every card approved or blocked before a child could see it | briefed | 20 Oct 2026 | Brandon's own steps on the test copy; June on the safety floor and the twenty questions; then the build session | a slice | — / — | 3 | `docs/gate-slice.md`; `phase-3-curation` |
+| The policy gate: every card approved or blocked before a child could see it | building | 20 Oct 2026 | the build session; then Brandon's own steps on the test copy and his look there; June on the safety floor and the twenty questions | a slice | — / — | 3 | `docs/gate-slice.md`; `phase-3-curation` |
 | Safety-floor lessons in the plan: body safety, telling a trusted adult, emergency basics | not fully formed | 20 Oct 2026 | June reading the safety floor | — | — / — | 3 | `docs/gate-slice.md`, decision 8; `docs/09-family-values.md` |
 | A guardian can enter what to be careful about for each child | not fully formed | 20 Oct 2026 | the gate built, which is the first thing to read it | — | — / — | 3 | `docs/gate-slice.md`, *To settle* |
 | Prompt caching of the policy document in the model adapter | not fully formed | 20 Oct 2026 | the gate's measured cost per card | — | — / — | 3 | `docs/gate-slice.md`, *To settle* |
