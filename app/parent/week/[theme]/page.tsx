@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import { credit } from "@/core/content/credit";
+import type { PolicyNotes } from "@/core/curation/gate";
 import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
@@ -12,9 +13,10 @@ import { Zoom } from "./zoom";
 
 export const metadata: Metadata = { title: "This week's cards · Quark" };
 
-// A read-only look at a built week before the gate checks it: each child's cards by day and slot,
-// with the lens and all four layers, and each card's picture or recording with its credit line.
-// Step 6 builds the "looks good" page on this one.
+// A read-only look at a built week: each child's cards by day and slot, with the lens and all four
+// layers, each card's picture or recording with its credit line, and what the gate decided for it
+// (passed, held back and why, or not checked yet), with the checker's reader notes. Never which
+// guardian a blackball came from. Step 6 builds the "looks good" page on this one.
 export default function WeekPage({ params }: { params: Promise<{ theme: string }> }) {
   return (
     <main className={styles.page}>
@@ -40,7 +42,7 @@ type Card = {
   door: string | null;
   level: string | null;
   policy: string;
-  policy_notes: { validation?: string[] } | null;
+  policy_notes: PolicyNotes | null;
   body: Body;
   ideas: { content_item_id: string | null; topic_id: string | null; plan_topics: { key: string } | null } | null;
 };
@@ -75,7 +77,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
 
   // Row-level security keeps all of this to the guardian's own family.
   const supabase = await createClient();
-  const [theme, kids, cards] = await Promise.all([
+  const [theme, kids, cards, rulebook] = await Promise.all([
     supabase.from("themes").select("id, title, week_start, status").eq("id", themeId).maybeSingle(),
     supabase.from("children").select("id, nickname").order("birth_month"),
     supabase
@@ -85,8 +87,9 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
       .order("day")
       .order("layer")
       .returns<Card[]>(),
+    supabase.from("values_profiles").select("source_hash").maybeSingle(),
   ]);
-  for (const r of [theme, kids, cards]) if (r.error) throw new Error(r.error.message);
+  for (const r of [theme, kids, cards, rulebook]) if (r.error) throw new Error(r.error.message);
   if (!theme.data) return <p>No such week.</p>;
 
   // Pictures and recordings: the approved items, with their stored copies through signed URLs that
@@ -138,7 +141,16 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
 
   const days = [...new Set((cards.data ?? []).map((c) => c.day))].sort();
   const weekday = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long", month: "short", day: "numeric" });
-  const blocked = (cards.data ?? []).filter((c) => c.policy === "blocked").length;
+  const all = cards.data ?? [];
+  const count = (policy: string) => all.filter((c) => c.policy === policy).length;
+  const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+  const currentHash = rulebook.data?.source_hash ?? null;
+  const older = all.filter((c) => c.policy_notes?.gate && c.policy_notes.gate.rulebook !== currentHash).length;
+  // The newest safety floor any verdict was checked against.
+  const floor = all
+    .map((c) => c.policy_notes?.gate)
+    .filter((g) => !!g)
+    .sort((a, b) => b!.floor - a!.floor)[0];
 
   return (
     <>
@@ -148,10 +160,14 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
         </Link>
         <h1>{theme.data.title}</h1>
         <p className={styles.lede}>
-          The week starting {weekday(theme.data.week_start)}, status {theme.data.status}. These cards haven&rsquo;t been
-          checked against your rulebook yet, and nothing here is on the kids&rsquo; iPads. Each card is shown with its
-          four layers: what the child sees first, then each tap deeper.
-          {blocked ? ` ${blocked} card${blocked === 1 ? " was" : "s were"} held back because a hint still gave the answer away.` : ""}
+          The week starting {weekday(theme.data.week_start)}, status {theme.data.status}. Nothing here is on the kids&rsquo;
+          iPads. Each card is shown with its four layers: what the child sees first, then each tap deeper.
+        </p>
+        <p className={styles.lede}>
+          {plural(count("passed"), "card passed", "cards passed")} the checker, {count("blocked")} {count("blocked") === 1 ? "was" : "were"} held
+          back, and {count("pending")} {count("pending") === 1 ? "isn't" : "aren't"} checked yet.
+          {floor ? ` Checked against safety floor version ${floor.floor}${floor.floor_first_guess ? ", still a first guess" : ""}.` : ""}
+          {older ? ` ${plural(older, "card was", "cards were")} checked against an older rulebook and should be checked again.` : ""}
         </p>
       </div>
 
@@ -183,6 +199,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
                           <Layer
                             key={c.id}
                             card={c}
+                            currentHash={currentHash}
                             media={c.ideas?.content_item_id ? media.get(c.ideas.content_item_id) : undefined}
                             topicHasMedia={topicsWithMedia.has(c.ideas?.topic_id ?? null)}
                           />
@@ -200,14 +217,21 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
   );
 }
 
-function Layer({ card, media, topicHasMedia }: { card: Card; media?: Media; topicHasMedia: boolean }) {
+function Layer({ card, media, topicHasMedia, currentHash }: { card: Card; media?: Media; topicHasMedia: boolean; currentHash: string | null }) {
   const b = card.body;
   const key = card.ideas?.plan_topics?.key;
+  const gate = card.policy_notes?.gate;
   return (
     <details className={own.layer} open={card.layer === 1}>
       <summary>
         {card.layer}. {b.title}
-        {card.policy === "blocked" ? <span className={styles.flag}> held back</span> : null}
+        {card.policy === "blocked" ? (
+          <span className={styles.flag}> held back</span>
+        ) : card.policy === "passed" ? (
+          <span className={styles.meta}> passed</span>
+        ) : (
+          <span className={styles.meta}> not checked yet</span>
+        )}
       </summary>
       {media ? (
         <MediaBlock media={media} alt={b.image_alt} />
@@ -232,7 +256,17 @@ function Layer({ card, media, topicHasMedia }: { card: Card; media?: Media; topi
         ))}
       </ol>
       <p className={styles.meta}>Then: {b.handoff}</p>
-      {card.policy_notes?.validation?.length ? <p className={styles.flag}>{card.policy_notes.validation.join(" ")}</p> : null}
+      {card.policy_notes?.validation?.length ? (
+        <p className={styles.flag}>Held back by the card checks: {card.policy_notes.validation.join(" ")}</p>
+      ) : null}
+      {gate && card.policy === "blocked" ? (
+        <p className={styles.flag}>
+          {gate.by === "code" ? "Held back by your rulebook, before any checker read it: " : "Held back by the checker: "}
+          {gate.reasons.map((r) => r.note).join(" ")}
+        </p>
+      ) : null}
+      {gate?.reader?.length ? <p className={styles.meta}>A teacher&rsquo;s eye: {gate.reader.join(" ")}</p> : null}
+      {gate && gate.rulebook !== currentHash ? <p className={styles.meta}>Checked against an older rulebook.</p> : null}
     </details>
   );
 }
