@@ -30,6 +30,8 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
+| The Sunday cron and the Looks-good page: a guardian's one tap makes a week live | briefed | 20 Oct 2026 | the build session (`opusplan`); `CRON_SECRET` in `.env.local` by Brandon's hand first | a slice | — / — | 3 | `docs/looks-good-slice.md`; `phase-3-curation` |
+| Guardians can't write a week's status or a card's verdict directly: only the server can | raised | 20 Oct 2026 | Wonder Wall slice 1; its migration lands before any theme is made live on live | an hour | high / — | 4 | `docs/looks-good-slice.md`, *To settle*; `supabase/migrations/20261010000002_data_api_grants.sql` |
 | The policy gate: every card approved or blocked before a child could see it | on test | 20 Oct 2026 | Brandon's yes to the live migration (`gate_test_runs`) and to `gate:live` on day 1; then the release; June on the safety floor and the twenty questions | a slice | — / — | 3 | `docs/gate-slice.md`; `docs/reports/2026-10-20-gate-slice.md`; `phase-3-curation` |
 | A test Supabase project, so a migration from a branch cannot touch the live database | on test | 20 Oct 2026 | the live push only (the workflow applied a real migration on test, 20 Oct) | a job | high / — | tooling | `docs/test-database-slice.md`; `test-database` |
 | A guardian can enter what to be careful about for each child | not fully formed | 20 Oct 2026 | a brief; the gate reads the note now (proven on test) | — | — / — | 3 | `docs/gate-slice.md`, *To settle* |
