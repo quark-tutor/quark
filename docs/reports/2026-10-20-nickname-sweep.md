@@ -41,4 +41,4 @@ Nothing.
 
 ## Cost
 
-Pending: Brandon to type `/cost`.
+$0.51 for the session (`/cost`: Sonnet 5.5 $0.51, Haiku 5.5 $0.0002; 64 lines added, 19 removed).
