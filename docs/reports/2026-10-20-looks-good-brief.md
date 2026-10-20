@@ -116,4 +116,6 @@ None: this job changed nothing under `supabase/migrations`.
 
 ## `/cost`
 
-Brandon types `/cost`; the figure goes here.
+From Brandon's `/cost` at the close (this Claude Code session, not Quark's own model spend):
+**$6.48** in all (claude-opus-5-5 $6.43, claude-sonnet-5-5 $0.0541, claude-haiku-5-5 $0.0005);
+17m 33s of API time over 45m 12s of wall time; 1,120 lines added and 6 removed.
