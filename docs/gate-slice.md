@@ -9,6 +9,14 @@ changes what `week:build` does, adds one command and one block on the
 rulebook page for parents. Nothing a child can see changes: there is no kid
 view yet.
 
+**Settled with Brandon on 20 October 2026 ("go"):** every decision below and
+every recommended answer under *To settle*, with three changes, written in
+below: decision 5 (the gate call carries the `careful_about` note and nothing
+else about the child), decision 8 (the safety floor starts with the three items
+in docs/09 and is marked a first guess, pending June), and decision 10 (a new
+run line, measured at step 1, instead of a standing STOP on every full week).
+The decisions are dated for docs/08 at the close.
+
 ## Why
 
 Rule 5: nothing reaches a child unchecked. Today `week:build` writes every
@@ -65,28 +73,39 @@ in `core/runs.ts` prices ideas and cards only).
    (`values_profiles.policy_document`, whole), the safety floor (decision 8),
    the topic's perspective and the family's setting for each subject it
    marks, the card as the child would see it (title, text, read_aloud,
-   question, hints, handoff, image_alt), and the child's age and reading level.
-   No birth month, sex, school or address. Not kid-facing, so `readPrompt`,
-   not `kidFacingPrompt`, in `core/prompts/gate.md` (v1, on `QUARK_MODEL_GATE`,
-   like `flag-content.md`). It returns JSON: a verdict, reasons (a rule, a
-   subject if any, one plain sentence for parents) and reader notes (decision
-   7). It judges what code cannot: a card that teaches a parent-led subject
-   instead of handing off; one that states the family's view as the only one
-   when the setting is *several fairly*, or calls other views foolish;
-   free-text blackballs (`blackballs.topic`, listed in the document); fear,
-   shame or contempt (rule 1); and the child's caution (decision 5). A test
-   holds the prompt to the same rule as the card prompt's: nothing else about
-   the child. *Follows rules 1, 6 and 7.* The gate is not told the child's
-   sex and never blocks on it.
+   question, hints, handoff, image_alt), and, when the parents wrote one, the
+   `careful_about` note (decision 5). Nothing else about the child: no age,
+   reading level, birth month, sex, school, address or interests, and no
+   nickname field. The from-age rule is applied in code, so the model does not
+   need the age; it judges the card as written for its level. Not kid-facing,
+   so `readPrompt`, not `kidFacingPrompt`, in `core/prompts/gate.md` (v1, on
+   `QUARK_MODEL_GATE`, like `flag-content.md`). It returns JSON: a verdict,
+   reasons (a rule, a subject if any, one plain sentence for parents) and
+   reader notes (decision 7). It judges what code cannot: a card that teaches a
+   parent-led subject instead of handing off; one that states the family's view
+   as the only one when the setting is *several fairly*, or calls other views
+   foolish; free-text blackballs (`blackballs.topic`, listed in the document);
+   fear, shame or contempt (rule 1); and the child's caution (decision 5). A
+   test holds the prompt to the rule in decision 5. *Follows rules 1, 6 and 7.*
+   The gate is not told the child's sex and never blocks on it.
 5. **`careful_about` goes to the gate only** (CLAUDE.md, *Where we are*; docs/08,
-   *Building a week*). The card writer still does not get it, and its test
-   stays. The gate prompt carries the note as "the parents asked for care
-   about: …" for that child's cards, and the gate's reasons never quote it
-   back. *Touches rule 7, and it needs Brandon and June:* it is a
-   sensitive free-text line about a child (a fear, a loss) leaving the
-   machine for the model provider. If they would rather it did not, it stays
-   nowhere for now and the gate loses that one check. Found while writing this:
-   nothing in the app or the seed file can enter it today (see *To settle*).
+   *Building a week*; confirmed by Brandon, 20 October 2026). The card writer
+   still does not get it, and its test stays. **The gate call carries the note
+   and nothing else about the child beside it:** the note goes in as "the
+   parents asked for care about: …", with no age, reading level, nickname field,
+   birth month, sex, school, address or interests; the gate's reasons never
+   quote it back; and no `policy_notes` row holds it. A test builds the gate
+   prompt for a child with a note and for one without, and checks the note is
+   there only in the first and that none of those other fields is in either.
+   *Touches rule 7:* the note is a sensitive free-text line about a child (a
+   fear, a loss) leaving the machine for the model provider, and June's view of
+   that is not recorded here. One limit on the line: it governs what the call
+   is given about the child, not the card's own words. The card writer addresses
+   the child by nickname, so the card text can carry it, as the card prompt
+   already may under rule 7. Step 1 reports how often it does, and it is one
+   function to swap the nickname for "the child" if Brandon wants that too (see
+   *To settle*). Found while writing this: nothing in the app or the seed file
+   can enter the note today.
 6. **`learns_to_act` goes into the card prompt, not the gate.** One line in
    `cardPrompt()`, using the words already in `lib/policy.ts` (`LEARNS`) so the
    card and the rulebook say the same thing. `match_exemplars_to_sex` stays out
@@ -99,16 +118,20 @@ in `core/runs.ts` prices ideas and cards only).
    shown beside the card on the week page, never changing the verdict. It
    costs a few output tokens and feeds the review notebook for step 4d. Drop
    it if, on day 1, more than half the notes are noise.
-8. **The safety floor is a file above both guardians.** `gate/safety-floor.md`,
-   a first version written in this job from docs/09 and `packs/README.md`:
-   body safety, telling a trusted adult, emergency basics, each with a sentence
-   on what "taught at an age-appropriate level" means. Short; three items. The
-   gate reads it ahead of the family's rulebook: a card on the floor is never
-   blocked by a blackball or by a never or parent-led setting, only by rule 1
-   or 6. No screen lets a guardian change it; it changes by commit. *Touches
-   rule 2:* the floor limits what either guardian can block, so Brandon and June
-   read it at step 1. The library has no floor lesson yet; the gate only has to
-   stand aside, and the test run proves it.
+8. **The safety floor is a file above both guardians, and a first guess.**
+   `gate/safety-floor.md` starts with the three items docs/09 names (body
+   safety, how to tell a trusted adult, emergency basics), in docs/09's words
+   (always taught at an age-appropriate level), and nothing else. Its first line
+   says it is **a first guess, pending June**, and that stays until June has
+   read it and a commit removes the line; docs/09's open question, "What belongs
+   on the safety floor", stays open until then. The gate reads it ahead of the
+   family's rulebook: a card on the floor is never blocked by a blackball or by a
+   never or parent-led setting, only by rule 1 or 6. Each verdict records the
+   floor's version and whether it was still a first guess, and the week page
+   says so. No screen lets a guardian change the file; it changes by commit.
+   *Touches rule 2:* the floor limits what either guardian can block, which is
+   why June reads it before it is more than a guess. The library has no floor
+   lesson yet; the gate only has to stand aside, and the test run proves it.
 9. **The gate runs at the end of `week:build`, and as its own command.**
    Inside `week:build`, once every card is saved: each card checked once, the
    report gains a gate section (passed, blocked by code, blocked by the model,
@@ -128,11 +151,19 @@ in `core/runs.ts` prices ideas and cards only).
     policy document is most of it), is about $0.02 a card on Opus 5.5, so about
     $6 a week; about $3 on Sonnet 5.5. Ideas and cards were $0.85 for day 1,
     about $6 a week. So a full week with the gate is about $12 and crosses the
-    $10 a run that runs freely: any full-week `week:build` after this job gets
-    a STOP with the estimate. Step 1 measures the policy document on test and
-    replaces my guess with a number. `estimate()` in `core/runs.ts` gains the
-    gate (priced per child per day, like cards) once a `week:build` run has
-    recorded one.
+    $10 a run that runs freely (decided 18 October 2026, when a full week was
+    $5.70). **Proposed instead of a standing STOP on every full week: a new run
+    line for docs/08**, set by the rule behind the old one: about one and three
+    quarters times a normal full week, so a normal week and one with re-asks run
+    freely and a runaway stops. On my guess that is about $20 a run. Step 1
+    measures the policy document on test and the gate's real cost per card, gives
+    the full-week figure with the gate and the line the rule makes of it, and
+    Brandon confirms the number. It then goes into docs/08 as a *Decided:* line
+    and replaces the "$10 a run" line in CLAUDE.md's *Before a consequential
+    action* at the close; a brief still puts a STOP above whatever the line is,
+    as now. Until then the $10 line stands, and nothing in this job comes near
+    it. `estimate()` in `core/runs.ts` gains the gate (priced per child per
+    day, like cards) once a `week:build` run has recorded one.
 11. **The twenty-question test run**, on the rulebook page
     (`/parent/beliefs/rulebook`), for parents. Twenty questions, fixed, in a
     list in `lib/` with a test: 16 from the 24 subjects, at least one from each
@@ -208,7 +239,8 @@ in `core/runs.ts` prices ideas and cards only).
    nickname = '<one of the invented children>';`. Test project only, invented
    children only. Step 1 names a note that day 1's cards will touch.
 4. Read the twenty questions and the safety floor in step 1's write-back, with
-   June, and mark what to change. They are what the parents will read.
+   June, and mark what to change. They are what the parents will read. The
+   floor stays a first guess until June has read it.
 
 ## Steps and stops
 
@@ -218,19 +250,25 @@ test). No step here is live unless it says so.
 
 1. **Write back, then STOP.** Read the files above and show: the policy
    document's size on test and the per-card cost at the configured model
-   (measured, replacing my guess); the exact gate input, field by field, with
-   rule 7 checked line by line; the verdict schema and the `policy_notes.gate`
-   shape; the code checks and what each blocks; the first `gate/safety-floor.md`;
-   the twenty questions with the subject each draws on; the page copy; the
-   migration written out; the tests to add; the files to change; the note for
-   the caution check; and anything here that does not fit the repository. Say
+   (measured, replacing my guess), the full-week figure with the gate, and the
+   run line the rule in decision 10 makes of it, as one number for Brandon to
+   confirm; the exact gate input, field by field, with rule 7 checked line by
+   line: the `careful_about` note and nothing else about the child beside it,
+   and how often a card's own text carries the nickname; the verdict schema and
+   the `policy_notes.gate` shape; the code checks and what each blocks; the
+   first `gate/safety-floor.md`, the three items from docs/09 with its
+   "first guess, pending June" line; the twenty questions with the subject each
+   draws on; the page copy; the migration written out; the tests to add; the
+   files to change; the note for the caution check; and anything here that does
+   not fit the repository. Say
    the branch (`phase-3-curation`, no new one; see *To settle*). Suggest plan
    mode and `opusplan`. **Brandon confirms the decisions, answers *To settle*,
    and says go.** On go the board row moves to *building* as the first commit.
 2. **Build,** each a commit: (a) `core/curation/gate.ts` (pure, the database and
    model as deps, like `buildWeek`), `core/prompts/gate.md`,
-   `gate/safety-floor.md`, the code checks, Vitest with a fake model and no
-   network; (b) `week:build` calls it, `gate` and `gate:live` scripts, the
+   `gate/safety-floor.md` (the three items, marked a first guess, pending June),
+   the code checks, Vitest with a fake model and no network, including the
+   rule 7 test in decision 5; (b) `week:build` calls it, `gate` and `gate:live` scripts, the
    report's gate section, `QUARK_MODEL_GATE` checked before anything is spent,
    `estimate()` and the models page; (c) `learns_to_act` in the card prompt, with
    its test; (d) verdicts on the week page; (e) `answer.md`, the question list,
@@ -246,8 +284,10 @@ test). No step here is live unless it says so.
       `quark-test` after the tests pass; `gh run watch`, report the result.
    3. `npm run week:build -- --week 1 --days 1 --rebuild` on test, about $1.70
       by my guess (day 1 about $0.85; the gate on 40 cards about $0.80), under
-      the $10 that runs freely. No `content:fetch` is needed: the gate reads
-      card text, not pictures. Show the report's gate section.
+      the $10 line that stands until decision 10's new one is confirmed. No
+      `content:fetch` is needed: the gate reads card text, not pictures. Show
+      the report's gate section, and the gate's real cost per card, which
+      confirms or replaces the run line proposed at step 1.
    4. The week page: `how-fossils-form`'s cards blocked by code for subject 5,
       the reason naming the subject and no guardian; the other cards passed or
       held back with reasons; reader notes; the caution firing if set.
@@ -266,8 +306,11 @@ test). No step here is live unless it says so.
    **STOP** for Brandon to open `/parent/week/<theme>` and the rulebook page on
    test.
 4. **Records and `/close`.** docs/04 (*How the gate is built*), docs/09 (the
-   floor), docs/08 (*Decided:* lines; the `careful_about`, `learns_to_act` and
-   second-reader lines marked done), `gate/values-interview.md` (the test run,
+   floor, as a first guess pending June; its open question stays open), docs/08
+   (*Decided:* lines; the `careful_about`, `learns_to_act` and second-reader
+   lines marked done; the new run line, with the figures it was measured from),
+   CLAUDE.md's *Before a consequential action* ("$10 a run" becomes the
+   confirmed line), `gate/values-interview.md` (the test run,
    as built), docs/13 (one line), CLAUDE.md *Where we are* then the README
    status line, the board row to *on test* (Waiting on: Brandon's look at the
    test copy, the live migration, the release). The full report, the four-line
@@ -292,7 +335,9 @@ test). No step here is live unless it says so.
   step 5, and the migrations workflow runs on a push of a `phase-*` branch.
 - **Cost.** Recommend keeping Opus 5.5 for the gate (the `.env.example`
   default), per card, as decided. About $6 a week on top of $6 is the number
-  to look at. Levers if it is too much, none recommended now: Sonnet 5.5 for the
+  to look at, and the new run line (decision 10, about $20 on my guess) is
+  measured at step 1 and confirmed by Brandon, not assumed. Levers if it is
+  too much, none recommended now: Sonnet 5.5 for the
   gate (about half); one call per chain of four (under half, a change to "per
   card"); caching the policy document (cached input costs a tenth, which also
   brings it under half, but it is an adapter change that touches every call and
@@ -308,7 +353,14 @@ test). No step here is live unless it says so.
   separate board row for Brandon to `/idea` when he wants it. Until then the
   live column is empty and that check does nothing there.
 - **The twenty questions and the floor.** Whether Brandon and June change a
-  question or a floor line. Each change is a one-line edit.
+  question or a floor line. Each change is a one-line edit. The floor is a first
+  guess until June has read it, so the job can ship with the mark still on.
+- **The nickname in a card's own words.** Decision 5's line governs what the
+  gate call is given about the child, not the card's text, which can carry the
+  nickname because the writer used it. Recommend leaving the card as written
+  and reporting how often at step 1. Swapping the nickname for "the child" is one
+  function, but a nickname that is also an ordinary word (the invented family has
+  one) would mangle a card that uses the word; Brandon says if he wants it.
 - **Live in this job.** Recommend no: end on test (step 4), and take 5 and 6
   when Brandon has looked at the test copy.
 - **Found while writing this brief, where it and the repository disagree:**
@@ -342,8 +394,14 @@ test). No step here is live unless it says so.
 - `week:build` and `npm run gate` (and `gate:live`, never run here) do this;
   the gate's cost is in the report, the `model_runs` row and the models page
   estimate; `QUARK_MODEL_GATE` is checked before money is spent.
-- The gate prompt holds nothing else about a child; `careful_about` reaches the
-  gate and not the card writer; `learns_to_act` reaches the card writer.
+- The gate call carries the `careful_about` note and nothing else about the
+  child beside it, and a test holds that; `careful_about` reaches the gate and
+  not the card writer; `learns_to_act` reaches the card writer.
+- `gate/safety-floor.md` holds the three items from docs/09 and says it is a
+  first guess, pending June; each verdict and the week page say which floor
+  version they were checked against.
+- The run line is measured, confirmed by Brandon and written to docs/08 and
+  CLAUDE.md, with no standing STOP on a full week.
 - The rulebook page runs the twenty questions per child, keeps the results for
   both guardians and says when the rulebook has changed since; one run read in
   full.
