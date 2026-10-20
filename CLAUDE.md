@@ -10,7 +10,7 @@ The `wwc` plugin (`/wwc:job` and the rest; the method is in `BrandonReisen/worki
 - Board: `docs/board.md`
 - Board page: `npm run docs:board` (writes `Quark board.html` at the repository root, untracked; skip it in a side worktree)
 - Branches: working is the phase branch (`phase-N-...`; a phase job runs on its phase branch, a tooling job on a tooling branch, never `main`); finished `main`, and a push or merge to `main` is Brandon's go
-- Release: Brandon merges the branch to `main`; no skill
+- Release: `/wwc:release` when `main` has not moved; otherwise Brandon merges by hand
 - Tests: `npm test`, and `npm run typecheck`
 - Bugs: `docs/08-open-questions.md`, a bullet at the top of the list under `## Bugs`: `- <date>, <where> (<phase N or tooling>): <what happened>; expected: <what should have happened>. <File, if any.> Size: <minutes, an hour, a job>.` The phase in brackets is what the board page counts by. No screenshot is saved: the repository is public.
 - Also read at /job: the README status line; `docs/08-open-questions.md` (*How Quark is built with Claude* and *Bugs*); by search, the spec pages the brief touches, `deploy/supabase/schema.sql` if it touches data, `gate/values-interview.md` and `packs/README.md` for values
