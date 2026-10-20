@@ -378,8 +378,12 @@ test). No step here is live unless it says so.
   joins the estimate on its own and `estimate()` does not include it;
   `week-build.mts` checks only the idea and card models before spending;
   `careful_about` cannot be entered; and the installed `wwc` plugin copy here
-  (`75332818d9f8`) has no `release` skill, so I could not read what
-  `/wwc:release` does and only quote the *Method* line.
+  (`75332818d9f8`) has no `release` skill. It is in the plugin's source
+  (`working-with-claude/skills/release`), read at the close: it refuses unless
+  the tree is clean and pushed and the release fast-forwards, runs the *Tests*
+  commands, shows what the release carries, then pushes the branch to `main` on
+  the terminal's Yes. The ordering in step 6 stands: with `SUPABASE_DB_URL_LIVE`
+  unset, the push does not apply a migration to live.
 
 ## Not in this job
 
