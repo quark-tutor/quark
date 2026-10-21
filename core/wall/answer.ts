@@ -3,7 +3,8 @@ import type { AnswerKey } from "../curation/types.ts";
 
 // Is a child's guess right? Judged in code, with no model call (docs/wonder-wall-1-slice.md, decision 2):
 // the hint check's word rule (words() in core/curation/cards.ts), with these additions:
-//   - a one-letter slip is forgiven in a word of five letters or more ("chello" is "cello");
+//   - a one-letter slip is forgiven in a word of five letters or more ("chello" is "cello"), unless the
+//     question itself uses the word typed;
 //   - a guess with "not", "no", "never" or "n't" is not right unless the answer it matches has one too;
 //   - on a question that offers a choice of two, a guess that also holds the other choice is not right
 //     ("north or south" is not "north"; Brandon, 20 Oct 2026), and a yes-or-no question offers yes and no;
@@ -76,13 +77,15 @@ export function slip(typed: string, want: string): boolean {
 }
 
 // How many of the answer's meaningful words the guess holds, each guess word used once, and how many it needs.
-function overlap(guess: string[], answer: string): { held: number; need: number } {
+// A word the question itself uses is read as that word, never as a slip: "painted" on "painted with a brush, or
+// pressed?" is the other choice, not a misspelling of "printed" (found on test, 21 Oct 2026).
+function overlap(guess: string[], answer: string, asked: Set<string>): { held: number; need: number } {
   const need = meaningful(answer);
   const pool = [...guess];
   let held = 0;
   for (const w of need) {
     let i = pool.indexOf(w);
-    if (i < 0) i = pool.findIndex((g) => slip(g, w));
+    if (i < 0) i = pool.findIndex((g) => !asked.has(g) && slip(g, w));
     if (i < 0) continue;
     pool.splice(i, 1);
     held += 1;
@@ -136,8 +139,9 @@ export function judgeGuess(guess: string, key: AnswerKey, question: string, rule
   const g = tokens(guess);
   const negated = g.some((w) => NEGATIONS.has(w));
   const two = choicesOf(question, key.accept);
+  const asked = new Set(tokens(question));
   const right = key.accept.some((answer) => {
-    const { held, need } = overlap(g, answer);
+    const { held, need } = overlap(g, answer, asked);
     if (need === 0 || (rule === "every" ? held < need : held === 0)) return false;
     const a = tokens(answer);
     if (negated && !a.some((w) => NEGATIONS.has(w))) return false;

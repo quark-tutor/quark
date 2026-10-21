@@ -34,6 +34,14 @@ describe("a one-letter slip", () => {
     expect(judgeGuess("the chello", key("the cello"), Q)).toBe("right");
   });
 
+  it("is not forgiven for a word the question itself uses", () => {
+    // "painted" is one letter from "printed", and it is the other choice (test, 21 Oct 2026).
+    const q = "Was the Great Wave painted with a brush, or pressed onto the paper from something else?";
+    const k = key("pressed", "pressed from wood blocks", "printed", "carved blocks");
+    expect(judgeGuess("painted", k, q)).toBe("not_yet");
+    expect(judgeGuess("printd", k, q)).toBe("right");
+  });
+
   it("is not forgiven in a shorter word, two letters off, or in a number", () => {
     expect(slip("blu", "blue")).toBe(false);
     expect(slip("selo", "cello")).toBe(false);
