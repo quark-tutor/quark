@@ -2,6 +2,7 @@
 
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
+import { audit } from "@/lib/audit";
 import { requireGuardian } from "@/lib/guardian";
 import { generatePairingCode, hashSecret } from "@/lib/pairing";
 import { createClient } from "@/lib/supabase/server";
@@ -53,14 +54,7 @@ export async function forgetDevice(deviceId: string) {
     .select("id, child_id");
   if (error) throw error;
 
-  if (data.length > 0) {
-    await supabase.from("audit_log").insert({
-      family_id: guardian.familyId,
-      guardian_id: guardian.id,
-      action: "device.forget",
-      target: { device_id: deviceId, child_id: data[0].child_id },
-    });
-  }
+  if (data.length > 0) await audit(guardian, "device.forget", { device_id: deviceId, child_id: data[0].child_id });
   refresh();
 }
 

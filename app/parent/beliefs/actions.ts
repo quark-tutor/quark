@@ -16,6 +16,7 @@ import {
   type LeanChoice,
   type Setting,
 } from "@/lib/beliefs";
+import { audit as serverAudit } from "@/lib/audit";
 import { isChoice, isChoiceKey, isConductKey, PER_CHILD, type ConductKey } from "@/lib/conduct";
 import { saveFamilyValues } from "@/lib/family-save";
 import { requireGuardian, type Guardian } from "@/lib/guardian";
@@ -40,11 +41,9 @@ async function context(): Promise<Ctx | null> {
   return { guardian, supabase: await createClient() };
 }
 
-async function audit({ guardian, supabase }: Ctx, action: string, target: Record<string, unknown>) {
-  const { error } = await supabase
-    .from("audit_log")
-    .insert({ family_id: guardian.familyId, guardian_id: guardian.id, action, target });
-  if (error) throw new Error(error.message);
+// Through the server: a guardian's own session can't write audit_log (20261021000000).
+async function audit({ guardian }: Ctx, action: string, target: Record<string, unknown>) {
+  await serverAudit(guardian, action, target);
 }
 
 async function done(ctx: Ctx): Promise<Result> {

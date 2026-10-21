@@ -1,9 +1,9 @@
 "use server";
 
 import { refresh } from "next/cache";
+import { audit } from "@/lib/audit";
 import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
 
 // Approve or reject one outside content item (docs/04). Any guardian may do either. content_items
 // is written only by the server, so these use the service-role client after checking the guardian.
@@ -29,11 +29,7 @@ async function decide(id: string, action: "content.approve" | "content.reject") 
   if (error) throw new Error(error.message);
   if (!data) return; // already rejected, or gone
 
-  const supabase = await createClient();
-  const logged = await supabase
-    .from("audit_log")
-    .insert({ family_id: guardian.familyId, guardian_id: guardian.id, action, target: { content_item_id: id, title: data.title } });
-  if (logged.error) throw new Error(logged.error.message);
+  await audit(guardian, action, { content_item_id: id, title: data.title });
   refresh();
 }
 
