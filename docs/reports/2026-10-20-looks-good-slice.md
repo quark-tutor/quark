@@ -438,3 +438,123 @@ Pre-flight for this stop:
    and 7 are then built through the route at about $1.90 each.
 3. **How it is undone:** revert the commit; no data is changed by it.
 4. **What was checked on test:** the timings above; nothing of this change yet.
+
+Brandon: "go: the code change, not Pro. Both children's cards at once, five card calls per child, the gate eight at a time,
+with tests; one commit. Then days 6 and 7 through the route; the 240-second line still stops you. Record the per-day table
+and the rule (under 240 fine; over 240 is the Pro conversation) in docs/04 at the close, and name the rate-limit failure
+mode there: a day that fails on a rate limit is cleared and rebuilt by the next firing. All four decisions you took stand."
+(Five decisions are listed above; the review's question 2 is the fifth. He said four: I read it as all of them.)
+
+## Stop 3: the whole week is built and checked on test; the tap is Brandon's (20 October 2026, evening)
+
+The code change is `634aa46` (one commit, with tests: 311 pass, typecheck clean). Days 6 and 7 went through the route on
+it. 3.3 (a) and (b) are done on the whole week; the tap (c) is not done, on purpose. Nothing is live and nothing is on `main`.
+
+### The per-day table (every day built through the route or, for the first two script rows, the script)
+
+| Day | Seconds (route) | Run row seconds | Calls (ideas, cards, gate) | Cost | Concurrency |
+|---|---|---|---|---|---|
+| 1 | 209.4 | 203 | 5, 10, 40 | $1.7072 | old |
+| 2 | 237.0 | 233 | 5, 13, 40 | $1.8584 | old |
+| 3 | 198.6 | 195 | 5, 10, 40 | $1.7064 | old |
+| 4 | 206.2 | 203 | 5, 12, 40 | $1.7947 | old |
+| 5 | 268.5 | 265 | 5, 12, 39 | $1.8757 | old (the stop) |
+| 6 | **131.4** | 128 | 5, 13, 39 | $1.8534 | new |
+| 7 | **125.2** | 122 | 5, 11, 40 | $1.8419 | new |
+
+Old: cards a child after a child, four at a time, the gate four at a time. New: both children at once, five a child, the
+gate eight at a time. The new days took 125 to 131 seconds, about half of the old mean (232) and 44% of the 300-second
+Hobby cap; the worst day under the new setting has 169 seconds of room. The eighth firing found all seven days built and
+did nothing, in 2 seconds, for $0. The route cost for the week is $12.64 (a normal full week is about $11.55 to $13.44).
+The estimate on `/parent/models` reads "about $13 a week, about $55 a month".
+
+No rate-limit failure showed in the two new days (the call counts are the same as the old days, so the SDK did not
+need to retry visibly). The failure mode is still real and recorded for docs/04 at the close: a day that fails on a
+rate limit after the SDK's two retries ends as a `failed` row, leaves a half-built day, and is cleared and built again by
+the next firing (the 8 pm spare covers one lost firing; two lost firings leave a day missing on Monday).
+
+### 3.3 (a) and (b), on the whole week, in Chrome as the test guardian
+
+- **The page, whole week, before anything:** "Ready for you to read", the Looks good button enabled, per child "Kiddo: 136
+  passed. Held back: 2 by the card checks, 0 by your rulebook, 2 by the checker. 0 cards aren't checked yet.", the first
+  cards missing named ("No Then card on Saturday for Kiddo."), "3 deeper cards are held back; Kiddo stops at the layer
+  before one.", "Safety floor version 1, still a first guess.", "Every card was checked against your rulebook as it is
+  today."
+- **(a) a card back to pending:** `fixture -- unpass 1` set the 26 Oct look card, layer 1, to pending *while the page
+  was open with an enabled button*. Pressing the stale button was **refused by the server**: "1 card isn't checked yet. This
+  week can go live once every card is checked. Whoever runs Quark can check them again." No `theme.live` row was written
+  and the week stayed in review. A reload showed the button disabled with the same reason. `npm run gate -- --week 1`
+  checked the card again (1 call, $0.03) and the page allowed the tap. This was a tap that could only be refused; it is the
+  one tap I made, and it did not make the week live.
+- **(b) a changed setting:** the test guardian's answer on subject 14 changed in the app (`beliefs.answer`), which moved
+  nothing: on the test copy only one guardian has answered each subject, so the merge ignores it (the rulebook says 24
+  waiting). A **block on subject 14** (`blackball.place`, then `values.save` version 5) is what changes the rulebook, as in
+  step 5's proof. The answer was set back first. Then the page said "278 cards were checked against an older rulebook and
+  need checking again before this week can go live. Whoever runs Quark can check them again." and the button was disabled.
+  `npm run gate -- --week 1` checked 278 cards in 179 seconds for **$6.91** (the brief's "about $1" was for the one-day
+  week): 269 passed, 9 held back by the checker (parent_led 7, caution 2), none pending. The page then allowed the tap.
+- **Left on test:** the block on subject 14 stays (lifting it changes the rulebook again and every verdict goes stale: about
+  $7 and three minutes to check them again). Test only. The test family's answer on subject 14 is as it was.
+
+### 3.4 again, with the week built
+
+- No secret, and a wrong one: 401, nothing written.
+- A firing with the week built: `nothing`, "all seven days of week 1 are built", $0, two audit rows linked by `started`.
+- `week:build -- --week 2 --plan`: the library's refusal ("the look card needs 6 and 0 are left; …"), nothing spent.
+
+### 3.6, the pages after
+
+- `/parent`, under Weeks: "Week 1 is ready for you to read" (a link), then "Sunday's build: week 1, 7 of 7 days, ready at 4:37
+  pm, $12.64." (the hand-fired days all fell on one Hawaii date, so they read as one Sunday), then the week in the list
+  as "from Oct 26, ready for you to read".
+- `/parent/models`: "The Sunday build: set up", and the estimate above.
+- The week page on the whole week: as above; the browser could not take a screenshot of it (it timed out at 30 seconds; the
+  page holds 280 cards), so these were read from the page's text and structure rather than seen.
+
+### Money, test only
+
+Route days 1 to 7 $12.64; the two script runs of day 2 $3.52; the gate re-checks $0.03 and $6.91. About $23.10 in all, each run
+under the $25 line. Nothing was spent on live.
+
+### What Brandon does now (the tap, 3.3(c))
+
+The dev server on test is up, and a tab of the week page is open in the browser I drive. Open
+`http://localhost:3000/parent` on test, read the Weeks section, open "Week 1 is ready for you to read", and read the week.
+Then:
+
+1. Open the week page in a **second tab** too, so there is a stale button to press afterwards.
+2. In the first tab press **Looks good**. Expected: "Live from Monday 26 October. Made live by [you] on Tuesday at [time]."; the
+   heading becomes "Live from Monday 26 October"; the button becomes "Take it back to review".
+3. In the second tab (not reloaded) press **Looks good**. Expected: "This week is already live." and nothing written.
+4. In the first tab press **Take it back to review**. Expected: "This week is back in review…", the heading "Ready for you to
+   read" again (allowed because the week starts on 26 October and today is the 20th).
+5. Tell me when done (any order is fine). I then read the audit rows (`theme.live`, `theme.review`) and finish the records.
+
+Pre-flight:
+1. **What is about to happen:** Brandon presses Looks good on the test copy's week 1, then takes it back.
+2. **What it touches:** not live. The test copy's `themes.status` for week 1 and two rows in the test copy's `audit_log`. Nothing
+   on an iPad, because there is no kid view yet.
+3. **How it is undone:** "Take it back to review" on the same page, until Monday 26 October 00:00 Hawaii time.
+4. **What was checked on test:** the tap's refusals (a pending card, an older rulebook, with the server's answer to a stale
+   page), the allowed state of the button, and the pages' lines. The allowed tap itself, the stale second tap and the
+   take-back have not been done; they are this step.
+
+### Couldn't check
+
+- The tap, the second stale tap and the take-back (Brandon's, above).
+- A screenshot of the week page (timed out; read from text).
+- Vercel production: the eight entries, `CRON_SECRET`, the three model names and the key there, and a firing that ends at
+  300 seconds (a Hobby function stopped mid-run); live week 1's start date. None is in this job.
+- A rate-limit failure in practice (none occurred); that a firing killed at the cap leaves the day recoverable is held by
+  tests and by the design, not seen.
+
+### Carried to the close (Brandon's instructions and mine)
+
+- docs/04: the per-day table above and the rule (**under 240 seconds is fine; over 240 is the Pro conversation**), and the
+  rate-limit failure mode (a day that fails on a rate limit is cleared and rebuilt by the next firing); how the Sunday build
+  and the Looks-good page are built; the lens plan limit once phase 4 records taps (history can change between firings);
+  `/parent/models` undercounts a firing killed by the time limit; a week left `generating` is visible and untappable.
+- docs/13 (weekly curation row), docs/08 (the *Decided:* lines), CLAUDE.md (the stack line, *Where we are*), the README status.
+- Board: the unique-index row ("Waiting on": before a real week 2 on live), and the `audit_log` insert finding into the
+  direct-write row's scope; this row to *on test*.
+- The bug for the wwc job skill (printed before written) is recorded at the top of this file.
