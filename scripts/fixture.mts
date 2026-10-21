@@ -6,6 +6,8 @@
 //   npm run fixture -- delete-week <week>   delete the week's theme with its ideas, cards and questions
 //   npm run fixture -- audit [n]            the last n audit rows (default 12): when, what, and the target
 //   npm run fixture -- runs [n]             the last n model runs (default 10): how long, and the calls and cost per job
+//   npm run fixture -- answers [n]          the last n answers on the wall (default 20) and the last sessions; a child is
+//                                           "child 1" or "child 2", oldest first, never by name
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
@@ -99,6 +101,45 @@ if (command === "show") {
     const calls = r.models.map((m) => `${m.use} ${m.calls}`).join(", ");
     console.log(`${r.finished_at.slice(0, 19)}  ${r.kind}${r.ok ? "" : " (stopped)"}  ${r.days ?? "-"} day  ${seconds}s  ${calls}  $${Number(r.cost).toFixed(2)}`);
   }
+} else if (command === "answers") {
+  // What the wall recorded, read-only (docs/wonder-wall-1-slice.md, decision 3).
+  const n = arg ? Number(arg) : 20;
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  const who = (id: string) => `child ${kids.findIndex((k) => k.id === id) + 1}`;
+  const rows = must(
+    await db
+      .from("attempts")
+      .select("created_at, child_id, session_id, answer, correct, hints_used, seconds, mode, questions(cards(day, slot, layer))")
+      .eq("family_id", familyId)
+      .order("created_at", { ascending: false })
+      .limit(n),
+    "attempts",
+  ) as unknown as {
+    created_at: string;
+    child_id: string;
+    session_id: string;
+    answer: string;
+    correct: boolean | null;
+    hints_used: number;
+    seconds: number | null;
+    mode: string;
+    questions: { cards: { day: string; slot: string; layer: number } | null } | null;
+  }[];
+  for (const r of rows.reverse()) {
+    const c = r.questions?.cards;
+    const verdict = r.correct === null ? "open" : r.correct ? "right" : "not right";
+    console.log(
+      `${r.created_at.slice(0, 19)}  ${who(r.child_id)}  ${c ? `${c.day} ${c.slot} layer ${c.layer}` : "?"}  ${verdict}  hints ${r.hints_used}  ${r.seconds ?? "-"}s  session ${r.session_id.slice(0, 8)}  "${r.answer}"`,
+    );
+  }
+  const sessions = must(
+    await db.from("sessions").select("id, child_id, started_at, ended_at, ended_reason, device").eq("family_id", familyId).order("started_at", { ascending: false }).limit(6),
+    "sessions",
+  ) as { id: string; child_id: string; started_at: string; ended_at: string | null; ended_reason: string | null; device: string | null }[];
+  console.log("Sessions, newest last:");
+  for (const s of sessions.reverse()) {
+    console.log(`  ${s.id.slice(0, 8)}  ${who(s.child_id)}  ${s.started_at.slice(0, 19)} to ${s.ended_at?.slice(0, 19) ?? "-"}  ${s.ended_reason ?? "open"}  device ${s.device?.slice(0, 8) ?? "-"}`);
+  }
 } else if (command === "audit") {
   const n = arg ? Number(arg) : 12;
   const rows = must(await db.from("audit_log").select("created_at, action, target").eq("family_id", familyId).order("created_at", { ascending: false }).limit(n), "audit_log") as {
@@ -108,6 +149,6 @@ if (command === "show") {
   }[];
   for (const r of rows.reverse()) console.log(`${r.created_at}  ${r.action}  ${JSON.stringify(r.target)}`);
 } else {
-  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n]");
+  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n]");
   process.exit(1);
 }
