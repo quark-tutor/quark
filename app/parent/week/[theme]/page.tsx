@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
+import { commonsMp3 } from "@/core/content/commons";
 import { credit } from "@/core/content/credit";
 import { readFloor, type PolicyNotes } from "@/core/curation/gate";
 import { backToReviewProblem, childSummary, daysBuilt, floorLine, liveProblems, longDay, plural, rulebookLine, statusWords, whenWords } from "@/core/curation/live";
@@ -68,11 +69,6 @@ type Media = {
   file: string | null;
 };
 
-// Wikimedia keeps an MP3 of each sound file, which iPad Safari plays where it may not play Ogg.
-const commonsMp3 = (url: string) => {
-  const m = url.match(/^https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/(\w\/\w\w)\/([^/]+\.(?:ogg|oga|opus|flac|wav))$/);
-  return m ? `https://upload.wikimedia.org/wikipedia/commons/transcoded/${m[1]}/${m[2]}/${m[2]}.mp3` : null;
-};
 
 async function Week({ params }: { params: Promise<{ theme: string }> }) {
   await connection();

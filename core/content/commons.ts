@@ -14,6 +14,13 @@ type CommonsReply = {
   };
 };
 
+// Wikimedia keeps an MP3 of each sound file, which iPad Safari plays where it may not play Ogg. Used by the
+// week page and the Wonder Wall's player.
+export const commonsMp3 = (url: string) => {
+  const m = url.match(/^https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/(\w\/\w\w)\/([^/]+\.(?:ogg|oga|opus|flac|wav))$/);
+  return m ? `https://upload.wikimedia.org/wikipedia/commons/transcoded/${m[1]}/${m[2]}/${m[2]}.mp3` : null;
+};
+
 const entities: Record<string, string> = { "&amp;": "&", "&quot;": '"', "&#39;": "'", "&#039;": "'", "&lt;": "<", "&gt;": ">", "&nbsp;": " " };
 
 // extmetadata values are HTML; keep the text.

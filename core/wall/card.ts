@@ -71,7 +71,9 @@ export const isDone = (s: CardState) => s.kind !== "answering";
 export type Tile = { slot: Slot; title: string; cardId: string; done: boolean };
 export type WallReply = { nickname: string; tiles: Tile[] };
 
-export type Media = { type: string; url: string; credit: { title: string; lines: string[] } };
+// url is a signed URL to the family's stored copy, or a recording's Wikimedia URL (with the MP3 Wikimedia
+// keeps of it, which iPad Safari plays where it may not play Ogg).
+export type Media = { type: string; url: string; mp3: string | null; credit: { title: string; lines: string[] } };
 
 export type CardReply = {
   id: string;
