@@ -558,3 +558,70 @@ Pre-flight:
 - Board: the unique-index row ("Waiting on": before a real week 2 on live), and the `audit_log` insert finding into the
   direct-write row's scope; this row to *on test*.
 - The bug for the wwc job skill (printed before written) is recorded at the top of this file.
+
+## After the tap (20 October 2026, evening)
+
+Brandon: "done. Three things for the close: (1) every card on the test week says 'No approved picture for this topic yet',
+because content:fetch has never run on quark-test; the proof week was text-only, so a day with pictures through the route
+is a 'couldn't check', and content:fetch on test goes on the to-do before the Wonder Wall slice; (2) after 'This week is
+already live' the stale tab keeps its old heading and an enabled Looks good; the component should redraw to the live
+state after a refusal: beyond the brief, your call whether it is a one-line fix now or a bugs line; (3) the heading
+'Kiddo (chapter_books, age 9)' shows the raw reading-level code; pre-existing, one bugs line."
+
+### What the tap wrote (read from the test copy's audit log)
+
+- `theme.live` at 03:03:25 UTC: week 1, floor 1, 269 passed, 11 held back (the 9 the checker held back and the 2 the card
+  checks held back), under the rulebook of the block on subject 14. Then `theme.review` at 03:04:38 UTC. The week is in
+  review again. Brandon's description: the first tab went live and the stale second tab was refused with "This week is
+  already live" and kept its old heading and an enabled button.
+
+### (2) The stale tab: fixed now, `e7c0a51`
+
+My call: a fix, not a bugs line, because it was three small edits in the page I had just built. A refused Looks-good or
+take-back tap now revalidates `/parent/week/<theme>` and `/parent` as well as answering (`refused()` in
+`app/parent/week/[theme]/actions.ts`), and the tap button is keyed on whether it is blocked, so it starts afresh when
+the page redraws and the reason is in the list above it rather than twice. The "Reload the page" wording is gone from
+both refusals. Checked in the browser on the same pending-card scenario as 3.3(a): the stale tab pressed Looks good,
+the server refused, and the page redrew with the button disabled and the reason listed once and no message left over;
+the card was then checked again ($0.03, none pending). Not checked: the exact sequence Brandon saw (a second tab after
+the week went live), which needs a second tap that makes the week live; it goes through the same `refused()` call, and
+the redrawn page for a live week is the one the first tab already shows. Tests: 311 pass, typecheck clean.
+
+### (3) The raw reading-level code: a bugs line, not fixed
+
+One line at the top of the Bugs list in docs/08: the heading shows `cards.level` as stored, the reading-level code and
+the age. Size: minutes. (This page names the invented test family's children; the line in the repository uses an invented
+nickname.)
+
+### (1) Pictures: a "couldn't check", and a to-do
+
+`npm run content:fetch` has never run on `quark-test`, so test has no approved items: every topic is text only, every
+card says "No approved picture for this topic yet", and the whole proof week above (the timings, the costs, the gate's
+reading) is of text-only cards. Live has its pictures (CLAUDE.md's 2b and 2d notes: the items were fetched and approved there). What differs on
+a day with pictures, unproved: the ideas prompt lists the offered items; layer 1 must use one, and a chain without is
+sent back once (a second idea call of the same chain, in parallel with the other slots, so up to one more call's time
+on the day, perhaps half a minute); cards carry `image_alt`. My estimate, not measured: a day of about 130 seconds
+becomes about 160, still under 240. The rule in docs/04 (under 240 fine) stands, and the first real Sunday on live is
+the first day with pictures through the route.
+
+To-do, for `/close` to put on the board as its own row: **content:fetch on quark-test, so a test week has pictures** (a
+job of minutes; the model cost of flagging each item is not measured, so check the estimate with `content:fetch` first; waits
+on: before the Wonder Wall slice). Phase 4.
+
+### For the close (everything carried)
+
+- docs/04: *How the Sunday build is built* and *How a week goes live*; the per-day table; the rule (**under 240 seconds is
+  fine; over 240 is the Pro conversation**); the rate-limit failure mode (**a day that fails on a rate limit is cleared and
+  rebuilt by the next firing**); the 13 Oct line ("what the gate held back", not "changed"); the lens plan limit once phase 4
+  records taps; `/parent/models` undercounts a firing killed at the time limit; a week left `generating` is visible and
+  untappable; the pictures "couldn't check".
+- docs/13 (weekly curation row: a day a firing, eight firings, Hobby), docs/08 (the *Decided:* lines under *The Sunday cron
+  and the Looks-good page*, as built; the first-guess question answered: not a new version), CLAUDE.md (stack line; *Where we
+  are*), the README status line.
+- Board rows: this row to *on test* (waiting on: the release; `CRON_SECRET` on Vercel by Brandon's hand; more short lessons
+  before a real week 2; the direct-write row's migration before any week is made live on live); the unique-index row
+  (ideas and cards, "an hour", phase 3, **waiting on: before a real week 2 on live**); the `audit_log` insert finding added
+  to the direct-write row's scope; the content:fetch-on-test row above.
+- Test state left behind, for the record: the block on subject 14 on `quark-test` (lifting it makes every verdict stale: about
+  $7 and three minutes to check them again), and week 1 in review there.
+- Spend on test this job: about $23.10 (the table above), plus $0.03 for the card checked after the redraw check.
