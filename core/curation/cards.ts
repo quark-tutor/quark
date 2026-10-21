@@ -124,12 +124,15 @@ export function cardPrompt(ctx: CardContext): string {
 
 // --- Checking what the model wrote ---
 
-const STOP = new Set(
+// The word rule is shared with the wall's answer matcher (core/wall/answer.ts), so the two can't drift.
+export const STOP = new Set(
   "a an and are as at be by for from has have in is it its of on or that the their them they this to was were with what which who why how you your".split(" "),
 );
-const words = (s: string) =>
+export const words = (s: string) =>
   // A trailing s is dropped only from longer words, so "rains" meets "rain" but "tens" isn't "ten".
   (s.toLowerCase().normalize("NFKD").match(/[a-z0-9]+/g) ?? []).map((w) => (w.length > 4 && w.endsWith("s") ? w.slice(0, -1) : w));
+// Meaningful means not a stop word, and more than one letter unless it is a digit.
+export const isMeaningful = (w: string) => !STOP.has(w) && (w.length > 1 || /\d/.test(w));
 
 // Does this text give away an acceptable answer? True when every meaningful word of some accepted
 // answer appears in it ("silt" in "Is it silt?"; "monsoon rain" in "the rain of the monsoon").
@@ -139,7 +142,7 @@ export function givesAway(text: string, key: AnswerKey): boolean {
   const have = new Map<string, number>();
   for (const w of words(text)) have.set(w, (have.get(w) ?? 0) + 1);
   return key.accept.some((answer) => {
-    const need = words(answer).filter((w) => !STOP.has(w) && (w.length > 1 || /\d/.test(w)));
+    const need = words(answer).filter(isMeaningful);
     // A word the answer uses twice ("one and one") has to be there twice: "Does each one count?"
     // has one "one", which is only a pronoun, not the sum.
     const counts = new Map<string, number>();
@@ -148,7 +151,7 @@ export function givesAway(text: string, key: AnswerKey): boolean {
   });
 }
 
-const BRILLIANCE = /\b(smart|clever|genius|brilliant|gifted|talented)\b/i;
+export const BRILLIANCE = /\b(smart|clever|genius|brilliant|gifted|talented)\b/i;
 
 export type RawCards = Partial<Record<(typeof CARD_KEYS)[number], CardBody>>;
 
