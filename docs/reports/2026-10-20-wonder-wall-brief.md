@@ -139,4 +139,6 @@ steps (M1 to M4) are for a later session, each at a stop by Brandon's hand.
 
 ## Cost
 
-`/cost`: not yet given.
+`/cost`, typed by Brandon at the close: **$8.44** for the session (Opus 5.5 $8.24, Sonnet 5.5 $0.19 for the
+read-back, Haiku 5.5 $0.0005); 23 minutes 22 seconds of API time, 56 minutes on the clock. This is Claude Code's
+own cost, not Quark's API spend (none this job).
