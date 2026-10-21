@@ -5,6 +5,7 @@
 //   npm run fixture -- unpass <week>        set the week's first passed card back to pending, clearing its gate notes
 //   npm run fixture -- delete-week <week>   delete the week's theme with its ideas, cards and questions
 //   npm run fixture -- audit [n]            the last n audit rows (default 12): when, what, and the target
+//   npm run fixture -- runs [n]             the last n model runs (default 10): how long, and the calls and cost per job
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
@@ -81,6 +82,23 @@ if (command === "show") {
   const { error } = await db.from("themes").delete().eq("id", t.id);
   if (error) throw new Error(`themes: ${error.message}`);
   console.log("Done. Its audit rows and model runs stay.");
+} else if (command === "runs") {
+  // What recent runs spent, read-only: when, how long, and the calls and cost per job. Counts and money only.
+  const n = arg ? Number(arg) : 10;
+  const rows = must(await db.from("model_runs").select("kind, ok, days, started_at, finished_at, models, cost").eq("family_id", familyId).order("finished_at", { ascending: false }).limit(n), "model_runs") as {
+    kind: string;
+    ok: boolean;
+    days: number | null;
+    started_at: string;
+    finished_at: string;
+    models: { use: string; calls: number; cost: number | null }[];
+    cost: number;
+  }[];
+  for (const r of rows.reverse()) {
+    const seconds = Math.round((Date.parse(r.finished_at) - Date.parse(r.started_at)) / 1000);
+    const calls = r.models.map((m) => `${m.use} ${m.calls}`).join(", ");
+    console.log(`${r.finished_at.slice(0, 19)}  ${r.kind}${r.ok ? "" : " (stopped)"}  ${r.days ?? "-"} day  ${seconds}s  ${calls}  $${Number(r.cost).toFixed(2)}`);
+  }
 } else if (command === "audit") {
   const n = arg ? Number(arg) : 12;
   const rows = must(await db.from("audit_log").select("created_at, action, target").eq("family_id", familyId).order("created_at", { ascending: false }).limit(n), "audit_log") as {

@@ -329,3 +329,112 @@ Then go: pull, the board row to *building*, and build.
 5. Step 3 as the brief has it, with the additions above: one real script run through `week-job` before 3.5; Chrome
    for 3.3(a) and (b); 3.3(c) at stop 3, Brandon's.
 6. Stop 3, then the records and `/close`.
+
+## Stop 2: a day took 268.5 seconds, over the 240-second line (20 October 2026, evening)
+
+The brief's stop for step 3.5: "Any day over 240 seconds: STOP, with the timings." Days 1 to 5 of test's week 1 are built
+through the route; days 6 and 7, the ninth firing, 3.3 (a) and (b), 3.6 and Brandon's tap are not done. Nothing is live
+and nothing is on `main`.
+
+### What is built (the four commits, pushed)
+
+| Step | Commit | What |
+|---|---|---|
+| 2(a) | `a398d77` | `week-job.ts` and `gate-run.ts` in `core/curation`, the per-run meter and `meteredComplete`, `pendingOnly` in `runGate`; `week:build` and `gate` on them |
+| 2(b) | `788ffb9` | `buildWeek`'s one-day mode, `deleteDay`, `--day`, and the out-of-order lenses-and-doors test |
+| 2(c) | `5a4c84b` | `cron.ts`, `cron-job.ts`, the route, `vercel.json`, `cron:week`, `fixture`, the models-page line, `.env.example` |
+| 2(d) | `0477511` | `live.ts` and the Looks-good tap, `makeWeekLive` and back to review, the week page, the `/parent` lines |
+
+The records (stop 1's report and the board row) are `e12811c` and `c3465fe`. Step 3.1: `npm test` 308 passed (230 at the
+start), `npm run typecheck` clean, `next build` clean: `/api/cron/week` is dynamic and the build output carries
+`maxDuration: 300` for it (`.next/server/functions-config-manifest.json`), so the open question in the write-back's item 8
+is closed. Step 3.2: pushed; no migration changed, so the migrations workflow did not run (`gh run list` still shows the
+two runs of 20 Oct, 09:28Z and 20:05Z).
+
+### Proved on test so far
+
+- **3.4(a):** the route with no secret, and with a wrong one: 401 `Unauthorized`; no audit row written.
+- **3.4(b):** `npm run cron:week` with week 1 as it was: `refused`, "week 1 is already built", nothing spent, two audit
+  rows (`started`, `refused`, linked by `started`). `CRON_SECRET` is set in `.env.local` and the dev server reads it.
+- **3.4(c):** `week:build -- --week 2 --plan`: the library's refusal ("the look card needs 6 and 0 are left; …") from
+  `weekSchedule` inside `prepareWeek`, nothing spent.
+- **The refactor changed nothing:** `week:build -- --week 1 --days 1 --plan` printed the same bytes before and after 2(a);
+  `npm run gate -- --week 1` ran through the moved code at $0.00 (38 cards already checked against this rulebook).
+- **The script's day mode on the real database,** by `week:build -- --week 1 --day 2` (a mistake, below) and then
+  `--day 2 --rebuild`: the rebuild cleared and rewrote only day 2 (ideas stayed 20 a day, cards 40 a day, no doubles, the
+  cascade through `ideas` took the day's cards and questions), the theme went to `generating`, a second `--day 2` is
+  refused with "Day 2 of week 1 is already built, or half built" at $0.00.
+- **3.5, the whole week through the route:** test's week 1 deleted (`fixture -- delete-week 1`: 40 ideas and 80 cards over 2
+  days), `plan:import` on test undid the step 5 reorder (day 1 is now leap-years and two-dice with the Nile), then the
+  firings below. **Two at once on day 3:** one built it, the other answered `refused`, "another firing is working on day
+  3 of week 1", in 1.3 seconds.
+
+### The timings
+
+| Firing | Day | Route seconds | Run row seconds | Calls (ideas, cards, gate) | Cost |
+|---|---|---|---|---|---|
+| route | 1 | 209.4 | 203 | 5, 10, 40 | $1.7072 |
+| route | 2 | 237.0 | 233 | 5, 13, 40 | $1.8584 |
+| route | 3 | 198.6 | 195 | 5, 10, 40 | $1.7064 |
+| route | 4 | 206.2 | 203 | 5, 12, 40 | $1.7947 |
+| route | **5** | **268.5** | 265 | 5, 12, 39 | $1.8757 |
+| script, `--day 2` (mistake) | 2 | n/a | 257 | 5, 12, 37 | $1.75 |
+| script, `--day 2 --rebuild` | 2 | n/a | 267 | 5, 12, 39 | $1.77 |
+
+Seven days built: 195 to 267 seconds, mean about 232; three of the seven were over 250. The day's time does not follow
+its call count (day 4 and day 5 both made 12 card calls and took 206 and 268 seconds), so it is the model's latency, not
+the work, that moves it. Hobby stops a function at 300; the worst so far is 89.5% of that, and 237 and 267 were within
+three and twenty-seven seconds of 240. Money on test: the five route days $8.94, the two script days $3.52, the earlier
+gate re-check $0.00: $12.46 in all, each run under the $25 line. The twin firing and the three refused ones spent nothing.
+
+### Where the day goes (estimated; nothing records phases)
+
+One day is five idea calls side by side (about 45 s), then each child's cards one child after the other with the calls
+four at a time (five chains a child, so a round of four and a round of one: about 70 s a child, 140 s), then the gate on
+40 cards four at a time (about 60 s). That adds to about 245 s, which matches.
+
+### Mistakes in this stretch
+
+- **A build I ran by mistake.** To see the script's refusal I ran `week:build -- --week 1 --day 2` on test, thinking day 2
+  existed. Test's week 1 held only day 1 (the brief says so, and I wrote it myself), so it built day 2: $1.75 on test, 257
+  seconds. Under the $25 line and test only, so no stop was crossed, but I should have run `fixture -- show 1` first; I now
+  look before a run that spends. It left a theme in review with two days, which is why 2(b) sets a theme back to
+  `generating` whenever it adds a day.
+
+### Decisions taken in the build (for Brandon to strike)
+
+1. **`liveProblems` refuses a week in review that has fewer than seven days** ("Only 2 of 7 days are built…"). A trial
+   `--days 3` week sits in review today and would otherwise go live with four empty days. Consequence: 3.3 as the brief
+   wrote it (a tap on test's one-day week) cannot be allowed, so 3.3 (a) and (b) run on the whole week after 3.5. (c) is
+   Brandon's at stop 3, as he said.
+2. A day added to an existing theme puts it back to `generating`; the theme goes to review only when all seven days are in.
+3. A run that made no model call writes no `model_runs` row.
+4. `fixture` also has `show`, `audit` and `runs`, all read-only.
+5. A firing that finds all seven days built still gates cards left pending, `pendingOnly` (the review's question 2).
+
+### The decision: what to do about the 240-second line
+
+The brief gave two ways out: build both children's cards side by side (about a third off a day, changes `buildWeek`), or
+move to Pro (800 seconds). Measured above, there are three cheap levers inside the code and none changes the cost:
+
+- **Both children's cards at once.** One pool across children instead of a child after a child: about 70 s saved.
+- **Five at a time for cards** (a child has five chains a day, so four leaves a second round of one): the same round
+  again if it stands alone, and together with the first the whole card phase becomes one round of about 35 s.
+- **The gate eight at a time** instead of four: about 30 s saved.
+
+Together they would take a typical day from about 230 s to about 120 to 150 s, and the worst seen from 268 to about 190.
+The risks: ten or so calls at once on one API key (the SDK retries a 429 twice by itself), and more database writes at
+once. Pro (800 s) fixes the cap but not the slowness, and costs money every month. A third way, no change at all, leaves
+a 10% margin on the worst day: a firing killed at 300 s is recovered by the next one, but the week would no longer be
+reliably ready by 7 pm.
+
+**Recommended: the code change (children side by side, five a chain-round, the gate eight at a time), not Pro.** It
+touches `buildWeek` and `runGate`'s default concurrency, test only, no cost. After it I time days 6 and 7 through the
+route, rebuild day 5 by hand to compare, and carry on from 3.5. It is undone by reverting its commit.
+
+Pre-flight for this stop:
+1. **What is about to happen:** the card writing for both children and the gate run with more calls at once.
+2. **What it touches:** not live. `core/curation/week.ts` and `core/curation/gate.ts` (a default), their tests; test's days 6
+   and 7 are then built through the route at about $1.90 each.
+3. **How it is undone:** revert the commit; no data is changed by it.
+4. **What was checked on test:** the timings above; nothing of this change yet.
