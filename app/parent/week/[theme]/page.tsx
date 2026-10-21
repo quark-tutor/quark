@@ -3,20 +3,28 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense, type ReactNode } from "react";
 import { credit } from "@/core/content/credit";
-import type { PolicyNotes } from "@/core/curation/gate";
+import { readFloor, type PolicyNotes } from "@/core/curation/gate";
+import { backToReviewProblem, childSummary, daysBuilt, floorLine, liveProblems, longDay, plural, rulebookLine, statusWords, whenWords } from "@/core/curation/live";
+import { todayIn } from "@/core/curation/week";
+import { readSafetyFloor } from "@/core/prompts";
+import { currentRulebookHash } from "@/lib/family-rulebook";
 import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import styles from "../../beliefs/beliefs.module.css";
+import { LooksGood } from "./looks-good";
 import own from "./week.module.css";
 import { Zoom } from "./zoom";
 
 export const metadata: Metadata = { title: "This week's cards · Quark" };
 
-// A read-only look at a built week: each child's cards by day and slot, with the lens and all four
-// layers, each card's picture or recording with its credit line, and what the gate decided for it
-// (passed, held back and why, or not checked yet), with the checker's reader notes. Never which
-// guardian a blackball came from. Step 6 builds the "looks good" page on this one.
+// A built week: what a guardian needs before tapping Looks good (per child, what passed and what was held
+// back and by whom, which first cards are missing, the safety floor and the rulebook), the tap itself, and
+// each child's cards by day and slot, with the lens and all four layers, each card's picture or recording
+// with its credit line, and what the gate decided for it (passed, held back and why, or not checked yet),
+// with the checker's reader notes. Never which guardian a blackball came from. The tap is any one
+// guardian's (docs/looks-good-slice.md); making a week live changes nothing a child sees yet, since the
+// Wonder Wall is phase 4.
 export default function WeekPage({ params }: { params: Promise<{ theme: string }> }) {
   return (
     <main className={styles.page}>
@@ -77,7 +85,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
 
   // Row-level security keeps all of this to the guardian's own family.
   const supabase = await createClient();
-  const [theme, kids, cards, rulebook] = await Promise.all([
+  const [theme, kids, cards, rulebook, family, said, nowHash] = await Promise.all([
     supabase.from("themes").select("id, title, week_start, status").eq("id", themeId).maybeSingle(),
     supabase.from("children").select("id, nickname").order("birth_month"),
     supabase
@@ -88,8 +96,20 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
       .order("layer")
       .returns<Card[]>(),
     supabase.from("values_profiles").select("source_hash").maybeSingle(),
+    supabase.from("families").select("timezone").single(),
+    // Who last made this week live or took it back, and when. The audit log is open to every guardian.
+    supabase
+      .from("audit_log")
+      .select("action, created_at, guardians(display_name)")
+      .in("action", ["theme.live", "theme.review"])
+      .eq("target->>theme", themeId)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .returns<{ action: string; created_at: string; guardians: { display_name: string } | null }[]>(),
+    // The hash of the guardians' answers now: a verdict counts only against it.
+    currentRulebookHash(createAdminClient(), guardian.familyId),
   ]);
-  for (const r of [theme, kids, cards, rulebook]) if (r.error) throw new Error(r.error.message);
+  for (const r of [theme, kids, cards, rulebook, family, said]) if (r.error) throw new Error(r.error.message);
   if (!theme.data) return <p>No such week.</p>;
 
   // Pictures and recordings: the approved items, with their stored copies through signed URLs that
@@ -142,15 +162,15 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
   const days = [...new Set((cards.data ?? []).map((c) => c.day))].sort();
   const weekday = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long", month: "short", day: "numeric" });
   const all = cards.data ?? [];
-  const count = (policy: string) => all.filter((c) => c.policy === policy).length;
-  const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
-  const currentHash = rulebook.data?.source_hash ?? null;
-  const older = all.filter((c) => c.policy_notes?.gate && c.policy_notes.gate.rulebook !== currentHash).length;
-  // The newest safety floor any verdict was checked against.
-  const floor = all
-    .map((c) => c.policy_notes?.gate)
-    .filter((g) => !!g)
-    .sort((a, b) => b!.floor - a!.floor)[0];
+  const currentHash = nowHash;
+  const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
+  const floor = readFloor(readSafetyFloor());
+  const childIds = (kids.data ?? []).map((k) => k.id);
+  const built = daysBuilt(all, childIds);
+  const problems = liveProblems({ status: theme.data.status, cards: all, childIds, currentHash: nowHash, savedHash: rulebook.data?.source_hash ?? null, floorVersion: floor.version });
+  const canUndo = theme.data.status === "live" && backToReviewProblem({ status: "live", weekStart: theme.data.week_start, today: todayIn(timeZone) }) === null;
+  const lastSaid = said.data?.[0];
+  const dayName = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long" });
 
   return (
     <>
@@ -160,16 +180,71 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
         </Link>
         <h1>{theme.data.title}</h1>
         <p className={styles.lede}>
-          The week starting {weekday(theme.data.week_start)}, status {theme.data.status}. Nothing here is on the kids&rsquo;
-          iPads. Each card is shown with its four layers: what the child sees first, then each tap deeper.
-        </p>
-        <p className={styles.lede}>
-          {plural(count("passed"), "card passed", "cards passed")} the checker, {count("blocked")} {count("blocked") === 1 ? "was" : "were"} held
-          back, and {count("pending")} {count("pending") === 1 ? "isn't" : "aren't"} checked yet.
-          {floor ? ` Checked against safety floor version ${floor.floor}${floor.floor_first_guess ? ", still a first guess" : ""}.` : ""}
-          {older ? ` ${plural(older, "card was", "cards were")} checked against an older rulebook and should be checked again.` : ""}
+          The week starting {weekday(theme.data.week_start)}. Each card is shown with its four layers: what the child sees first, then each tap
+          deeper. Nothing here is on the kids&rsquo; iPads.
         </p>
       </div>
+
+      <section className={styles.panel} aria-labelledby="week-status">
+        <h2 id="week-status">{statusWords(theme.data.status, built, theme.data.week_start)}</h2>
+        {theme.data.status === "live" && lastSaid?.action === "theme.live" ? (
+          <p className={styles.meta}>
+            Made live{lastSaid.guardians ? ` by ${lastSaid.guardians.display_name}` : ""} on {whenWords(lastSaid.created_at, timeZone)}.
+          </p>
+        ) : null}
+        {theme.data.status === "review" && lastSaid?.action === "theme.review" ? (
+          <p className={styles.meta}>
+            Taken back to review{lastSaid.guardians ? ` by ${lastSaid.guardians.display_name}` : ""} on {whenWords(lastSaid.created_at, timeZone)}.
+          </p>
+        ) : null}
+        {problems.length && theme.data.status !== "live" ? (
+          <ul>
+            {problems.map((p) => (
+              <li key={p} className={styles.flag}>
+                {p}
+              </li>
+            ))}
+          </ul>
+        ) : null}
+        {theme.data.status === "review" ? <LooksGood themeId={theme.data.id} mode="tap" blocked={problems.length > 0} /> : null}
+        {theme.data.status === "live" && canUndo ? <LooksGood themeId={theme.data.id} mode="undo" blocked={false} /> : null}
+        {theme.data.status === "live" && !canUndo ? (
+          <p className={styles.meta}>This week has begun, so it can&rsquo;t be taken back to review here.</p>
+        ) : null}
+        <p className={styles.meta}>
+          Any one of you can do this. From {longDay(theme.data.week_start)}, the Wonder Wall will show the cards that passed and nothing that was
+          held back. The wall isn&rsquo;t on the iPads yet, so for now nothing changes for the kids.
+        </p>
+      </section>
+
+      <section className={styles.panel} aria-labelledby="before-you-tap">
+        <h2 id="before-you-tap">Before you tap</h2>
+        {(kids.data ?? []).map((kid) => {
+          const mine = all.filter((c) => c.child_id === kid.id);
+          if (mine.length === 0) return null;
+          const s = childSummary(mine);
+          return (
+            <div key={kid.id}>
+              <p>
+                <strong>{kid.nickname}:</strong> {s.passed} passed. Held back: {s.heldByChecks} by the card checks, {s.heldByRulebook} by your
+                rulebook, {s.heldByChecker} by the checker. {plural(s.notChecked, "card isn't", "cards aren't")} checked yet.
+              </p>
+              {s.missingFirst.map((m) => (
+                <p key={`${m.day}${m.slot}`} className={styles.flag}>
+                  No {SLOT_NAMES[m.slot] ?? m.slot} card on {dayName(m.day)} for {kid.nickname}.
+                </p>
+              ))}
+              {s.deeperHeldBack ? (
+                <p className={styles.meta}>
+                  {plural(s.deeperHeldBack, "deeper card is", "deeper cards are")} held back; {kid.nickname} stops at the layer before one.
+                </p>
+              ) : null}
+            </div>
+          );
+        })}
+        <p className={styles.meta}>{floorLine(all, floor)}</p>
+        <p className={styles.meta}>{rulebookLine(all, nowHash)}</p>
+      </section>
 
       {(kids.data ?? []).map((kid) => {
         const mine = (cards.data ?? []).filter((c) => c.child_id === kid.id);

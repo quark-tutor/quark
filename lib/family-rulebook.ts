@@ -105,6 +105,13 @@ export async function loadFamilyInputs(db: SupabaseClient, familyId: string): Pr
   };
 }
 
+// The hash of the guardians' answers as they stand now, which is what a verdict has to have been reached
+// under to count (values_profiles.source_hash is the rulebook as it was last saved, and can lag).
+export async function currentRulebookHash(db: SupabaseClient, familyId: string): Promise<string> {
+  const [inputs, entries] = await Promise.all([loadFamilyInputs(db, familyId), loadHandoffs(db)]);
+  return familyRulebook(inputs, entries).hash;
+}
+
 export const merge = (inputs: FamilyInputs): FamilyValues =>
   mergeFamily(inputs.guardians, inputs.children, inputs.blackballs, inputs.packActs);
 

@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import type { CronRow } from "@/core/curation/cron";
+import { longDay } from "@/core/curation/live";
+import { readyWeek, sundayLine } from "@/core/curation/sunday-line";
+import { todayIn } from "@/core/curation/week";
 import { ageFrom } from "@/lib/beliefs";
 import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -39,7 +43,9 @@ async function ParentHome() {
     .select("id", { count: "exact", head: true })
     .eq("approved", false)
     .is("rejected_at", null);
-  const [family, guardians, kids, devices, answers, content, themes] = await Promise.all([
+  // The Sunday build's own rows (no guardian wrote them): the last nine days is enough to find this Sunday's.
+  const since = new Date(Date.now() - 9 * 86_400_000).toISOString();
+  const [family, guardians, kids, devices, answers, content, themes, cron] = await Promise.all([
     supabase.from("families").select("name, timezone").single(),
     supabase.from("guardians").select("id, display_name").eq("active", true).order("created_at"),
     supabase.from("children").select("id, nickname, birth_month").order("birth_month"),
@@ -50,11 +56,16 @@ async function ParentHome() {
       .order("created_at"),
     supabase.from("guardian_answers").select("guardian_id"),
     waiting,
-    supabase.from("themes").select("id, title, week_start, status").order("week_start"),
+    supabase.from("themes").select("id, title, week_start, plan_week, status").order("week_start"),
+    supabase.from("audit_log").select("id, created_at, target").eq("action", "week.cron").gte("created_at", since).order("created_at").returns<CronRow[]>(),
   ]);
-  for (const result of [family, guardians, kids, devices, answers, content, themes]) if (result.error) throw result.error;
+  for (const result of [family, guardians, kids, devices, answers, content, themes, cron]) if (result.error) throw result.error;
 
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
+  const ready = readyWeek(themes.data ?? [], todayIn(timeZone));
+  const sunday = sundayLine(cron.data ?? [], timeZone, new Date());
+  const statusOf = (t: { status: string; week_start: string }) =>
+    t.status === "review" ? "ready for you to read" : t.status === "live" ? `live from ${longDay(t.week_start)}` : t.status === "generating" ? "being built" : t.status;
   const when = (iso: string | null) =>
     iso ? new Date(iso).toLocaleString("en-US", { timeZone, dateStyle: "medium", timeStyle: "short" }) : "never";
   const children = kids.data ?? [];
@@ -127,16 +138,22 @@ async function ParentHome() {
         </p>
       </section>
 
-      {themes.data?.length ? (
+      {themes.data?.length || sunday ? (
         <section className={styles.section}>
           <h2>Weeks</h2>
+          {ready ? (
+            <p>
+              <Link href={`/parent/week/${ready.id}`}>Week {ready.plan_week ?? ""} is ready for you to read</Link>
+            </p>
+          ) : null}
+          {sunday ? <p className={styles.muted}>{sunday}</p> : null}
           <ul className={styles.list}>
-            {themes.data.map((t) => (
+            {(themes.data ?? []).map((t) => (
               <li key={t.id}>
                 <Link href={`/parent/week/${t.id}`}>{t.title}</Link>{" "}
                 <span className={styles.muted}>
                   from {new Date(`${t.week_start}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", month: "short", day: "numeric" })},{" "}
-                  {t.status === "review" ? "ready for you to read" : t.status}
+                  {statusOf(t)}
                 </span>
               </li>
             ))}
