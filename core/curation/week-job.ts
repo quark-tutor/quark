@@ -18,7 +18,7 @@ import { writeCards } from "./cards.ts";
 import { subjectWatch, type GateReport } from "./gate.ts";
 import { gateTheme, type GateSetup } from "./gate-run.ts";
 import { sourceRefs, writeIdeaChain } from "./ideas.ts";
-import { weekSchedule, type Scheduled } from "./schedule.ts";
+import { DAYS_IN_WEEK, weekSchedule, type Scheduled } from "./schedule.ts";
 import type { IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic } from "./types.ts";
 import { addDays, buildWeek, nextMonday, todayIn, type WeekChild, type WeekDeps, type WeekReport } from "./week.ts";
 
@@ -232,14 +232,14 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   };
 }
 
-// What the family's settings already decide for the first `days` days of the week, so a guardian sees
+// What the family's settings already decide for days `from` to `upTo` of the week, so a guardian sees
 // the blocks before the money (docs/gate-slice.md, To settle). Empty when there is no rulebook to read.
-export function settingsWatch(p: Prepared, gate: GateSetup, days: number): string[] {
+export function settingsWatch(p: Prepared, gate: GateSetup, upTo: number, from = 1): string[] {
   if (!gate.rulebook) return [];
   const watch: string[] = [];
   for (const kid of p.only ? [p.only] : p.children) {
     const age = gate.children.find((c) => c.id === kid.id)?.age ?? kid.age;
-    for (const d of p.plan.schedule.filter((d) => d.day <= days)) {
+    for (const d of p.plan.schedule.filter((d) => d.day >= from && d.day <= upTo)) {
       for (const slot of SLOT_ORDER) {
         const t = p.topicById.get(d.topics[slot]);
         if (!t?.valuesPoints.length) continue;
@@ -278,6 +278,9 @@ function weekDeps(p: Prepared, ai: { complete: typeof complete }): WeekDeps {
     },
     async deleteIdeas(themeId) {
       maybe(await db.from("ideas").delete().eq("theme_id", themeId), "ideas"); // cascades to cards and questions
+    },
+    async deleteDay(themeId, day) {
+      maybe(await db.from("ideas").delete().eq("theme_id", themeId).eq("day", day), "ideas"); // cascades to that day's cards and questions
     },
     async deleteCards(themeId, childId) {
       maybe(await db.from("cards").delete().eq("theme_id", themeId).eq("child_id", childId), "cards");
@@ -374,27 +377,45 @@ export class BuildStopped extends Error {
   }
 }
 
-// What a run spent, for /parent/models: counts and money only, never which child (rule 7).
+// What a run spent, for /parent/models: counts and money only, never which child (rule 7). A run that
+// made no model call spent nothing and leaves no row.
 async function recordRun(p: Prepared, meter: Meter, started: Date, ok: boolean, themeId: string | null, days: number): Promise<string | null> {
+  if (meter.usage().length === 0) return null;
   const row = runRow("week:build", meter.usage(), { ok, startedAt: started, themeId, week: p.week, days, children: p.only ? 1 : p.children.length });
   const { error } = await p.db.from("model_runs").insert({ family_id: p.family.id, ...row });
   return error ? `Could not record this run for /parent/models: ${error.message}. Run npm run db:push?` : null;
 }
 
-// Build the first `days` days of the week, check the cards that are pending, and record the run.
-// Anything the gate leaves pending is the caller's to report (gateFailed); a build that throws is
-// recorded as stopped and rethrown as a BuildStopped.
-export async function buildDays(p: Prepared, run: { days: number }, opts: BuildOptions): Promise<BuildResult> {
+// What to build: the first `days` days of the week, or the one `day` (into the theme the earlier days
+// made; the Sunday build and week:build --day). A one-day build plans the lenses and doors over all seven.
+export type BuildRun = { days: number } | { day: number };
+
+// Build what `run` says, check the cards that are pending, and record the run. Anything the gate
+// leaves pending is the caller's to report (gateFailed); a build that throws is recorded as stopped
+// and rethrown as a BuildStopped.
+export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions): Promise<BuildResult> {
   const started = new Date();
   const deps = weekDeps(p, { complete: opts.complete });
+  const built = "day" in run ? 1 : run.days; // days of money spent, for model_runs
   let report: WeekReport;
   try {
     report = await buildWeek(
-      { plan: p.plan, weekStart: p.start, days: run.days, children: p.children, statement: p.statement, learns: p.learns, pointNames: p.pointNames, rebuild: !!opts.rebuild, onlyChild: p.only?.id },
+      {
+        plan: p.plan,
+        weekStart: p.start,
+        days: "day" in run ? DAYS_IN_WEEK : run.days,
+        day: "day" in run ? run.day : undefined,
+        children: p.children,
+        statement: p.statement,
+        learns: p.learns,
+        pointNames: p.pointNames,
+        rebuild: !!opts.rebuild,
+        onlyChild: p.only?.id,
+      },
       deps,
     );
   } catch (e) {
-    throw new BuildStopped(e, await recordRun(p, opts.meter, started, false, p.existing?.id ?? null, run.days));
+    throw new BuildStopped(e, await recordRun(p, opts.meter, started, false, p.existing?.id ?? null, built));
   }
   const buildSeconds = Math.round((Date.now() - started.getTime()) / 1000);
 
@@ -405,6 +426,6 @@ export async function buildDays(p: Prepared, run: { days: number }, opts: BuildO
   } catch (e) {
     gateError = e instanceof Error ? e.message : String(e);
   }
-  const recordError = await recordRun(p, opts.meter, started, true, report.themeId, run.days);
+  const recordError = await recordRun(p, opts.meter, started, true, report.themeId, built);
   return { report, gate: gated, gateError, buildSeconds, recordError };
 }

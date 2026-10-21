@@ -3,7 +3,7 @@ import { CARD_SCHEMA, cardPrompt, checkCards, givesAway, planDoors, writeCards, 
 import { firstLayerProblem, IDEA_SCHEMA, ideasPrompt, parseIdeas, sourceRefs, topicForDay, writeIdeaChain, type RawIdeas, type RawLayer } from "./ideas";
 import type { IdeaChain, WeekPlan, WeekTopic } from "./types";
 import { weekSchedule } from "./schedule";
-import { addDays, buildWeek, nextMonday, todayIn, type CardRow, type WeekChild, type WeekDeps } from "./week";
+import { addDays, buildWeek, nextMonday, todayIn, type CardRow, type QuestionRow, type WeekChild, type WeekDeps } from "./week";
 import { mergeFamily } from "../../lib/family-values";
 import { learnsSentence, renderPolicy } from "../../lib/policy";
 
@@ -406,6 +406,12 @@ function fakeDb(existingTheme: { id: string } | null = null) {
       db.cards = [];
       db.questions = [];
     },
+    deleteDay: async (_t, day) => {
+      const gone = new Set(db.ideas.filter((i) => i.chain.day === day).map((i) => i.id));
+      db.ideas = db.ideas.filter((i) => !gone.has(i.id));
+      db.cards = db.cards.filter((c) => !gone.has(c.idea_id));
+      db.questions = (db.questions as QuestionRow[]).filter((q) => !gone.has(q.idea_id));
+    },
     deleteCards: async (_t, childId) => void (db.cards = db.cards.filter((c) => c.child_id !== childId)),
     loadIdeas: async () => {
       const chains = new Map<string, IdeaChain>();
@@ -544,6 +550,132 @@ describe("buildWeek", () => {
     await buildWeek({ ...options, days: 2 }, deps);
     expect(deps.writeIdeaChain).toHaveBeenCalledTimes(10);
     expect(new Set(db.cards.map((c) => c.day))).toEqual(new Set(["2026-10-19", "2026-10-20"]));
+  });
+});
+
+// The Sunday build (docs/looks-good-slice.md): a day a firing, into the week's theme.
+describe("buildWeek, a day at a time", () => {
+  const dayOptions = (day: number, over: Partial<typeof options & { onlyChild: string }> = {}) => ({ ...options, day, ...over });
+  const cardKey = (c: CardRow) => `${c.child_id}|${c.day}|${c.slot}|${c.layer}`;
+  const lensAndDoor = (cards: CardRow[]) => Object.fromEntries(cards.map((c) => [cardKey(c), [c.lens, c.door, c.level]]));
+
+  it("gives a week built a day at a time, in any order, the lenses and doors of one built whole", async () => {
+    const whole = fakeDb();
+    await buildWeek(options, whole.deps);
+
+    const parts = fakeDb();
+    const deleteIdeas = vi.spyOn(parts.deps, "deleteIdeas");
+    const statuses: string[] = [];
+    for (const day of [1, 2, 4, 3, 5, 6, 7]) {
+      await buildWeek(dayOptions(day), parts.deps);
+      statuses.push(parts.db.themes[0].status);
+    }
+    // Both children: one with no history, one who has chosen story before.
+    expect(lensAndDoor(parts.db.cards)).toEqual(lensAndDoor(whole.db.cards));
+    expect(Object.values(lensAndDoor(parts.db.cards)).some(([, door]) => door)).toBe(true);
+    expect(parts.db.cards).toHaveLength(280);
+    expect(parts.db.ideas).toHaveLength(140);
+    expect(parts.db.questions).toHaveLength(280);
+    expect(parts.deps.writeIdeaChain).toHaveBeenCalledTimes(35);
+    expect(parts.deps.writeCards).toHaveBeenCalledTimes(70);
+    expect(deleteIdeas).not.toHaveBeenCalled();
+    expect(statuses).toEqual(["generating", "generating", "generating", "generating", "generating", "generating", "review"]);
+  });
+
+  it("builds only that day: five idea chains and every child's cards for it", async () => {
+    const { db, deps } = fakeDb();
+    const report = await buildWeek(dayOptions(1), deps);
+    expect(deps.writeIdeaChain).toHaveBeenCalledTimes(5);
+    expect(deps.writeCards).toHaveBeenCalledTimes(10);
+    expect(db.cards).toHaveLength(40);
+    expect(new Set(db.cards.map((c) => c.day))).toEqual(new Set(["2026-10-19"]));
+    expect(report.ideas).toBe(20);
+    expect(report.children.map((c) => c.cards)).toEqual([20, 20]);
+    expect(db.themes).toEqual([{ id: "theme-1", status: "generating" }]);
+  });
+
+  it("writes each day's ideas on from that slot's earlier days only", async () => {
+    const { deps } = fakeDb();
+    const seen = new Map<string, number[]>();
+    vi.mocked(deps.writeIdeaChain).mockImplementation(async (slot, day, earlier) => {
+      seen.set(`${slot}:${day}`, earlier.map((c) => c.day).sort());
+      expect(earlier.every((c) => c.slot === slot)).toBe(true);
+      return chainFor(day, slot);
+    });
+    for (const day of [1, 2, 4, 3, 5]) await buildWeek(dayOptions(day), deps);
+    expect(seen.get("look:1")).toEqual([]);
+    expect(seen.get("look:2")).toEqual([1]);
+    expect(seen.get("look:4")).toEqual([1, 2]);
+    expect(seen.get("look:3")).toEqual([1, 2]); // day 4 is built by then, but it is not earlier
+    expect(seen.get("wonder:5")).toEqual([1, 2, 3, 4]);
+  });
+
+  it("refuses a day that is already built, or half built, and writes nothing", async () => {
+    const { db, deps } = fakeDb();
+    await buildWeek(dayOptions(1), deps);
+    await buildWeek(dayOptions(2), deps);
+    const counts = () => [db.ideas.length, db.cards.length, db.questions.length];
+    vi.mocked(deps.writeIdeaChain).mockClear();
+
+    const built = counts();
+    await expect(buildWeek(dayOptions(2), deps)).rejects.toThrow(/Day 2 of week 1 is already built, or half built.*--rebuild/);
+    db.cards = db.cards.filter((c) => c.day !== "2026-10-20"); // a firing that stopped after the ideas
+    const half = counts();
+    await expect(buildWeek(dayOptions(2), deps)).rejects.toThrow(/already built, or half built/);
+    expect(counts()).toEqual(half);
+    expect(built[0]).toBe(half[0]);
+    expect(deps.writeIdeaChain).not.toHaveBeenCalled();
+  });
+
+  it("with rebuild, clears that one day and builds it again, leaving the other days alone", async () => {
+    const { db, deps } = fakeDb();
+    for (const day of [1, 2, 3]) await buildWeek(dayOptions(day), deps);
+    const others = db.cards.filter((c) => c.day !== "2026-10-20").map((c) => c.id);
+    const second = db.cards.filter((c) => c.day === "2026-10-20").map((c) => c.id);
+    await buildWeek(dayOptions(2, { rebuild: true }), deps);
+    expect(db.ideas).toHaveLength(60);
+    expect(db.cards).toHaveLength(120);
+    expect(db.questions).toHaveLength(120);
+    expect(db.cards.filter((c) => c.day !== "2026-10-20").map((c) => c.id)).toEqual(others);
+    expect(db.cards.some((c) => second.includes(c.id))).toBe(false);
+    expect(db.themes).toHaveLength(1);
+  });
+
+  it("takes a finished week out of review while one day is rebuilt, and puts it back", async () => {
+    const { db, deps } = fakeDb();
+    for (let day = 1; day <= 7; day++) await buildWeek(dayOptions(day), deps);
+    expect(db.themes[0].status).toBe("review");
+    const setStatus = vi.spyOn(deps, "setStatus");
+    await buildWeek(dayOptions(4, { rebuild: true }), deps);
+    expect(setStatus.mock.calls.map(([, s]) => s)).toEqual(["generating", "review"]);
+    expect(db.cards).toHaveLength(280);
+  });
+
+  it("puts a week that was in review back to generating while it gains a day", async () => {
+    const { db, deps } = fakeDb();
+    await buildWeek({ ...options, days: 1 }, deps); // a one-day trial, left in review
+    expect(db.themes[0].status).toBe("review");
+    await buildWeek(dayOptions(2), deps);
+    expect(db.themes[0].status).toBe("generating");
+    expect(db.cards).toHaveLength(40 + 40);
+  });
+
+  it("goes on into a theme that day 1 made and then stopped short of any ideas", async () => {
+    const { db, deps } = fakeDb({ id: "theme-9" });
+    db.themes[0].status = "generating";
+    vi.spyOn(deps, "createTheme");
+    await buildWeek(dayOptions(1), deps);
+    expect(deps.createTheme).not.toHaveBeenCalled();
+    expect(db.themes).toHaveLength(1);
+    expect(db.cards).toHaveLength(40);
+  });
+
+  it("needs day 1 first, a day of the week, and every child", async () => {
+    const { deps } = fakeDb();
+    await expect(buildWeek(dayOptions(3), deps)).rejects.toThrow(/no theme yet: build day 1 first/);
+    await expect(buildWeek(dayOptions(8), deps)).rejects.toThrow(/outside this week's 7 days/);
+    await expect(buildWeek(dayOptions(1, { onlyChild: "c1" }), deps)).rejects.toThrow(/every child/);
+    expect(deps.writeIdeaChain).not.toHaveBeenCalled();
   });
 });
 

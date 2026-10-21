@@ -41,6 +41,7 @@ export type WeekDeps = {
   createTheme: () => Promise<string>;
   setStatus: (themeId: string, status: "generating" | "review") => Promise<void>;
   deleteIdeas: (themeId: string) => Promise<void>; // cascades to cards and questions
+  deleteDay: (themeId: string, day: number) => Promise<void>; // one day's ideas; cascades to its cards and questions
   deleteCards: (themeId: string, childId: string) => Promise<void>; // cascades to questions
   loadIdeas: (themeId: string) => Promise<IdeaChain[]>;
   saveIdeas: (themeId: string, chain: IdeaChain) => Promise<string[]>; // ideas.id per layer
@@ -53,7 +54,14 @@ export type WeekDeps = {
 export type WeekOptions = {
   plan: WeekPlan;
   weekStart: string; // YYYY-MM-DD, day 1
+  // How many days the week plan covers. Without `day`, the days built; with it, the horizon the lenses
+  // and doors are planned over (7), so a week built a day at a time has the lenses and doors of one
+  // built whole.
   days: number;
+  // Build only this day into the week's theme (the Sunday build, a day a firing). Day 1 makes the
+  // theme; the theme goes to review when every day has been built. A day that already has ideas is
+  // refused unless `rebuild`, which clears that one day first. For every child: not with onlyChild.
+  day?: number;
   children: WeekChild[];
   statement: string | null;
   learns: LearnsToAct | null;
@@ -116,9 +124,9 @@ export async function pool<T, R>(items: T[], n: number, fn: (item: T) => Promise
 export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<WeekReport> {
   const { plan, children } = opts;
   const days = Math.min(7, Math.max(1, opts.days));
-  const concurrency = opts.concurrency ?? 4;
   const kids = opts.onlyChild ? children.filter((c) => c.id === opts.onlyChild) : children;
   if (kids.length === 0) throw new Error(`No child ${opts.onlyChild} in this family`);
+  if (opts.day !== undefined) return buildOneDay(opts, deps, days, kids);
 
   // 1. The theme: refuse to build a week twice unless asked to rebuild it.
   const existing = await deps.findTheme();
@@ -161,13 +169,26 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
     .map((c) => `day ${c.day} ${c.slot} (${c.topic.title})`);
   const ideasReasked = chains.filter((c) => (c.asked ?? 1) > 1).length;
 
-  // 3. Each child's cards: a lens and maybe a door per day-slot, four cards per chain.
+  // 3. Each child's cards.
+  const reports = await writeChildCards(opts, deps, themeId, chains, kids, days);
+
+  await deps.setStatus(themeId, "review");
+  return { themeId, ideas: chains.length * 4, textOnly, firstWithoutPicture, ideasReasked, children: reports };
+}
+
+// Each child's cards for the chains given: a lens and maybe a door per day-slot, four cards per chain.
+// Lenses and doors are planned over all `days` of the week and the chains take their own, which is why
+// a day built alone gets the lens and door it would have had in a week built whole.
+async function writeChildCards(opts: WeekOptions, deps: WeekDeps, themeId: string, chains: IdeaChain[], kids: WeekChild[], days: number): Promise<ChildReport[]> {
+  const { plan } = opts;
+  const concurrency = opts.concurrency ?? 4;
   const reports: ChildReport[] = [];
   for (const child of kids) {
     const picks = pickLenses({ sex: child.sex, pilotWeek: plan.week, history: child.history, days });
     const lensOf = new Map(picks.map((p) => [`${p.day}:${p.slot}`, p.lens]));
     const doors = planDoors(child.interests, picks.map((p) => `${p.day}:${p.slot}`));
-    const report: ChildReport = { nickname: child.nickname, cards: 0, lenses: {}, doors: doors.size, withoutPicture: 0, reasked: 0, heldBack: [] };
+    const opened = chains.filter((c) => doors.has(`${c.day}:${c.slot}`)).length;
+    const report: ChildReport = { nickname: child.nickname, cards: 0, lenses: {}, doors: opened, withoutPicture: 0, reasked: 0, heldBack: [] };
 
     await pool(chains, concurrency, async (chain) => {
       const key = `${chain.day}:${chain.slot}`;
@@ -214,7 +235,57 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
     });
     reports.push(report);
   }
+  return reports;
+}
 
-  await deps.setStatus(themeId, "review");
+// One day of the week into its theme: the Sunday build, a day a firing (docs/looks-good-slice.md). Day 1
+// makes the theme; a day that already has ideas, built or half built, is refused unless `rebuild`, which
+// clears that one day first, because nothing in the database stops a day being written twice. The ideas
+// carry on from the earlier days of their slot, and the theme goes to review once every day is in.
+async function buildOneDay(opts: WeekOptions, deps: WeekDeps, days: number, kids: WeekChild[]): Promise<WeekReport> {
+  const { plan } = opts;
+  const day = opts.day!;
+  if (!Number.isInteger(day) || day < 1 || day > days) throw new Error(`Day ${day} is outside this week's ${days} days`);
+  if (opts.onlyChild) throw new Error("A day is built for every child, so a one-day build can't be limited to one child.");
+
+  const existing = await deps.findTheme();
+  let themeId: string;
+  let saved: IdeaChain[] = [];
+  if (!existing) {
+    if (day !== 1) throw new Error(`Week ${plan.week} has no theme yet: build day 1 first.`);
+    themeId = await deps.createTheme();
+  } else {
+    themeId = existing.id;
+    saved = await deps.loadIdeas(themeId);
+    if (saved.some((c) => c.day === day)) {
+      if (!opts.rebuild) {
+        throw new Error(`Day ${day} of week ${plan.week} is already built, or half built (theme ${themeId}). Run again with --rebuild to replace that day.`);
+      }
+      await deps.setStatus(themeId, "generating");
+      await deps.deleteDay(themeId, day);
+      saved = saved.filter((c) => c.day !== day);
+    } else {
+      // A day is being added, so the week is not ready to read: back to generating until every day is in.
+      await deps.setStatus(themeId, "generating");
+    }
+  }
+  const earlier = saved.filter((c) => c.day < day);
+
+  // Ideas, shared by every child: slots side by side, each carrying on from its earlier days.
+  const chains = await pool([...SLOT_ORDER], SLOT_ORDER.length, async (slot) => {
+    const chain = await deps.writeIdeaChain(slot, day, earlier.filter((c) => c.slot === slot));
+    chain.ids = await deps.saveIdeas(themeId, chain);
+    return chain;
+  });
+  const textOnly = chains.filter((c) => c.topic.items.length === 0).map((c) => `day ${c.day} ${c.slot}`);
+  const firstWithoutPicture = chains
+    .filter((c) => firstLayerProblem(c.layers, c.topic.items))
+    .map((c) => `day ${c.day} ${c.slot} (${c.topic.title})`);
+  const ideasReasked = chains.filter((c) => (c.asked ?? 1) > 1).length;
+
+  const reports = await writeChildCards(opts, deps, themeId, chains, kids, days);
+
+  const built = new Set([...saved.map((c) => c.day), day]);
+  if (Array.from({ length: days }, (_, i) => i + 1).every((d) => built.has(d))) await deps.setStatus(themeId, "review");
   return { themeId, ideas: chains.length * 4, textOnly, firstWithoutPicture, ideasReasked, children: reports };
 }

@@ -5,6 +5,8 @@
 //   npm run week:build -- --week 1
 //   npm run week:build -- --week 1 --child Pip --days 2     (one child, the first two days)
 //   npm run week:build -- --week 1 --rebuild                (replace a week already built)
+//   npm run week:build -- --week 1 --day 3                  (just day 3, into the week's theme; the Sunday build does this, a day a firing)
+//   npm run week:build -- --week 1 --day 3 --rebuild        (clear day 3 and build it again, and only that day)
 //   npm run week:build -- --week 1 --days 1 --plan          (what would be built, and what the family's settings decide; spends nothing)
 // Options: --debug (write each model request and reply to .quark-debug/), --stretch (the thread; default: the plan's first stretch), --start YYYY-MM-DD (default: next Monday, or
 // counted on from week 1's start). The theme ends in status 'review'; nothing goes live here.
@@ -28,7 +30,8 @@ const { values: args } = parseArgs({
     week: { type: "string" },
     stretch: { type: "string" },
     child: { type: "string" },
-    days: { type: "string", default: "7" },
+    days: { type: "string" },
+    day: { type: "string" },
     start: { type: "string" },
     rebuild: { type: "boolean", default: false },
     debug: { type: "boolean", default: false },
@@ -36,9 +39,13 @@ const { values: args } = parseArgs({
   },
 });
 const week = Number(args.week);
-const days = Number(args.days);
+const days = args.days === undefined ? 7 : Number(args.days);
+const day = args.day === undefined ? undefined : Number(args.day); // one day only
 if (!Number.isInteger(week) || week < 1) throw new Error("Say which week: npm run week:build -- --week 1");
 if (!Number.isInteger(days) || days < 1 || days > 7) throw new Error("--days must be 1 to 7");
+if (day !== undefined && (!Number.isInteger(day) || day < 1 || day > 7)) throw new Error("--day must be 1 to 7");
+if (day !== undefined && args.days !== undefined) throw new Error("Use --day for one day or --days for the first few, not both.");
+if (day !== undefined && args.child) throw new Error("--day builds a day for every child; it can't be combined with --child.");
 if (args.start && !/^\d{4}-\d{2}-\d{2}$/.test(args.start)) throw new Error("--start must be YYYY-MM-DD");
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -61,9 +68,11 @@ const complete = meteredComplete(meter);
 const p = await prepareWeek(db, { week, start: args.start, stretch: args.stretch, child: args.child });
 const { plan, children, only } = p;
 
-console.log(`${plan.title}: starting ${p.start}, ${days} day${days === 1 ? "" : "s"}.`);
+const first = day ?? 1; // the first day built
+const last = day ?? days; // the last
+console.log(`${plan.title}: starting ${p.start}, ${day !== undefined ? `day ${day} only` : `${days} day${days === 1 ? "" : "s"}`}.`);
 const titleOf = new Map(plan.topics.map((t) => [t.id, t]));
-for (const d of plan.schedule.filter((d) => d.day <= days)) {
+for (const d of plan.schedule.filter((d) => d.day >= first && d.day <= last)) {
   const lessons = SLOT_ORDER.filter((s) => s !== d.thread).map((s) => `${s} ${titleOf.get(d.topics[s])?.keys[0].split("/")[1]}`);
   console.log(`  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread])?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}.`);
 }
@@ -73,7 +82,7 @@ const gate = await gateSetup(db, p.family.id);
 if (!gate.rulebook) {
   console.log(`\nThe gate: ${gate.missing}. The cards will be built and left pending; run npm run gate -- --week ${week} afterwards.`);
 } else {
-  const watch = settingsWatch(p, gate, days);
+  const watch = settingsWatch(p, gate, last, first);
   console.log(
     watch.length
       ? `\nWhat the family's settings decide before anything is spent (the gate holds these back in code, or reads them as parent-led):\n${watch.join("\n")}`
@@ -89,7 +98,7 @@ if (args.plan) {
 const started = Date.now();
 let result;
 try {
-  result = await buildDays(p, { days }, { complete, meter, gate, rebuild: args.rebuild });
+  result = await buildDays(p, day !== undefined ? { day } : { days }, { complete, meter, gate, rebuild: args.rebuild });
 } catch (e) {
   const message = e instanceof Error ? e.message : String(e);
   console.error(`\nStopped: ${message}`);
@@ -100,7 +109,11 @@ try {
 }
 const { report } = result;
 
-console.log(`\nTheme ${report.themeId}, now in review. ${report.ideas} ideas. ${result.buildSeconds}s.`);
+console.log(
+  day !== undefined
+    ? `\nTheme ${report.themeId}: day ${day} built (the theme goes to review once all seven are in). ${report.ideas} ideas. ${result.buildSeconds}s.`
+    : `\nTheme ${report.themeId}, now in review. ${report.ideas} ideas. ${result.buildSeconds}s.`,
+);
 for (const c of report.children) {
   const lenses = Object.entries(c.lenses).sort((a, b) => b[1] - a[1]).map(([l, n]) => `${l} ${n}`).join(", ");
   console.log(`\n${c.nickname}: ${c.cards} cards. Lenses (per day-slot): ${lenses}.`);
