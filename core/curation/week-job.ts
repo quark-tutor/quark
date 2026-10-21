@@ -253,7 +253,7 @@ export function settingsWatch(p: Prepared, gate: GateSetup, upTo: number, from =
 
 // --- The database and the model, for buildWeek ---
 
-function weekDeps(p: Prepared, ai: { complete: typeof complete }): WeekDeps {
+function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (themeId: string) => Promise<void> }): WeekDeps {
   const { db, family, plan, start, week, existing, topicById } = p;
   const ideaSystem = readPrompt("ideas.md");
   const cardSystem = kidFacingPrompt("card.md");
@@ -268,6 +268,7 @@ function weekDeps(p: Prepared, ai: { complete: typeof complete }): WeekDeps {
           .single(),
         "themes",
       );
+      await ai.onTheme?.(theme.id); // the Sunday build records the theme it made, so a firing that stops here is not lost
       return theme.id;
     },
     // A rebuild starts by setting 'generating': the theme takes this run's title and topics then, so a
@@ -355,6 +356,7 @@ export type BuildOptions = {
   gate: GateSetup; // gateSetup() before anything is spent
   rebuild?: boolean;
   pendingOnly?: boolean; // gate only the cards still pending (the Sunday build)
+  onTheme?: (themeId: string) => Promise<void>; // told the moment a theme is made
 };
 
 export type BuildResult = {
@@ -395,7 +397,7 @@ export type BuildRun = { days: number } | { day: number };
 // and rethrown as a BuildStopped.
 export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions): Promise<BuildResult> {
   const started = new Date();
-  const deps = weekDeps(p, { complete: opts.complete });
+  const deps = weekDeps(p, { complete: opts.complete, onTheme: opts.onTheme });
   const built = "day" in run ? 1 : run.days; // days of money spent, for model_runs
   let report: WeekReport;
   try {

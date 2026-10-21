@@ -121,6 +121,18 @@ async function Models() {
       </section>
 
       <section className={own.section}>
+        <h2>The Sunday build</h2>
+        <p>
+          <strong>The Sunday build: {process.env.CRON_SECRET ? "set up" : "not set up"}</strong>
+        </p>
+        <p className={styles.muted}>
+          On Sunday, Hawaii time, Vercel calls the build once at each of eight hours, and each call builds a day of next
+          week and leaves it for you to read. It runs only where <code>CRON_SECRET</code> is set, the same value Vercel
+          sends. The value is never shown here.
+        </p>
+      </section>
+
+      <section className={own.section}>
         <h2>Prices</h2>
         <p className={styles.muted}>
           Anthropic&rsquo;s list prices in dollars per million tokens, last checked {checked}. They live in{" "}
