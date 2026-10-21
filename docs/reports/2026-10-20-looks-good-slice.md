@@ -137,4 +137,7 @@ again).
 
 ## Cost
 
-The session's `/cost` figure goes here once Brandon gives it.
+`/cost`, from Brandon's screen at the end of the close: **$21.61** for the session. API time 47m 55s, wall time 6h 28m 18s,
+3,885 lines of code added and 1,173 removed. By model: `claude-sonnet-5-5` 18.2k input, 398.5k output, 104.4m cache read,
+1.8m cache write, $21.61; `claude-haiku-5-5` (the read-back reader) 1.3k input, 299 output, $0.0003. That is Claude Code's
+own spend, apart from the about $23.13 of Anthropic API spend on `quark-test` above (the curation and gate models).
