@@ -68,7 +68,7 @@ export type WeekOptions = {
   pointNames: Map<number, string>;
   rebuild: boolean;
   onlyChild?: string; // a child id
-  concurrency?: number;
+  concurrency?: number; // card calls in flight for each child (default CARD_CALLS_PER_CHILD)
 };
 
 export type ChildReport = {
@@ -176,14 +176,20 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
   return { themeId, ideas: chains.length * 4, textOnly, firstWithoutPicture, ideasReasked, children: reports };
 }
 
+// Card calls in flight for one child. A child has five chains a day, so a day is one round, not four
+// then one; the children go side by side, so a day of two children has ten calls out at once. Measured
+// on 20 Oct 2026 (docs/reports/2026-10-20-looks-good-slice.md): a day took 195 to 268 seconds a child
+// after a child, four at a time, against a Hobby function's 300.
+export const CARD_CALLS_PER_CHILD = 5;
+
 // Each child's cards for the chains given: a lens and maybe a door per day-slot, four cards per chain.
 // Lenses and doors are planned over all `days` of the week and the chains take their own, which is why
-// a day built alone gets the lens and door it would have had in a week built whole.
+// a day built alone gets the lens and door it would have had in a week built whole. The children are
+// written side by side; each one's own cards, lenses and doors are the same whatever the order.
 async function writeChildCards(opts: WeekOptions, deps: WeekDeps, themeId: string, chains: IdeaChain[], kids: WeekChild[], days: number): Promise<ChildReport[]> {
   const { plan } = opts;
-  const concurrency = opts.concurrency ?? 4;
-  const reports: ChildReport[] = [];
-  for (const child of kids) {
+  const concurrency = opts.concurrency ?? CARD_CALLS_PER_CHILD;
+  const forChild = async (child: WeekChild): Promise<ChildReport> => {
     const picks = pickLenses({ sex: child.sex, pilotWeek: plan.week, history: child.history, days });
     const lensOf = new Map(picks.map((p) => [`${p.day}:${p.slot}`, p.lens]));
     const doors = planDoors(child.interests, picks.map((p) => `${p.day}:${p.slot}`));
@@ -233,9 +239,9 @@ async function writeChildCards(opts: WeekOptions, deps: WeekDeps, themeId: strin
         if (problems.length) report.heldBack.push(`day ${chain.day} ${chain.slot} layer ${layer.layer}: ${problems.join("; ")}`);
       }
     });
-    reports.push(report);
-  }
-  return reports;
+    return report;
+  };
+  return Promise.all(kids.map(forChild));
 }
 
 // One day of the week into its theme: the Sunday build, a day a firing (docs/looks-good-slice.md). Day 1

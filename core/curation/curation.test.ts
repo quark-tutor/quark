@@ -670,6 +670,42 @@ describe("buildWeek, a day at a time", () => {
     expect(db.cards).toHaveLength(40);
   });
 
+  it("writes both children's cards side by side, five calls a child, so a day has ten out at once", async () => {
+    const { db, deps } = fakeDb();
+    const inFlight = new Map<string, number>();
+    let peakAll = 0;
+    const peak = new Map<string, number>();
+    vi.mocked(deps.writeCards).mockImplementation(async (ctx) => {
+      inFlight.set(ctx.child.id, (inFlight.get(ctx.child.id) ?? 0) + 1);
+      peak.set(ctx.child.id, Math.max(peak.get(ctx.child.id) ?? 0, inFlight.get(ctx.child.id)!));
+      peakAll = Math.max(peakAll, [...inFlight.values()].reduce((a, b) => a + b, 0));
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      inFlight.set(ctx.child.id, inFlight.get(ctx.child.id)! - 1);
+      return { cards: goodList(), asked: 1, problems: [[], [], [], []] };
+    });
+    const report = await buildWeek(dayOptions(1), deps);
+    expect([peak.get("c1"), peak.get("c2"), peakAll]).toEqual([5, 5, 10]);
+    expect(report.children.map((c) => [c.nickname, c.cards])).toEqual([["Pip", 20], ["Ash", 20]]); // reported in the family's order
+    expect(db.cards).toHaveLength(40);
+  });
+
+  it("holds a child to five calls at once across a whole week too", async () => {
+    const { db, deps } = fakeDb();
+    let inFlight = 0;
+    let peak = 0;
+    vi.mocked(deps.writeCards).mockImplementation(async (ctx) => {
+      if (ctx.child.id !== "c2") return { cards: goodList(), asked: 1, problems: [[], [], [], []] };
+      inFlight += 1;
+      peak = Math.max(peak, inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 2));
+      inFlight -= 1;
+      return { cards: goodList(), asked: 1, problems: [[], [], [], []] };
+    });
+    await buildWeek(options, deps);
+    expect(peak).toBe(5);
+    expect(db.cards).toHaveLength(280);
+  });
+
   it("needs day 1 first, a day of the week, and every child", async () => {
     const { deps } = fakeDb();
     await expect(buildWeek(dayOptions(3), deps)).rejects.toThrow(/no theme yet: build day 1 first/);

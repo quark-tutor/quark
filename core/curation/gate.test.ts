@@ -325,6 +325,25 @@ describe("running the gate", () => {
     expect(f.saved.map((s) => s.id)).toEqual([cards[2].id]);
   });
 
+  it("checks eight cards at a time unless told otherwise", async () => {
+    const f = fake([pass]);
+    let inFlight = 0;
+    let peak = 0;
+    const answer = f.deps.complete;
+    f.deps.complete = (async (o: { prompt: string }) => {
+      inFlight += 1;
+      peak = Math.max(peak, inFlight);
+      await new Promise((resolve) => setTimeout(resolve, 5));
+      inFlight -= 1;
+      return (answer as (o: unknown) => Promise<unknown>)(o);
+    }) as GateDeps["complete"];
+    const cards = Array.from({ length: 20 }, () => gateCard());
+    const report = await runGate({ cards, children, rulebook, floor, system: "S", model: "m" }, f.deps);
+    expect(peak).toBe(8);
+    expect(report).toMatchObject({ checked: 20, passed: 20, pending: 0 });
+    expect(f.saved).toHaveLength(20);
+  });
+
   it("with pendingOnly, checks the pending cards and leaves a verdict on another rulebook alone", async () => {
     const f = fake([pass]);
     const stale: PolicyNotes = { gate: { by: "model", rulebook: "h0", floor: 1, floor_first_guess: true, reasons: [], checked_at: "x" } };

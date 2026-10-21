@@ -277,13 +277,17 @@ export type GateOptions = {
   floor: Floor;
   system: string; // gate.md, then the floor
   model: string;
-  concurrency?: number;
+  concurrency?: number; // cards checked at once (default GATE_CALLS_AT_ONCE)
   now?: () => Date;
   // Check only the cards still pending. A verdict reached under another rulebook or floor is left as
   // it is (counted in staleLeft), which is what the Sunday build wants: it must not re-judge, or spend
   // on, cards an earlier firing already settled.
   pendingOnly?: boolean;
 };
+
+// Cards checked at once. Forty cards a day, four at a time, is an estimated minute of a day that took 195
+// to 268 seconds against a Hobby function's 300 (20 Oct 2026), so it is eight.
+export const GATE_CALLS_AT_ONCE = 8;
 
 export type HeldBack = { label: string; childId: string; by: "code" | "model"; reasons: GateReason[] };
 
@@ -367,7 +371,7 @@ export async function runGate(opts: GateOptions, deps: GateDeps): Promise<GateRe
     await settle(c, "pending", withoutGate(c.notes));
   };
 
-  await pool(todo, opts.concurrency ?? 4, async (c) => {
+  await pool(todo, opts.concurrency ?? GATE_CALLS_AT_ONCE, async (c) => {
     if (report.rulebookChanged) return leavePending(c, "the rulebook changed during the run");
     const child = children.get(c.childId);
     if (!child) return leavePending(c, "a card for a child this family doesn't have");
