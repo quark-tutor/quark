@@ -30,6 +30,8 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
+| Wonder Wall slice 1: today's five cards, layers, hints as written, the handoff, on a paired iPad | briefed | 20 Oct 2026 | the build session; target: the boys using it on Monday 26 Oct 2026 | a slice | — / — | 4 | `docs/wonder-wall-1-slice.md`; `phase-4-wonder-wall` |
+| Wonder Wall: five daily cards, layers 1–4, voice, hints as conversation, stamps, calm end | raised | 20 Oct 2026 | slice 1 briefed (`docs/wonder-wall-1-slice.md`); split into its pieces at slice 1's close | several slices | — / — | 4 | `docs/03-touch-points.md`, `docs/12-teaching-that-tests-itself.md` |
 | The Sunday cron and the Looks-good page: a guardian's one tap makes a week live | live | 20 Oct 2026 | — (open checks: Brandon sets `CRON_SECRET`, the API key and the three model names on Vercel, which starts the Sunday build; its first Sunday on live; more short lessons before a real week 2; the direct-write row's migration before any week is made live on live) | a slice | — / — | 3 | `docs/looks-good-slice.md`; `docs/reports/2026-10-20-looks-good-slice.md`; `docs/04-curation-engine.md`; `phase-3-curation` |
 | Curation engine v1: weekly cron, ideas, cards, gate, load the week | live | 20 Oct 2026 | — (open checks: June on the safety floor and the twenty questions) | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | The policy gate: every card approved or blocked before a child could see it | live | 20 Oct 2026 | — (open checks: June on the safety floor and the twenty questions) | a slice | — / — | 3 | `docs/gate-slice.md`; `docs/reports/2026-10-20-gate-slice.md`; `docs/reports/2026-10-20-gate-live.md`; `phase-3-curation` |
@@ -51,7 +53,6 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 | `docs/decisions.md`, newest first with what each replaced | raised | 17 Oct 2026 (seeded) | its own small job | an hour | — / — | tooling | review, job 8 |
 | Checks on GitHub: `checks.yml` running typecheck and tests on push | raised | 17 Oct 2026 (seeded) | its own job | an hour | — / — | tooling | review, job 7 |
 | The Claude GitHub app for pull-request review | raised | 17 Oct 2026 (seeded) | — | — | — / — | tooling | review, job 7 |
-| Wonder Wall: five daily cards, layers 1–4, voice, hints as conversation, stamps, calm end | raised | 17 Oct 2026 (seeded) | phase 3 merged | several slices | — / — | 4 | `docs/03-touch-points.md`, `docs/12-teaching-that-tests-itself.md` |
 | Digest and audio: Sunday email, RSS, art of the week | raised | 17 Oct 2026 (seeded) | phase 4 | a slice | — / — | 5 | `docs/03-touch-points.md` |
 | Checks and difficulty: delayed recall, hint-count dial, results in the digest | raised | 17 Oct 2026 (seeded) | phase 5 | a slice | — / — | 6 | `docs/12-teaching-that-tests-itself.md` |
 | Pilot: four weeks with the boys | raised | 17 Oct 2026 (seeded) | phases 3–6; the iPads set up | — | — / — | 7 | CLAUDE.md, *Build order* |
