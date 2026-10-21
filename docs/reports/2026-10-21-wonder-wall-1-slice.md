@@ -10,6 +10,12 @@ with the full report.
 Steps 2 and 3.1 to 3.5 are done and shown below. What is left is Brandon on the iPad as each invented child would, and
 his choice of the matcher's rule.
 
+**Paused, 21 October (Brandon, in the field; back tonight).** No dev server is running: the one on the home network was
+stopped when the laptop left. To resume: on the home Wi-Fi, check the laptop's address (`ipconfig`; it was
+`192.168.50.67`), start `npm run dev -- --hostname 0.0.0.0` with `DEV_ORIGIN` set to that address, and use that address
+below. If the test guardian's Chrome session has lapsed, sign in again at `/sign-in`. The week on test is live from
+21 October, so tonight is day 1 and tomorrow is day 2.
+
 **The pre-flight, four lines:**
 
 - **What is about to happen:** Brandon pairs a real iPad, in Safari (not the Home Screen app), to the test copy on the
