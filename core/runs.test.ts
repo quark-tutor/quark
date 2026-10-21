@@ -1,5 +1,28 @@
 import { describe, expect, it } from "vitest";
-import { estimate, runRow, WEEKS_PER_MONTH, type RecordedRun, type RunModel } from "./runs";
+import { estimate, makeMeter, runRow, WEEKS_PER_MONTH, type RecordedRun, type RunModel } from "./runs";
+
+describe("makeMeter", () => {
+  it("tallies calls and tokens per job and model, and two meters never share a count", () => {
+    const a = makeMeter();
+    const b = makeMeter();
+    a.add("curate", { model: "m1", input: 10, output: 5 });
+    a.add("curate", { model: "m1", input: 20, output: 5 });
+    a.add("write", { model: "m1", input: 1, output: 2 });
+    b.add("gate", { model: "m2", input: 7, output: 7 });
+    expect(a.usage()).toEqual([
+      { use: "curate", model: "m1", input: 30, output: 10, calls: 2 },
+      { use: "write", model: "m1", input: 1, output: 2, calls: 1 },
+    ]);
+    expect(b.usage()).toEqual([{ use: "gate", model: "m2", input: 7, output: 7, calls: 1 }]);
+  });
+
+  it("hands back copies, so pricing a run can't change its tally", () => {
+    const m = makeMeter();
+    m.add("curate", { model: "m1", input: 10, output: 5 });
+    m.usage()[0].input = 999;
+    expect(m.usage()[0].input).toBe(10);
+  });
+});
 
 describe("runRow", () => {
   it("prices each job and model, totals what it can, and keeps only counts", () => {

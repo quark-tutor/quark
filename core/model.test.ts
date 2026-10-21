@@ -7,7 +7,8 @@ vi.mock("@anthropic-ai/sdk", () => ({
     messages = { create };
   },
 }));
-const { complete, debugTo, modelFor, resetUsage, usageSoFar } = await import("./model");
+const { complete, debugTo, meteredComplete, modelFor, resetUsage, usageSoFar } = await import("./model");
+const { makeMeter } = await import("./runs");
 
 function reply(text: string, stop_reason = "end_turn") {
   return { content: [{ type: "text", text }], stop_reason, stop_details: null };
@@ -107,6 +108,33 @@ describe("usage", () => {
       { use: "write", model: "write-model", input: 250, output: 600, calls: 2 },
       { use: "curate", model: "curate-model", input: 125, output: 300, calls: 1 },
     ]);
+  });
+});
+
+describe("meteredComplete", () => {
+  it("counts a run's own calls apart from the process's, keeps the overloads, and still tells the caller's onUsage", async () => {
+    resetUsage();
+    const usage = { input_tokens: 100, output_tokens: 300 };
+    create.mockResolvedValueOnce({ ...reply("someone else's call"), usage });
+    await complete({ system: "s", prompt: "p", maxTokens: 10 });
+
+    const meter = makeMeter();
+    const metered = meteredComplete(meter);
+    const mine = vi.fn();
+    create.mockResolvedValueOnce({ ...reply("ok"), usage });
+    create.mockResolvedValueOnce({ ...reply('{"a":1}'), usage: { input_tokens: 10, output_tokens: 20 } });
+    create.mockResolvedValueOnce({ ...reply("again"), usage });
+    expect(await metered({ system: "s", prompt: "p", maxTokens: 10, use: "write", onUsage: mine })).toBe("ok");
+    expect(await metered<{ a: number }>({ system: "s", prompt: "p", maxTokens: 10, use: "gate", json: { type: "object" } })).toEqual({ a: 1 });
+    await metered({ system: "s", prompt: "p", maxTokens: 10, use: "write" });
+
+    expect(meter.usage()).toEqual([
+      { use: "write", model: "write-model", input: 200, output: 600, calls: 2 },
+      { use: "gate", model: "gate-model", input: 10, output: 20, calls: 1 },
+    ]);
+    expect(create.mock.calls[2][0].output_config).toEqual({ format: { type: "json_schema", schema: { type: "object" } } });
+    expect(mine).toHaveBeenCalledWith({ use: "write", model: "write-model", input: 100, output: 300 });
+    expect(usageSoFar().reduce((n, u) => n + u.calls, 0)).toBe(4); // the process keeps its own count too
   });
 });
 

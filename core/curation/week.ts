@@ -88,6 +88,17 @@ export function addDays(date: string, n: number): string {
   return d.toISOString().slice(0, 10);
 }
 
+// Today's date (YYYY-MM-DD) where the family lives, so a Sunday evening in Hawaii that is already
+// Monday in UTC is still Sunday.
+export function todayIn(timeZone: string, now = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone }).format(now);
+}
+
+// The Monday after a date, never the date itself: a Monday asks for the Monday a week on.
+export function nextMonday(date: string): string {
+  return addDays(date, (8 - new Date(`${date}T00:00:00Z`).getUTCDay()) % 7 || 7);
+}
+
 // Run fn over items, n at a time, in order of starting.
 export async function pool<T, R>(items: T[], n: number, fn: (item: T) => Promise<R>): Promise<R[]> {
   const out: R[] = new Array(items.length);

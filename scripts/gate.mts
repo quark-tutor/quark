@@ -10,9 +10,10 @@
 
 import { parseArgs } from "node:util";
 import { createClient } from "@supabase/supabase-js";
-import { debugTo, usageSoFar } from "../core/model.ts";
-import { runRow } from "../core/runs.ts";
-import { gateFailed, gateSetup, gateTheme, printGate } from "./gate-run.ts";
+import { gateFailed, gateSetup, gateTheme } from "../core/curation/gate-run.ts";
+import { debugTo, meteredComplete } from "../core/model.ts";
+import { makeMeter, runRow } from "../core/runs.ts";
+import { printGate } from "./gate-run.ts";
 import { announceTarget } from "./target.ts";
 
 announceTarget();
@@ -51,15 +52,19 @@ const only = args.child ? setup.children.find((c) => c.id === args.child || c.ni
 if (args.child && !only) throw new Error(`No child "${args.child}". The family has ${setup.children.map((c) => c.nickname).join(", ")}.`);
 console.log(`${theme.data.title}: checking ${only ? `${only.nickname}'s` : "every child's"} cards on ${setup.model}.`);
 
+// This run's own tally of calls and tokens.
+const meter = makeMeter();
+const complete = meteredComplete(meter);
+
 const started = new Date();
 let failed = true;
 try {
-  const report = await gateTheme(db, familyId, theme.data.id, setup, only?.id);
+  const report = await gateTheme(db, familyId, theme.data.id, setup, { complete, childId: only?.id });
   printGate(report, setup);
   failed = gateFailed(report);
 } finally {
   printUsage();
-  const row = runRow("gate", usageSoFar(), { ok: !failed, startedAt: started, themeId: theme.data.id, week, children: only ? 1 : setup.children.length });
+  const row = runRow("gate", meter.usage(), { ok: !failed, startedAt: started, themeId: theme.data.id, week, children: only ? 1 : setup.children.length });
   const { error } = await db.from("model_runs").insert({ family_id: familyId, ...row });
   if (error) console.error(`Could not record this run for /parent/models: ${error.message}.`);
 }
@@ -67,7 +72,7 @@ console.log(`\nSee it at /parent/week/${theme.data.id}.`);
 if (failed) process.exit(1);
 
 function printUsage() {
-  const row = runRow("gate", usageSoFar(), { ok: true, startedAt: started });
+  const row = runRow("gate", meter.usage(), { ok: true, startedAt: started });
   console.log("\nTokens:");
   for (const m of row.models) {
     console.log(`  ${m.use} on ${m.model}: ${m.calls} calls, ${m.input.toLocaleString()} in, ${m.output.toLocaleString()} out${m.cost === null ? ", price unknown" : `, $${m.cost.toFixed(2)}`}`);

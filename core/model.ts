@@ -34,7 +34,7 @@ export type CompleteOptions = {
   label?: string; // names the debug file: "ideas-day1-puzzle"
   // This one call's tokens, for a caller that prices it on its own (a server action shares the
   // process with other requests, so usageSoFar() isn't its own).
-  onUsage?: (u: { model: string; input: number; output: number }) => void;
+  onUsage?: (u: { use: ModelUse; model: string; input: number; output: number }) => void;
 };
 
 let client: Anthropic | undefined;
@@ -45,6 +45,24 @@ export type Usage = { use: ModelUse; model: string; input: number; output: numbe
 const usage = new Map<string, Usage>();
 export const usageSoFar = (): Usage[] => [...usage.values()].map((u) => ({ ...u }));
 export const resetUsage = () => usage.clear();
+
+// A run's own tally. usageSoFar() is one counter for the whole process, which is wrong for a route:
+// a warm Vercel instance keeps an earlier firing's counts and can serve another request at the same
+// moment. meteredComplete() gives a run a complete() that tells its own sink (makeMeter() in
+// core/runs.ts) about every call it makes, with the same overloads.
+export type UsageSink = { add: (use: ModelUse, u: { model: string; input: number; output: number }) => void };
+
+export function meteredComplete(sink: UsageSink): typeof complete {
+  const metered = (options: CompleteOptions & { json?: Record<string, unknown> }) =>
+    (complete as (o: CompleteOptions) => Promise<unknown>)({
+      ...options,
+      onUsage: (u) => {
+        sink.add(u.use, u);
+        options.onUsage?.(u);
+      },
+    });
+  return metered as typeof complete;
+}
 
 // With a debug folder set, every request and its reply are written there as JSON, one file per
 // call, before anything is checked, so a reply that fails can be read as it came back. Image
@@ -110,7 +128,7 @@ export async function complete(options: CompleteOptions & { json?: Record<string
   tally.output += u?.output_tokens ?? 0;
   tally.calls += 1;
   usage.set(`${use} ${model}`, tally);
-  options.onUsage?.({ model, input, output: u?.output_tokens ?? 0 });
+  options.onUsage?.({ use, model, input, output: u?.output_tokens ?? 0 });
 
   if (response.stop_reason === "refusal") {
     throw new Error(`The model declined (${response.stop_details?.category ?? "no category"}).`);

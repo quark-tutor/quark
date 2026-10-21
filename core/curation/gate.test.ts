@@ -325,6 +325,27 @@ describe("running the gate", () => {
     expect(f.saved.map((s) => s.id)).toEqual([cards[2].id]);
   });
 
+  it("with pendingOnly, checks the pending cards and leaves a verdict on another rulebook alone", async () => {
+    const f = fake([pass]);
+    const stale: PolicyNotes = { gate: { by: "model", rulebook: "h0", floor: 1, floor_first_guess: true, reasons: [], checked_at: "x" } };
+    const cards = [gateCard(), gateCard({ policy: "passed", notes: stale }), gateCard({ policy: "blocked", notes: stale })];
+    const report = await runGate({ cards, children, rulebook, floor, system: "S", model: "m", concurrency: 1, pendingOnly: true }, f.deps);
+    expect(report).toMatchObject({ checked: 1, passed: 1, staleLeft: 2, upToDate: 0, pending: 0 });
+    expect(f.calls()).toBe(1);
+    expect(f.saved.map((s) => s.id)).toEqual([cards[0].id]);
+  });
+
+  it("with pendingOnly and nothing pending, makes no call and writes nothing", async () => {
+    const f = fake([pass]);
+    const current: PolicyNotes = { gate: { by: "model", rulebook: "h1", floor: 1, floor_first_guess: true, reasons: [], checked_at: "x" } };
+    const stale: PolicyNotes = { gate: { ...current.gate!, rulebook: "h0" } };
+    const cards = [gateCard({ policy: "passed", notes: current }), gateCard({ policy: "passed", notes: stale })];
+    const report = await runGate({ cards, children, rulebook, floor, system: "S", model: "m", pendingOnly: true }, f.deps);
+    expect(report).toMatchObject({ checked: 0, upToDate: 1, staleLeft: 1, pending: 0 });
+    expect(f.calls()).toBe(0);
+    expect(f.saved).toEqual([]);
+  });
+
   it("writes nothing without a rulebook", async () => {
     const f = fake([pass]);
     const report = await run([gateCard(), gateCard()], f.deps, null);

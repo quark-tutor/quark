@@ -3,7 +3,7 @@ import { CARD_SCHEMA, cardPrompt, checkCards, givesAway, planDoors, writeCards, 
 import { firstLayerProblem, IDEA_SCHEMA, ideasPrompt, parseIdeas, sourceRefs, topicForDay, writeIdeaChain, type RawIdeas, type RawLayer } from "./ideas";
 import type { IdeaChain, WeekPlan, WeekTopic } from "./types";
 import { weekSchedule } from "./schedule";
-import { addDays, buildWeek, type CardRow, type WeekChild, type WeekDeps } from "./week";
+import { addDays, buildWeek, nextMonday, todayIn, type CardRow, type WeekChild, type WeekDeps } from "./week";
 import { mergeFamily } from "../../lib/family-values";
 import { learnsSentence, renderPolicy } from "../../lib/policy";
 
@@ -551,6 +551,21 @@ describe("addDays", () => {
   it("counts in calendar days", () => {
     expect(addDays("2026-10-19", 6)).toBe("2026-10-25");
     expect(addDays("2026-12-29", 4)).toBe("2027-01-02");
+  });
+});
+
+describe("todayIn and nextMonday", () => {
+  it("reads the date where the family lives: Monday 04:00 UTC is still Sunday evening in Hawaii", () => {
+    expect(todayIn("Pacific/Honolulu", new Date("2026-10-26T04:00:00Z"))).toBe("2026-10-25");
+    expect(todayIn("Pacific/Honolulu", new Date("2026-10-25T16:00:00Z"))).toBe("2026-10-25");
+    expect(todayIn("UTC", new Date("2026-10-26T04:00:00Z"))).toBe("2026-10-26");
+  });
+
+  it("is the Monday after a date, and a Monday asks for the Monday a week on", () => {
+    expect(nextMonday("2026-10-20")).toBe("2026-10-26"); // Tuesday
+    expect(nextMonday("2026-10-25")).toBe("2026-10-26"); // Sunday
+    expect(nextMonday("2026-10-26")).toBe("2026-11-02"); // Monday
+    expect(nextMonday("2026-12-30")).toBe("2027-01-04"); // across the new year
   });
 });
 

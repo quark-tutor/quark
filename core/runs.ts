@@ -6,6 +6,28 @@ import { costOf } from "./prices.ts";
 
 export type RunKind = "week:build" | "content:fetch" | "gate"; // gate: npm run gate on its own
 
+// One run's own tally of calls and tokens, per job and model. core/model.ts's meteredComplete() feeds
+// it, and runRow() prices what usage() returns. Pure, so it is tested without a model.
+export type Meter = {
+  add: (use: ModelUse, u: { model: string; input: number; output: number }) => void;
+  usage: () => Usage[];
+};
+
+export function makeMeter(): Meter {
+  const tally = new Map<string, Usage>();
+  return {
+    add(use, { model, input, output }) {
+      const key = `${use} ${model}`;
+      const t = tally.get(key) ?? { use, model, input: 0, output: 0, calls: 0 };
+      t.input += input;
+      t.output += output;
+      t.calls += 1;
+      tally.set(key, t);
+    },
+    usage: () => [...tally.values()].map((u) => ({ ...u })),
+  };
+}
+
 // One job on one model in a run. cost is null when the model isn't in core/prices.ts.
 export type RunModel = { use: ModelUse; model: string; calls: number; input: number; output: number; cost: number | null };
 

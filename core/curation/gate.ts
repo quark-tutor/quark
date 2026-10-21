@@ -279,6 +279,10 @@ export type GateOptions = {
   model: string;
   concurrency?: number;
   now?: () => Date;
+  // Check only the cards still pending. A verdict reached under another rulebook or floor is left as
+  // it is (counted in staleLeft), which is what the Sunday build wants: it must not re-judge, or spend
+  // on, cards an earlier firing already settled.
+  pendingOnly?: boolean;
 };
 
 export type HeldBack = { label: string; childId: string; by: "code" | "model"; reasons: GateReason[] };
@@ -287,6 +291,7 @@ export type GateReport = {
   cards: number;
   upToDate: number; // already checked against this rulebook and floor
   heldBackByChecks: number; // blocked by the card checks at build time; the gate leaves them
+  staleLeft: number; // verdicts on another rulebook or floor, left alone because only pending cards were asked for
   checked: number;
   passed: number;
   blockedByCode: number;
@@ -322,6 +327,7 @@ export async function runGate(opts: GateOptions, deps: GateDeps): Promise<GateRe
     cards: opts.cards.length,
     upToDate: 0,
     heldBackByChecks: 0,
+    staleLeft: 0,
     checked: 0,
     passed: 0,
     blockedByCode: 0,
@@ -342,6 +348,7 @@ export async function runGate(opts: GateOptions, deps: GateDeps): Promise<GateRe
   for (const c of opts.cards) {
     if (heldByChecks(c)) report.heldBackByChecks += 1;
     else if (rulebook && isUpToDate(c, rulebook, floor)) report.upToDate += 1;
+    else if (opts.pendingOnly && c.policy !== "pending") report.staleLeft += 1;
     else todo.push(c);
   }
   if (!rulebook) {
