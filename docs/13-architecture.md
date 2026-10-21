@@ -75,7 +75,7 @@ The full architecture above is the community vision. One family can start much s
 | Kid and parent apps | One web app on Vercel (or Netlify, Cloudflare Pages). The tablet opens the kid view, parents open the settings view. | Separate kid and parent apps |
 | API | Serverless API routes alongside the app | FastAPI services |
 | Database, auth, files | Supabase: tables for profiles, values and blackballs, cards, activity and check results. Supabase Auth for guardians. Storage for images and audio. | Postgres, Keycloak, Kolibri, SQL LRS |
-| Weekly curation job | A scheduled (cron) function once a week. If it outgrows the function time limit, a small worker on Railway or Fly.io. | Scheduled job in the core |
+| Weekly curation job | A scheduled (cron) function: Vercel calls one route eight times on Sunday, and each call builds one day of next week, because a week does not fit a function and a day does (Hobby stops a function at 300 seconds; a day takes about 130). If a day ever takes over 240 seconds, the Pro plan (800 seconds), not a worker. Built 20 Oct 2026; see [Curation engine](04-curation-engine.md), "How the Sunday build is built". | Scheduled job in the core |
 | Language model | A model provider API key (Anthropic, OpenAI or similar) | Model adapter |
 | Policy check | A second model call that checks each card against the written values profile before it's saved | gpt-oss-safeguard, Llama Guard |
 | Digest | A transactional email service (Resend or similar) | Digest service |
