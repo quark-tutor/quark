@@ -30,7 +30,7 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
-| The Sunday cron and the Looks-good page: a guardian's one tap makes a week live | briefed | 20 Oct 2026 | the build session (`opusplan`); `CRON_SECRET` in `.env.local` by Brandon's hand first | a slice | — / — | 3 | `docs/looks-good-slice.md`; `phase-3-curation` |
+| The Sunday cron and the Looks-good page: a guardian's one tap makes a week live | building | 20 Oct 2026 | the build (2(a) to (d)), then stop 3: Brandon opens the week on test and taps Looks good; `CRON_SECRET` in `.env.local` by his hand | a slice | — / — | 3 | `docs/looks-good-slice.md`; `docs/reports/2026-10-20-looks-good-slice.md`; `phase-3-curation` |
 | Guardians can't write a week's status or a card's verdict directly: only the server can | raised | 20 Oct 2026 | Wonder Wall slice 1; its migration lands before any theme is made live on live | an hour | high / — | 4 | `docs/looks-good-slice.md`, *To settle*; `supabase/migrations/20261010000002_data_api_grants.sql` |
 | Curation engine v1: weekly cron, ideas, cards, gate, load the week | building | 20 Oct 2026 | step 6 built (briefed: a day a firing, eight Sunday firings, `docs/looks-good-slice.md`); merge to `main` when it runs | several slices | — / — | 3 | `docs/04-curation-engine.md`; `phase-3-curation` |
 | The policy gate: every card approved or blocked before a child could see it | on test | 20 Oct 2026 | the release; June on the safety floor and the twenty questions | a slice | — / — | 3 | `docs/gate-slice.md`; `docs/reports/2026-10-20-gate-slice.md`; `docs/reports/2026-10-20-gate-live.md`; `phase-3-curation` |
