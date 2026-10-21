@@ -177,7 +177,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
         <h1>{theme.data.title}</h1>
         <p className={styles.lede}>
           The week starting {weekday(theme.data.week_start)}. Each card is shown with its four layers: what the child sees first, then each tap
-          deeper. Nothing here is on the kids&rsquo; iPads.
+          deeper.
         </p>
       </div>
 
@@ -209,8 +209,8 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
           <p className={styles.meta}>This week has begun, so it can&rsquo;t be taken back to review here.</p>
         ) : null}
         <p className={styles.meta}>
-          Any one of you can do this. From {longDay(theme.data.week_start)}, the Wonder Wall will show the cards that passed and nothing that was
-          held back. The wall isn&rsquo;t on the iPads yet, so for now nothing changes for the kids.
+          Any one of you can do this. From {longDay(theme.data.week_start)}, the Wonder Wall shows the cards that passed and nothing that was
+          held back.
         </p>
       </section>
 
