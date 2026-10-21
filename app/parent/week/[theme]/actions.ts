@@ -22,6 +22,14 @@ const message = (e: unknown) => (e instanceof Error ? e.message : String(e));
 
 type Admin = ReturnType<typeof createAdminClient>;
 
+// A refusal usually means the page the guardian pressed was out of date (another tab made the week live; a
+// card was set back to pending), so the page is redrawn too, and its heading and button tell the truth.
+function refused(themeId: string, why: string): TapState {
+  revalidatePath(`/parent/week/${themeId}`);
+  revalidatePath("/parent");
+  return { ok: false, message: why };
+}
+
 async function readWeek(db: Admin, familyId: string, themeId: string) {
   const [theme, cards, kids, family, profile, currentHash] = await Promise.all([
     db.from("themes").select("id, week_start, plan_week, status").eq("id", themeId).eq("family_id", familyId).maybeSingle(),
@@ -61,12 +69,12 @@ export async function makeWeekLive(themeId: string, _previous: TapState, _form?:
       savedHash: week.savedHash,
       floorVersion: floor.version,
     });
-    if (problems.length) return { ok: false, message: problems.join(" ") };
+    if (problems.length) return refused(themeId, problems.join(" "));
 
     // Only a theme still in review moves: if two guardians tap at once, one wins and the other is told so.
     const moved = await db.from("themes").update({ status: "live" }).eq("id", themeId).eq("family_id", guardian.familyId).eq("status", "review").select("id");
     if (moved.error) throw new Error(moved.error.message);
-    if (!moved.data?.length) return { ok: false, message: "This week is already live, or was just changed. Reload the page." };
+    if (!moved.data?.length) return refused(themeId, "This week is already live, or was just changed.");
 
     const logged = await db.from("audit_log").insert({
       family_id: guardian.familyId,
@@ -103,11 +111,11 @@ export async function backToReview(themeId: string, _previous: TapState, _form?:
     const week = await readWeek(db, guardian.familyId, themeId);
     if (!week) return { ok: false, message: "No such week." };
     const problem = backToReviewProblem({ status: week.theme.status, weekStart: week.theme.week_start, today: todayIn(week.timeZone) });
-    if (problem) return { ok: false, message: problem };
+    if (problem) return refused(themeId, problem);
 
     const moved = await db.from("themes").update({ status: "review" }).eq("id", themeId).eq("family_id", guardian.familyId).eq("status", "live").select("id");
     if (moved.error) throw new Error(moved.error.message);
-    if (!moved.data?.length) return { ok: false, message: "This week was just changed. Reload the page." };
+    if (!moved.data?.length) return refused(themeId, "This week was just changed.");
 
     const logged = await db.from("audit_log").insert({
       family_id: guardian.familyId,

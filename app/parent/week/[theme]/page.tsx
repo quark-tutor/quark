@@ -206,7 +206,8 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
             ))}
           </ul>
         ) : null}
-        {theme.data.status === "review" ? <LooksGood themeId={theme.data.id} mode="tap" blocked={problems.length > 0} /> : null}
+        {/* Keyed on whether it is blocked, so the button starts afresh when the page is redrawn after a refusal and the reason is in the list above it. */}
+        {theme.data.status === "review" ? <LooksGood key={`tap-${problems.length > 0}`} themeId={theme.data.id} mode="tap" blocked={problems.length > 0} /> : null}
         {theme.data.status === "live" && canUndo ? <LooksGood themeId={theme.data.id} mode="undo" blocked={false} /> : null}
         {theme.data.status === "live" && !canUndo ? (
           <p className={styles.meta}>This week has begun, so it can&rsquo;t be taken back to review here.</p>
