@@ -2,48 +2,74 @@
 
 Opus 5.5 (the brief asks for `opusplan`; this session ran on Opus 5.5 throughout). Branch `phase-4-wonder-wall`, pushed.
 Nothing to `main`. Nothing on live. The job was Brandon's `/wwc:job docs/wonder-wall-1-slice.md` of 20 October, with
-stop 1 (the write-back, answered on 21 October) and stop 2 below. This file is the stop's state; `/close` replaces it
-with the full report.
+stop 1 (the write-back, answered on 21 October) and stop 2 below, resumed in a new session the same night. This file is
+the stop's state; `/wwc:close` replaces it with the full report.
 
-## STOP 2: Brandon on a real iPad (step 3.6)
+## STOP 2: Your look, Brandon on a real iPad (step 3.6)
 
-Steps 2 and 3.1 to 3.5 are done and shown below. What is left is Brandon on the iPad as each invented child would, and
-his choice of the matcher's rule.
+**Resumed 21 October at 10:48 pm** (a new session, `/wwc:job docs/wonder-wall-1-slice.md`). Steps 2 and 3.1 to 3.5 are
+done and shown below; no code has changed since the pause. Checked tonight: the branch is level with
+`origin/phase-4-wonder-wall`; `npm test` 368 of 368 and `npm run typecheck` clean; the laptop is on the home Wi-Fi at
+`192.168.50.67`; a dev server on test, started by this session with that address allowed
+(`DEV_ORIGIN=192.168.50.67 npm run dev -- --hostname 0.0.0.0`), answers 200 at `http://192.168.50.67:3000/kid/pair`.
+Not live: `quark-test` only; what the iPad writes are test rows, and "Forget this iPad" on `/parent` undoes the pairing.
 
-**Paused, 21 October (Brandon, in the field; back tonight).** No dev server is running: the one on the home network was
-stopped when the laptop left. To resume: on the home Wi-Fi, check the laptop's address (`ipconfig`; it was
-`192.168.50.67`), start `npm run dev -- --hostname 0.0.0.0` with `DEV_ORIGIN` set to that address, and use that address
-below. If the test guardian's Chrome session has lapsed, sign in again at `/sign-in`. The week on test is live from
-21 October, so tonight is day 1 and tomorrow is day 2.
+What is left: Brandon on the iPad as each invented child would, and his choice of the matcher's rule. Then the close,
+`/wwc:close`, Brandon's word. Since the pause, the method says this stop is the brief's *Your look* (21 October): each
+check below in exact words; "go" means every one passed, or name the one that didn't, and that is a fix round.
 
-**The pre-flight, four lines:**
+**Setting up:**
 
-- **What is about to happen:** Brandon pairs a real iPad, in Safari (not the Home Screen app), to the test copy on the
-  laptop's dev server over the home Wi-Fi, and uses the wall as each invented child.
-- **What it touches:** not live. `quark-test` (sessions and attempts rows for the invented children, a device row), and
-  the laptop's dev server on the home network at `http://192.168.50.67:3000` while it runs.
-- **How it is undone:** "Forget this iPad" on `/parent`; the rows are test rows; stopping the dev server closes the address.
-- **What was checked on test:** everything under *Proved on test* below, in the laptop's browser at 820 × 1180 and
-  1180 × 820.
+1. On the iPad, in Safari (not the Home Screen app), open `http://192.168.50.67:3000/kid/pair`. If it doesn't load,
+   Windows may be blocking Node on the private network: allow it for private networks.
+2. On the laptop, open `http://localhost:3000/parent` in Chrome as the test guardian (if it asks, sign in at
+   `/sign-in`). Pick **Bug**, **Get a code**, and type the code on the iPad.
 
-**On the iPad:**
+**The checks, as Bug first (all five of Bug's cards are fresh today):**
 
-1. In Safari, open `http://192.168.50.67:3000/kid/pair`. (The dev server is running with that address allowed. If the
-   page doesn't load, Windows may be blocking Node on the private network: allow it for private networks.)
-2. On the laptop, `http://localhost:3000/parent` is signed in as the test guardian in Chrome. Pick a child, **Get a code**,
-   and type it on the iPad.
-3. Check: "Read it to me" is heard (the iPad's volume up, silent mode off), the keyboard and its dictation key, the answer
-   box above the keyboard, the player on Listen, the pictures, both orientations.
-4. For the other child: **Forget this iPad** on `/parent`, then a new code for the other child.
-
-**Today on test (Wednesday 21 October, day 1):** the older invented child's Wonder, Then and Puzzle cards are done and
-Look is at layer 2 (the proof used them); the younger child's five cards are untouched. Thursday is day 2, fresh for both.
+1. The wall says "Hi, Bug." and shows five tiles in the order Look, Wonder, Listen, Then, Puzzle, each with the card's
+   title. Nothing scrolls: five stacked in portrait; three and two in landscape.
+2. Look opens to its picture, the credit line in small type, the card's words, the question, a box saying "Type your
+   answer", and "That's my answer".
+3. "Read it to me": you hear the card read (volume up, silent mode off); the button now says "Stop", and tapping it stops
+   the voice.
+4. Tapping the box opens the keyboard and the box stays in sight above it. The keyboard's microphone key puts your spoken
+   words in the box (if dictation is on: Settings, General, Keyboard, Enable Dictation).
+5. Type "I don't know" and tap "That's my answer": "Have a guess first. Any guess is fine." and no hint.
+6. A wrong guess: "Here's something to think about:" and one hint, with its own "Read it to me".
+7. A right guess: "That's it." and "Go deeper", which opens layer 2.
+8. Listen: a player saying "Play" that plays nothing until tapped; tapped, the music plays, and "Pause" pauses it.
+9. On any card, wrong guesses until the hints run out, then one more: "This one is for a person:" and the handoff line,
+   with no answer box and no "Go deeper". "Back to the wall": that tile now says "Done for today".
+10. Leave a card part way, reload Safari, open the tile again: the same layer, with the hints already seen.
+11. Nothing plays or reads by itself, and nothing on any screen leads out of the wall.
+12. On `/parent`, **Forget this iPad**, then a code for **Kiddo**: the wall says "Hi, Kiddo.", Kiddo's own cards. Before
+    midnight, Wonder, Then and Puzzle say "Done for today" and Look opens at layer 2 (the laptop proof used them); after
+    midnight it is Thursday, day 2, and all five are fresh for both.
+13. Used as each would, a 7-year-old and a 9-year-old: name anything that would stop or puzzle a child.
 
 **Brandon's choice at this stop: the matcher's rule.** The wall runs `every` (`WALL_RULE` in `lib/wall.ts`). Over the same
 invented answers (table below): `every` misjudges 68 of 105 right answers in a child's own words and takes 1 of 105 wrong
 answers as right; `any` misjudges 22 and takes 35 wrong answers as right, and 4 of 17 both-choices answers. Recommended:
 **keep `every`**. A misjudged right answer now costs a hint (the reply no longer says "Not yet"); a misjudged wrong answer
 is told "That's it." and opens the next layer, so the screen confirms a mistake.
+
+**Found since the pause, decided here:**
+
+- The board is run as GTD now (21 October): this row is *building*, in hand, waiting on this stop; no other row is in
+  hand. The brief's step 4 asks the close to move a direct-write row and a content:fetch-on-test row (neither is on the
+  board any more) and to split the Wonder Wall heading row into five rows (it is a project now, and a job never adds a
+  row). So at the close only this row moves, to *on test*, waiting on the release and the week for Monday; the five
+  pieces (hints as a conversation, spoken answers, stamps, the calm end, the Ask box) go in the full report for Brandon
+  to add if he wants them.
+- CLAUDE.md's *Where we are* still says slice 1 "is briefed, not built" (the board job's close left it); the close
+  rewrites it, and the README status line with it.
+- The brief's `/close` is `/wwc:close` now, Brandon's word; it does step 4's records.
+
+**On go:** `git pull --rebase origin phase-4-wonder-wall`; the matcher's rule as Brandon picks it (`every` changes
+nothing); any check he names as failed is a fix round, shown again here. When every check has passed: the dev server on
+the home network stopped (the address closes), the state written here, committed and pushed, and then "run `/wwc:close`
+when ready".
 
 ## What could not be checked (first, because these matter most)
 
