@@ -7,6 +7,57 @@ the stop's state; `/wwc:close` replaces it with the full report.
 
 ## STOP 2: Your look, Brandon on a real iPad (step 3.6)
 
+### Fix round 1, 22 October (from the iPad, as Bug)
+
+Brandon, from a second guardian's iPad paired as Bug, not go yet: "Read it to me" used the robotic compact voice
+though Zoe (Premium) is installed and chosen in Spoken Content; the child's own answer vanished after an answer; "That's
+it." was small and grey, the quietest line on the screen; Bug's wall on day 2 had four tiles, no Wonder.
+
+**Fixed** (`3e64e4f`, on the dev server now; reload the iPad):
+
+- **The voice.** Safari ignores Spoken Content's choice, so the wall picks: an en-US Premium voice (by voiceURI or name),
+  then en-US Enhanced, then any en-US voice (never Apple's novelty or Eloquence voices), then the browser's default;
+  within a tier the browser's default first (`pickVoice()` in `core/wall/voice.ts`, 8 tests). The list is read when the
+  page loads and again on `voiceschanged`, so the tap never waits: iPad Safari speaks only from inside the tap.
+- **The voices the iPad reports:** `http://192.168.50.67:3000/kid/voices` lists every voice the browser reports with the
+  pick in bold, and a "Read it to me" to hear it; the same list is printed in the dev server's output, for this report.
+  Dev server only (404 in production), and nothing links to it. Checked in the laptop's Chrome: 31 voices, picked
+  "Microsoft David - English (United States)", the list printed by the server. The iPad's list goes here when Brandon
+  opens the page.
+- **The child's answer stays.** Each guess stays on screen as a bubble on the right, with the reply under it: before
+  each hint ("Here's something to think about:" and the hint), and before "That's it.", "That's one to talk about." or
+  "This one is for a person:". Decided here: the guesses are kept on the page only, so after a reload the hints come
+  back from the database without the guesses that earned them; the card's reply carries nothing a child typed back to
+  the browser (decision 3's fields, rule 7).
+- **The replies as big as the question.** Every reply line is 28 px, bold, in the ink colour, as the question is; a hint
+  and the handoff are 28 px too; "Have a guess first. Any guess is fine." the same. Checked in the laptop's Chrome on
+  Kiddo's Puzzle card: "eight", then the hint, then "six" and "That's it.", the question and every reply 28 px bold
+  ink, the bubbles on the right.
+
+**Bug's Wonder card: the gate held it back, and four tiles is the rule.** `npm run fixture -- day 2026-10-22` (new,
+`2031107`, test only, names no child): Bug's Wonder layer 1, "Steps in the River", and layer 3 are `blocked` by the
+checker: "caution: Touches what the parents asked Quark to be careful about." The test copy keeps an invented caution
+note on Bug for the gate's proof (20 October); Kiddo has none and has all five. Decision 1: a slot with no passed first
+card shows nothing and the other tiles keep their order, so a child sees four tiles, Look, Listen, Then, Puzzle, with no
+gap. Layer 2 passed, but a child reaches layer 2 only through layer 1, so nothing of Wonder shows. The week page's
+missing-first-card line already tells a parent what the day lacks.
+
+Also: the laptop's Chrome is now paired to Kiddo as a second device (Bug's iPad stays paired), and Kiddo's day-2 Puzzle
+card is at layer 2 from that check. `npm test` 376 of 376, `npm run typecheck` clean, eslint clean on the changed files.
+
+**After the reload, the checks for this round:**
+
+1. On the iPad, open `http://192.168.50.67:3000/kid/voices`: the voices it reports, and "Picked:" names an en-US Premium
+   voice (Zoe, if it is the only one). Its "Read it to me" is Zoe's voice, not the compact one. If Zoe isn't in the list,
+   Safari doesn't offer it to a web page, and the pick is the next tier.
+2. On a card, "Read it to me" reads in that same voice.
+3. A guess that isn't right: your words stay in a bubble on the right, then "Here's something to think about:" and the
+   hint, as big and as dark as the question.
+4. A right guess: your words in a bubble, then "That's it." as big and as dark as the question, and "Go deeper".
+5. Bug's wall today: four tiles, Look, Listen, Then, Puzzle, no gap.
+
+The checks below still stand; say which have passed.
+
 **Resumed 21 October at 10:48 pm** (a new session, `/wwc:job docs/wonder-wall-1-slice.md`). Steps 2 and 3.1 to 3.5 are
 done and shown below; no code has changed since the pause. Checked tonight: the branch is level with
 `origin/phase-4-wonder-wall`; `npm test` 368 of 368 and `npm run typecheck` clean; the laptop is on the home Wi-Fi at
