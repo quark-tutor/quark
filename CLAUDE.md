@@ -6,14 +6,14 @@ The `wwc` plugin (`/wwc:job` and the rest; the method is in `BrandonReisen/worki
 
 - As built: the *Where we are* note under Build order in this file, and the *How it is built* sections of the spec pages in `docs/`
 - Decisions: the *Decided:* lines in the spec pages a job touched; for a tooling job, under *How Quark is built with Claude* in `docs/08-open-questions.md`
-- To test: none; the board's *on test* rows are the list
+- To test: none; a check is taken at a stop before the close, never parked
 - Board: `docs/board.md`
 - Board page: `npm run docs:board` (writes `Quark board.html` at the repository root, untracked; skip it in a side worktree)
 - Branches: working is the phase branch (`phase-N-...`; a phase job runs on its phase branch, a tooling job on a tooling branch, never `main`); finished `main`, and a push or merge to `main` is Brandon's go
 - Release: `/wwc:release` when `main` has not moved; otherwise Brandon merges by hand
 - Tests: `npm test`, and `npm run typecheck`
 - Migrations: applied by `.github/workflows/migrations.yml` on a push of the phase branch (test: quark-test), after the tests pass. A job pushes, watches the run (`gh run watch`) and reports it; a brief has no test-database push stop. Live: the workflow's live job waits on `SUPABASE_DB_URL_LIVE`, left unset (Brandon, 19 October 2026), so a live migration is still `db:push:live` at a stop
-- Bugs: `docs/08-open-questions.md`, a bullet at the top of the list under `## Bugs`: `- <date>, <where> (<phase N or tooling>): <what happened>; expected: <what should have happened>. <File, if any.> Size: <minutes, an hour, a job>.` The phase in brackets is what the board page counts by. No screenshot is saved: the repository is public.
+- Bugs: `docs/08-open-questions.md`, a bullet at the top of the list under `## Bugs`: `- <date>, <where> (<phase N or tooling>): <what happened>; expected: <what should have happened>. <File, if any.> Size: <minutes, an hour, a job>.` The phase in brackets says where it belongs. No screenshot is saved: the repository is public.
 - Also read at /job: the README status line; `docs/08-open-questions.md` (*How Quark is built with Claude* and *Bugs*); by search, the spec pages the brief touches, `deploy/supabase/schema.sql` if it touches data, `gate/values-interview.md` and `packs/README.md` for values
 - Also at close: update the *Where we are* note in this file (date, what is merged, what is on which branch, what is next), then the README status line so it agrees; the spec pages' *How it is built* sections and *Decided:* lines; for a tooling job, the *Decided:* lines in `docs/08-open-questions.md`. The repository is public: nothing written names a child.
 - Read-back adds: the one live database, API spend, anything a child could see, anything naming a child in the public repository; if a choice touches a guardian's say or one of the project's rules, say so
@@ -63,22 +63,11 @@ Two boys, 7 and 9, in Hawaii, each with a recent iPad. One hosted copy on Vercel
 
 ### Kinds of session
 
-Each starts with a skill typed in Claude Code (`.claude/skills/`).
-
-- `/idea <words>`: one row in `docs/board.md`, committed on the branch you are on. Never reads, diagnoses or asks.
-- `/ask <question>`: answers from the records, sources named. Read only.
-- `/job <brief>`: reads the records and the brief, says where it stands and which branch is checked out, does step 1 and stops. Every question comes with a recommended answer; it ends "reply go to take all of these".
-- `/side <name>`: opens or resumes `side/<name>` in its own worktree, with `docs/side/<name>.md`. Never touches `main`, a phase branch or the board.
-- `/bugs <words>`: one line under Bugs in docs/08, committed. Never diagnoses; saves no screenshot (the repo is public).
-- `/sweep`: proposes a batch of bugs that fits the branch checked out, stops for a yes, deletes the lines it fixes.
-- `/close`: the end of any job: the records, `npm run docs:board`, the commits, the full report, the read-back, `/cost`.
+The plugin's page says them (`docs/working-with-claude.md` in `BrandonReisen/working-with-claude`, *Kinds of session*). Quark's own: `/wwc:bugs` saves no screenshot, because the repository is public.
 
 ### The board
 
-- `docs/board.md` is the one list of every feature, from first mention to live or not doing, one row each, with its stage, what it waits on, size, importance and phase. Public: no row names a child.
-- `/idea` adds a row; `/close` moves the rows a job touched; nothing else writes it.
-- `npm run docs:board` writes `Quark board.html` at the repository root (not tracked), to open in a browser at the laptop. Bugs stay in docs/08 and show as a count per phase.
-- A row names one thing that can be briefed and built. Open questions that are decisions for Brandon and June stay in docs/08.
+The plugin's page says how it is run (the same page, *The board*: run as GTD). Quark's own: `docs/board.md` is public, so no row names a child.
 
 ## Stops
 
