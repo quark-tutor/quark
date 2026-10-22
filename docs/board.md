@@ -20,7 +20,6 @@ is a path in this repository or a link; words alone have nothing to open.
 
 | Feature | Stage | Moved | Project | Depends on | Waiting on | Size | Where |
 |---|---|---|---|---|---|---|---|
-| Quark's board run as GTD: the plugin's columns, the phases as projects, every row clarified with Brandon | building | 21 Oct 2026 | — | — | — | an hour | `docs/board-gtd-slice.md`; `docs/reports/2026-10-21-board-gtd.md` |
 | Wonder Wall slice 1: today's five cards, layers, hints as written, the handoff, on a paired iPad | building | 21 Oct 2026 | Wonder Wall | — | the iPad check at stop 2 of its job, then its close | a slice | `docs/wonder-wall-1-slice.md`; `docs/reports/2026-10-20-wonder-wall-brief.md`; `phase-4-wonder-wall` |
 | The boys' first live week: live week 1 deleted and built again to start Monday 26 Oct, read and tapped | next | 21 Oct 2026 | Pilot | Wonder Wall slice 1 | June's read of the safety floor before the build | a job | `docs/wonder-wall-1-slice.md`, *The week for Monday* |
 | 28 more short lessons for week 2, picked before Saturday 31 Oct, or the wall is empty from Monday 2 Nov | next | 21 Oct 2026 | Week 2 builds itself | — | — | a job | `plan/short-lessons.yaml`; `plan/candidates/short-lessons.md`; `docs/wonder-wall-1-slice.md`, *The week for Monday* |
@@ -42,6 +41,7 @@ is a path in this repository or a link; words alone have nothing to open.
 | Sample weeks written so they can be shared and reused | someday | 21 Oct 2026 | — | — | — | — | `docs/08-open-questions.md` |
 | The Claude GitHub app for pull-request review | someday | 21 Oct 2026 | — | — | — | — | review, job 7 |
 | `docs/decisions.md`, newest first with what each replaced | someday | 21 Oct 2026 | — | — | — | an hour | review, job 8 |
+| Quark's board run as GTD: the plugin's columns, the phases as projects, every row clarified with Brandon | live | 21 Oct 2026 | — | — | — | an hour | `docs/board-gtd-slice.md`; `docs/reports/2026-10-21-board-gtd.md` |
 | The Sunday cron and the Looks-good page: a guardian's one tap makes a week live | live | 20 Oct 2026 | — | — | — | a slice | `docs/looks-good-slice.md`; `docs/reports/2026-10-20-looks-good-slice.md`; `docs/04-curation-engine.md`; `phase-3-curation` |
 | Curation engine v1: weekly cron, ideas, cards, gate, load the week | live | 20 Oct 2026 | — | — | — | several slices | `docs/04-curation-engine.md`; `phase-3-curation` |
 | The policy gate: every card approved or blocked before a child could see it | live | 20 Oct 2026 | — | — | — | a slice | `docs/gate-slice.md`; `docs/reports/2026-10-20-gate-slice.md`; `docs/reports/2026-10-20-gate-live.md`; `phase-3-curation` |

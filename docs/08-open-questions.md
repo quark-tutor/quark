@@ -262,6 +262,16 @@ Brief: `docs/working-with-claude-4-slice.md`; branch `working-with-claude-4`. To
 - **Decided (18 Oct 2026): `working-with-claude-4` is merged into `phase-3-curation` by Brandon's hand; PDERP's half runs as its own session next.**
 - **Proven (18 Oct 2026), on the restarted session:** `cd /c/Users/BrandonReisen/Documents/quark && git push --dry-run origin main` asked and Brandon declined it (his first run was accepted by mistake: a dry run, nothing sent); `cd … && npm run db:push` did not ask and printed `Target: test`; `/job docs/test-database-slice.md` listed its live dry-run as the risky step, said Brandon runs it by hand, and stopped. Closes the 18 Oct live-ask bug and the 17 Oct chained-command bug, and makes moot the `.env.example` over-match and the `/ask` tool line.
 
+### Quark's board run as GTD
+
+Decided (Brandon, 21 Oct 2026, 21:48 to 22:08, in the chat's clarify pass), `docs/board-gtd-slice.md`, report `docs/reports/2026-10-21-board-gtd.md`; a tooling job on `phase-4-wonder-wall`.
+
+- **Decided: Quark's board is run as GTD,** with the same rules as the WWC and BUTLR boards. Brandon: "help me get quark's state board into a GTD format, the same as we've already done for WWC, and butlr." *Replaces* the older stages (not fully formed · raised · briefed · building · on test · on hold · live · not doing) of slice 2, 17 Oct.
+- **Decided: the plugin's eight columns,** `Feature | Stage | Moved | Project | Depends on | Waiting on | Size | Where`. *Replaces* the *Importance* and *Phase* columns: the projects carry the phases, and the order of Next carries the priority. The board script no longer takes `--second June`.
+- **Decided: the phases become projects.** Wonder Wall and Pilot are projects; so is "Week 2 builds itself", which is new. Digest and audio (phase 5) and Checks and difficulty (phase 6) are projects at *someday*.
+- **Decided: every row's outcome is as the chat proposed it** ("yes, these look good"). The two rows waiting on June and a brainstorm, "Where the limits on 'Ask' are" and "Safety-floor lessons in the plan", were thrown away ("clear the two waiting on, we don't need those"). Two rows became bug lines, and three more were deleted as done or overtaken.
+- **Decided: *To test* is "none; a check is taken at a stop before the close, never parked".** *Replaces* "the board's *on test* rows are the list". In CLAUDE.md, *Kinds of session* and *The board* now each point to the plugin's page and keep only Quark's own rules.
+
 ### Releases
 
 - **Released to `main`, 20 Oct 2026: phase 3** (the plan and the short lessons, content and the approval rule, ideas and cards, the models and costs page, the week preview, the policy gate on test and on live, and the Sunday build with the Looks-good page), with the test database job, slice 4 of working with Claude and the method moved into the wwc plugin that were merged into the branch. A fast-forward of 137 commits: `main` moved from `d9bd970` to `9694b58`. Brandon typed `/wwc:release` and gave the push at the terminal's ask; he gave no other words for it. The migrations workflow's run for the push (`39558916342`) was green and applied nothing: its live job ran the tests and the typecheck, and skipped "Push to the live database" because `SUPABASE_DB_URL_LIVE` is not set. The Sunday build is asleep in production until Brandon sets `CRON_SECRET` there.
