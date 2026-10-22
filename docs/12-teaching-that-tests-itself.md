@@ -32,6 +32,8 @@ A free hint button turns into something to tap for the reaction, the same way ki
 - **One question, one way to answer.** Nothing decorative to tap. Young kids answer by voice, which takes more thought than tapping.
 - **Thinking happens off the screen.** The screen starts the thinking, and paper, conversation and the dinner table finish it.
 
+**As built in the Wonder Wall's slice 1 (22 Oct 2026):** the hints are the card's written ones, one at a time after a guess that isn't judged right, each under the child's own guess; a model's guiding question is a later slice. Answers are typed, with the iPad keyboard's dictation as the family's setting; spoken answers in the app are a later slice. A guess is judged in code, which misreads many right answers in a child's own words, so the reply never says a guess was wrong. docs/04, *How the Wonder Wall is built*.
+
 ## The session ends when the thinking stops (proposed)
 
 Some language apps "hang up" after too many careless answers. The tutor does a gentle version. If taps come faster than anyone could read, or answers turn into random guesses, it first slows down: it reads the card aloud or asks for a spoken answer. If the rushing continues, it ends the session calmly, with no scolding, shame or lost points: "Let's stop here. Here's something to think about until next time." The child learns that the screen only works when they're thinking, and parents see the pattern in the digest.

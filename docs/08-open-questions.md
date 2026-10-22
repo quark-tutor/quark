@@ -107,7 +107,7 @@ Brief: `docs/looks-good-slice.md`, on `phase-3-curation`. Built and proven on `q
 
 ## Wonder Wall, slice 1: decided in the brief (phase 4, 20 Oct 2026)
 
-Brief: `docs/wonder-wall-1-slice.md`, on `phase-4-wonder-wall`; report `docs/reports/2026-10-20-wonder-wall-brief.md`. Not built yet. Brandon, 20 Oct 2026, at the brief's step 1: "go, taking all of these, with two changes: (1) take cut 1 now: no next-day layer in slice 1; the docs/04 rule stays "its day is today", commit (f) goes, and the carry-over is a slice 2 row; (2) in judgeGuess, on a question whose accepted answers are a choice of two, a guess that contains both choices is not right. Everything else as recommended", naming each, and "Add a board row for the 28 short lessons needed before 31 October (raised, phase 3, Brandon and June)." June's view is not recorded on any of these.
+Brief: `docs/wonder-wall-1-slice.md`, on `phase-4-wonder-wall`; report `docs/reports/2026-10-20-wonder-wall-brief.md`. Built 21 and 22 Oct 2026 (report `docs/reports/2026-10-21-wonder-wall-1-slice.md`; docs/04, *How the Wonder Wall is built*), on test, waiting on the release. Brandon, 20 Oct 2026, at the brief's step 1: "go, taking all of these, with two changes: (1) take cut 1 now: no next-day layer in slice 1; the docs/04 rule stays "its day is today", commit (f) goes, and the carry-over is a slice 2 row; (2) in judgeGuess, on a question whose accepted answers are a choice of two, a guess that contains both choices is not right. Everything else as recommended", naming each, and "Add a board row for the 28 short lessons needed before 31 October (raised, phase 3, Brandon and June)." June's view is not recorded on any of these.
 
 - **Decided (20 Oct 2026): the road is slice 1, then the iPads, then the pilot.** Brandon: "slice 1 is the minimum a kid can use, not the whole of phase 4."
 - **Decided (20 Oct 2026): the target is the boys using it on Monday 26 October,** and the slice is sized to that, with a cut list (the one-letter slip, the session's end time, pictures in the test proof, then layers 2 to 4). Brandon: "the target is the boys using it on Monday 26 October. Size slice 1 to that, say what has to be true by then and what to cut if it doesn't fit."
@@ -126,6 +126,18 @@ Brief: `docs/wonder-wall-1-slice.md`, on `phase-4-wonder-wall`; report `docs/rep
 - **Decided (20 Oct 2026): one build session, with the cut list.**
 - **Decided (20 Oct 2026): a board row for the 28 short lessons needed before 31 October** (raised, phase 3, Brandon and June): week 1 again uses all 28, so the wall is empty from Monday 2 Nov without them.
 - Still open, for June: the wall's own sentences (decision 5 of the brief; she may read them at the build's step 1) and the safety floor, by Friday 23 Oct.
+
+### Decided in the build (21 and 22 Oct 2026)
+
+Brandon at the iPad stop, 22 Oct 2026: "go. Every check passed on my wife's iPad as Bug, except "Read it to me" as a natural voice, which is dropped from this job, not failed". His answers at stop 1 on 21 Oct were not kept as a report; the two below are recorded from the build's commits (`e7bcbc5`, `9d73457`) and `core/wall/words.ts`, without his words.
+
+- **Decided (21 Oct 2026): the matcher takes a rule, `every` (as briefed) or `any`,** both measured over test's week 1 at step 1, the choice left to the iPad stop.
+- **Decided (22 Oct 2026): the rule is `every`.** Brandon: "Keep every." Over the invented answers, `every` judged 68 of 105 right answers in a child's own words not right and took 1 of 105 wrong answers as right; `any`, 22 and 35. A misjudged right answer costs a hint; a misjudged wrong one would be told "That's it.". *Touches rule 3.*
+- **Decided (21 Oct 2026): the wall never says "Not yet".** A guess not judged right gets "Here's something to think about:" and the hint, because the matcher misreads about two in three right answers in a child's own words. *Replaces* the brief's "Not yet. Here's something to think about:".
+- **Decided (22 Oct 2026): a natural voice for "Read it to me" is dropped from slice 1, not failed;** the next slice, the tutor's voice from Google, replaces it (its brief is the chat's). Brandon: "'Read it to me' as a natural voice, which is dropped from this job, not failed: it is replaced by the next slice, the tutor's voice from Google". Found at the iPad stop: iPad Safari offers a web page no Premium or Enhanced voice, so the voice chosen in the iPad's settings can't be used. *Touches rule 7 in that slice:* the card's words go to Google, so nothing in them may identify a child.
+- **Decided (22 Oct 2026): every check on a real iPad, in testing and development, uses one invented child, Bug, on June's iPad, which stays paired; the boys' iPads are used only for live.** Brandon: "every check on a real iPad, in testing and development, uses one invented child, Bug, on my wife's iPad, which stays paired; the boys' iPads are used only for live." *Replaces* the brief's "as each invented child would" on the iPad.
+- **Decided (22 Oct 2026): the card prompt will name the idea it teaches, every time, with the same name** ("Perspective", not "Big People, Tiny People"), so a child has a bucket for it across weeks and layers. Brandon: "that change is the first-live-week brief's, not this job's."
+- **Decided (22 Oct 2026): slice 1's board row goes to *on hold*, waiting on the release, not *on test*.** Brandon: "no look is left."
 
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
@@ -279,6 +291,8 @@ Decided (Brandon, 21 Oct 2026, 21:48 to 22:08, in the chat's clarify pass), `doc
 ## Bugs
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
+
+- 21 Oct 2026, the four-notes card on the Wonder Wall (phase 3): its words say "Listen closely" and it has no recording; only its handoff asks a parent to play the music; expected: a card with no recording says from its first words that a grown-up plays the music (decided 16 Oct: a parent plays four-notes). Size: an hour.
 
 - 21 Oct 2026, `/parent/models` (phase 3): a Sunday-build firing stopped at the time limit is undercounted; expected: it records what it spent. `docs/04-curation-engine.md`, "How the Sunday build is built". Size: an hour.
 - 21 Oct 2026, this page (tooling): docs/08 still holds items the board's rows replaced; expected: each is deleted. Size: minutes.

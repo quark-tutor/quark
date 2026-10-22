@@ -4,7 +4,7 @@
 
 **An open project to build Quark, an AI tutor that helps parents give their kids a rich, challenging education at home, even when parents are short on time.**
 
-> Status: being built for one family first; the foundation, the values interview and the weekly curation engine are done (it builds a week of cards that mixes the first theme with short lessons, checks every card against the family's rulebook and a safety floor, and waits for a parent's tap; the build that runs by itself every Sunday is not yet switched on). Next is the Wonder Wall itself: its first slice, the cards a child reads and answers on an iPad, is planned, aiming at the kids' first week from 26 October. Nothing is on the kids' iPads yet, and we're looking for parents, educators, designers and developers to help. Current detail: the Where we are note in CLAUDE.md.
+> Status: being built for one family first; the foundation, the values interview and the weekly curation engine are done (it builds a week of cards that mixes the first theme with short lessons, checks every card against the family's rulebook and a safety floor, and waits for a parent's tap; the build that runs by itself every Sunday is not yet switched on). The Wonder Wall's first slice, the cards a child reads and answers on an iPad, is built and tried on a test copy with an invented child; it goes out next, aiming at the kids' first week from 26 October. Nothing is on the kids' iPads yet, and we're looking for parents, educators, designers and developers to help. Current detail: the Where we are note in CLAUDE.md.
 
 ## The idea in one paragraph
 

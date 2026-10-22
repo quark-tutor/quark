@@ -20,3 +20,5 @@ The wall screen is the anchor. The other touch points use time families already 
 - Each card goes 3–4 layers deeper on tap, then ends with a question to take to a person.
 - Each child has a profile, with explanations written at their level.
 - Explorer passport: stamps for eras, artists and ideas they've explored.
+
+As built in slice 1 (22 Oct 2026): a layer opens on a right answer, not a tap, to layer 4, and a handoff ends the card for the day; an iPad belongs to one child; no stamps yet. docs/04, *How the Wonder Wall is built*.

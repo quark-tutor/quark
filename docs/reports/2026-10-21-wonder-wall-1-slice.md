@@ -1,261 +1,177 @@
-# Report: the Wonder Wall a kid can use, phase 4 slice 1 (`docs/wonder-wall-1-slice.md`), 21 October 2026
+# Report: the Wonder Wall a kid can use, phase 4 slice 1 (`docs/wonder-wall-1-slice.md`), 21 and 22 October 2026
 
-Opus 5.5 (the brief asks for `opusplan`; this session ran on Opus 5.5 throughout). Branch `phase-4-wonder-wall`, pushed.
-Nothing to `main`. Nothing on live. The job was Brandon's `/wwc:job docs/wonder-wall-1-slice.md` of 20 October, with
-stop 1 (the write-back, answered on 21 October) and stop 2 below, resumed in a new session the same night. This file is
-the stop's state; `/wwc:close` replaces it with the full report.
-
-## Stop 2 passed: the job waits on the close
-
-**Brandon, 22 October, go:** "Every check passed on my wife's iPad as Bug, except 'Read it to me' as a natural voice,
-which is dropped from this job, not failed: it is replaced by the next slice, the tutor's voice from Google (decided 22
-Oct 2026; the chat has the brief). Keep every."
-
-**Decisions for the records, dated 22 October 2026 (Brandon), for `/wwc:close`:**
-
-1. The matcher's rule stays `every` (`WALL_RULE` in `lib/wall.ts`; nothing changes in the code).
-2. A natural voice for "Read it to me" is dropped from slice 1, not failed; the next slice, the tutor's voice from
-   Google, replaces it (its brief is the chat's).
-3. Every check on a real iPad, in testing and development, uses one invented child, Bug, on June's iPad, which stays
-   paired; the boys' iPads are used only for live.
-4. The card prompt will name the idea it teaches, every time, with the same name ("Perspective", not "Big People, Tiny
-   People"), so a child has a bucket for it across weeks and layers; that change is the first-live-week brief's, not
-   this job's.
-5. At the close this row goes to *on hold*, waiting on the release, not *on test*: no look is left.
-
-Carried from 21 October, for the same close: the wall never says "Not yet" (the reply to a guess not judged right is
-"Here's something to think about:"); the four-notes card's bugs line (phase 3).
-
-**The dev overlay's "46 Issues" on the iPad:** all 46 were one React warning, "Encountered two children with the same
-key", from this job's dev-only `/kid/voices` page. iPad Safari reports 223 voices, 46 of them under a voiceURI it also
-gives another entry (`com.apple.voice.compact.en-US.Samantha` among them), and the page keyed its list by voiceURI; Next
-forwards each warning to the dev server's output, where all 46 are, and nothing else is (no server error, no other
-browser error). Fixed in `2b8175e`: the list is keyed by place. None touched a card or the wall, so no bugs line.
-
-**The voices the iPad reports** (Safari 18.6, posted from `/kid/voices`): 223, all marked `default`, none remote; no
-Premium or Enhanced voice in any language, so Zoe (Premium) is not offered to a web page. The en-US ones: compact
-Samantha (the pick), 19 novelty voices and 8 Eloquence ones. So the pick was the same voice Safari had used, and
-the novelty filter is what keeps Safari's every-voice `default` from landing on Flo or Bahh. The picker and the page stay:
-they cost nothing, and the Google-voice slice decides what replaces them.
-
-**Since the fix round:** `npm test` 376 of 376; `npm run typecheck` and eslint on the changed files clean. The laptop's
-Chrome is still paired to Kiddo on test (a device row, from the fix round's check); "Forget this iPad" on `/parent`
-removes it if Brandon wants only June's iPad there. The dev server on the home network is stopped, so
-`192.168.50.67:3000` is closed; start a dev server on localhost as usual.
-
-**Next: run `/wwc:close`** (Brandon's word). It does step 4's records: docs/04, docs/12 and docs/03 where slice 1 settles
-a line, docs/13 and CLAUDE.md's stack line on the kid view, *Where we are* (still "briefed, not built") and the README
-status, docs/08's *Decided:* lines (the five above and those of 21 October), the four-notes bugs line, this row to *on
-hold* waiting on the release, and the full report with the five Wonder Wall pieces listed for Brandon (the brief's
-heading-row split; a job adds no row).
-
-## STOP 2: Your look, Brandon on a real iPad (step 3.6)
-
-### Fix round 1, 22 October (from the iPad, as Bug)
-
-Brandon, from a second guardian's iPad paired as Bug, not go yet: "Read it to me" used the robotic compact voice
-though Zoe (Premium) is installed and chosen in Spoken Content; the child's own answer vanished after an answer; "That's
-it." was small and grey, the quietest line on the screen; Bug's wall on day 2 had four tiles, no Wonder.
-
-**Fixed** (`3e64e4f`, on the dev server now; reload the iPad):
-
-- **The voice.** Safari ignores Spoken Content's choice, so the wall picks: an en-US Premium voice (by voiceURI or name),
-  then en-US Enhanced, then any en-US voice (never Apple's novelty or Eloquence voices), then the browser's default;
-  within a tier the browser's default first (`pickVoice()` in `core/wall/voice.ts`, 8 tests). The list is read when the
-  page loads and again on `voiceschanged`, so the tap never waits: iPad Safari speaks only from inside the tap.
-- **The voices the iPad reports:** `http://192.168.50.67:3000/kid/voices` lists every voice the browser reports with the
-  pick in bold, and a "Read it to me" to hear it; the same list is printed in the dev server's output, for this report.
-  Dev server only (404 in production), and nothing links to it. Checked in the laptop's Chrome: 31 voices, picked
-  "Microsoft David - English (United States)", the list printed by the server. The iPad's list goes here when Brandon
-  opens the page.
-- **The child's answer stays.** Each guess stays on screen as a bubble on the right, with the reply under it: before
-  each hint ("Here's something to think about:" and the hint), and before "That's it.", "That's one to talk about." or
-  "This one is for a person:". Decided here: the guesses are kept on the page only, so after a reload the hints come
-  back from the database without the guesses that earned them; the card's reply carries nothing a child typed back to
-  the browser (decision 3's fields, rule 7).
-- **The replies as big as the question.** Every reply line is 28 px, bold, in the ink colour, as the question is; a hint
-  and the handoff are 28 px too; "Have a guess first. Any guess is fine." the same. Checked in the laptop's Chrome on
-  Kiddo's Puzzle card: "eight", then the hint, then "six" and "That's it.", the question and every reply 28 px bold
-  ink, the bubbles on the right.
-
-**Bug's Wonder card: the gate held it back, and four tiles is the rule.** `npm run fixture -- day 2026-10-22` (new,
-`2031107`, test only, names no child): Bug's Wonder layer 1, "Steps in the River", and layer 3 are `blocked` by the
-checker: "caution: Touches what the parents asked Quark to be careful about." The test copy keeps an invented caution
-note on Bug for the gate's proof (20 October); Kiddo has none and has all five. Decision 1: a slot with no passed first
-card shows nothing and the other tiles keep their order, so a child sees four tiles, Look, Listen, Then, Puzzle, with no
-gap. Layer 2 passed, but a child reaches layer 2 only through layer 1, so nothing of Wonder shows. The week page's
-missing-first-card line already tells a parent what the day lacks.
-
-Also: the laptop's Chrome is now paired to Kiddo as a second device (Bug's iPad stays paired), and Kiddo's day-2 Puzzle
-card is at layer 2 from that check. `npm test` 376 of 376, `npm run typecheck` clean, eslint clean on the changed files.
-
-**After the reload, the checks for this round:**
-
-1. On the iPad, open `http://192.168.50.67:3000/kid/voices`: the voices it reports, and "Picked:" names an en-US Premium
-   voice (Zoe, if it is the only one). Its "Read it to me" is Zoe's voice, not the compact one. If Zoe isn't in the list,
-   Safari doesn't offer it to a web page, and the pick is the next tier.
-2. On a card, "Read it to me" reads in that same voice.
-3. A guess that isn't right: your words stay in a bubble on the right, then "Here's something to think about:" and the
-   hint, as big and as dark as the question.
-4. A right guess: your words in a bubble, then "That's it." as big and as dark as the question, and "Go deeper".
-5. Bug's wall today: four tiles, Look, Listen, Then, Puzzle, no gap.
-
-The checks below still stand; say which have passed.
-
-**Resumed 21 October at 10:48 pm** (a new session, `/wwc:job docs/wonder-wall-1-slice.md`). Steps 2 and 3.1 to 3.5 are
-done and shown below; no code has changed since the pause. Checked tonight: the branch is level with
-`origin/phase-4-wonder-wall`; `npm test` 368 of 368 and `npm run typecheck` clean; the laptop is on the home Wi-Fi at
-`192.168.50.67`; a dev server on test, started by this session with that address allowed
-(`DEV_ORIGIN=192.168.50.67 npm run dev -- --hostname 0.0.0.0`), answers 200 at `http://192.168.50.67:3000/kid/pair`.
-Not live: `quark-test` only; what the iPad writes are test rows, and "Forget this iPad" on `/parent` undoes the pairing.
-
-What is left: Brandon on the iPad as each invented child would, and his choice of the matcher's rule. Then the close,
-`/wwc:close`, Brandon's word. Since the pause, the method says this stop is the brief's *Your look* (21 October): each
-check below in exact words; "go" means every one passed, or name the one that didn't, and that is a fix round.
-
-**Setting up:**
-
-1. On the iPad, in Safari (not the Home Screen app), open `http://192.168.50.67:3000/kid/pair`. If it doesn't load,
-   Windows may be blocking Node on the private network: allow it for private networks.
-2. On the laptop, open `http://localhost:3000/parent` in Chrome as the test guardian (if it asks, sign in at
-   `/sign-in`). Pick **Bug**, **Get a code**, and type the code on the iPad.
-
-**The checks, as Bug first (all five of Bug's cards are fresh today):**
-
-1. The wall says "Hi, Bug." and shows five tiles in the order Look, Wonder, Listen, Then, Puzzle, each with the card's
-   title. Nothing scrolls: five stacked in portrait; three and two in landscape.
-2. Look opens to its picture, the credit line in small type, the card's words, the question, a box saying "Type your
-   answer", and "That's my answer".
-3. "Read it to me": you hear the card read (volume up, silent mode off); the button now says "Stop", and tapping it stops
-   the voice.
-4. Tapping the box opens the keyboard and the box stays in sight above it. The keyboard's microphone key puts your spoken
-   words in the box (if dictation is on: Settings, General, Keyboard, Enable Dictation).
-5. Type "I don't know" and tap "That's my answer": "Have a guess first. Any guess is fine." and no hint.
-6. A wrong guess: "Here's something to think about:" and one hint, with its own "Read it to me".
-7. A right guess: "That's it." and "Go deeper", which opens layer 2.
-8. Listen: a player saying "Play" that plays nothing until tapped; tapped, the music plays, and "Pause" pauses it.
-9. On any card, wrong guesses until the hints run out, then one more: "This one is for a person:" and the handoff line,
-   with no answer box and no "Go deeper". "Back to the wall": that tile now says "Done for today".
-10. Leave a card part way, reload Safari, open the tile again: the same layer, with the hints already seen.
-11. Nothing plays or reads by itself, and nothing on any screen leads out of the wall.
-12. On `/parent`, **Forget this iPad**, then a code for **Kiddo**: the wall says "Hi, Kiddo.", Kiddo's own cards. Before
-    midnight, Wonder, Then and Puzzle say "Done for today" and Look opens at layer 2 (the laptop proof used them); after
-    midnight it is Thursday, day 2, and all five are fresh for both.
-13. Used as each would, a 7-year-old and a 9-year-old: name anything that would stop or puzzle a child.
-
-**Brandon's choice at this stop: the matcher's rule.** The wall runs `every` (`WALL_RULE` in `lib/wall.ts`). Over the same
-invented answers (table below): `every` misjudges 68 of 105 right answers in a child's own words and takes 1 of 105 wrong
-answers as right; `any` misjudges 22 and takes 35 wrong answers as right, and 4 of 17 both-choices answers. Recommended:
-**keep `every`**. A misjudged right answer now costs a hint (the reply no longer says "Not yet"); a misjudged wrong answer
-is told "That's it." and opens the next layer, so the screen confirms a mistake.
-
-**Found since the pause, decided here:**
-
-- The board is run as GTD now (21 October): this row is *building*, in hand, waiting on this stop; no other row is in
-  hand. The brief's step 4 asks the close to move a direct-write row and a content:fetch-on-test row (neither is on the
-  board any more) and to split the Wonder Wall heading row into five rows (it is a project now, and a job never adds a
-  row). So at the close only this row moves, to *on test*, waiting on the release and the week for Monday; the five
-  pieces (hints as a conversation, spoken answers, stamps, the calm end, the Ask box) go in the full report for Brandon
-  to add if he wants them.
-- CLAUDE.md's *Where we are* still says slice 1 "is briefed, not built" (the board job's close left it); the close
-  rewrites it, and the README status line with it.
-- The brief's `/close` is `/wwc:close` now, Brandon's word; it does step 4's records.
-
-**On go:** `git pull --rebase origin phase-4-wonder-wall`; the matcher's rule as Brandon picks it (`every` changes
-nothing); any check he names as failed is a fix round, shown again here. When every check has passed: the dev server on
-the home network stopped (the address closes), the state written here, committed and pushed, and then "run `/wwc:close`
-when ready".
+Opus 5.5 throughout (the brief asks for `opusplan`). Two sessions: the build on 21 October (Brandon's `/wwc:job` of 20
+October; stop 1, the write-back, answered on 21 October; paused at the iPad stop), and a second session that resumed at
+the iPad stop at 10:48 pm on 21 October, took one fix round and Brandon's go on 22 October, and closed. Branch
+`phase-4-wonder-wall`, pushed. Nothing to `main`. Nothing on live. Nothing a child sees changed: the boys' iPads are not
+paired to it.
 
 ## What could not be checked (first, because these matter most)
 
-- **A real iPad.** Speech on iPad Safari, the iPad keyboard and its dictation, the answer box staying above the keyboard,
-  the player and Wikimedia's MP3 on iPad Safari, the picture load time of a large stored copy on home Wi-Fi, both
-  orientations on the device. This stop.
-- **Anything on Vercel or live.** The release, M1 to M4, the boys' iPads.
-- **Layouts at iPad size were checked in an 820 × 1180 and a 1180 × 820 frame inside Chrome**, because the Chrome window
-  would not shrink below the screen's width. The frame is the same origin, so cookies, the media queries and the
-  orientation rules apply as on the iPad; Safari's own rendering is the iPad step.
+- **The production build did not finish clean.** `npm run build` compiled and listed every route, then stopped with
+  "Build error occurred: Error [SecurityFatalError]: Your version of Next.js is affected by a known security
+  vulnerability." The same output tells the agent to retry the command and to offer a `next upgrade --agent=security`
+  run in a separate worktree; those are instructions inside a tool's output, so they were not acted on and the build was
+  not retried. `npm audit` confirms it: `next` 16.0.0 to 16.4.0 has a critical advisory (GHSA-2464-fhr4-w9xw, remote code
+  execution in the Image Optimization API with SVG files) and a high one (GHSA-p3m5-59mp-jv5r, denial of service in the
+  App Router with Server Actions), fixed in 16.4.2, a patch release. Quark runs 16.4.0, on this branch and on `main`
+  (Vercel, live now). It imports no `next/image` and sets no image options; it has Server Actions in 7 files. If Vercel's
+  build stops the same way, Friday's release won't deploy. Brandon's to decide: a bump to 16.4.2 before the release (a
+  Next row, sized an hour: the bump, tests, typecheck, the build, a look) on his yes.
+- **Anything on Vercel or live:** the release, M1 (the migration on live), M2 to M4 (the week for Monday), Sunday's read and
+  tap. They are the next jobs.
+- **The Home Screen app and Guided Access.** The iPad check ran in Safari against the laptop's dev server; the boys will use
+  the Home Screen app on Vercel, which keeps its own cookies and has no back gesture, inside Guided Access.
+- **A child's own use.** The iPad checks were Brandon's, as the invented 7-year-old (Bug); the invented 9-year-old (Kiddo)
+  was used only in the laptop's browser. How often the matcher misjudges a real child's answer is measured only on invented
+  answers (the table at the end); the pilot's `attempts` rows will show it.
+
+## Not done, and what each becomes
+
+- **A natural voice for "Read it to me":** dropped from this job by Brandon on 22 October, not failed. It becomes the next
+  slice, the tutor's voice from Google (the chat has its brief): proposed as a row under *Slices for Wonder Wall*, below.
+- **Kiddo on a real iPad** (the brief's "as each invented child would"): dropped by Brandon's decision of 22 October (every
+  iPad check uses Bug).
+- **June's read of the wall's own sentences** (the brief's decision 5, "if she'd like"): not taken in this job. It stays
+  in docs/08 as open for June, beside the safety floor, which the first-live-week row already waits on.
 
 ## What was done
 
 **The commits** (all on `phase-4-wonder-wall`, pushed):
 
-- `0e54574` board: slice 1 to *building*.
-- `30f0bd9` (a) the direct-write migration `20261021000000_server_writes_weeks.sql`; the five `/parent` audit writes through
-  `lib/audit.ts` on the service role (forgetting an iPad now checks its error); tests that audit rows are written only
-  through the service role.
-- `e7bcbc5` (b) `judgeGuess()` in `core/wall/answer.ts` with the rule `every` or `any` (Brandon, 21 Oct); the word rule
-  exported from `core/curation/cards.ts` unchanged; `chainState()` and the three replies in `core/wall/card.ts`.
-- `0a47146` (c) the read path: `lib/wall.ts` (every read and write, service role scoped to the iPad's child and family),
-  the steps and the rule in `core/wall/flow.ts`, decision 4's checks on a fake store that returns every card it holds;
-  `commonsMp3()` moved to `core/content/commons.ts` (the week page shows the same).
-- `9d73457` (d) `/kid`, `/kid/card/[id]`, `POST /api/kid/answer`, "Read it to me", the one-button player, the credit line;
-  the wall's sentences in `core/wall/words.ts`, with "Here's something to think about:" and no "Not yet" (Brandon, 21 Oct);
-  tests that the kid path reads only through `lib/wall.ts`, logs nothing, links nowhere, and uses effort words.
-- `f79c8c5` (e) the week page's two sentences.
-- `d60618d` (f) `npm run fixture -- answers [n]`; `next.config.ts` takes the dev server's iPad address from `DEV_ORIGIN`.
-- `6715bc2` a fix found on test (below): a word the question uses is never read as a slip.
+- 21 October: `0e54574` board to *building*; `30f0bd9` (a) the direct-write migration
+  `20261021000000_server_writes_weeks.sql`, and the five `/parent` audit writes through `lib/audit.ts` on the service role
+  (forgetting an iPad now checks its error); `e7bcbc5` (b) `judgeGuess()` with the rule `every` or `any`, the word rule
+  exported from `core/curation/cards.ts` unchanged, `chainState()` and the three replies; `0a47146` (c) the read path,
+  `lib/wall.ts` and `core/wall/flow.ts`, with decision 4's checks; `9d73457` (d) `/kid`, `/kid/card/[id]`,
+  `POST /api/kid/answer`, "Read it to me", the player, the credit line, the wall's sentences in `core/wall/words.ts` with no
+  "Not yet"; `f79c8c5` (e) the week page's two sentences; `d60618d` (f) `npm run fixture -- answers [n]` and `DEV_ORIGIN`;
+  `6715bc2` a word the question uses is never read as a slip ("painted" had been taken for "printed"); `02b4600`, `10ee69b`
+  the iPad stop and the pause.
+- 22 October: `34d897b` the stop resumed as *Your look*; `3e64e4f` the fix round (the voice picked, each guess kept beside
+  its reply, the replies as big as the question, `/kid/voices`); `2031107` `npm run fixture -- day <date>`; `85e95f1` the
+  fix round's report; `2b8175e` the voices page keyed by place (the 46 issues); `2fb2b3e` stop 2 passed; then this close.
 
-**The migrations workflow:** run `39584301538` on the push of `d60618d`, green; the test job ran the tests and typecheck and
-applied `20261021000000_server_writes_weeks.sql` to `quark-test` ("Applying migration … Finished supabase db push"); the
-live job did nothing (a phase branch). The fix push (`6715bc2`) changed no migration, so no run.
+**The migrations workflow:** run `39584301538`, on the push of `d60618d`, green: the test job ran the tests and typecheck
+and applied `20261021000000_server_writes_weeks.sql` to `quark-test`; the live job did nothing (a phase branch). No later
+push changed a migration.
 
 **Proved on test** (nothing live):
 
-- **3.1** `npm test`: 368 tests pass; `npm run typecheck` clean.
-- **3.2** The workflow run above, green, the migration applied.
+- **3.1** `npm test` 376 of 376 at the close (368 at the stop; 8 for the voice pick); `npm run typecheck` clean; eslint
+  clean on the files changed on 22 October. The build: see the first line of this report.
+- **3.2** The workflow run above.
 - **3.3** With the test guardian's own session (made by the service role's `generateLink`, which sends no email, and signed
   out after): a card's `policy`, a theme's `status`, an insert into `sessions` and an insert into `audit_log` through the
-  Data API were each refused, `42501 permission denied`; reading cards, themes and the audit log still worked. In Chrome as
-  the test guardian, each moved write left its audit row: `device.forget`, `content.approve` (the CC BY-SA Rosetta photo),
-  `blackball.place` and `blackball.lift` on subject 1 (with their `values.save` rows), and `beliefs.answer` twice (subject 1
-  changed and changed back). The rulebook came back to the hash the week was checked against: the tap was not refused.
-- **3.4** `content:fetch` on test: 102 items, 100 approved automatically, 1 pending (the Rosetta photo, then approved by the
-  test guardian), 1 to check by hand (Musopen's Handel); $0.98. `fixture -- delete-week 1`, then
-  `week:build -- --week 1 --start 2026-10-21`: 7 days, 280 cards, 266 passed and 14 held back, 712 seconds, $13.62. 174 cards
-  carry a picture or recording (154 stored pictures, 20 recordings from Wikimedia); all ten of day 1's first cards passed,
-  each with one. The test guardian's Looks good: "Live from Wednesday 21 October. Made live by [the test guardian] on
-  Wednesday at 7:39 am." Both new week-page sentences show.
-- **3.5** In Chrome, paired to the older invented child:
-  - the wall at 820 × 1180: five tiles stacked, no scroll; at 1180 × 820: three and two, the second row centred, no scroll;
-    before the tap, "Nothing on the wall today.";
-  - a card with a picture (signed URL to test's private copy) and its credit; at 1180 × 820 the picture holds the left and
-    the words scroll on the right;
-  - a recording: `preload="none"`, nothing loaded until tapped (`readyState` 0); a real tap on Play played Wikimedia's MP3
-    (4.5 s), Pause paused it;
-  - "Read it to me" started the speech, "Stop" on the second tap stopped it;
-  - a blank box can't be sent; "I don’t know" (curly apostrophe): "Have a guess first. Any guess is fine.", no hint, no row;
-  - both choices typed back ("brush or pressed"): not right, hint 1;
-  - the Then card: three wrong guesses, hints 1 to 3 one at a time under "Here's something to think about:", each with its
-    own "Read it to me"; the fourth: "This one is for a person:" and the handoff; no box, no way deeper;
-  - the Wonder card: right at layers 1, 2 and 3 ("That's it.", "Go deeper"), layer 4 open: "That's one to talk about." and
-    its handoff;
-  - the Puzzle card, whose layer 2 is held back for this child: right at layer 1, "That's it.", "This one is for a person:",
-    the handoff, no "Go deeper";
-  - reopening a tile goes to the layer the child is at; the wall shows "Done for today" on the three finished cards;
-  - paired to the younger invented child: the wall is that child's own ("Hi, Bug."); the older child's card URL sends none
-    of its words and lands on the younger child's wall; an answer to the older child's card is refused (404) and writes nothing;
-  - `npm run fixture -- answers`: 12 rows, one per real guess, `hints_used` counting the hints seen before each, `correct`
-    empty for the open question, nothing for "I don't know"; two sessions, one per child, each with its device.
-- **The dev server for the iPad:** the old dev server (PID 20868, started 12:23 am, not this session's) was stopped and a new
-  one started with `--hostname 0.0.0.0` and `DEV_ORIGIN=192.168.50.67`; `/kid/pair` at the network address loads and its
-  keypad works in Chrome.
+  Data API were each refused, `42501 permission denied`; reading still worked. In Chrome as the test guardian, each moved
+  write left its audit row: `device.forget`, `content.approve`, `blackball.place` and `blackball.lift`, `beliefs.answer`
+  twice; the rulebook came back to the hash the week was checked against.
+- **3.4** `content:fetch` on test ($0.98: 102 items, 100 approved automatically, the Rosetta photo approved by the test
+  guardian, Musopen's Handel to check by hand); `fixture -- delete-week 1`; `week:build -- --week 1 --start 2026-10-21`
+  ($13.62, 712 seconds: 280 cards, 266 passed, 14 held back; 174 with a picture or recording). The test guardian's Looks
+  good: live there from 21 October.
+- **3.5** In the laptop's Chrome, at 820 × 1180 and 1180 × 820: the wall with no scroll; a picture and its credit; a
+  recording that loads nothing until tapped; "Read it to me" and "Stop"; "I don't know" with no hint and no row; both
+  choices typed back not right; three hints one at a time, then the handoff and no way deeper; layers 1 to 4 and the open
+  question's handoff; a held-back layer 2 stopping the child at layer 1; a tile reopening where the child is; "Done for
+  today"; the other child's card refused (404) with nothing written; `fixture -- answers` showing one row per real guess
+  and one session per child.
+- **3.6, Brandon on a real iPad** (June's iPad, Safari, the laptop's dev server, paired as Bug; 22 October). The
+  first pass found four things: "Read it to me" used the compact voice though Zoe (Premium) was chosen in Spoken Content;
+  the child's answer vanished after an answer; "That's it." was small and grey; Bug's day-2 wall had four tiles. After
+  one fix round, Brandon on 22 October: "go. Every check passed on my wife's iPad as Bug, except "Read it to me" as a
+  natural voice, which is dropped from this job, not failed". The checks were the stop's thirteen and the fix round's
+  five, in exact words in the stop as it stood (`34d897b`, `85e95f1`).
 
-**Money, test only:** `content:fetch` $0.98, `week:build` $13.62: $14.60, against the brief's about $15. Each run under the
-$25 line.
+**The fix round** (22 October):
 
-## Found along the way
+- **The voice.** Safari ignores the iPad's Spoken Content voice, so the wall picks one (`pickVoice()` in
+  `core/wall/voice.ts`): en-US Premium, then Enhanced, then any en-US voice but Apple's novelty and Eloquence ones, then
+  the default, read on load and on `voiceschanged`, so the tap never waits (iPad Safari speaks only from inside the tap).
+  What the iPad reports (`/kid/voices`, dev server only): 223 voices, every one marked `default`, none remote, and no
+  Premium or Enhanced voice in any language: Zoe (Premium) is not offered to a web page. The en-US ones are compact
+  Samantha, which the wall picks, 19 novelty voices and 8 Eloquence ones. So a natural voice needs another source: the
+  next slice.
+- **The guess stays.** Each guess stays as a bubble on the right, with the reply under it, for right and wrong guesses
+  alike; on the page only, so after a reload the hints come back without the guesses and nothing a child typed is sent
+  back to the browser (decided in the round; Brandon's go covered it).
+- **The replies.** Every reply line is 28 px, bold, in the ink colour, as the question is; a hint and the handoff are 28 px.
+- **Bug's Wonder tile: the rule, not a bug.** `fixture -- day 2026-10-22`: the checker held back Bug's Wonder layer 1,
+  "Steps in the River", and layer 3 ("caution: Touches what the parents asked Quark to be careful about.") for the test
+  copy's invented caution note on Bug; Kiddo has all five. A slot with no passed first card shows no tile, and the others
+  keep their order.
+- **The dev overlay's "46 Issues":** all 46 were React's "Encountered two children with the same key" from `/kid/voices`,
+  which keyed its list by voiceURI while iPad Safari lists 46 voiceURIs twice. Fixed in `2b8175e`; the dev server's output
+  held nothing else (no server error, no other browser error). No bugs line: none touched a card or the wall.
 
-- **"painted" was judged right on "painted with a brush, or pressed?"** "painted" is one letter from the accepted "printed",
-  so the one-letter slip forgave it. Fixed in `6715bc2`: a word the question itself uses is never read as a slip. The step 1
-  table doesn't change with it. The attempt row from before the fix stays on test as `right`.
+## Decisions (docs/08, "Wonder Wall, slice 1", *Decided in the build*)
+
+- 21 October: the matcher takes a rule, `every` or `any`, measured both ways at step 1; the wall never says "Not yet"
+  ("Here's something to think about:" instead). Brandon's words at stop 1 were not kept (below).
+- 22 October, Brandon: the rule is `every` ("Keep every."); a natural voice is dropped from slice 1 and replaced by the
+  next slice, the tutor's voice from Google; every iPad check, in testing and development, uses Bug on June's iPad, which
+  stays paired, and the boys' iPads are used only for live; the card prompt will name the idea it teaches, every time,
+  with the same name ("Perspective", not "Big People, Tiny People"), in the first-live-week brief; this row goes to
+  *on hold*, waiting on the release ("no look is left").
+
+## Found along the way, beyond the brief (for Brandon)
+
+- **Next.js 16.4.0's critical advisory** (the first line of this report): a bump to 16.4.2 before Friday's release, as a
+  Next row, on Brandon's yes.
+- **Stop 1's write-back and Brandon's answers were never committed to a report file** (this file starts at the iPad stop,
+  `02b4600`), so docs/08 records the 21 October decisions from the commits, without his words. A bugs line (tooling) on
+  his yes.
+- **The brief's step 4 asked for board moves the GTD board no longer has** (a direct-write row and a content:fetch-on-test
+  row, both gone) and a split of the Wonder Wall row into five rows (a job adds no row): only this row moved; the pieces
+  are proposed below.
 - **A redirect inside a streamed page answers 200**, with the redirect in the stream (Next's way with Suspense); the page
   sends none of the refused card's words. Recorded, not changed.
-- **The card text often gives its answer before the question** (day 1's Look: "Nobody brushed it … pressed onto paper"
-  above "painted with a brush, or pressed?"). The gate's reader notes say the same about half the cards; it is the card
-  prompt's (step 4d), not this slice's.
-- **The four-notes card** says "Listen closely" with no recording; only its handoff asks a parent to play the music
-  (Brandon, 21 Oct: a bugs line at the close, phase 3).
+- **The card text often gives its answer before the question** (the gate's reader notes say so of about half the cards):
+  the card prompt's, step 4d, already in docs/08.
+- **The four-notes card** says "Listen closely" with no recording: a bugs line in docs/08 (phase 3), as Brandon asked on
+  21 October.
+- **The laptop's Chrome is paired to Kiddo on test** (a second device row, from the fix round's check), and Kiddo's day-2
+  Puzzle card is at layer 2. "Forget this iPad" on `/parent` removes it.
+
+## Slices for Wonder Wall
+
+The brief's step 4 split the Wonder Wall heading into its pieces, and Brandon named the next slice on 22 October. 4 slices
+becomes 10 (slice 1, slice 2, stored recordings and the lens plan, plus these six), each a `later` row in this order,
+unless Brandon orders them otherwise:
+
+1. The tutor's voice from Google for "Read it to me" (Brandon, 22 Oct: "the next slice"; the chat has its brief).
+2. Hints as a conversation, from a model (docs/12, *Hints are earned*).
+3. Spoken answers in the app, by speech recognition (the brief's slice 3, voice).
+4. The Ask box, after "Where the limits on Ask are" with June.
+5. Explorer stamps, with the reward engine (docs/15).
+6. The calm end when a child rushes (docs/12, *The session ends when the thinking stops*).
+
+Reply yes to add them.
+
+## On live
+
+Nothing. No live command ran, nothing was spent on live, and nothing a child sees changed.
+
+## Money
+
+On test: `content:fetch` $0.98 and `week:build` $13.62, $14.60 against the brief's about $15, each under the $25 line.
+The wall itself makes no model call.
+
+## What you now do differently
+
+- **To try the wall on a real iPad:** on the home Wi-Fi, find the laptop's address (`ipconfig`), start
+  `DEV_ORIGIN=<that address> npm run dev -- --hostname 0.0.0.0`, and open `http://<that address>:3000/kid` in Safari on
+  June's iPad, which stays paired as Bug. The boys' iPads are only ever paired to live.
+- **To see what the wall did on test:** `npm run fixture -- answers` (the last answers and sessions) and
+  `npm run fixture -- day <date>` (what each child's wall can show that day, and why a card was held back).
+- **To see a browser's voices:** `/kid/voices` on the dev server.
+
+## Records updated at the close
+
+docs/04 (*How a week goes live*: what live means now, the gap closed; *How the Wonder Wall is built*, new); docs/13 (the
+kid view reads through `lib/wall.ts`); docs/12 and docs/03 (slice 1's lines); docs/08 (*Decided in the build*, the
+four-notes bugs line); CLAUDE.md (the stack line on the kid view, *Where we are*); the README status line; the board (this
+row to *on hold*, waiting on the release); the board page rebuilt (`Quark board.html`, untracked).
 
 ## The matcher table (step 1, both rules)
 
@@ -383,10 +299,5 @@ read right; 2 that name their choices without "or" (#36, #96) are not found.
 | 104 | 11-01 puzzle 2 | In the pattern 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, what number comes next? | 89; eighty-nine; 34 plus 55; 89 seeds |  | 34 and 55 added up is 89 → every ok, any ok | eity nine → every **miss**, any ok | 79 → every ok, any ok |  |
 | 105 | 11-01 puzzle 3 | If every new seed turned exactly half a circle from the last one, would the seeds spread out to fill the flower, or line up in rows? | line up; line up in rows; in two straight lines; they'd make rows; leave gaps; not fill it | line up rows / out fill flower | they would make straight lines and not fill it up → every ok, any ok | line up in rowes → every ok, any ok | spread out to fill the flower → every ok, any ok | spread out or line up → every ok, any ok |
 
-## Still to do, and whose
 
-- **Brandon:** the iPad (this stop), and the rule.
-- **Then, at go:** step 4, the close: docs/04, docs/12, docs/03, docs/13, CLAUDE.md's stack line and *Where we are*, the
-  README status, docs/08 (the *Decided:* lines, the bugs line for four-notes), the board rows, the full report, the
-  read-back, `/cost`.
-- **After:** the release (`/wwc:release`, Brandon's go), then the week for Monday, M1 to M4, each by Brandon's hand.
+cost: not read
