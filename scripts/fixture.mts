@@ -8,6 +8,8 @@
 //   npm run fixture -- runs [n]             the last n model runs (default 10): how long, and the calls and cost per job
 //   npm run fixture -- answers [n]          the last n answers on the wall (default 20) and the last sessions; a child is
 //                                           "child 1" or "child 2", oldest first, never by name
+//   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
+//                                           its item's approval, and the gate's reasons for a card held back
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
@@ -140,6 +142,50 @@ if (command === "show") {
   for (const s of sessions.reverse()) {
     console.log(`  ${s.id.slice(0, 8)}  ${who(s.child_id)}  ${s.started_at.slice(0, 19)} to ${s.ended_at?.slice(0, 19) ?? "-"}  ${s.ended_reason ?? "open"}  device ${s.device?.slice(0, 8) ?? "-"}`);
   }
+} else if (command === "day") {
+  // What each child's wall can show on one day, read-only: per child and slot, each layer's verdict, whether its
+  // item is approved, and the gate's reasons for a card held back. Rule 5 in rows, for a missing tile.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(arg ?? "")) throw new Error("Say which day: npm run fixture -- day 2026-10-22");
+  const kids = must(await db.from("children").select("id, careful_about").eq("family_id", familyId).order("birth_month"), "children") as {
+    id: string;
+    careful_about: string | null;
+  }[];
+  const rows = must(
+    await db
+      .from("cards")
+      .select("child_id, slot, layer, policy, policy_notes, body, themes(status), ideas(content_items(approved)), questions(id)")
+      .eq("family_id", familyId)
+      .eq("day", arg)
+      .order("slot")
+      .order("layer"),
+    "cards",
+  ) as unknown as {
+    child_id: string;
+    slot: string;
+    layer: number;
+    policy: string;
+    policy_notes: { validation?: string[]; gate?: { by: string; reasons: { rule: string; subject?: number; note: string }[] } } | null;
+    body: { title?: string };
+    themes: { status: string } | null;
+    ideas: { content_items: { approved: boolean } | null } | null;
+    questions: { id: string }[];
+  }[];
+  console.log(`${arg}: ${rows.length} cards, theme ${[...new Set(rows.map((r) => r.themes?.status))].join(", ") || "none"}.`);
+  kids.forEach((k, i) => {
+    // Whether a caution note is on file, never what it says.
+    console.log(`child ${i + 1}${k.careful_about?.trim() ? ", with a caution note on file" : ""}:`);
+    for (const r of rows.filter((r) => r.child_id === k.id)) {
+      const item = r.ideas?.content_items ? (r.ideas.content_items.approved ? "item approved" : "item NOT approved") : "no item";
+      const question = r.questions.length ? "" : ", no question";
+      console.log(`  ${r.slot.padEnd(6)} layer ${r.layer}  ${r.policy.padEnd(7)}  ${item}${question}`);
+      if (r.policy === "passed") continue;
+      console.log(`      "${r.body?.title ?? ""}"`);
+      for (const why of r.policy_notes?.gate?.reasons ?? []) {
+        console.log(`      ${r.policy_notes!.gate!.by}: ${why.rule}${why.subject ? ` (subject ${why.subject})` : ""}: ${why.note}`);
+      }
+      for (const v of r.policy_notes?.validation ?? []) console.log(`      card check: ${v}`);
+    }
+  });
 } else if (command === "audit") {
   const n = arg ? Number(arg) : 12;
   const rows = must(await db.from("audit_log").select("created_at, action, target").eq("family_id", familyId).order("created_at", { ascending: false }).limit(n), "audit_log") as {
@@ -149,6 +195,6 @@ if (command === "show") {
   }[];
   for (const r of rows.reverse()) console.log(`${r.created_at}  ${r.action}  ${JSON.stringify(r.target)}`);
 } else {
-  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n]");
+  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | day <date>");
   process.exit(1);
 }
