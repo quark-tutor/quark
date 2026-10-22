@@ -40,8 +40,9 @@ export function Voices() {
       </p>
       <ReadAloud text="This is the voice the Wonder Wall reads with." />
       <ol className={styles.voices}>
-        {voices.map((v) => (
-          <li key={v.voiceURI} className={v === picked ? styles.voicePicked : undefined}>
+        {/* By place, not voiceURI: iPad Safari reports some voices twice under one voiceURI. */}
+        {voices.map((v, i) => (
+          <li key={i} className={v === picked ? styles.voicePicked : undefined}>
             {v.name} · {v.lang} · {v.voiceURI}
             {v.default ? " · default" : ""}
             {v.localService ? "" : " · remote"}
