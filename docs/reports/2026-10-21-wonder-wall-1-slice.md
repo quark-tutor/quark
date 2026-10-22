@@ -5,6 +5,50 @@ Nothing to `main`. Nothing on live. The job was Brandon's `/wwc:job docs/wonder-
 stop 1 (the write-back, answered on 21 October) and stop 2 below, resumed in a new session the same night. This file is
 the stop's state; `/wwc:close` replaces it with the full report.
 
+## Stop 2 passed: the job waits on the close
+
+**Brandon, 22 October, go:** "Every check passed on my wife's iPad as Bug, except 'Read it to me' as a natural voice,
+which is dropped from this job, not failed: it is replaced by the next slice, the tutor's voice from Google (decided 22
+Oct 2026; the chat has the brief). Keep every."
+
+**Decisions for the records, dated 22 October 2026 (Brandon), for `/wwc:close`:**
+
+1. The matcher's rule stays `every` (`WALL_RULE` in `lib/wall.ts`; nothing changes in the code).
+2. A natural voice for "Read it to me" is dropped from slice 1, not failed; the next slice, the tutor's voice from
+   Google, replaces it (its brief is the chat's).
+3. Every check on a real iPad, in testing and development, uses one invented child, Bug, on June's iPad, which stays
+   paired; the boys' iPads are used only for live.
+4. The card prompt will name the idea it teaches, every time, with the same name ("Perspective", not "Big People, Tiny
+   People"), so a child has a bucket for it across weeks and layers; that change is the first-live-week brief's, not
+   this job's.
+5. At the close this row goes to *on hold*, waiting on the release, not *on test*: no look is left.
+
+Carried from 21 October, for the same close: the wall never says "Not yet" (the reply to a guess not judged right is
+"Here's something to think about:"); the four-notes card's bugs line (phase 3).
+
+**The dev overlay's "46 Issues" on the iPad:** all 46 were one React warning, "Encountered two children with the same
+key", from this job's dev-only `/kid/voices` page. iPad Safari reports 223 voices, 46 of them under a voiceURI it also
+gives another entry (`com.apple.voice.compact.en-US.Samantha` among them), and the page keyed its list by voiceURI; Next
+forwards each warning to the dev server's output, where all 46 are, and nothing else is (no server error, no other
+browser error). Fixed in `2b8175e`: the list is keyed by place. None touched a card or the wall, so no bugs line.
+
+**The voices the iPad reports** (Safari 18.6, posted from `/kid/voices`): 223, all marked `default`, none remote; no
+Premium or Enhanced voice in any language, so Zoe (Premium) is not offered to a web page. The en-US ones: compact
+Samantha (the pick), 19 novelty voices and 8 Eloquence ones. So the pick was the same voice Safari had used, and
+the novelty filter is what keeps Safari's every-voice `default` from landing on Flo or Bahh. The picker and the page stay:
+they cost nothing, and the Google-voice slice decides what replaces them.
+
+**Since the fix round:** `npm test` 376 of 376; `npm run typecheck` and eslint on the changed files clean. The laptop's
+Chrome is still paired to Kiddo on test (a device row, from the fix round's check); "Forget this iPad" on `/parent`
+removes it if Brandon wants only June's iPad there. The dev server on the home network is stopped, so
+`192.168.50.67:3000` is closed; start a dev server on localhost as usual.
+
+**Next: run `/wwc:close`** (Brandon's word). It does step 4's records: docs/04, docs/12 and docs/03 where slice 1 settles
+a line, docs/13 and CLAUDE.md's stack line on the kid view, *Where we are* (still "briefed, not built") and the README
+status, docs/08's *Decided:* lines (the five above and those of 21 October), the four-notes bugs line, this row to *on
+hold* waiting on the release, and the full report with the five Wonder Wall pieces listed for Brandon (the brief's
+heading-row split; a job adds no row).
+
 ## STOP 2: Your look, Brandon on a real iPad (step 3.6)
 
 ### Fix round 1, 22 October (from the iPad, as Bug)
