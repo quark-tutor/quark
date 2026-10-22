@@ -351,20 +351,33 @@
   font-size: 1.5rem; /* 24 px; anything under 16 px makes Safari zoom */
 }
 
+/* What the wall says back: as big and as dark as the question, never the quietest line on the screen
+   (Brandon, 22 Oct 2026). */
+.reply {
+  margin: 0;
+  font-size: 1.75rem; /* 28 px, as the question */
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+/* "Have a guess first", under the box, on a line of its own. */
 .notice {
   flex-basis: 100%;
-  margin: 0;
 }
 
-.hints {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.lead {
+/* The child's own guess, kept on screen beside the reply it got. */
+.said {
+  align-self: flex-end;
+  max-width: 85%;
   margin: 0;
-  color: var(--muted);
+  padding: 12px 20px;
+  border: 2px solid var(--line);
+  border-radius: 20px 20px 6px 20px;
+  background: var(--surface);
+  font-size: 1.5rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .hint,
@@ -382,7 +395,8 @@
 .handoff p {
   flex: 1;
   margin: 0;
-  line-height: 1.4;
+  font-size: 1.75rem;
+  line-height: 1.35;
 }
 
 .ending {
@@ -390,4 +404,22 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
+}
+
+.ending .handoff {
+  align-self: stretch;
+}
+
+/* /kid/voices, on the dev server only. */
+.voices {
+  margin: 0;
+  padding-left: 1.5em;
+  font-size: 1rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.voicePicked {
+  font-weight: 700;
+  background: var(--accent-soft);
 }

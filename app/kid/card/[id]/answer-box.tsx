@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Fragment, useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { AnswerReply, CardReply } from "@/core/wall/card";
@@ -10,7 +10,9 @@ import { ReadAloud } from "../../read-aloud";
 
 // The question, one box and one button. Guess first: a hint comes only after a guess, one at a time, and
 // after the last one, one more guess, then the handoff to a person. The screen never gives the answer; the
-// server judges the guess and says only what comes next (core/wall/flow.ts).
+// server judges the guess and says only what comes next (core/wall/flow.ts). Each guess stays on screen beside
+// the reply it got, right or not (Brandon, 22 Oct 2026); it is kept only on this page, so after a reload the
+// hints come back from the database without the guesses that earned them.
 
 type End =
   | { kind: "handed_off" | "open" | "answered"; handoff: string }
@@ -21,6 +23,10 @@ type Props = { id: string; question: string; hints: string[]; state: CardReply["
 export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) {
   const router = useRouter();
   const [hints, setHints] = useState(seen);
+  // The guess that earned each hint, on this page; null for a hint seen before it loaded.
+  const [guesses, setGuesses] = useState<(string | null)[]>(() => seen.map(() => null));
+  // The guess that ended the layer: right, open, or the one before the handoff.
+  const [last, setLast] = useState<string | null>(null);
   const [end, setEnd] = useState<End | null>(state !== "answering" && handoff !== null ? { kind: state, handoff } : null);
   const [guess, setGuess] = useState("");
   const [notice, setNotice] = useState<"guessFirst" | "didntSend" | null>(null);
@@ -65,9 +71,17 @@ export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) 
       setNotice("guessFirst");
       return;
     }
+    const said = guess.trim();
     setGuess("");
-    if (r.outcome === "not_yet" && r.hint) setHints((h) => [...h, r.hint!]);
-    else if (r.outcome === "right" && r.next) setEnd({ kind: "deeper", next: r.next });
+    if (r.outcome === "not_yet") {
+      if (r.hint) {
+        setGuesses((g) => [...g, said]);
+        setHints((h) => [...h, r.hint!]);
+      }
+      return;
+    }
+    setLast(said);
+    if (r.outcome === "right" && r.next) setEnd({ kind: "deeper", next: r.next });
     else if (r.outcome === "right" && r.handoff) setEnd({ kind: "answered", handoff: r.handoff });
     else if (r.outcome === "open" && r.handoff) setEnd({ kind: "open", handoff: r.handoff });
     else if (r.outcome === "handoff" && r.handoff) setEnd({ kind: "handed_off", handoff: r.handoff });
@@ -76,20 +90,19 @@ export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) 
   return (
     <div className={styles.ask}>
       <p className={styles.question}>{question}</p>
-      {hints.length > 0 ? (
-        <div className={styles.hints}>
-          <p className={styles.lead}>{SAY.thinkAbout}</p>
-          {hints.map((h, i) => (
-            <div key={i} className={styles.hint}>
-              <p>{h}</p>
-              <ReadAloud text={h} small />
-            </div>
-          ))}
-        </div>
-      ) : null}
+      {hints.map((h, i) => (
+        <Fragment key={i}>
+          {guesses[i] ? <p className={styles.said}>{guesses[i]}</p> : null}
+          <p className={styles.reply}>{SAY.thinkAbout}</p>
+          <div className={styles.hint}>
+            <p>{h}</p>
+            <ReadAloud text={h} small />
+          </div>
+        </Fragment>
+      ))}
       <div ref={reply}>
         {end ? (
-          <Ending end={end} />
+          <Ending end={end} guess={last} />
         ) : (
           <form className={styles.answer} onSubmit={send}>
             <input
@@ -107,7 +120,7 @@ export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) 
             <button type="submit" className={styles.send} disabled={!guess.trim() || sending}>
               {SAY.send}
             </button>
-            {notice ? <p className={styles.notice}>{notice === "guessFirst" ? SAY.guessFirst : SAY.didntSend}</p> : null}
+            {notice ? <p className={`${styles.reply} ${styles.notice}`}>{notice === "guessFirst" ? SAY.guessFirst : SAY.didntSend}</p> : null}
           </form>
         )}
       </div>
@@ -115,11 +128,13 @@ export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) 
   );
 }
 
-function Ending({ end }: { end: End }) {
+function Ending({ end, guess }: { end: End; guess: string | null }) {
+  const said = guess ? <p className={styles.said}>{guess}</p> : null;
   if (end.kind === "deeper") {
     return (
       <div className={styles.ending}>
-        <p className={styles.lead}>{SAY.right}</p>
+        {said}
+        <p className={styles.reply}>{SAY.right}</p>
         <Link href={`/kid/card/${end.next}`} prefetch={false} className={styles.deeper}>
           {SAY.deeper}
         </Link>
@@ -128,8 +143,9 @@ function Ending({ end }: { end: End }) {
   }
   return (
     <div className={styles.ending}>
-      {end.kind === "answered" ? <p className={styles.lead}>{SAY.right}</p> : null}
-      <p className={styles.lead}>{end.kind === "open" ? SAY.toTalkAbout : SAY.forAPerson}</p>
+      {said}
+      {end.kind === "answered" ? <p className={styles.reply}>{SAY.right}</p> : null}
+      <p className={styles.reply}>{end.kind === "open" ? SAY.toTalkAbout : SAY.forAPerson}</p>
       <div className={styles.handoff}>
         <p>{end.handoff}</p>
         <ReadAloud text={end.handoff} small />
