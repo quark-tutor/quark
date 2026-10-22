@@ -53,7 +53,7 @@ jobs:
     env:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL_TEST }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -88,7 +88,7 @@ jobs:
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "Mode: $mode ($why)."
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
@@ -128,7 +128,7 @@ jobs:
       SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL_LIVE }}
       SUPABASE_DB_URL_TEST: ${{ secrets.SUPABASE_DB_URL_TEST }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -162,7 +162,7 @@ jobs:
           echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "Mode: $mode ($why)."
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm

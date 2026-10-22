@@ -80,28 +80,18 @@ Each starts with a skill typed in Claude Code (`.claude/skills/`).
 - `npm run docs:board` writes `Quark board.html` at the repository root (not tracked), to open in a browser at the laptop. Bugs stay in docs/08 and show as a count per phase.
 - A row names one thing that can be briefed and built. Open questions that are decisions for Brandon and June stay in docs/08.
 
-## Before a consequential action
+## Stops
 
-**The report is the control, not the ask** (decided 17 Oct 2026, replacing slice 1's ask-list as the first line). Risk is caught by the full report read in the chat, before a go and at the close. A permission prompt is a click, not a check.
+Two kinds and no third: a planned stop the brief names, and an emergency stop of Claude Code's own; nothing asks at the terminal. The plugin's page says how (`docs/working-with-claude.md` in `BrandonReisen/working-with-claude`, *Stops*, 21 October 2026).
 
-- **Three stops.** Three classes Claude Code runs only at a stop the brief names: any command against the live database (`:live` scripts, `supabase`, anything that reads `.env.live.local`), anything that moves money, and anything that sends to a real person. Claude Code prepares the command, writes the pre-flight report to the report file and stops; Brandon says yes, and Claude Code runs the command. A new migration always waits for his yes, inside a fix too. The "real person" class has no command yet; the phase 5 digest brief adds it when Resend arrives.
-- **Stops in the brief.** A brief lists its risky steps (live database, money, a real person, anything a child will see) and puts a STOP before each. The pre-flight report at a stop has four lines: what is about to happen; what it touches (LIVE in capitals, or "not live"); how it is undone, or that it cannot be; what was checked on test.
-- **Everything else runs without asking:** deletes, kills, npm, gh, curl, Vercel reads, the test database, reads of anything but a secret file. API spend from `week:build`, `gate` and `content:fetch` runs freely up to $25 a run (decided 20 Oct 2026, measured with the gate: a full week is about $11.55 to $13.44; it replaces the $10 line of 18 Oct 2026); a brief puts a STOP above that, with the estimate in the pre-flight report.
-- **The backstop.** `.claude/settings.json` asks on a short list that marks the three stop classes: a push to `main` or any force push, `npm run *:live*`, the live env file, the Supabase CLI and `db-push`, `stripe`, the secret files (`.env.local`, `.env.*.local`, never `.env.example`), and `git add -A`, `git add .`, `git commit -a` (the repo is public). Each pattern starts with `*` so a `cd … &&` prefix cannot hide the command. It is a backstop, not the control: **a backstop ask that fires is itself a finding**, because a brief missed a stop, and the close report says so, true or false positive. Never claim an ask fired unless a prompt was seen.
-- **The description rule stays.** Any command near the backstop, and the pre-flight report, carry three plain-words facts: what it does, what it touches (LIVE in capitals, or "not live"), whether it can be undone; say first if it cannot. "Run shell command" is never a description. One action per command near the backstop: never chain it with others (a `grep` whose text names `db-push` matches too).
+- A brief puts a planned stop before any command against the live database (`:live` scripts, anything that reads `.env.live.local`), anything that moves money, anything that sends to a real person and anything a child will see. At that stop the report file says what is about to happen, what it touches (LIVE in capitals, or "not live"), how it is undone or that it cannot be, and what was checked on test. A new migration always waits for his yes, inside a fix too. The "real person" class has no command yet; the phase 5 digest brief adds it when Resend arrives.
+- API spend from `week:build`, `gate` and `content:fetch` runs freely up to $25 a run (decided 20 Oct 2026, measured with the gate: a full week is about $11.55 to $13.44; it replaces the $10 line of 18 Oct 2026); a brief puts a planned stop above that, with the estimate in the report file.
 - There are two Supabase projects: the boys' live copy and `quark-test`. Test is the default: `.env.local` points at it, and `npm run dev`, `db:push`, `seed`, `packs:import`, `plan:import`, `content:fetch` and `week:build` run against it. Live has its own file, `.env.live.local`, read only by the scripts with `:live` in their name (`db:push:live` and so on; a Vitest check holds that rule). Each script prints `Target: LIVE` or `Target: test` first and refuses if `QUARK_TARGET` in its env file disagrees.
 - A migration reaches live only after it has run on test from the same branch, in the same session, with the result shown.
 - The test project is where a rule is proven. The live project is never used to prove one: do not run `db:push:live`, `supabase` or any script that reads `.env.live.local` to test a permission, not even with `--dry-run`. Nothing is ever copied from live to test; test holds `scripts/family.example.json`-style invented children and a plus-address guardian (`scripts/family.test.json`, gitignored).
-- Claude Code runs as one writer per working tree: the chat never edits files in this folder while a session is open in it; a second parallel job uses `claude --worktree`. Sonnet for a briefed job; Opus or `opusplan` when the brief leaves a design choice open.
+- Claude Code runs as one writer per working tree: the chat never edits files in this folder while a session is open in it; a second parallel job uses `claude --worktree`.
 - Every job's last message is the full report, unchanged, for the records and the next session, then the read-back from the `readback` reader (`/readback <brief>`, Sonnet): four lines, under 25 words each. Brandon answers the read-back. The reader never says Brandon approved or decided something the report does not quote him on. See docs/08, "How Quark is built with Claude".
 - A bug seen is one line under Bugs in `docs/08-open-questions.md`, not a brief. When a handful have gathered, one sweep job fixes a batch.
-
-### Toolbelt
-
-- At the start of a `/job`, suggest plan mode (`/plan`) for step 1.
-- After a run that has to be undone, mention `/rewind`.
-- At `/close`, remind Brandon to run `/cost` and put the figure in the report.
-- When a brief leaves a design choice open, suggest `opusplan`.
 
 ## Build order
 
