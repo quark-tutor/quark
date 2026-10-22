@@ -30,6 +30,7 @@ or — when it fits none; a row that spans phases takes the last one it needs.
 
 | Feature | Stage | Moved | Waiting on | Size | Importance | Phase | Where |
 |---|---|---|---|---|---|---|---|
+| Quark's board run as GTD: the plugin's columns, the phases as projects, every row clarified with Brandon | building | 21 Oct 2026 | — | an hour | — / — | tooling | `docs/board-gtd-slice.md`; `docs/reports/2026-10-21-board-gtd.md` |
 | Wonder Wall slice 1: today's five cards, layers, hints as written, the handoff, on a paired iPad | building | 21 Oct 2026 | the build (steps 2 and 3), then Brandon on a real iPad at the stop; target: the boys using it on Monday 26 Oct 2026 | a slice | — / — | 4 | `docs/wonder-wall-1-slice.md`; `docs/reports/2026-10-20-wonder-wall-brief.md`; `phase-4-wonder-wall` |
 | The boys' first live week: live week 1 deleted and built again to start Monday 26 Oct, read and tapped | briefed | 20 Oct 2026 | slice 1 released; stops M1 to M4 by Brandon's hand (Fri 23 to Sat 24 Oct, about $13); a guardian's tap on Sun 25 Oct; June's read of the safety floor before the build | a job | — / — | 4 | `docs/wonder-wall-1-slice.md`, *The week for Monday* |
 | 28 more short lessons for week 2, picked before Saturday 31 Oct, or the wall is empty from Monday 2 Nov | raised | 20 Oct 2026 | Brandon and June picking them (candidates drafted by Claude Code, as for the first 28) | a job | — / — | 3 | `plan/short-lessons.yaml`; `plan/candidates/short-lessons.md`; `docs/wonder-wall-1-slice.md`, *The week for Monday* |
