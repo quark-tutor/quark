@@ -87,9 +87,9 @@ createServer((_req, res) => {
 
 console.log(`\nOn the iPad, in Safari:\n  once: http://${address}:${CERT_PORT}  (install it, then turn it on under General, About, Certificate Trust Settings)\n  then: https://${address}:3000/kid\n`);
 
-const next = spawn(process.platform === "win32" ? "npx.cmd" : "npx", ["next", "dev", "--hostname", "0.0.0.0", "--experimental-https", "--experimental-https-key", KEY, "--experimental-https-cert", CERT], {
+const bin = join("node_modules", "next", "dist", "bin", "next");
+const next = spawn(process.execPath, [bin, "dev", "--hostname", "0.0.0.0", "--experimental-https", "--experimental-https-key", KEY, "--experimental-https-cert", CERT], {
   stdio: "inherit",
   env: { ...process.env, DEV_ORIGIN: address },
-  shell: process.platform === "win32",
 });
 next.on("exit", (code) => process.exit(code ?? 0));
