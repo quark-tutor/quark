@@ -9,12 +9,16 @@
 //   npm run fixture -- speech [n]           the last n calls to Google for the tutor's voice and ears, and the lines stored
 //   npm run fixture -- answers [n]          the last n answers on the wall (default 20) and the last sessions; a child is
 //                                           "child 1" or "child 2", oldest first, never by name
+//   npm run fixture -- card <id>            one card: its words as shown, what "Read it to me" says, and what is stored
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
 //                                           its item's approval, and the gate's reasons for a card held back
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
+import { readLine, speechPath } from "../core/wall/speech.ts";
 import { announceTarget } from "./target.ts";
+
+const TUTOR_VOICE = "en-US-Chirp3-HD-Sulafat"; // core/speech.ts, which only the server may import
 
 announceTarget();
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -208,6 +212,25 @@ if (command === "show") {
       for (const v of r.policy_notes?.validation ?? []) console.log(`      card check: ${v}`);
     }
   });
+} else if (command === "card") {
+  // One card, read-only: the words the card page shows, the line "Read it to me" says, and the writer's
+  // read_aloud (never said), each with whether it is stored in the tutor's voice. Test only: it prints a card.
+  if (!arg) throw new Error("Say which card: npm run fixture -- card <card id>");
+  const row = must(await db.from("cards").select("day, slot, layer, body").eq("family_id", familyId).eq("id", arg).maybeSingle(), "cards") as {
+    day: string;
+    slot: string;
+    layer: number;
+    body: { title: string; text: string; read_aloud: string; question: string };
+  };
+  const stored = async (text: string) => ((await db.storage.from("content").createSignedUrl(speechPath(TUTOR_VOICE, text.trim()), 60)).data ? "stored" : "not stored");
+  console.log(`${row.day} ${row.slot} layer ${row.layer}: ${row.body.title}`);
+  const parts: [string, string][] = [
+    ["text, shown", row.body.text],
+    ["question, shown", row.body.question],
+    ["Read it to me says", readLine(row.body)],
+    ["read_aloud, never said", row.body.read_aloud],
+  ];
+  for (const [name, text] of parts) console.log(`\n${name}, ${await stored(text)}:\n  ${text}`);
 } else if (command === "audit") {
   const n = arg ? Number(arg) : 12;
   const rows = must(await db.from("audit_log").select("created_at, action, target").eq("family_id", familyId).order("created_at", { ascending: false }).limit(n), "audit_log") as {

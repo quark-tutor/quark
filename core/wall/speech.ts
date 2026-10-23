@@ -69,8 +69,13 @@ export async function lineText(store: WallStore, scope: Scope, line: Line, now: 
     return line.hint < seen ? (body.hints[line.hint] ?? null) : null;
   }
   if (line.part === "handoff") return at === state.at && isDone(state) ? body.handoff : null;
-  return line.part === "read" ? body.read_aloud : body.question;
+  return line.part === "read" ? readLine(body) : body.question;
 }
+
+// What "Read it to me" says on a card: the card as the page shows it, its words then its question (Brandon at
+// stop 2, 23 Oct 2026: what it read "does not match the text on the screen"). read_aloud, the writer's shorter
+// spoken version for a child who reads alone, is never said.
+export const readLine = (body: { text: string; question: string }) => `${body.text.trim()} ${body.question.trim()}`;
 
 // Where a line's audio is kept in the private bucket: the voice, then a hash of the words.
 export const speechPath = (voice: string, text: string) => `speech/${voice}/${createHash("sha256").update(text).digest("hex")}.mp3`;

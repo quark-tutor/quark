@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { lineId } from "./card.ts";
 import type { AttemptInsert, CardRow, Scope } from "./flow.ts";
-import { answer } from "./flow.ts";
+import { answer, cardFor } from "./flow.ts";
 import { CLIP_RATE, heardText, lineText, parseLine, speechPath, spokenUrl, type SpeechRun, type SpeechStore } from "./speech.ts";
 
 // The tutor's voice and ears (docs/tutor-voice-slice.md): a line is said only when the child can see it now,
@@ -78,7 +78,7 @@ describe("a line's name", () => {
 describe("what the tutor may say", () => {
   it("says a card's words and question, but a hint only once earned and the handoff only once reached", async () => {
     const { store } = fake([card(1)]);
-    expect(await text(store, lineId(ID(1), "read"))).toBe("Read 1");
+    expect(await text(store, lineId(ID(1), "read"))).toBe("Text 1 Question 1?");
     expect(await text(store, lineId(ID(1), "question"))).toBe("Question 1?");
     expect(await text(store, lineId(ID(1), 0))).toBeNull();
     expect(await text(store, lineId(ID(1), "handoff"))).toBeNull();
@@ -91,13 +91,21 @@ describe("what the tutor may say", () => {
     expect(await text(store, lineId(ID(1), "handoff"))).toBe("Ask a parent about 1.");
   });
 
+  it("reads the card as the page shows it, its words then its question, and never the writer's read_aloud", async () => {
+    const { store } = fake([card(1)]);
+    const shown = await cardFor(store, scope, ID(1), MONDAY);
+    if (!shown || !("card" in shown)) throw new Error("the card should be on the wall");
+    expect(await text(store, lineId(ID(1), "read"))).toBe(`${shown.card.text} ${shown.card.question}`);
+    expect(await text(store, lineId(ID(1), "read"))).not.toContain(shown.card.read_aloud);
+  });
+
   it("says nothing of a layer not yet reached, and keeps a finished layer's own lines", async () => {
     const { store } = fake([card(1), card(2, { layer: 2 })]);
     expect(await text(store, lineId(ID(2), "read"))).toBeNull();
     await ask(store, 1, "a wrong guess");
     await ask(store, 1, "answer1");
-    expect(await text(store, lineId(ID(2), "read"))).toBe("Read 2");
-    expect(await text(store, lineId(ID(1), "read"))).toBe("Read 1");
+    expect(await text(store, lineId(ID(2), "read"))).toBe("Text 2 Question 2?");
+    expect(await text(store, lineId(ID(1), "read"))).toBe("Text 1 Question 1?");
     expect(await text(store, lineId(ID(1), 0))).toBe("Hint 1.1");
     expect(await text(store, lineId(ID(1), 1))).toBeNull();
     expect(await text(store, lineId(ID(1), "handoff"))).toBeNull();
@@ -118,11 +126,11 @@ describe("the tutor's voice", () => {
     const calls: string[] = [];
     const first = await spokenUrl(store, scope, parseLine(lineId(ID(1), "read"))!, MONDAY, voice(calls));
     const second = await spokenUrl(store, scope, parseLine(lineId(ID(1), "read"))!, MONDAY, voice(calls));
-    expect(first).toBe(`https://signed.example/${speechPath("voice-a", "Read 1")}`);
+    expect(first).toBe(`https://signed.example/${speechPath("voice-a", "Text 1 Question 1?")}`);
     expect(second).toBe(first);
-    expect(calls).toEqual(["Read 1"]);
-    expect([...files.keys()]).toEqual([speechPath("voice-a", "Read 1")]);
-    expect(runs).toEqual([{ family_id: FAMILY, kind: "say", model: "voice-a", characters: 6, seconds: 0, cost: (6 * 30) / 1_000_000 }]);
+    expect(calls).toEqual(["Text 1 Question 1?"]);
+    expect([...files.keys()]).toEqual([speechPath("voice-a", "Text 1 Question 1?")]);
+    expect(runs).toEqual([{ family_id: FAMILY, kind: "say", model: "voice-a", characters: 18, seconds: 0, cost: (18 * 30) / 1_000_000 }]);
   });
 
   it("keeps a voice's lines apart, and the path names no child and holds no words", () => {
