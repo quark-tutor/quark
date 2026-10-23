@@ -188,3 +188,64 @@ if every hold ends in "That didn't come through", that is a fix round, not a fai
 **Size:** a slice (8 hours); 22 minutes since go.
 
 Reply go if every check passed, or name the one that didn't.
+
+## Stop 2 again: fix round 1, "Read it to me" did not read the screen (23 Oct 2026, 06:56 HST)
+
+Brandon at stop 2, 23 Oct 2026: "The certificate is installed and trusted, https works, and "Read it to me" speaks in
+Sulafat's voice. But what it reads does not match the text on the screen." The card was Bug's Look card today,
+"Painted Walls by the Nile", layer 1.
+
+### What was wrong
+
+- **No line was filed wrong.** A line is filed under a hash of its own words, and the stored "read" line for that
+  card was made from the card's `read_aloud` field (the hash matches it exactly). The part asked for was `read`
+  (the dev server: `GET /api/kid/say?line=5f565ffb-….read 302 in 6.3s`, made on that tap). Nothing from the laptop
+  proof is involved, and a line can't land under another card.
+- **The page shows the card's `text`, and the button said its `read_aloud`.** The card writer
+  (`core/prompts/card.md`) makes `read_aloud` "a short spoken version" for a child who reads alone (the whole card only
+  for a child who is read to), and slice 1 chose to speak it (`docs/wonder-wall-1-slice.md`, *Read aloud*). This
+  slice kept that. On this card the spoken version leaves out the nickname, "a scribe", "near Thebes", the
+  Metropolitan Museum and the tempera, and ends with the question in other words. The words you quoted are the
+  spoken ones (the voice says 3,400 as "three thousand four hundred"). The screen's begin "Bug, if you draw, you
+  know how a picture gets made. Nakht was a scribe…".
+
+### The fix (`a1ae45b`)
+
+- **"Read it to me" now says the card as the page shows it: its words, then its question, word for word**
+  (`readLine()` in `core/wall/speech.ts`). The question is included because it sits right under the button with no
+  button of its own, and a child who is read to needs to hear it (the old `read_aloud` carried it for that child).
+  `read_aloud` is never said. The hints and the handoff already said exactly what they show.
+- A new test holds that the read line is the page's text and question and never `read_aloud`. 383 of 383 tests
+  pass; the typecheck is clean; lint is clean on the changed files.
+- New: `npm run fixture -- card <id>` prints one card's shown words, what "Read it to me" says, and `read_aloud`,
+  each with whether it is stored in the voice. Test only.
+- This card's text opens with the nickname, so this line sends it to Google and the stored sound says it, as
+  decision 6 at stop 1 allowed (`read_aloud` happened to leave it out). *Touches rule 7.*
+- Not made yet: the new line is made by your next tap (one call to Google, about 430 characters, under 2 cents at
+  list price, inside the free tier). The say route answers only a paired iPad, and June's is the paired one.
+
+Found, not changed: the card writer still writes `read_aloud` and the gate still reads it, but nothing says it now.
+Dropping it from `card.md` (with its check for a child who is read to) would save output tokens and bears on docs/08's
+open "Too many words" question. The card prompt is outside this brief, so this is for the close or a later job.
+
+### Your look
+
+On June's iPad, as Bug, at https://192.168.50.67:3000/kid:
+
+1. If the Look card is open, tap "Back to the wall" first, so the page drops the sound it already loaded. Then open
+   the Look card, "Painted Walls by the Nile".
+2. Tap "Read it to me". The first tap takes a few seconds while the line is made. It should say the paragraph on the
+   screen word for word, from "Bug, if you draw…" to "…tempera paint on paper.", then "What crop are the men in the
+   painting working to grow?"
+3. Tap once to stop it and again to play: it starts at once.
+
+The check for this fix, in exact words:
+
+- "On a card, 'Read it to me' says the words on the screen and then the question, word for word."
+
+The stop-2 checks above stand as written. You have passed the certificate and the voice; the rest (the second tap,
+the hint and handoff voice, Talk, `/kid/voices` gone) are still to take.
+
+**Size:** a slice (8 hours); 22 minutes to stop 2, and this fix round about 5 minutes from your word.
+
+Reply go if every check passed, or name the one that didn't.
