@@ -117,3 +117,74 @@ them is seen there."
 So: the tutor's voice is `en-US-Chirp3-HD-Sulafat`; the eight decisions above and the `speech_runs` migration stand;
 the certificate is served at an address on the dev server for Safari on June's iPad; the boys' check is dropped from
 stop 2, and how well Talk hears the boys is seen on live in the first week.
+
+## Stop 2: your look, on June's iPad as Bug (23 Oct 2026, 00:10 HST)
+
+**Where it stands.** Steps 2 to 5 are built, proven on `quark-test` in the laptop's Chrome, committed and pushed. The
+iPad dev server is running now, on HTTPS, for your look. Nothing on live, nothing a child sees.
+
+- **The mouth.** "Read it to me" asks Quark's own route for the line by its card and part. The first tap has Google
+  make it in Sulafat's voice and stores it in the private bucket; after that it plays the stored file. In Chrome on
+  test: a new line started playing 3 to 5 seconds after the tap (Google, the store, the dev server); a stored line after
+  a reload in 1.6 seconds; a second tap on the same page started in 3 milliseconds; a tap while it plays stops it;
+  starting a hint stopped the card. A hint not yet earned, a handoff not yet reached, free text, another child's card
+  and an iPad with no pairing were all refused, and nothing was made for them.
+- **The ears.** Talk sits under the box, the whole width, 96 px tall, and turns the accent colour while it listens. In
+  Chrome the microphone was fed a stored tutor line (the card's question, 4.4 seconds), since I can't speak into the
+  laptop; everything after the microphone was the real code. The words landed in the box exactly, 2.3 seconds after
+  letting go, and nothing was sent as an answer. A quick tap says "Keep holding the button while you talk."; a refused
+  microphone says "The microphone is off. A grown-up can turn it on."; neither reaches Google.
+- **Spent on test** (`npm run fixture -- speech`): 5 lines made once each (743 characters) and 1 clip heard (5.5
+  seconds), $0.02 at list price, inside the free tier; reloads and second taps added nothing. `/parent/models` shows
+  the voice, these counts and Google's prices.
+- **Checks:** `npm test` 382 of 382, `npm run typecheck` clean, `npm run build` clean (with `/api/kid/say` and
+  `/api/kid/hear`), lint clean on every file this job changed. Migration `20261022000000_speech_runs` was applied to
+  `quark-test` by the migrations workflow, run `39935530082`, green.
+- **Commits:** `aa182ad` (board, brief, stop 1), `7d5613c` (the adapter's first piece), `a3da4b3` (server: lines,
+  store, both routes, the migration), `8155af7` (the page: Read it to me, Talk, the browser voice and `/kid/voices`
+  deleted), `ac33845` (the iPad dev server), `c94ca93` (a Talk guard, `fixture -- speech`), `149f628` (the models page,
+  `.env.example`), `0d6176a` (the launcher started without a shell).
+
+**Done along the way, so you know:**
+
+- A dev server started at 22:43 from Git Bash (before this session; likely the Next.js job's look) was still running on
+  port 3000 and had gone stale through the file changes: its card page threw "Jest worker encountered 2 child process
+  exceptions". A clean production build had no such fault. I stopped it and started a fresh one; it is now the iPad
+  server below.
+- **Google's pricing page wouldn't load for me.** The Speech-to-Text figures ($0.016 a minute, each request rounded up
+  to the second, no free tier named for V2) are from search results of that page; two other sites say 15-second
+  rounding. Text-to-Speech's ($30 per million characters, 1 million free a month) are from the same search. Worth one
+  look by hand at cloud.google.com/speech-to-text/pricing; a wrong figure only changes what `/parent/models` estimates.
+- The certificate: `certificates/` (ignored by git) holds it for 192.168.50.67, good to November 2027. The authority's
+  private key was deleted the moment it signed. If the laptop's address changes, `npm run dev:ipad` makes a new pair
+  and the iPad installs the new one.
+
+### Your look
+
+On June's iPad, in Safari, on the home Wi-Fi (the laptop's dev server is running):
+
+1. Open **http://192.168.50.67:3001**. Safari asks to download a configuration profile: Allow. Then Settings, the
+   *Profile Downloaded* line near the top, Install (it asks for the passcode). Then Settings, General, About,
+   Certificate Trust Settings, and turn on "Quark dev, this laptop at 192.168.50.67 only".
+2. Open **https://192.168.50.67:3000/kid**. Bug should still be paired; if the iPad shows the pairing screen, pair it
+   as Bug from `/parent` as before. The first time you hold Talk, Safari asks for the microphone: let go, tap Allow,
+   then hold again.
+
+The checks, in exact words:
+
+- "June's iPad trusts the laptop's dev certificate: I opened the address in Safari, installed the profile in Settings,
+  and turned it on under General, About, Certificate Trust Settings."
+- "On a card, 'Read it to me' speaks in the voice we picked at stop 1, and only after my tap."
+- "The second tap of the same line starts at once: no wait, no spend (it is stored)." (On the same page it is
+  instant; after leaving and reopening a card, expect a second or two while the server checks the line again.)
+- "A hint's 'Read it to me' and the handoff's are the same voice."
+- "Holding the Talk button and saying an answer puts my words in the answer box a moment after I let go, and nothing
+  is sent until I tap 'That's my answer'."
+- "The dev page `/kid/voices` is gone."
+
+The boys' check is dropped (your word at stop 1). Talk on the iPad is the first real microphone this code has heard:
+if every hold ends in "That didn't come through", that is a fix round, not a failed slice.
+
+**Size:** a slice (8 hours); 22 minutes since go.
+
+Reply go if every check passed, or name the one that didn't.
