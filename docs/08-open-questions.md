@@ -289,6 +289,7 @@ Decided (Brandon, 21 Oct 2026, 21:48 to 22:08, in the chat's clarify pass), `doc
 Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`, report `docs/reports/2026-10-22-next-16-4-2.md`; a tooling job on `phase-4-wonder-wall`.
 
 - **Decided: Next.js goes to 16.4.2 before the release, as its own job at the top of Next.** Brandon: "accept." 16.4.0 carries GHSA-2464-fhr4-w9xw (critical) and GHSA-p3m5-59mp-jv5r (high), and its production build stops with a security error. Nothing was replaced. `eslint-config-next` moved with it; `npm audit`'s remaining `braces` line (lint tooling) was left alone, as the brief said.
+- **Decided (Brandon, 22 Oct 2026, at the close): the release carries the bump, so Vercel's first build on 16.4.2 is the release's.** Brandon: "yes to both" (this, and the lint errors as a bug line).
 
 ### Releases
 
@@ -298,6 +299,7 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
 
+- 22 Oct 2026, `npm run lint` (tooling): 2 errors and 4 warnings, the same on Next.js 16.4.0 and 16.4.2: `Date.now()` called in render, `let week` never reassigned, four unused `_previous`/`_form` parameters; expected: lint clean. `app/parent/page.tsx:47`, `core/curation/cron.ts:174`. Size: minutes.
 - 21 Oct 2026, the four-notes card on the Wonder Wall (phase 3): its words say "Listen closely" and it has no recording; only its handoff asks a parent to play the music; expected: a card with no recording says from its first words that a grown-up plays the music (decided 16 Oct: a parent plays four-notes). Size: an hour.
 
 - 21 Oct 2026, `/parent/models` (phase 3): a Sunday-build firing stopped at the time limit is undercounted; expected: it records what it spent. `docs/04-curation-engine.md`, "How the Sunday build is built". Size: an hour.
