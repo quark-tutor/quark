@@ -61,3 +61,6 @@ plan/candidates/*.json
 
 # the board page, rewritten by npm run docs:board
 /Quark board.html
+
+# voice samples for picking the tutor's voice (npm run speech:samples); the report names the pick
+/docs/reports/samples/

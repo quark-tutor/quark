@@ -25,6 +25,8 @@
     "gate:live": "node --env-file=.env.live.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/gate.mts",
     "cron:week": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/cron-week.mts",
     "fixture": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/fixture.mts",
+    "speech:samples": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/speech-samples.mts",
+    "speech:check": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/speech-check.mts",
     "model:smoke": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/model-smoke.mts",
     "docs:board": "node ../working-with-claude/scripts/export-board.mjs --name Quark --out ."
   },
@@ -32,6 +34,7 @@
     "@anthropic-ai/sdk": "^0.133.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.117.3",
+    "google-auth-library": "^11.1.0",
     "next": "^16.4.2",
     "react": "19.3.0",
     "react-dom": "19.3.0",
