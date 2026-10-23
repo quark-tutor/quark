@@ -249,3 +249,80 @@ the hint and handoff voice, Talk, `/kid/voices` gone) are still to take.
 **Size:** a slice (8 hours); 22 minutes to stop 2, and this fix round about 5 minutes from your word.
 
 Reply go if every check passed, or name the one that didn't.
+
+## Stop 2 again: fix round 2, a thousands comma read as a pause (23 Oct 2026, 07:10 HST)
+
+Brandon at stop 2, 23 Oct 2026: ""Read it to me" now says the screen word for word, good. But it reads "3,400 years
+ago" as "three, four hundred years ago": the thousands comma is read as a pause. Before a line goes to Google, drop
+the comma inside a number (3,400 → 3400) so it is read as one number; do the same for any other number shape you find
+in the week's cards (a year, a date, a fraction, "1/4") and say in the report which ones you handled and which you
+left."
+
+### How the shapes were found and checked
+
+- `npm run fixture -- numbers 1` lists every number in the spoken words (text, question, hints, handoff) of test's
+  week 1, 280 cards, grouped by shape.
+- Each shape was said by Google in Sulafat's voice and heard back by Chirp 3 (`npm run speech:check`, which now takes
+  several lines). A number read whole comes back whole; one read with a pause comes back split ("3 400").
+- The limit: the ears write numbers in digits, so they show whether a number was read whole or split, not every
+  detail (whether 365.2422 is "point two four two two", say). Your ear is the check.
+
+### Handled
+
+- **A comma inside a number is dropped before the line goes to Google:** 3,400 is sent as 3400 (`forVoice()` in
+  `core/wall/speech.ts`). Heard back, "3,400" was "3 400" and "1,234" was "1 234"; "3400" is one number. The week has
+  24 of them: 3,400 and other x,xxx numbers (15), 1,000 (4), 10,000 and 100,000 (3), 1,000,000 (2). Round ones
+  (5,000, 100,000, 1,000,000) were already read whole; without the comma they still are (checked both ways).
+- A comma followed by a space, as in a list ("400, 800, 1200"), stays as it is. So does any comma not between digit
+  groups of three.
+
+### Left as written, because Google already reads them whole
+
+- Years: 1582, 1884, 1900, 2026 and the rest (52 four-digit numbers in the week).
+- Decades: 1660s, 1670s, 1960s.
+- Year ranges: 1811-12 (heard "1811 to 12"), (1827-1838) (heard "1827 to 1838").
+- Dates: 17 December 1903 (heard "the 17th of December, 1903"), February 29th.
+- Decimals: 365.2422, 137.5, 2.3 million.
+- 24-hour, 400s, 7s (heard "sevens"), and lists of numbers.
+- Not in this week's cards, tried anyway and read whole: 1/4, 1/6, 3/4, 10/26, 2–3 hours (heard "2 to 3"), a
+  3-4-5 rope, 6 × 6 = 36. No fraction or slash date is in the week. If a later week shows one misread, that is a
+  bug line.
+
+### The fix (`5220b09`)
+
+- `forVoice()` runs on every line the tutor says, and the stored line is now named by the words as sent. Bug's old
+  recording with the pause is never played again, and a line with such a number is made again on its next tap (one
+  call to Google each).
+- 386 of 386 tests pass (3 new: the commas dropped, every other shape in the week left alone, and the line sent and
+  filed as 3400). The typecheck is clean; lint is clean on the changed files.
+- New: `npm run fixture -- numbers <week>`; `npm run speech:line -- <card id> [part]`, which says one card's line
+  through the wall's own code, as a tap on that child's paired iPad would, stores it, and hears it back
+  (`scripts/server-alias.mts` lets a script load the app's `@/` code, as Next does). `speech:check` takes several
+  lines.
+
+### Proven on test
+
+`npm run speech:line` on Bug's Look card, "Painted Walls by the Nile": said through `sayLine()` as Bug's paired iPad
+would, stored (`fixture -- card` says "stored"), and recorded as one speech run of 436 characters ($0.013 at list
+price). Heard back: "…a scribe who lived about 3,400 years ago…", one number.
+
+Spent this round: that line, plus about 30 short lines said and heard by `speech:check`, which records nothing on
+`/parent/models`. Together under 10 cents at list price, all inside Google's free tiers.
+
+### Your look
+
+On June's iPad as Bug:
+
+1. If the Look card is open, tap "Back to the wall", then open "Painted Walls by the Nile" again.
+2. Tap "Read it to me". It starts at once: the line is already made and stored.
+
+The check for this fix, in exact words:
+
+- "On a card, 'Read it to me' says '3,400 years ago' as one number, with no pause after 'three'."
+
+Fix round 1's check passed in your words ("now says the screen word for word, good"). The other stop-2 checks are
+still to take: the second tap, the hint and handoff voice, Talk, and `/kid/voices` gone.
+
+**Size:** a slice (8 hours); 22 minutes to stop 2, about 5 for fix round 1, about 10 for this one.
+
+Reply go if every check passed, or name the one that didn't.
