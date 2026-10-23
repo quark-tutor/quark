@@ -271,7 +271,7 @@ left."
 
 - **A comma inside a number is dropped before the line goes to Google:** 3,400 is sent as 3400 (`forVoice()` in
   `core/wall/speech.ts`). Heard back, "3,400" was "3 400" and "1,234" was "1 234"; "3400" is one number. The week has
-  24 of them: 3,400 and other x,xxx numbers (15), 1,000 (4), 10,000 and 100,000 (3), 1,000,000 (2). Round ones
+  24 of them: x,xxx numbers such as 3,400, 5,000 and 1,000 (18), 10,000 and 100,000 (4), 1,000,000 (2). Round ones
   (5,000, 100,000, 1,000,000) were already read whole; without the comma they still are (checked both ways).
 - A comma followed by a space, as in a list ("400, 800, 1200"), stays as it is. So does any comma not between digit
   groups of three.
