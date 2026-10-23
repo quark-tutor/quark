@@ -77,7 +77,11 @@ export function Talk({ onHeard, disabled = false }: { onHeard: (words: string) =
 
   async function press(e: PointerEvent<HTMLButtonElement>) {
     if (disabled || phase !== "idle") return;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId); // a finger that slides off still lets go here
+    } catch {
+      // no capture for this pointer; the release still comes on pointerup
+    }
     held.current = true;
     setNotice(null);
     setPhase("starting");

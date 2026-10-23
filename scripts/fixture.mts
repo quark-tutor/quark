@@ -6,6 +6,7 @@
 //   npm run fixture -- delete-week <week>   delete the week's theme with its ideas, cards and questions
 //   npm run fixture -- audit [n]            the last n audit rows (default 12): when, what, and the target
 //   npm run fixture -- runs [n]             the last n model runs (default 10): how long, and the calls and cost per job
+//   npm run fixture -- speech [n]           the last n calls to Google for the tutor's voice and ears, and the lines stored
 //   npm run fixture -- answers [n]          the last n answers on the wall (default 20) and the last sessions; a child is
 //                                           "child 1" or "child 2", oldest first, never by name
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
@@ -102,6 +103,27 @@ if (command === "show") {
     const seconds = Math.round((Date.parse(r.finished_at) - Date.parse(r.started_at)) / 1000);
     const calls = r.models.map((m) => `${m.use} ${m.calls}`).join(", ");
     console.log(`${r.finished_at.slice(0, 19)}  ${r.kind}${r.ok ? "" : " (stopped)"}  ${r.days ?? "-"} day  ${seconds}s  ${calls}  $${Number(r.cost).toFixed(2)}`);
+  }
+} else if (command === "speech") {
+  // The tutor's voice and ears, read-only: the last n calls to Google (a line said for the first time, or a clip
+  // heard), and how many lines are stored per voice. Counts and money only: no child, no words.
+  const n = arg ? Number(arg) : 10;
+  const rows = must(await db.from("speech_runs").select("kind, model, characters, seconds, cost, created_at").eq("family_id", familyId).order("created_at", { ascending: false }).limit(n), "speech_runs") as {
+    kind: string;
+    model: string;
+    characters: number;
+    seconds: number;
+    cost: number;
+    created_at: string;
+  }[];
+  for (const r of rows.reverse()) {
+    const size = r.kind === "say" ? `${r.characters} characters` : `${Number(r.seconds).toFixed(1)} s`;
+    console.log(`${r.created_at.slice(0, 19)}  ${r.kind}  ${r.model}  ${size}  ${Number(r.cost).toFixed(5)}`);
+  }
+  const voices = must(await db.storage.from("content").list("speech"), "speech") as { name: string }[];
+  for (const v of voices) {
+    const files = must(await db.storage.from("content").list(`speech/${v.name}`, { limit: 1000 }), "speech") as unknown[];
+    console.log(`Stored lines in ${v.name}: ${files.length}`);
   }
 } else if (command === "answers") {
   // What the wall recorded, read-only (docs/wonder-wall-1-slice.md, decision 3).
