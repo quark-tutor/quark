@@ -27,4 +27,11 @@ export const SAY = {
   toTalkAbout: "That's one to talk about.",
   forAPerson: "This one is for a person:",
   didntSend: "That didn't send. Try again.",
+  // Talk (docs/tutor-voice-slice.md): hold to talk, let go to send the words to the box.
+  talk: "Hold to talk",
+  listening: "Listening… let go when you're done",
+  writing: "Writing it down…",
+  keepHolding: "Keep holding the button while you talk.",
+  didntHear: "That didn't come through. Hold the button and try again.",
+  noMicrophone: "The microphone is off. A grown-up can turn it on.",
 } as const;

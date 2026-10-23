@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { lineId } from "@/core/wall/card";
 import { SAY, SLOT_NAMES } from "@/core/wall/words";
 import { getDevice } from "@/lib/device";
 import { loadCard } from "@/lib/wall";
@@ -63,7 +64,7 @@ async function Card({ params }: { params: Promise<{ id: string }> }) {
         <section className={styles.words}>
           <h1 className={styles.cardTitle}>{c.title}</h1>
           <p className={styles.cardText}>{c.text}</p>
-          <ReadAloud text={c.read_aloud} />
+          <ReadAloud line={lineId(c.id, "read")} />
           <AnswerBox key={c.id} id={c.id} question={c.question} hints={c.hints} state={c.state} handoff={c.handoff ?? null} />
         </section>
       </div>

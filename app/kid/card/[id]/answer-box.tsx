@@ -3,10 +3,11 @@
 import { Fragment, useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { AnswerReply, CardReply } from "@/core/wall/card";
+import { lineId, type AnswerReply, type CardReply } from "@/core/wall/card";
 import { SAY } from "@/core/wall/words";
 import styles from "../../kid.module.css";
 import { ReadAloud } from "../../read-aloud";
+import { Talk } from "./talk";
 
 // The question, one box and one button. Guess first: a hint comes only after a guess, one at a time, and
 // after the last one, one more guess, then the handoff to a person. The screen never gives the answer; the
@@ -96,13 +97,13 @@ export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) 
           <p className={styles.reply}>{SAY.thinkAbout}</p>
           <div className={styles.hint}>
             <p>{h}</p>
-            <ReadAloud text={h} small />
+            <ReadAloud line={lineId(id, i)} small />
           </div>
         </Fragment>
       ))}
       <div ref={reply}>
         {end ? (
-          <Ending end={end} guess={last} />
+          <Ending id={id} end={end} guess={last} />
         ) : (
           <form className={styles.answer} onSubmit={send}>
             <input
@@ -120,6 +121,7 @@ export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) 
             <button type="submit" className={styles.send} disabled={!guess.trim() || sending}>
               {SAY.send}
             </button>
+            <Talk disabled={sending} onHeard={(words) => setGuess((g) => (g.trim() ? `${g.trim()} ${words}` : words).slice(0, 200))} />
             {notice ? <p className={`${styles.reply} ${styles.notice}`}>{notice === "guessFirst" ? SAY.guessFirst : SAY.didntSend}</p> : null}
           </form>
         )}
@@ -128,7 +130,7 @@ export function AnswerBox({ id, question, hints: seen, state, handoff }: Props) 
   );
 }
 
-function Ending({ end, guess }: { end: End; guess: string | null }) {
+function Ending({ id, end, guess }: { id: string; end: End; guess: string | null }) {
   const said = guess ? <p className={styles.said}>{guess}</p> : null;
   if (end.kind === "deeper") {
     return (
@@ -148,7 +150,7 @@ function Ending({ end, guess }: { end: End; guess: string | null }) {
       <p className={styles.reply}>{end.kind === "open" ? SAY.toTalkAbout : SAY.forAPerson}</p>
       <div className={styles.handoff}>
         <p>{end.handoff}</p>
-        <ReadAloud text={end.handoff} small />
+        <ReadAloud line={lineId(id, "handoff")} small />
       </div>
     </div>
   );

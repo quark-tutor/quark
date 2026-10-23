@@ -1,67 +1,54 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { pickVoice } from "@/core/wall/voice";
+import { useEffect, useRef, useState } from "react";
 import { SAY } from "@/core/wall/words";
 import styles from "./kid.module.css";
 
-// "Read it to me": the browser's own speech, on a tap only, never by itself. A second tap stops it, and
-// starting one stops any other, so only one thing is ever read at a time.
+// "Read it to me": the tutor's voice (docs/tutor-voice-slice.md), from Quark's own route, on a tap only, never by
+// itself (rule 4). The line is named by its card and part ("<card id>.hint.0"), never sent as words. The tap
+// sets the player's address and starts it in the same moment, because iPad Safari plays sound only when it
+// starts inside the tap; the route answers with the stored audio, made on the first tap anywhere. A second tap
+// stops it, and starting one stops any other, so only one thing is ever read at a time.
 const STARTED = "quark:read-aloud";
 
-// The voice it reads with (core/wall/voice.ts). Safari fills its list of voices after the page loads, so the
-// pick is made on load and again when the list changes; the tap only reads it, because iPad Safari speaks
-// only from inside the tap itself, never after waiting for an event.
-let voice: SpeechSynthesisVoice | null = null;
-const choose = () => {
-  voice = pickVoice(window.speechSynthesis.getVoices());
-};
-
-export function ReadAloud({ text, small = false }: { text: string; small?: boolean }) {
+export function ReadAloud({ line, small = false }: { line: string; small?: boolean }) {
+  const audio = useRef<HTMLAudioElement>(null);
   const [reading, setReading] = useState(false);
 
   useEffect(() => {
-    const stop = () => setReading(false);
-    window.addEventListener(STARTED, stop);
-    const speech = window.speechSynthesis;
-    if (speech) {
-      choose();
-      speech.addEventListener("voiceschanged", choose);
-    }
+    const a = audio.current;
+    const other = (e: Event) => {
+      if ((e as CustomEvent<HTMLAudioElement>).detail !== a) a?.pause();
+    };
+    window.addEventListener(STARTED, other);
     return () => {
-      window.removeEventListener(STARTED, stop);
-      speech?.removeEventListener("voiceschanged", choose);
+      window.removeEventListener(STARTED, other);
+      a?.pause();
     };
   }, []);
 
-  useEffect(() => () => window.speechSynthesis?.cancel(), []);
-
-  if (!text.trim()) return null;
-
   function toggle() {
-    const speech = window.speechSynthesis;
-    if (!speech) return;
+    const a = audio.current;
+    if (!a) return;
     if (reading) {
-      speech.cancel();
+      a.pause();
       setReading(false);
       return;
     }
-    speech.cancel();
-    window.dispatchEvent(new Event(STARTED));
-    if (!voice) choose(); // the list can fill without the event firing
-    const said = new SpeechSynthesisUtterance(text);
-    if (voice) said.voice = voice;
-    said.lang = voice?.lang.replace("_", "-") ?? "en-US";
-    said.rate = 0.9;
-    said.onend = () => setReading(false);
-    said.onerror = () => setReading(false);
-    speech.speak(said);
+    window.dispatchEvent(new CustomEvent(STARTED, { detail: a }));
+    const src = `/api/kid/say?line=${encodeURIComponent(line)}`;
+    if (a.getAttribute("src") !== src) a.src = src;
+    else a.currentTime = 0;
     setReading(true);
+    void a.play().catch(() => setReading(false));
   }
 
   return (
-    <button type="button" className={small ? styles.readSmall : styles.read} onClick={toggle} aria-pressed={reading}>
-      {reading ? SAY.stop : SAY.readIt}
-    </button>
+    <>
+      <audio ref={audio} preload="none" onPause={() => setReading(false)} onEnded={() => setReading(false)} onError={() => setReading(false)} />
+      <button type="button" className={small ? styles.readSmall : styles.read} onClick={toggle} aria-pressed={reading}>
+        {reading ? SAY.stop : SAY.readIt}
+      </button>
+    </>
   );
 }

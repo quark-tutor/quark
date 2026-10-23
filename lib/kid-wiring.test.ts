@@ -47,6 +47,32 @@ describe("the kid view", () => {
   });
 });
 
+describe("the tutor's voice and ears (docs/tutor-voice-slice.md)", () => {
+  const SPEECH = /core\/speech|core\/wall\/speech|google-auth-library|@\/lib\/wall\b/;
+
+  it("never reach a browser: nothing under app/kid imports the adapter or Google's client", () => {
+    const direct = sources("app/kid").filter((p) => /core\/speech|google-auth-library/.test(code(p))).map(name);
+    expect(direct).toEqual([]);
+  });
+
+  it("are imported by no file a browser loads", () => {
+    const client = sources("app").filter((p) => /^\s*["']use client["']/.test(readFileSync(join(root, p), "utf8")));
+    expect(client.length).toBeGreaterThan(0);
+    expect(client.filter((p) => SPEECH.test(code(p))).map(name)).toEqual([]);
+  });
+
+  it("are server-only, so a browser import would stop the build", () => {
+    for (const p of ["core/speech.ts", "core/speech/google.ts", "lib/wall.ts"]) {
+      expect(code(p), p).toMatch(/^import "server-only";/);
+    }
+  });
+
+  it("use no browser speech engine anywhere", () => {
+    const engines = [...sources("app"), ...sources("core"), ...sources("lib")].filter((p) => /speechSynthesis|SpeechRecognition|SpeechSynthesisUtterance/.test(code(p))).map(name);
+    expect(engines).toEqual([]);
+  });
+});
+
 describe("the wall's own words", () => {
   const all = [...Object.values(SAY).map((s) => (typeof s === "function" ? s("Pip") : s)), ...Object.values(SLOT_NAMES)];
 

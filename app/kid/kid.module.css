@@ -361,6 +361,34 @@
   color: var(--ink);
 }
 
+/* Talk: under the box, a whole row and the biggest thing to press. Listening fills it with the accent colour,
+   so whether the microphone is on is plain. A long press must not select its words or open a menu. */
+.talk {
+  flex-basis: 100%;
+  min-height: 96px;
+  padding: 0 24px;
+  border: 2px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.75rem; /* 28 px */
+  font-weight: 700;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.talk[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.talk:disabled {
+  opacity: 0.45;
+}
+
 /* "Have a guess first", under the box, on a line of its own. */
 .notice {
   flex-basis: 100%;
