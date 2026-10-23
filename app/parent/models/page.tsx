@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
-import { PRICES, PRICES_CHECKED } from "@/core/prices";
+import { PRICES, PRICES_CHECKED, SPEECH_PRICES, SPEECH_PRICES_CHECKED } from "@/core/prices";
+import { HEAR_MODEL, TUTOR_VOICE } from "@/core/speech";
 import { estimate, OLD_WEEK_ESTIMATE, type RecordedRun, type RunModel } from "@/core/runs";
 import { requireGuardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
@@ -44,7 +45,7 @@ async function Models() {
 
   // Row-level security keeps the runs to the guardian's own family.
   const supabase = await createClient();
-  const [family, kids, runs, themes] = await Promise.all([
+  const [family, kids, runs, themes, speech] = await Promise.all([
     supabase.from("families").select("timezone").single(),
     supabase.from("children").select("id", { count: "exact", head: true }),
     supabase
@@ -53,8 +54,9 @@ async function Models() {
       .order("finished_at", { ascending: false })
       .returns<Run[]>(),
     supabase.from("themes").select("id, title"),
+    supabase.from("speech_runs").select("kind, characters, seconds, cost, created_at").returns<SpeechRow[]>(),
   ]);
-  for (const r of [family, kids, runs, themes]) if (r.error) throw new Error(r.error.message);
+  for (const r of [family, kids, runs, themes, speech]) if (r.error) throw new Error(r.error.message);
 
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone, dateStyle: "medium", timeStyle: "short" });
@@ -65,6 +67,12 @@ async function Models() {
   const est = estimate(all, children);
   const spent = all.reduce((s, r) => s + Number(r.cost), 0);
   const inUse = new Set(JOBS.map((j) => process.env[j.env]).filter(Boolean));
+  const monthStart = new Date().toLocaleDateString("en-CA", { timeZone }).slice(0, 7); // "2026-10", where the family lives
+  const thisMonth = (speech.data ?? []).filter((r) => new Date(r.created_at).toLocaleDateString("en-CA", { timeZone }).startsWith(monthStart));
+  const speechAll = tally(speech.data ?? []);
+  const speechMonth = tally(thisMonth);
+  const speechChecked = new Date(`${SPEECH_PRICES_CHECKED}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", dateStyle: "long" });
+  const speechKey = Boolean(process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GOOGLE_CREDENTIALS_JSON);
 
   return (
     <>
@@ -121,6 +129,77 @@ async function Models() {
       </section>
 
       <section className={own.section}>
+        <h2>The tutor&rsquo;s voice and ears</h2>
+        <p>
+          <strong>Google&rsquo;s key: {speechKey ? "set up" : "not set up"}</strong>
+        </p>
+        <p className={styles.muted}>
+          The tutor reads a card, a hint or a handoff aloud in one voice, <code>{TUTOR_VOICE}</code>, and hears a
+          child&rsquo;s spoken answer through Talk with <code>{HEAR_MODEL}</code>, both from Google Cloud. A line&rsquo;s
+          audio is made the first time a child taps it and kept, so a line is paid for once; a clip is paid for each time,
+          by its length. Quark keeps no recording of a child and no words but the answer the child sends. The voice is set
+          in <code>core/speech.ts</code>; the key is never shown here.
+        </p>
+        <div className={own.scroll}>
+          <table className={own.table}>
+            <thead>
+              <tr>
+                <th>What</th>
+                <th className={own.num}>This month</th>
+                <th className={own.num}>Since the start</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  Lines made
+                  <br />
+                  <span className={styles.meta}>and the characters sent to the voice</span>
+                </td>
+                <td className={own.num}>
+                  {speechMonth.says.toLocaleString()}
+                  <br />
+                  <span className={styles.meta}>{speechMonth.characters.toLocaleString()}</span>
+                </td>
+                <td className={own.num}>
+                  {speechAll.says.toLocaleString()}
+                  <br />
+                  <span className={styles.meta}>{speechAll.characters.toLocaleString()}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  Clips heard
+                  <br />
+                  <span className={styles.meta}>and the minutes of talking</span>
+                </td>
+                <td className={own.num}>
+                  {speechMonth.hears.toLocaleString()}
+                  <br />
+                  <span className={styles.meta}>{(speechMonth.seconds / 60).toFixed(1)}</span>
+                </td>
+                <td className={own.num}>
+                  {speechAll.hears.toLocaleString()}
+                  <br />
+                  <span className={styles.meta}>{(speechAll.seconds / 60).toFixed(1)}</span>
+                </td>
+              </tr>
+              <tr>
+                <td>At list price, before the free tier</td>
+                <td className={own.num}>{money(speechMonth.cost)}</td>
+                <td className={own.num}>{money(speechAll.cost)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p className={styles.muted}>
+          This month&rsquo;s lines used {speechMonth.characters.toLocaleString()} of the{" "}
+          {SPEECH_PRICES.say.freeCharactersPerMonth.toLocaleString()} characters Google gives free each month. The real bill
+          is in the Google Cloud console.
+        </p>
+      </section>
+
+      <section className={own.section}>
         <h2>The Sunday build</h2>
         <p>
           <strong>The Sunday build: {process.env.CRON_SECRET ? "set up" : "not set up"}</strong>
@@ -158,6 +237,35 @@ async function Models() {
                   <td className={own.num}>${p.output.toFixed(2)}</td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+        <p className={styles.muted}>
+          Google&rsquo;s list prices for the tutor&rsquo;s voice and ears, last checked {speechChecked}, also in{" "}
+          <code>core/prices.ts</code>:
+        </p>
+        <div className={own.scroll}>
+          <table className={own.table}>
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th className={own.num}>Price</th>
+                <th className={own.num}>Free each month</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{SPEECH_PRICES.say.name}</td>
+                <td className={own.num}>${SPEECH_PRICES.say.perMillionCharacters} per million characters</td>
+                <td className={own.num}>{SPEECH_PRICES.say.freeCharactersPerMonth.toLocaleString()} characters</td>
+              </tr>
+              <tr>
+                <td>{SPEECH_PRICES.hear.name}</td>
+                <td className={own.num}>${SPEECH_PRICES.hear.perMinute} a minute, each clip rounded up to the second</td>
+                <td className={own.num}>
+                  {SPEECH_PRICES.hear.freeMinutesPerMonth === null ? "none named" : `${SPEECH_PRICES.hear.freeMinutesPerMonth} minutes`}
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
@@ -271,6 +379,24 @@ async function Models() {
       </section>
     </>
   );
+}
+
+type SpeechRow = { kind: string; characters: number; seconds: number; cost: number; created_at: string };
+
+// Counts and money only: how many lines were made and clips heard, and what they came to.
+function tally(rows: SpeechRow[]) {
+  const t = { says: 0, characters: 0, hears: 0, seconds: 0, cost: 0 };
+  for (const r of rows) {
+    if (r.kind === "say") {
+      t.says += 1;
+      t.characters += r.characters;
+    } else {
+      t.hears += 1;
+      t.seconds += Number(r.seconds);
+    }
+    t.cost += Number(r.cost);
+  }
+  return t;
 }
 
 const USE_NAMES: Record<string, string> = { curate: "ideas", write: "cards", gate: "gate" };
