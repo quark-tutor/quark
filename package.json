@@ -28,6 +28,7 @@
     "fixture": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/fixture.mts",
     "speech:samples": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/speech-samples.mts",
     "speech:check": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/speech-check.mts",
+    "speech:line": "node --env-file=.env.local --conditions=react-server --import ./scripts/server-alias.mts --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/speech-line.mts",
     "model:smoke": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/model-smoke.mts",
     "docs:board": "node ../working-with-claude/scripts/export-board.mjs --name Quark --out ."
   },

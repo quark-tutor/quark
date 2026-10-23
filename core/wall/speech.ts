@@ -77,7 +77,14 @@ export async function lineText(store: WallStore, scope: Scope, line: Line, now: 
 // spoken version for a child who reads alone, is never said.
 export const readLine = (body: { text: string; question: string }) => `${body.text.trim()} ${body.question.trim()}`;
 
-// Where a line's audio is kept in the private bucket: the voice, then a hash of the words.
+// The words as they go to the voice. Google reads a thousands comma as a pause, "3,400" as "three, four hundred"
+// (Brandon at stop 2, 23 Oct 2026), so the commas inside a number are dropped: 3,400 becomes 3400. The other
+// number shapes in the week's cards (years, decades, 1811-12, decimals, 29th, 24-hour, 400s) and fractions,
+// slash dates and 2–3 it reads as one number already (heard back by Chirp 3, 23 Oct), so they go as written.
+export const forVoice = (text: string) => text.replace(/(?<![\d.,])\d{1,3}(?:,\d{3})+(?!\d|,\d)/g, (n) => n.replaceAll(",", ""));
+
+// Where a line's audio is kept in the private bucket: the voice, then a hash of the words as they went to it, so
+// a change to forVoice() makes a line again rather than replaying the old reading.
 export const speechPath = (voice: string, text: string) => `speech/${voice}/${createHash("sha256").update(text).digest("hex")}.mp3`;
 
 // A signed URL to the line's audio in the tutor's voice: the stored file, or one made now and stored. Null when
@@ -89,8 +96,9 @@ export async function spokenUrl(
   now: Date,
   voice: { name: string; say: (text: string) => Promise<Uint8Array> },
 ): Promise<string | null> {
-  const text = (await lineText(store, scope, line, now))?.trim();
-  if (!text) return null;
+  const words = (await lineText(store, scope, line, now))?.trim();
+  if (!words) return null;
+  const text = forVoice(words);
   const path = speechPath(voice.name, text);
   const stored = await store.speechUrl(path);
   if (stored) return stored;

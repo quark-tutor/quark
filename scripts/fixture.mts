@@ -9,13 +9,14 @@
 //   npm run fixture -- speech [n]           the last n calls to Google for the tutor's voice and ears, and the lines stored
 //   npm run fixture -- answers [n]          the last n answers on the wall (default 20) and the last sessions; a child is
 //                                           "child 1" or "child 2", oldest first, never by name
-//   npm run fixture -- card <id>            one card: its words as shown, what "Read it to me" says, and what is stored
+//   npm run fixture -- card <id>            one card: its words as shown, what "Read it to me" sends, and what is stored
+//   npm run fixture -- numbers <week>       every number shape in the week's spoken words, and how each goes to the voice
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
 //                                           its item's approval, and the gate's reasons for a card held back
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
-import { readLine, speechPath } from "../core/wall/speech.ts";
+import { forVoice, readLine, speechPath } from "../core/wall/speech.ts";
 import { announceTarget } from "./target.ts";
 
 const TUTOR_VOICE = "en-US-Chirp3-HD-Sulafat"; // core/speech.ts, which only the server may import
@@ -227,10 +228,34 @@ if (command === "show") {
   const parts: [string, string][] = [
     ["text, shown", row.body.text],
     ["question, shown", row.body.question],
-    ["Read it to me says", readLine(row.body)],
+    ["Read it to me sends to the voice", forVoice(readLine(row.body))],
     ["read_aloud, never said", row.body.read_aloud],
   ];
   for (const [name, text] of parts) console.log(`\n${name}, ${await stored(text)}:\n  ${text}`);
+} else if (command === "numbers") {
+  // Every number in the week's spoken words (text, question, hints, handoff), grouped by its shape (each digit
+  // shown as 9), with how often it comes, how it goes to the voice (forVoice()) and a few examples. Test only: it
+  // prints card words.
+  const t = await theme(Number(arg));
+  const rows = must(await db.from("cards").select("body").eq("theme_id", t.id), "cards") as { body: { text: string; question: string; hints: string[]; handoff: string } }[];
+  const shapes = new Map<string, { count: number; examples: Set<string> }>();
+  for (const { body } of rows) {
+    for (const words of [body.text, body.question, body.handoff, ...body.hints]) {
+      for (const m of words.matchAll(/(?:\S+\s){0,2}\S*\d\S*(?:\s\S+){0,2}/g)) {
+        for (const token of m[0].match(/\S*\d\S*/g) ?? []) {
+          const shape = token.replace(/\d/g, "9");
+          const s = shapes.get(shape) ?? { count: 0, examples: new Set<string>() };
+          s.count += 1;
+          if (s.examples.size < 3) s.examples.add(m[0]);
+          shapes.set(shape, s);
+        }
+      }
+    }
+  }
+  for (const [shape, s] of [...shapes.entries()].sort((a, b) => b[1].count - a[1].count)) {
+    const sent = forVoice(shape) === shape ? "as written" : `sent as ${forVoice(shape)}`;
+    console.log(`${shape}  ×${s.count}  ${sent}  ${[...s.examples].map((e) => `“${e}”`).join("  ")}`);
+  }
 } else if (command === "audit") {
   const n = arg ? Number(arg) : 12;
   const rows = must(await db.from("audit_log").select("created_at, action, target").eq("family_id", familyId).order("created_at", { ascending: false }).limit(n), "audit_log") as {
@@ -240,6 +265,6 @@ if (command === "show") {
   }[];
   for (const r of rows.reverse()) console.log(`${r.created_at}  ${r.action}  ${JSON.stringify(r.target)}`);
 } else {
-  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | day <date>");
+  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | speech [n] | card <id> | numbers <week> | day <date>");
   process.exit(1);
 }

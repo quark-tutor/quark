@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { lineId } from "./card.ts";
 import type { AttemptInsert, CardRow, Scope } from "./flow.ts";
 import { answer, cardFor } from "./flow.ts";
-import { CLIP_RATE, heardText, lineText, parseLine, speechPath, spokenUrl, type SpeechRun, type SpeechStore } from "./speech.ts";
+import { CLIP_RATE, forVoice, heardText, lineText, parseLine, speechPath, spokenUrl, type SpeechRun, type SpeechStore } from "./speech.ts";
 
 // The tutor's voice and ears (docs/tutor-voice-slice.md): a line is said only when the child can see it now,
 // its audio is made once and stored, and a clip is heard without keeping anything about the child.
@@ -133,6 +133,17 @@ describe("the tutor's voice", () => {
     expect(runs).toEqual([{ family_id: FAMILY, kind: "say", model: "voice-a", characters: 18, seconds: 0, cost: (18 * 30) / 1_000_000 }]);
   });
 
+  it("sends a number with a thousands comma as one number, and files it under the words it sent", async () => {
+    const c = card(1);
+    c.body = { ...c.body, text: "Nakht lived about 3,400 years ago." };
+    const { store, files } = fake([c]);
+    files.set(speechPath("voice-a", "Nakht lived about 3,400 years ago. Question 1?"), new Uint8Array([9])); // read with the pause
+    const calls: string[] = [];
+    await spokenUrl(store, scope, parseLine(lineId(ID(1), "read"))!, MONDAY, voice(calls));
+    expect(calls).toEqual(["Nakht lived about 3400 years ago. Question 1?"]);
+    expect(files.has(speechPath("voice-a", "Nakht lived about 3400 years ago. Question 1?"))).toBe(true);
+  });
+
   it("keeps a voice's lines apart, and the path names no child and holds no words", () => {
     expect(speechPath("voice-a", "Read 1")).not.toBe(speechPath("voice-b", "Read 1"));
     expect(speechPath("voice-a", "Hi, Pip.")).toMatch(/^speech\/voice-a\/[0-9a-f]{64}\.mp3$/);
@@ -144,6 +155,37 @@ describe("the tutor's voice", () => {
     expect(await spokenUrl(store, scope, parseLine(lineId(ID(1), 0))!, MONDAY, voice(calls))).toBeNull();
     expect(calls).toEqual([]);
     expect(runs).toEqual([]);
+  });
+});
+
+describe("numbers as they go to the voice", () => {
+  it("drops the commas inside a number, and only there", () => {
+    expect(forVoice("about 3,400 years ago")).toBe("about 3400 years ago");
+    expect(forVoice("It is 1,234 steps.")).toBe("It is 1234 steps.");
+    expect(forVoice("Heh for 1,000,000. What")).toBe("Heh for 1000000. What");
+    expect(forVoice("rope 100, lotus 1,000, finger 10,000, tadpole 100,000 and")).toBe("rope 100, lotus 1000, finger 10000, tadpole 100000 and");
+    expect(forVoice("$3,400s")).toBe("$3400s");
+  });
+
+  it("leaves every other shape in the week's cards, and a list, as written", () => {
+    for (const same of [
+      "Count by 400s: 400, 800, 1200, 1600, 2000...",
+      "land in 6 times 6, 36 ways",
+      "In 1811-12, Mary Anning",
+      "of America (1827-1838), with 435",
+      "In the 1660s, Isaac Newton",
+      "about 365.2422 days",
+      "about 137.5 degrees",
+      "on February 29th?",
+      "one whole 24-hour day?",
+      "on 17 December 1903.",
+      "about 1/4 of a day",
+      "It took 2–3 hours.",
+      "the numbers 1,2,3",
+      "0.123,456",
+    ]) {
+      expect(forVoice(same), same).toBe(same);
+    }
   });
 });
 
