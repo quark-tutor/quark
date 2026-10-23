@@ -66,6 +66,11 @@ export function chainState(chain: ChainLayer[], attempts: AttemptRow[]): CardSta
 
 export const isDone = (s: CardState) => s.kind !== "answering";
 
+// The name of a line the tutor can say aloud (core/wall/speech.ts reads it back): a card's read-aloud words,
+// its question, its handoff, or one hint by its place. Never the words themselves.
+export const lineId = (cardId: string, part: "read" | "question" | "handoff" | number) =>
+  typeof part === "number" ? `${cardId}.hint.${part}` : `${cardId}.${part}`;
+
 // --- What reaches the browser (rule 7): these fields and nothing else. A test holds each list. ---
 
 export type Tile = { slot: Slot; title: string; cardId: string; done: boolean };

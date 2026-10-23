@@ -42,8 +42,12 @@ export async function say(text: string, voice: string, format: { wav?: number } 
 }
 
 // Chirp 3 runs in the "us" multi-region, on its own endpoint. The recognizer "_" is the default one, so
-// nothing is set up in the Google project beyond the API.
+// nothing is set up in the Google project beyond the API. Nothing is sent with the clip but its format: no
+// phrases to listen for (a card's answers would pull what is heard toward the right one, rule 3) and nothing
+// about the child (rule 7). Speech-to-Text keeps no audio or transcript unless a project joins Google's
+// data-logging program, and Quark's does not.
 const REGION = "us";
+export const HEAR_MODEL = "chirp_3";
 
 type Recognized = { results?: { alternatives?: { transcript?: string }[] }[] };
 
@@ -54,7 +58,7 @@ export async function hear(pcm: Uint8Array, options: { language: string; sampleR
     `https://${REGION}-speech.googleapis.com/v2/projects/${project}/locations/${REGION}/recognizers/_:recognize`,
     {
       config: {
-        model: "chirp_3",
+        model: HEAR_MODEL,
         languageCodes: [options.language],
         explicitDecodingConfig: { encoding: "LINEAR16", sampleRateHertz: options.sampleRate, audioChannelCount: 1 },
         features: { enableAutomaticPunctuation: true },

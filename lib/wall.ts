@@ -2,7 +2,9 @@ import "server-only";
 import type { AnswerKey } from "@/core/curation/types";
 import type { MatchRule } from "@/core/wall/answer";
 import type { AttemptRow } from "@/core/wall/card";
-import { answer, cardFor, wallFor, type CardRow, type Scope, type WallStore } from "@/core/wall/flow";
+import { answer, cardFor, wallFor, type CardRow, type Scope } from "@/core/wall/flow";
+import { CLIP_RATE, heardText, parseLine, spokenUrl, type SpeechStore } from "@/core/wall/speech";
+import { hear, HEAR_MODEL, say, TUTOR_VOICE } from "@/core/speech";
 import type { Device } from "@/lib/device";
 import { createAdminClient } from "@/lib/supabase/admin";
 
@@ -86,7 +88,7 @@ function must<T>(r: { data: T | null; error: { message: string } | null }, what:
 
 // The store, on the service role. The rule's query: this family's and this child's cards for today, passed,
 // in a theme of this family that is live. core/wall/flow.ts checks each row again, and the item's approval.
-export function wallStore(): WallStore {
+export function wallStore(): SpeechStore {
   const db = createAdminClient();
   const scoped = (familyId: string, childId: string) =>
     db
@@ -139,6 +141,19 @@ export function wallStore(): WallStore {
       const { data, error } = await db.storage.from("content").createSignedUrl(path, SIGNED_FOR);
       return error ? null : data.signedUrl;
     },
+    // The tutor's spoken lines sit beside the pictures in the private bucket. Signing a file that isn't there
+    // fails, which is how a line not yet made is found.
+    async speechUrl(path) {
+      const { data, error } = await db.storage.from("content").createSignedUrl(path, SIGNED_FOR);
+      return error ? null : data.signedUrl;
+    },
+    async putSpeech(path, audio) {
+      const { error } = await db.storage.from("content").upload(path, audio, { contentType: "audio/mpeg", upsert: true });
+      if (error) throw new Error(`speech: ${error.message}`);
+    },
+    async addSpeechRun(row) {
+      must(await db.from("speech_runs").insert(row), "speech_runs");
+    },
   };
 }
 
@@ -146,5 +161,16 @@ const scopeOf = (device: Device): Scope => ({ familyId: device.familyId, childId
 
 export const loadWall = (device: Device, now = new Date()) => wallFor(wallStore(), scopeOf(device), device.nickname, now);
 export const loadCard = (device: Device, cardId: string, now = new Date()) => cardFor(wallStore(), scopeOf(device), cardId, now);
+// "Read it to me": a signed URL to the line's audio in the tutor's voice, made on the first tap and stored; null
+// when the line isn't one the child can see now (core/wall/speech.ts).
+export const sayLine = (device: Device, line: string, now = new Date()) => {
+  const parsed = parseLine(line);
+  return parsed ? spokenUrl(wallStore(), scopeOf(device), parsed, now, { name: TUTOR_VOICE, say: (text) => say(text) }) : Promise.resolve(null);
+};
+
+// Talk: the words in the clip the child said, handed back for the answer box. Neither is kept.
+export const hearClip = (device: Device, pcm: Uint8Array) =>
+  heardText(wallStore(), scopeOf(device), pcm, { model: HEAR_MODEL, hear: (clip) => hear(clip, { sampleRate: CLIP_RATE }) });
+
 export const sendAnswer = (device: Device, input: { cardId: string; guess: string; seconds: number | null }, now = new Date()) =>
   answer(wallStore(), scopeOf(device), input, now, WALL_RULE);

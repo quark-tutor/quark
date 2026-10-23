@@ -11,6 +11,9 @@ import * as google from "./speech/google.ts";
 // Brandon and June from four samples (Brandon, 22 Oct 2026: "The voice is Sulafat").
 export const TUTOR_VOICE = "en-US-Chirp3-HD-Sulafat";
 
+// What hears the child.
+export const HEAR_MODEL = google.HEAR_MODEL;
+
 // The line's audio as MP3, in the tutor's voice unless another is named.
 export function say(text: string, options: { voice?: string } = {}): Promise<Uint8Array> {
   return google.say(text, options.voice ?? TUTOR_VOICE);
@@ -21,7 +24,8 @@ export function sayWav(text: string, sampleRate: number, options: { voice?: stri
   return google.say(text, options.voice ?? TUTOR_VOICE, { wav: sampleRate });
 }
 
-// The words in one clip of 16-bit mono PCM, as the child said them.
+// The words in one clip of 16-bit mono PCM, as the child said them. One clip, not a stream: iPad Safari can't
+// stream an upload, so Talk sends the clip when the child lets go (decided at stop 1, 22 Oct 2026).
 export function hear(pcm: Uint8Array, options: { language?: string; sampleRate: number }): Promise<string> {
   return google.hear(pcm, { language: options.language ?? "en-US", sampleRate: options.sampleRate });
 }

@@ -116,14 +116,14 @@ const toLayer = (row: CardRow): ChainLayer => ({
 
 // A day-slot's chain as the child can reach it: the rows on the wall, one per layer (the first made, if a
 // day was ever written twice), layer 1 onwards while each is there.
-function chainOf(rows: CardRow[], scope: Scope, today: string, slot: string): { chain: ChainLayer[]; rows: CardRow[] } {
+export function chainOf(rows: CardRow[], scope: Scope, today: string, slot: string): { chain: ChainLayer[]; rows: CardRow[] } {
   const seen = new Set<number>();
   const visible = rows.filter((r) => r.slot === slot && onWall(r, scope, today) && !seen.has(r.layer) && seen.add(r.layer));
   const chain = reachable(visible);
   return { chain: chain.map(toLayer), rows: chain };
 }
 
-const today = async (store: WallStore, scope: Scope, now: Date) => todayIn(await store.timezone(scope.familyId), now);
+export const today = async (store: WallStore, scope: Scope, now: Date) => todayIn(await store.timezone(scope.familyId), now);
 
 // A visit: the child's last session if anything happened in the last 30 minutes, else a new one, and the
 // one before it ended as child_left. Its ended_at is moved to each load and answer, so it is the last activity.
