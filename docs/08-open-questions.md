@@ -284,6 +284,12 @@ Decided (Brandon, 21 Oct 2026, 21:48 to 22:08, in the chat's clarify pass), `doc
 - **Decided: every row's outcome is as the chat proposed it** ("yes, these look good"). The two rows waiting on June and a brainstorm, "Where the limits on 'Ask' are" and "Safety-floor lessons in the plan", were thrown away ("clear the two waiting on, we don't need those"). Two rows became bug lines, and three more were deleted as done or overtaken.
 - **Decided: *To test* is "none; a check is taken at a stop before the close, never parked".** *Replaces* "the board's *on test* rows are the list". In CLAUDE.md, *Kinds of session* and *The board* now each point to the plugin's page and keep only Quark's own rules.
 
+### Next.js to 16.4.2
+
+Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`, report `docs/reports/2026-10-22-next-16-4-2.md`; a tooling job on `phase-4-wonder-wall`.
+
+- **Decided: Next.js goes to 16.4.2 before the release, as its own job at the top of Next.** Brandon: "accept." 16.4.0 carries GHSA-2464-fhr4-w9xw (critical) and GHSA-p3m5-59mp-jv5r (high), and its production build stops with a security error. Nothing was replaced. `eslint-config-next` moved with it; `npm audit`'s remaining `braces` line (lint tooling) was left alone, as the brief said.
+
 ### Releases
 
 - **Released to `main`, 20 Oct 2026: phase 3** (the plan and the short lessons, content and the approval rule, ideas and cards, the models and costs page, the week preview, the policy gate on test and on live, and the Sunday build with the Looks-good page), with the test database job, slice 4 of working with Claude and the method moved into the wwc plugin that were merged into the branch. A fast-forward of 137 commits: `main` moved from `d9bd970` to `9694b58`. Brandon typed `/wwc:release` and gave the push at the terminal's ask; he gave no other words for it. The migrations workflow's run for the push (`39558916342`) was green and applied nothing: its live job ran the tests and the typecheck, and skipped "Push to the live database" because `SUPABASE_DB_URL_LIVE` is not set. The Sunday build is asleep in production until Brandon sets `CRON_SECRET` there.
