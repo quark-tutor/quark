@@ -64,3 +64,6 @@ plan/candidates/*.json
 
 # voice samples for picking the tutor's voice (npm run speech:samples); the report names the pick
 /docs/reports/samples/
+
+# the iPad dev server's certificate for the laptop's home address (npm run dev:ipad)
+/certificates/

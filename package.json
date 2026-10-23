@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:ipad": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/dev-ipad.mts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
