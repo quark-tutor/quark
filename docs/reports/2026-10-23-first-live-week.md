@@ -237,3 +237,54 @@ npm run db:push:live
 
 It prints `Target: LIVE` first, then the database user, then the two migrations it applies. Say **"M1 is in"** with
 what it printed. Saturday's M2 to M4 follow.
+
+## M1 is in (23 Oct 2026, 20:37 HST)
+
+What it printed (Brandon's screenshot), in order: `Target: LIVE` with the live project's address; `Database user:
+postgres.<the live project's ref>`; `Finished supabase db push.`; the CLI's `Connecting to remote database...`, its
+question listing `20261021000000_server_writes_weeks.sql` and `20261022000000_speech_runs.sql` with `[Y/n]`; then
+`Applying migration` for each, in order. No error. Both migrations are on live. Code ran nothing against live and
+has not looked at it; the first sight of them working there is stop 6 (the live week page, and `/parent/models`,
+which reads `speech_runs`).
+
+**Found along the way (tooling, for the close as one bug line):** the CLI's `[Y/n]` is never answered.
+`scripts/db-push.mts` runs the CLI through `spawnSync` with no input, so the question meets an empty stdin and takes
+its default, yes. The output is held back to be scrubbed and printed only when the push is done, stdout before
+stderr, which is why `Finished` comes first. The file's comment says `db:push:live` "asks first"; it does not (the
+gate-live report of 20 Oct saw the same: "the CLI did not prompt"). Nothing went wrong: the stop is the guard, and
+"M1 is in" follows it. The fix is minutes: pass `--yes` and say so in the comment, so the script does what it says.
+
+## Stop M2: live week 1 deleted, and the younger's reading level, by your hand (23 Oct 2026, 20:37 HST)
+
+The brief has this on Saturday. Nothing holds it to Saturday: no child has seen live week 1 and no iPad is paired to
+live, so it can be done whenever you are ready.
+
+**What it does:** four statements in the live project's SQL editor, one at a time, each select read before the
+statement after it:
+
+```sql
+select id, week_start, plan_week, status from themes where plan_week = 1;   -- expect one row: 2026-10-19
+delete from themes where plan_week = 1 and week_start = '2026-10-19';       -- expect DELETE 1
+select id, birth_month, reading from children;                              -- expect two rows: chapter_books, reads_alone
+update children set reading = 'chapter_books' where reading = 'reads_alone'; -- expect UPDATE 1: the younger only
+```
+
+The delete takes the theme's ideas, cards, questions and any review rows with it (each `on delete cascade`). The
+`model_runs` rows of the 19 and 20 Oct builds stay, with their theme set to null, so `/parent/models` keeps the money.
+An answer recorded against one of its questions would stop the delete (`attempts` does not cascade): if it fails on
+`attempts_question_id_fkey`, nothing is deleted; paste the error and stop there.
+
+**What it touches:** **LIVE**: one theme and everything under it (one day, 40 cards); one child's reading level.
+
+**How it is undone:** the delete cannot be undone; the week can be built again, not restored, and no child ever saw
+it (`docs/reports/2026-10-20-gate-live.md`). The update is undone by
+`update children set reading = 'reads_alone' where id = '<the younger's id from the select>';`.
+
+**Checked on test:** the same cascade is what `--day 5 --rebuild` used tonight (the day's ideas deleted, their cards
+and questions with them; then built again). The reading level is read by `levelOf()`, which the build's plan now
+prints for each child, so M3 shows whether the update took. `scripts/family.local.json` already has the younger at
+`chapter_books`, so a later `seed:live` keeps it.
+
+**Your step:** the Supabase dashboard, the live project, SQL Editor, a new query. Run the four lines one at a time.
+Say **"M2 is in"** with what each printed (the row counts and the two reading levels are enough; the ids and birth
+months stay in the session, never in the report). Then M3, the plan check.
