@@ -327,7 +327,7 @@ npm run week:build:live -- --week 1 --start 2026-10-26 --plan
 Paste everything it prints. The nicknames in it stay in the session; the report says "the older" and "the
 younger". Then M4, the build.
 
-## M3 is in (23 Oct 2026, 21:02 HST)
+## M3 is in (23 Oct 2026, 21:01 HST)
 
 From Brandon's screenshot, `Target: LIVE` first, then:
 
@@ -343,7 +343,7 @@ From Brandon's screenshot, `Target: LIVE` first, then:
    rulebook has not changed since. The models are the three expected (ideas and gate on Opus 5.5, cards on Sonnet
    5.5).
 
-## Stop M4: the week built on live, by your hand (23 Oct 2026, 21:02 HST)
+## Stop M4: the week built on live, by your hand (23 Oct 2026, 21:01 HST)
 
 **What it does:** `npm run week:build:live -- --week 1 --start 2026-10-26` builds week 1 on live: seven days, both
 children, five day-slots a day, four layers each (280 cards), on card v6 and ideas v5, with pictures from live's
@@ -351,7 +351,7 @@ approved items, then the gate reads every card. The theme ends in `review`: noth
 taps Looks good (stop 7). It writes one `model_runs` row with the counts and the money.
 
 **What it touches:** **LIVE**: one new theme and its ideas, cards and questions. **Money:** about $13 to $14 of
-Anthropic spend (test's proof week, 21 Oct: $13.62; tonight's v6 day on test cost the same as a v5 day), under the
+Anthropic spend (test's proof week, 21 Oct: $13.62; tonight's two v6 builds of day 5 on test came to $3.79, about the same a day), under the
 $25 line. It takes a while: let it run to the end, about 15 to 20 minutes.
 
 **How it is undone:** nothing a child sees until the tap. A bad day is `--day d --rebuild` at a stop of its own; the
