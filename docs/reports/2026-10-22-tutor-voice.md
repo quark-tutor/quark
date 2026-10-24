@@ -439,3 +439,38 @@ rule, under 15 cents at list price. Nothing on Anthropic.
 
 **Size:** a slice (8 hours). About 40 minutes of work since go: 22 to stop 2, about 5 and 10 for the two fix rounds,
 and a few for the restart.
+
+### A row for the close: the lines made ahead, and the button busy (Brandon, 23 Oct 2026)
+
+Brandon, after the go: "One finding for the close, not a failed check: a line's first-ever tap waits 4–5 seconds
+before the voice starts. Propose a row to make each day's card lines ahead of time (the Sunday build or overnight) and
+to show the button busy while a line is being made."
+
+A job adds no row, so here is the row for the close to add, at `next`; its place in Next is Brandon's:
+
+| Feature | Stage | Moved | Project | Depends on | Waiting on | Size | Where |
+|---|---|---|---|---|---|---|---|
+| The tutor's lines made ahead: each night, every passed card of the next day has its lines made in the tutor's voice and stored, so no first tap waits 4–5 seconds; and "Read it to me" shows it is busy from the tap until the voice starts | next | 23 Oct 2026 | The tutor | The tutor's voice, both ways | — | a job | `docs/reports/2026-10-22-tutor-voice.md`, *A row for the close* |
+
+What the brief would propose (decisions for its stop 1, not taken here):
+
+- **Overnight, not Sunday.** One more daily Vercel cron, about 3 am Hawaii, makes the coming day's lines. Three
+  reasons:
+  - The Sunday build already spends about 130 of its 240 seconds a day.
+  - A card held back, or a week taken back to review after Sunday, would have spent on lines never said.
+  - The night run catches a card passed late.
+
+  One day is about 40 cards, which is well under a minute with a few made at once. Vercel's Hobby limits for a daily
+  cron are to be checked in that brief.
+- **Which lines.** Every passed card's read line, its hints and its handoff, made and stored, never served early. The
+  route still says a hint only once earned and the handoff only once reached, so rule 3 is unchanged: making a hint's
+  sound is not showing it. The read lines measured 386 to 436 characters. Rough sizes:
+  - Every line: about 30,000 characters a day, so about 900,000 a month, at the edge of the free 1 million.
+  - Read lines only: about 460,000 a month.
+
+  Past the free tier, it is $30 a million, so at most a dollar or two a month. A card held back is never made.
+- **The busy button.** From the tap until the voice starts, the button reads "Getting it ready…" (a new line in
+  `core/wall/words.ts`) and is marked busy; a second tap cancels. It also covers the 1 to 1.6 seconds a stored line
+  takes, because the route checks the line and signs its address on every tap.
+- **For Monday 26 Oct:** until this row is built, each line's first tap in the boys' first week waits 4–5 seconds.
+  Built before Monday, it is a job of about 4 hours, and it needs the key in Vercel either way.
