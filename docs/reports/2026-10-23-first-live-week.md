@@ -288,3 +288,41 @@ prints for each child, so M3 shows whether the update took. `scripts/family.loca
 **Your step:** the Supabase dashboard, the live project, SQL Editor, a new query. Run the four lines one at a time.
 Say **"M2 is in"** with what each printed (the row counts and the two reading levels are enough; the ids and birth
 months stay in the session, never in the report). Then M3, the plan check.
+
+## M2 is in (23 Oct 2026, 20:52 HST)
+
+Brandon: "The select found one theme, 2026-10-19, in review. The delete succeeded. The children select showed two
+rows, chapter_books and reads_alone. The update succeeded." Live has no week now, and both children read at
+`chapter_books`; M3's plan shows the second.
+
+## Stop M3: the plan check on live, by your hand (23 Oct 2026, 20:52 HST)
+
+**What it does:** `npm run week:build:live -- --week 1 --start 2026-10-26 --plan` prints what week 1 would be on
+live and what the family's settings decide about it, then stops. It reads the plan, the children and the rulebook;
+`prepareWeek()` writes nothing and `--plan` exits before any model is called.
+
+**What it touches:** **LIVE**, read only. Nothing written, nothing spent.
+
+**How it is undone:** nothing to undo.
+
+**Checked on test:** the same command on test tonight (`--week 1 --plan`, test's week starting 21 Oct) printed day 1
+as below and one "written for" line per child, then "--plan: stopped before spending anything; nothing was written."
+
+**What Code checks in what you paste:**
+
+1. Day 1 reads, word for word:
+   `Day 1: Ancient Egypt on then (The Nile, from source to sea); short lessons: look great-wave, wonder leap-years, listen carnival-of-the-animals, puzzle two-dice.`
+   If not, `plan:import:live` is a stop of its own before M4.
+2. Both children: `written for chapter_books, age N` (9 and 7). If either says `reads_alone`, the update is a stop
+   of its own before M4.
+3. Also read: the first line says `starting 2026-10-26, 7 days`, and the settings list names what the gate will hold
+   back or read as parent-led on live. Not a check that stops anything; it goes to stop 6 for your look.
+
+**Your step:** in your own PowerShell, in the repository:
+
+```
+npm run week:build:live -- --week 1 --start 2026-10-26 --plan
+```
+
+Paste everything it prints. The nicknames in it stay in the session; the report says "the older" and "the
+younger". Then M4, the build.
