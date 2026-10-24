@@ -90,7 +90,6 @@ const goodCard = (n: number): CardBody => ({
   title: `Card ${n}`,
   text: "The river rose every summer and left dark soil behind.",
   image_alt: "A painting of farmers by the river.",
-  read_aloud: "The river rose every summer.",
   question: "What did the flood leave behind?",
   hints: ["Where did the water come from?", "What was the ground like after the water went away?"],
   handoff: "Ask Dad what the farmers planted.",
@@ -164,6 +163,12 @@ describe("ideas", () => {
     expect(Object.keys(IDEA_SCHEMA.properties)).toEqual(IDEA_SCHEMA.required);
     expect(CARD_SCHEMA.required).toEqual(["card_1", "card_2", "card_3", "card_4"]);
     expect(JSON.stringify([IDEA_SCHEMA, CARD_SCHEMA])).not.toContain('"layers"');
+  });
+
+  it("asks the card writer for no read_aloud, which nothing says (card v6)", () => {
+    const one = CARD_SCHEMA.properties.card_1 as { required: string[]; properties: Record<string, unknown> };
+    expect(one.required).toEqual(["title", "text", "image_alt", "question", "hints", "handoff"]);
+    expect(Object.keys(one.properties)).toEqual(one.required);
   });
 
   it("anchors each idea to the plan topic and its item with attribution", () => {
@@ -281,7 +286,7 @@ describe("cardPrompt", () => {
   it("asks the first handoff to send the child to a parent when the topic has a parent's part", () => {
     const chain = chainFor(1, "listen");
     const p = cardPrompt(ctx({ chain: { ...chain, topic: { ...chain.topic, parentNote: "Play the first movement for him." } } }));
-    expect(p).toContain("A parent does this with the child: Play the first movement for him. Let the first card's handoff ask the child to get a parent for it. Never name an app, a website or a link.");
+    expect(p).toContain("A parent does this with the child: Play the first movement for him. Let the first card's handoff ask the child to get a parent for it, and a card that needs it with no recording of its own say so from its first words. Never name an app, a website or a link.");
     expect(cardPrompt(ctx())).not.toContain("A parent does this");
   });
 });
@@ -326,19 +331,18 @@ describe("the hint check", () => {
     list[1] = { ...list[1], hints: ["Where did the water go?", "It's silt, isn't it?"] };
     list[2] = { ...list[2], hints: ["Only one hint."], text: "You're so smart!" };
     list[3] = { ...list[3], handoff: " ", text: "See www.example.org" };
-    const check = checkCards(asRaw(list), chainFor(3, "look"), "reads_alone");
+    const check = checkCards(asRaw(list), chainFor(3, "look"));
     expect(check.cards[0]).toEqual([]);
     expect(check.cards[1]).toEqual(['hint 2 (the last) gives the answer away: "It\'s silt, isn\'t it?"']);
     expect(check.cards[2]).toEqual(expect.arrayContaining(["needs two or three hints, has 1", 'uses a brilliance word ("smart"); use effort words']));
     expect(check.cards[3]).toEqual(expect.arrayContaining(["no handoff", "contains a link"]));
   });
 
-  it("wants a picture described, and the whole card read aloud for a child who is read to", () => {
+  it("wants a picture described, and four cards", () => {
     const list = goodList();
     list[0] = { ...list[0], image_alt: "" };
-    expect(checkCards(asRaw(list), chainFor(3, "look"), "reads_alone").cards[0]).toEqual(["the idea has a picture but image_alt is empty"]);
-    expect(checkCards(goodCards(), chainFor(3, "look"), "read_to").cards[0]).toEqual(["the child is read to, so read_aloud must carry the whole card"]);
-    expect(checkCards(asRaw([goodCard(1)]), chainFor(3, "look"), "reads_alone").whole).toBe("expected 4 cards, got 1: cards 2, 3, 4 missing");
+    expect(checkCards(asRaw(list), chainFor(3, "look")).cards[0]).toEqual(["the idea has a picture but image_alt is empty"]);
+    expect(checkCards(asRaw([goodCard(1)]), chainFor(3, "look")).whole).toBe("expected 4 cards, got 1: cards 2, 3, 4 missing");
   });
 });
 

@@ -24,7 +24,7 @@ function card(n: number, o: { layer?: number; child_id?: string; policy?: string
     slot: "then",
     layer,
     policy: o.policy ?? "passed",
-    body: { title: `Title ${n}`, text: `Text ${n}`, image_alt: "", read_aloud: `Read ${n}`, question: `Question ${n}?`, hints: [`Hint ${n}.1`, `Hint ${n}.2`], handoff: `Ask a parent about ${n}.` },
+    body: { title: `Title ${n}`, text: `Text ${n}`, image_alt: "", question: `Question ${n}?`, hints: [`Hint ${n}.1`, `Hint ${n}.2`], handoff: `Ask a parent about ${n}.` },
     theme: { status: "live", family_id: FAMILY },
     itemId: null,
     item: null,
@@ -91,12 +91,15 @@ describe("what the tutor may say", () => {
     expect(await text(store, lineId(ID(1), "handoff"))).toBe("Ask a parent about 1.");
   });
 
-  it("reads the card as the page shows it, its words then its question, and never the writer's read_aloud", async () => {
-    const { store } = fake([card(1)]);
+  it("reads the card as the page shows it, its words then its question, and never the read_aloud a card written before card v6 keeps", async () => {
+    const old = card(1);
+    const kept = { ...old.body, read_aloud: "The writer's spoken version." };
+    const { store } = fake([{ ...old, body: kept }]);
     const shown = await cardFor(store, scope, ID(1), MONDAY);
     if (!shown || !("card" in shown)) throw new Error("the card should be on the wall");
     expect(await text(store, lineId(ID(1), "read"))).toBe(`${shown.card.text} ${shown.card.question}`);
-    expect(await text(store, lineId(ID(1), "read"))).not.toContain(shown.card.read_aloud);
+    expect(await text(store, lineId(ID(1), "read"))).not.toContain(kept.read_aloud);
+    expect(shown.card).not.toHaveProperty("read_aloud");
   });
 
   it("says nothing of a layer not yet reached, and keeps a finished layer's own lines", async () => {

@@ -27,7 +27,6 @@ function card(id: string, o: Opts = {}): CardRow {
       title: `Title ${id}`,
       text: `Text ${id}`,
       image_alt: "",
-      read_aloud: `Read ${id}`,
       question: `Which way does it go, ${id}?`,
       hints: Array.from({ length: o.hints ?? 2 }, (_, i) => `Hint ${id}.${i + 1}`),
       handoff: `Ask a parent about ${id}.`,
@@ -221,7 +220,7 @@ describe("what reaches the browser", () => {
 
     const shown = await cardFor(store, scope, "l1", MONDAY);
     const c = shown && "card" in shown ? shown.card : null;
-    expect(Object.keys(c!).sort()).toEqual(["hints", "id", "image_alt", "layer", "media", "question", "read_aloud", "slot", "state", "text", "title"]);
+    expect(Object.keys(c!).sort()).toEqual(["hints", "id", "image_alt", "layer", "media", "question", "slot", "state", "text", "title"]);
 
     const replies = [
       await ask(store, "l1", "nope"),

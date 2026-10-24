@@ -35,7 +35,7 @@ describe("the real reply with a stray brace (day 1 wonder, 14 Oct 2026)", () => 
     const clean = cleanCards(raw);
     expect(clean.card_1!.handoff).toBe("Ask a grown-up at home to show you the Nile on a map and tell you where it begins.");
     expect(clean.card_2).toEqual(raw.card_2);
-    const words = Object.values(clean).flatMap((c) => [c!.title, c!.text, c!.image_alt, c!.read_aloud, c!.question, c!.handoff, ...c!.hints]);
+    const words = Object.values(clean).flatMap((c) => [c!.title, c!.text, c!.image_alt, c!.question, c!.handoff, ...c!.hints]);
     expect(words.filter(hasBrace)).toEqual([]);
   });
 });

@@ -1,4 +1,4 @@
-<!-- ideas v4 (16 Oct 2026: mixed weeks, a thread topic or a short lesson per card; v3: four named layers, layer 4 may have no fixed answers). Used by core/curation/ideas.ts (use: "curate"): one call per day and slot of a week. Not kid-facing:
+<!-- ideas v5 (23 Oct 2026: the title is the idea's name, kept when the idea comes back, and the question never asks for it; v4, 16 Oct: mixed weeks, a thread topic or a short lesson per card; v3: four named layers, layer 4 may have no fixed answers). Used by core/curation/ideas.ts (use: "curate"): one call per day and slot of a week. Not kid-facing:
      the ideas are for the tutor, and core/curation/cards.ts turns them into each child's cards. Source: docs/04, "How a
      week is built" and "How a week is mixed". -->
 
@@ -21,9 +21,9 @@ Always return all four, as `layer_1`, `layer_2`, `layer_3` and `layer_4`, in tha
 
 ## Each idea
 
-- **title**: a few words.
+- **title**: the idea's name, the word or two someone who knows the subject would use for it ("Perspective", "Erosion", "A round", "Scattering"); when it has no such name, the plain name of what it is about ("The Nile's flood", "Khufu's pyramid"). Never a phrase that teases, puns or describes an action. When an idea comes back from an earlier layer or day, keep its name; a new idea brings its own. Both children's cards take this name as their title and say it in their words.
 - **statement**: the fact or concept in plain words, two or three sentences, with the mechanism named (not just "the Nile flooded" but why it flooded). Keep the names of people and works exact. Use only what the topic summaries say or what is well established; never invent a fact, a date, a quotation or a name. Where historians disagree or the evidence is thin, say so in the statement.
-- **question**: one question the child can reach by thinking about this idea, with one clear answer for layers 1 to 3. It must not be answerable only by recalling a name or date the child was never told.
+- **question**: one question the child can reach by thinking about this idea, with one clear answer for layers 1 to 3. It must not be answerable only by recalling a name or date the child was never told, and it never asks for the idea's own name.
 - **accept**: the acceptable answers, in plain words, short (one to five words each). Include the obvious ways a child might say it. For layer 4, whose question has more than one good answer, this may be empty; the rubric then says what a good answer includes.
 - **rubric**: one line on what counts as right, and what nearly right looks like.
 - **content_item_id**: the id of one approved item from the list that this idea is about, or that a child should look at or listen to with it. Layer 1 is the card a child meets first: when the list has any item, layer 1 must use one, so write layer 1 about something the child can see or hear in it. In layers 2-4, use an item only where it fits, and leave it as an empty string when none does. Never use an id that isn't in the list.

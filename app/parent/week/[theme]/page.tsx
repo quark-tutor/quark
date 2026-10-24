@@ -40,7 +40,7 @@ const SLOTS = ["look", "wonder", "listen", "then", "puzzle"] as const;
 const SLOT_NAMES: Record<string, string> = { look: "Look", wonder: "Wonder", listen: "Listen", then: "Then", puzzle: "Puzzle" };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-type Body = { title: string; text: string; image_alt: string; read_aloud: string; question: string; hints: string[]; handoff: string };
+type Body = { title: string; text: string; image_alt: string; question: string; hints: string[]; handoff: string };
 type Card = {
   id: string;
   child_id: string;
@@ -318,7 +318,6 @@ function Layer({ card, media, topicHasMedia, currentHash }: { card: Card; media?
         </p>
       )}
       <p>{b.text}</p>
-      {b.read_aloud && b.read_aloud !== b.text ? <p className={styles.meta}>Read aloud: {b.read_aloud}</p> : null}
       <p>
         <strong>{b.question}</strong>
       </p>

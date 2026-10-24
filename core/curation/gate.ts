@@ -180,7 +180,6 @@ export function gatePrompt(input: {
     "The card, as the child would see it:",
     `Title: ${card.title}`,
     `Text: ${card.text}`,
-    `Read aloud: ${card.read_aloud}`,
     ...(card.image_alt?.trim() ? [`Picture: ${card.image_alt}`] : []),
     `Question: ${card.question}`,
     "Hints, in order:",

@@ -73,8 +73,8 @@ export async function lineText(store: WallStore, scope: Scope, line: Line, now: 
 }
 
 // What "Read it to me" says on a card: the card as the page shows it, its words then its question (Brandon at
-// stop 2, 23 Oct 2026: what it read "does not match the text on the screen"). read_aloud, the writer's shorter
-// spoken version for a child who reads alone, is never said.
+// stop 2, 23 Oct 2026: what it read "does not match the text on the screen"). read_aloud, the spoken version
+// cards written before card v6 still carry, is never said.
 export const readLine = (body: { text: string; question: string }) => `${body.text.trim()} ${body.question.trim()}`;
 
 // The words as they go to the voice. Google reads a thousands comma as a pause, "3,400" as "three, four hundred"

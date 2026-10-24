@@ -87,7 +87,6 @@ export type CardReply = {
   title: string;
   text: string;
   image_alt: string;
-  read_aloud: string;
   question: string;
   media: Media | null;
   hints: string[];
@@ -116,7 +115,6 @@ export function cardReply(chain: ChainLayer[], state: CardState, media: Media | 
     title: body.title,
     text: body.text,
     image_alt: body.image_alt,
-    read_aloud: body.read_aloud,
     question: body.question,
     media,
     hints: body.hints.slice(0, state.hintsSeen),

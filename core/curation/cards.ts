@@ -24,7 +24,6 @@ export type CardBody = {
   title: string;
   text: string;
   image_alt: string;
-  read_aloud: string;
   question: string;
   hints: string[];
   handoff: string;
@@ -49,12 +48,11 @@ const ONE_CARD_SCHEMA = {
     title: { type: "string" },
     text: { type: "string" },
     image_alt: { type: "string" },
-    read_aloud: { type: "string" },
     question: { type: "string" },
     hints: { type: "array", items: { type: "string" } },
     handoff: { type: "string" },
   },
-  required: ["title", "text", "image_alt", "read_aloud", "question", "hints", "handoff"],
+  required: ["title", "text", "image_alt", "question", "hints", "handoff"],
   additionalProperties: false,
 };
 
@@ -102,7 +100,7 @@ export function cardPrompt(ctx: CardContext): string {
       ? `Perspective: ${ctx.perspective}. Values points touched: ${ctx.valuesPoints.map((p) => `${p.number} (${p.name})`).join(", ") || "none"}.`
       : "No perspective marked: these cards don't touch the family's values points.",
     chain.topic.parentNote
-      ? `A parent does this with the child: ${chain.topic.parentNote} Let the first card's handoff ask the child to get a parent for it. Never name an app, a website or a link.`
+      ? `A parent does this with the child: ${chain.topic.parentNote} Let the first card's handoff ask the child to get a parent for it, and a card that needs it with no recording of its own say so from its first words. Never name an app, a website or a link.`
       : "",
     `The family's own words: ${ctx.statement?.trim() || "(none given yet)"}`,
     `How the family wants its children to learn to act: ${learnsSentence(ctx.learns)}`,
@@ -112,7 +110,7 @@ export function cardPrompt(ctx: CardContext): string {
   for (const l of chain.layers) {
     const item = l.content_item_id ? items.get(l.content_item_id) : undefined;
     lines.push(
-      `Layer ${l.layer}: ${l.title}`,
+      `Layer ${l.layer}, named "${l.title}"`,
       `  Statement: ${l.statement}`,
       `  Question: ${l.question}`,
       `  Accept: ${l.answer_key.accept.join("; ")}. Rubric: ${l.answer_key.rubric}`,
@@ -162,9 +160,9 @@ export function cardsOf(raw: RawCards): { cards: CardBody[]; missing: number[] }
 }
 
 // Everything wrong with one card, in plain words. Empty when it is right.
-export function checkCard(c: CardBody, layer: IdeaChain["layers"][number], reading: Reading): string[] {
+export function checkCard(c: CardBody, layer: IdeaChain["layers"][number]): string[] {
   const problems: string[] = [];
-  for (const key of ["title", "text", "read_aloud", "question", "handoff"] as const) {
+  for (const key of ["title", "text", "question", "handoff"] as const) {
     if (typeof c?.[key] !== "string" || !c[key].trim()) problems.push(`no ${key}`);
   }
   const hints = (c?.hints ?? []).filter((h) => h.trim());
@@ -175,10 +173,7 @@ export function checkCard(c: CardBody, layer: IdeaChain["layers"][number], readi
     }
   });
   if (layer.content_item_id && !c?.image_alt?.trim()) problems.push("the idea has a picture but image_alt is empty");
-  if (reading === "read_to" && (c?.read_aloud?.length ?? 0) < (c?.text?.length ?? 0)) {
-    problems.push("the child is read to, so read_aloud must carry the whole card");
-  }
-  const all = [c?.title, c?.text, c?.read_aloud, c?.question, c?.handoff, ...hints].join(" ");
+  const all = [c?.title, c?.text, c?.question, c?.handoff, ...hints].join(" ");
   if (hasBrace([all, c?.image_alt ?? ""].join(" "))) problems.push("has a stray { or } in its words");
   const brilliance = all.match(BRILLIANCE);
   if (brilliance) problems.push(`uses a brilliance word ("${brilliance[0]}"); use effort words`);
@@ -187,13 +182,13 @@ export function checkCard(c: CardBody, layer: IdeaChain["layers"][number], readi
 }
 
 // Problems per card (index = layer - 1), or one problem for the whole reply when it isn't four cards.
-export function checkCards(raw: RawCards, chain: IdeaChain, reading: Reading): { whole: string | null; cards: string[][] } {
+export function checkCards(raw: RawCards, chain: IdeaChain): { whole: string | null; cards: string[][] } {
   const { cards, missing } = cardsOf(raw);
   if (missing.length) {
     const got = CARD_KEYS.length - missing.length;
     return { whole: `expected 4 cards, got ${got}: card${missing.length === 1 ? "" : "s"} ${missing.join(", ")} missing`, cards: [] };
   }
-  return { whole: null, cards: cards.map((c, i) => checkCard(c, chain.layers[i], reading)) };
+  return { whole: null, cards: cards.map((c, i) => checkCard(c, chain.layers[i])) };
 }
 
 const listProblems = (check: ReturnType<typeof checkCards>) =>
@@ -225,7 +220,6 @@ export function cleanCards(raw: RawCards): RawCards {
       title: tidy(c.title),
       text: tidy(c.text),
       image_alt: tidy(c.image_alt),
-      read_aloud: tidy(c.read_aloud),
       question: tidy(c.question),
       handoff: tidy(c.handoff),
       hints: Array.isArray(c.hints) ? c.hints.map((h) => tidy(h) as string) : c.hints,
@@ -247,12 +241,12 @@ export async function writeCards(ctx: CardContext, deps: { complete: Complete; s
     });
 
   let raw = cleanCards(await ask(""));
-  let check = checkCards(raw, ctx.chain, ctx.child.reading);
+  let check = checkCards(raw, ctx.chain);
   let asked = 1;
   if (listProblems(check).length) {
     const fix = listProblems(check).join("\n- ");
     raw = cleanCards(await ask(`\n\nYour last try had these problems. Write all four cards again and fix them:\n- ${fix}`));
-    check = checkCards(raw, ctx.chain, ctx.child.reading);
+    check = checkCards(raw, ctx.chain);
     asked = 2;
   }
   if (check.whole) throw new Error(`${ctx.child.nickname}, day ${ctx.chain.day} ${ctx.chain.slot}: ${check.whole}`);

@@ -59,7 +59,6 @@ const card = (over: Partial<CardBody> = {}): CardBody => ({
   title: "Bones in stone",
   text: "Long ago, mud covered a fish. Layer on layer, the mud turned to rock.",
   image_alt: "",
-  read_aloud: "Long ago, mud covered a fish.",
   question: "What turned the mud into rock?",
   hints: ["What was piled on top?", "What does weight do to mud?"],
   handoff: "Ask Mom what a fossil hunter looks for.",

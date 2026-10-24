@@ -9,7 +9,6 @@ const layer = (n: number, hints = 2): ChainLayer => ({
     title: `Title ${n}`,
     text: `Text ${n}`,
     image_alt: "",
-    read_aloud: `Read ${n}`,
     question: `Question ${n}?`,
     hints: Array.from({ length: hints }, (_, i) => `Hint ${n}.${i + 1}`),
     handoff: `Ask a parent about ${n}.`,
@@ -69,7 +68,7 @@ describe("a card's state from its attempts", () => {
 describe("the card's reply", () => {
   it("carries exactly its fields, the hints seen and no handoff while answering", () => {
     const r = cardReply(chain, { kind: "answering", at: 0, hintsSeen: 1 }, null);
-    expect(Object.keys(r).sort()).toEqual(["hints", "id", "image_alt", "layer", "media", "question", "read_aloud", "slot", "state", "text", "title"]);
+    expect(Object.keys(r).sort()).toEqual(["hints", "id", "image_alt", "layer", "media", "question", "slot", "state", "text", "title"]);
     expect(r.hints).toEqual(["Hint 1.1"]);
     expect(JSON.stringify(r)).not.toMatch(/answer 1|secret rubric|Hint 1\.2|Ask a parent/);
   });
