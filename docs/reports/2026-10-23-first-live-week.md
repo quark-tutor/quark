@@ -376,3 +376,109 @@ npm run week:build:live -- --week 1 --start 2026-10-26
 
 Paste everything it prints after the plan (the nicknames stay in the session). Then stop 6, your look at the week on
 live.
+
+## M4 is in (23 Oct 2026, 21:20 HST)
+
+From what Brandon pasted (the nicknames are left out here: "the older", "the younger"). Days are dated: day 1 is
+Mon 26 Oct, day 7 Sun 1 Nov.
+
+**The build:** theme `be339f66-4940-4fdb-acbc-84c8891b8e2b`, now in `review`; 140 ideas; 571 seconds (9.5 minutes).
+
+| | the older | the younger |
+|---|---|---|
+| Cards | 140 | 140 |
+| Lenses (day-slots) | explore 6, build 6, humor 6, collect 6, story 6, compete 3, care 2 | the same |
+| First cards opened by an interest | 8 | 8 |
+| Cards without a picture or recording | 45 | 45 |
+| Day-slots the card checks asked twice | 12 | 12 |
+| Held back by the card checks | 1 | 1 |
+
+- **Held back, the older:** Thu 29 Oct, look (Audubon's birds), layer 3: hint 2 gives the answer away ("Think of a
+  coloring book: the lines are printed first, and then what happens?"). His chain that day stops at layer 2: a
+  layer held back stops the child at the one before (`core/wall/card.ts`), so layer 4 is never reached.
+- **Held back, the younger:** Thu 29 Oct, then (why Greenland looks huge), layer 2: hint 3 gives the answer away. His
+  chain that day stops at layer 1.
+- Every day-slot had an approved item; no idea chain was sent back; every first card has a picture or recording
+  where its topic has one. So every day has five first cards for each boy.
+
+**The gate** (rulebook `b025a471`, safety floor v1, Opus 5.5): 280 cards, **278 passed**, 0 held back in code, 0 by
+the checker, 0 pending; 2 left as the card checks held them. The tap counts a held-back card as checked
+(`core/curation/live.ts`), so nothing here stops Looks good.
+
+**The money:** **$14.32** (ideas $1.85, cards $5.63, the gate $6.84, $0.025 a card), against the brief's "about $13"
+and under the $25 line. With test's $3.79 tonight, this job has spent $18.11.
+
+### What the reader notes say
+
+The gate left a reader note on 265 of the 280 cards (on 20 Oct, card v5's live day 1: 36 of 40). Notes never change
+a verdict. My count, by reading them; each is "about", since one note can say two things:
+
+1. **The lens's question pasted on as the opener, about 80 cards.** "What's down there?" (explore) opens maps,
+   fables, tangrams and Kitty Hawk; "What's funny about…" (humor) opens dice, snowflakes and the chessboard legend;
+   "Who won…" (compete), "Can you find them all?" (collect) and "Who looks after whom?" (care) likewise, and the
+   gate reads most of them as not fitting the card. This is not v6: `card.md` line 27 tells every card to open
+   "with the lens's question and framing", and the questions are `lib/lenses.ts` word for word. Test's day 5 had
+   it too (16 "down there"s on v5, 4 on v6). It is the biggest thing a boy will notice this week, and it is odd,
+   not harmful.
+2. **The answer before the question, about 40 cards** (the text or the question says what is then asked). Card v5's
+   live day 1 had it on about half; this week, about one card in seven. Better, not gone.
+3. **Something an earlier card taught, not said again, about 20 cards**: the Wright brothers never named (four
+   cards), Verdi never introduced (five), the knights-and-knaves rules not restated (three), the chessboard story
+   untold (three).
+4. **A lesson said outright, about 18 cards**: "that is worth copying", "thinking about both sides takes effort",
+   "careful counters make fewer mistakes"; from the `learns_to_act` line of card v5, kept in v6.
+5. **Facts a parent should know are loose, about 15 cards**: the leap-year drift (summer reaches winter in "a few
+   hundred years"; the card's own numbers make it about 700); every snowflake with six matching arms; Seurat's
+   green "not painted anywhere" (he used green dots); "a thousand years from al-Biruni to Mellan" (about 650);
+   the Canon's oldest copy "in his own hand" (it is a later copy); the Hōkūleʻa photo is the Yokohama arrival, not
+   the 1976 Tahiti sail; the fossil's cause and effect backwards; an ammonite as "a kind of shellfish"; a compass
+   needle that "stays put"; "the seven-piece rule" given as a tangram term, which it is not.
+6. **Hints**: about 10 where a later hint is vaguer than an earlier one, or one gives most of the answer.
+7. **The younger's words**: about 15 notes say a word or number is hard for seven or eight ("Rayleigh scattering",
+   365.2422, "a 137.5-degree turn", 7 percent interest). Expected from M2: he is written for chapter books now.
+8. **The interest doors**: about 5 say an interest comparison sits oddly on the card. None says a door was named
+   to the child; v6's rule held.
+
+### For June's read (the cards a guardian should see before the tap)
+
+These touch a feeling, a safety point, or one of the project's rules. The gate passed each:
+
+| Day | Boy | Card | The reader note, short | Touches |
+|---|---|---|---|---|
+| Wed 28 Oct | older | wonder (new land from lava), layer 1 | hint 1: picture dipping a hot pan into cold water; a curious child might try it in the kitchen | safety |
+| Wed 28 Oct | older | look (Nakht's tomb), layer 4 | hint 2 asks him to think of something hard or scary in his own life | a feeling |
+| Sun 1 Nov | both | listen (Aloha ʻOe), layer 4 | "the song you'd want sung when you say goodbye" could be heard as about dying | a feeling |
+| Sun 1 Nov | younger | listen (Aloha ʻOe), layer 1 | a chipmunk joke about the Queen's farewell song | rule 1, and Hawaiʻi |
+| Sun 1 Nov | both | listen (Aloha ʻOe), layer 3 | Liliʻuokalani's "funny job change" from songwriter to queen: glib, and not accurate | rule 1, and Hawaiʻi |
+| Wed 28 Oct | older | puzzle (knights and knaves), layer 3 | "funny to watch two people tangle themselves up" could read as laughing at someone | rule 1 |
+| Tue 27 Oct | older | puzzle (snowflake six), layer 1 | the snowflakes as "a crowd of show-offs" | rule 1, lightly |
+| Fri 30 Oct | younger | wonder (blue sky, red sunset), layer 2 | "Good thinkers try pretend skies like this" praises a kind of person | rule 8 |
+| Fri 30 Oct | both | then (Ra and the sun boat), layer 4 | "what Egyptians believed, not how the sun really moves" reads flat about a belief held deeply | rule 1 |
+| Fri 30 Oct | older | then (Ra), layer 3 | hint 3: picture a morning with no sun | a feeling, lightly |
+
+## Stop 6: your look, the week on live (23 Oct 2026, 21:20 HST)
+
+**Brandon, on the laptop at the live address, signed in, at `/parent/week/be339f66-4940-4fdb-acbc-84c8891b8e2b`:**
+
+- "The week page shows seven days, every day with five first cards for each boy, pictures on them, and the *Before
+  you tap* box names no card that isn't checked."
+- "The titles are the ideas' names."
+
+**June, the same page:** she reads the week, with the table above beside her.
+
+"go" here is Brandon's word that both looks are done. Do not tap Looks good yet: the tap is stop 7.
+
+**What I decided, and what I recommend (strike any you don't want):**
+
+1. **Tap this week as it is** (recommended). Nothing the gate holds a card back for is in it, and the patterns
+   above are the card prompt's, not the rulebook's; June sits with the boys this week, which is her check. A full
+   rebuild to fix the openers would cost about $14 more, want the whole read again, and should be proved on test
+   first.
+2. **If June wants one of the cards above gone,** name it at the go. The narrowest way is to hold back that one card
+   by SQL (`policy` to `blocked`, which stops his chain at the layer before, or takes the tile away for a layer 1).
+   It is LIVE, so it is a stop of its own with the line written out, undone by setting it back to `passed`. A day's
+   `--day d --rebuild` (about $2) changes every card of that day for both boys, so I do not recommend it for one
+   card.
+3. **For the close, not this job:** the lens-question openers (`card.md` line 27 and `lib/lenses.ts`), the lessons
+   said outright (`learns_to_act`), the loose facts, and the `db:push:live` question nobody answers, as bug lines in
+   docs/08; the openers and the lessons as a proposed row for card v7, which the job does not add.
