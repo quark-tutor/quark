@@ -22,3 +22,5 @@ The wall screen is the anchor. The other touch points use time families already 
 - Explorer passport: stamps for eras, artists and ideas they've explored.
 
 As built in slice 1 (22 Oct 2026): a layer opens on a right answer, not a tap, to layer 4, and a handoff ends the card for the day; an iPad belongs to one child; no stamps yet. docs/04, *How the Wonder Wall is built*.
+
+As built in the tutor's slice 1 (23 Oct 2026): "Read it to me" on a card, a hint and the handoff speaks in the tutor's one voice, Google's Sulafat, only after a tap, reading the words on the screen; and a **Talk** button under the answer box: the child holds it, says an answer, lets go, and the words land in the box a moment later, to fix by keyboard or send with "That's my answer". Nothing is sent before the child taps it. docs/13, *How the tutor's voice and ears are built*.
