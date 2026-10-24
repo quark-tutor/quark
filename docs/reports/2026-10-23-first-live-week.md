@@ -192,3 +192,48 @@ And `core/prompts/ideas.md` (v4 to v5):
 -... It must not be answerable only by recalling a name or date the child was never told.
 +... It must not be answerable only by recalling a name or date the child was never told, and it never asks for the idea's own name.
 ```
+
+## After the go (23 Oct 2026, 17:38 to 17:41 HST)
+
+- `git pull --rebase --autostash`: already up to date.
+- `6f8c530`: the row to *building* (no Waiting on), the brief with its fixes, and stop 1 with your go.
+- `scripts/family.local.json` (gitignored, never committed): the younger's reading level is now `chapter_books`, so
+  a later `seed:live` keeps M2's update.
+- `6ebb262`: card v6, ideas v5 and `read_aloud` gone; `5ce5b92`: the plan's reading-level line and `fixture -- words`.
+  Tests 389 passed, typecheck clean, both again before the commit.
+- **Pushed** (`ba8a2de..5ce5b92`). **No migrations run:** the workflow starts only on a push that changes
+  `supabase/migrations/` or the workflow file, and this one changed neither, so there is no run to watch (the brief
+  expected one). The latest run on the branch is still `39935530082` (22 Oct, green).
+
+## Stop M1: the two migrations on live, by your hand (23 Oct 2026, 17:41 HST)
+
+**What it does:** `npm run db:push:live` applies the two migrations live does not have, in order:
+`20261021000000_server_writes_weeks` (a signed-in guardian can no longer insert or update `themes`, `ideas`, `cards`,
+`questions`, `sessions` or `attempts`, or insert `audit_log` rows, through the data API; the server does all of it)
+and `20261022000000_speech_runs` (the table that counts what the tutor's voice and ears spend).
+
+**What it touches:** **LIVE**: grants on seven tables, and one new empty table. No row is changed. It comes after the
+release (done, `main` at `ab9a2f7` on Vercel), because the five `/parent` audit writes it moves to the server must
+already be there.
+
+**How it is undone:** by a new migration, itself a stop:
+
+```sql
+grant insert, update on themes, ideas, cards, questions to authenticated;
+grant insert, update on sessions, attempts to authenticated;
+grant insert on audit_log to authenticated;
+drop table speech_runs;
+```
+
+**Checked on test:** the workflow applied `20261021000000` (run `39584301538`, green) and `20261022000000` (run
+`39935530082`, green); on test the five moved audit writes worked, a guardian's direct write to a card and to the
+audit log was refused, and the voice wrote its rows (`$0.09`).
+
+**Your step:** in your own PowerShell, in the repository:
+
+```
+npm run db:push:live
+```
+
+It prints `Target: LIVE` first, then the database user, then the two migrations it applies. Say **"M1 is in"** with
+what it printed. Saturday's M2 to M4 follow.
