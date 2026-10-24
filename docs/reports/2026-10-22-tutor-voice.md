@@ -326,3 +326,116 @@ still to take: the second tap, the hint and handoff voice, Talk, and `/kid/voice
 **Size:** a slice (8 hours); 22 minutes to stop 2, about 5 for fix round 1, about 10 for this one.
 
 Reply go if every check passed, or name the one that didn't.
+
+## Stop 2 passed: the state at the end of the job (23 Oct 2026, 16:05 HST)
+
+Brandon, 23 Oct 2026: "go. Every check passed on June's iPad as Bug: the certificate, Sulafat reading the screen word
+for word, 3,400 as one number, the second tap instant, the hint in the same voice, Talk putting my words in the box
+exactly with nothing sent, /kid/voices gone. The whole thing was intuitive."
+
+His list names the hint's voice and not the handoff's. He said every check passed, and it is recorded so.
+
+### What was done
+
+All five steps of the brief, on `phase-4-wonder-wall`, proven on `quark-test` and on June's iPad as Bug, and pushed:
+
+- **The adapter:** `core/speech.ts`, server only, with Google behind it in `core/speech/google.ts`. `say()` uses Chirp 3
+  HD `en-US-Chirp3-HD-Sulafat` as MP3; `hear()` uses Chirp 3 (`chirp_3`, region `us`) on one 16 kHz clip. The key comes
+  from `GOOGLE_CREDENTIALS_JSON` or `GOOGLE_APPLICATION_CREDENTIALS`.
+- **The mouth:** `GET /api/kid/say?line=<card>.<part>` names a line by card and part, never by free text.
+  - It says a line only when the child can see it now: a hint once earned, the handoff once reached.
+  - A line is made on the first tap and stored in the private bucket under the voice and a hash of the words as sent.
+    After that it plays from storage.
+  - "Read it to me" says the card as the page shows it, its words then its question (fix round 1). `forVoice()` drops
+    the comma inside a number (fix round 2).
+- **The ears:** Talk, a hold-to-talk button under the answer box. The clip goes to `POST /api/kid/hear`, and the words
+  come back into the box. Nothing is sent as an answer until "That's my answer", and no audio or words are kept.
+- **Gone:** the browser voice (`core/wall/voice.ts`, `pickVoice()`, `/kid/voices`, `/api/dev/voices`). A test holds
+  that no `speechSynthesis` or `SpeechRecognition` is left, and that no browser code imports the speech code.
+- **Prices and counts** on `/parent/models`: the voice, the ears, Google's prices and free tier, and lines, clips and
+  cost this month and since the start. They come from `speech_runs` (migration `20261022000000`, on test by the
+  workflow, run `39935530082`, green).
+- **For testing:**
+  - `npm run dev:ipad`: the dev server over HTTPS for the iPad, with a one-time certificate.
+  - `npm run speech:check` (lines said and heard back, nothing kept) and `npm run speech:line -- <card id>` (one
+    card's line said through the wall's code, stored, heard back).
+  - `npm run fixture -- speech | card <id> | numbers <week>`.
+- **Checks:** 386 of 386 tests, typecheck clean, lint clean on every changed file, and `npm run build` clean at stop 2
+  (no route or page has changed since).
+
+Commits after stop 2: `a1ae45b` (Read it to me reads the screen), `5220b09` (numbers), with their report commits
+`ad25b50`, `f2dd61a` and `380b382`.
+
+### What could not be checked
+
+- **The boys' voices:** dropped from stop 2 (Brandon at stop 1). How well Talk hears them is seen on live in the
+  first week.
+- **Google's prices:** the pricing page wouldn't load for me. Speech-to-Text at $0.016 a minute, rounded up to the
+  second, is from search results; two other sites say 15-second rounding. It is worth one look by hand; a wrong figure
+  changes only `/parent/models`' estimate.
+- **The handoff's voice** is not named in Brandon's list (above).
+
+### On live, and what the release must carry
+
+Nothing on live. For "Read it to me" and Talk to work on the boys' iPads, the release needs three things:
+
+1. **The `speech_runs` migration on live.** `db:push:live` at stop M1 now applies two migrations,
+   `20261021000000_server_writes_weeks` and `20261022000000_speech_runs`. Without the table, every first tap of a
+   line fails (the route answers 502 and nothing plays).
+2. **Google's key in Vercel's production environment**, as `GOOGLE_CREDENTIALS_JSON` (the key's JSON on one line).
+   Without it the route also answers 502. This is Brandon's (*Before the job*, 3).
+3. **The Google Cloud project's billing on**, which the free tier needs. Already done for test, and the same project
+   serves both.
+
+### Money
+
+On test, recorded in `speech_runs`: 11 lines made and 3 clips heard, $0.086 at list price, all inside Google's free
+tiers. Not recorded: about 40 short lines said and heard by `speech:check` while choosing the voice and the number
+rule, under 15 cents at list price. Nothing on Anthropic.
+
+### Decisions for the close (Brandon's words, for the *Decided:* lines)
+
+- 22 Oct 2026, stop 1: "go. The voice is Sulafat. Yes to the certificate: the laptop is Windows, no AirDrop, so put the
+  file at an address on the dev server and give me the address to open in Safari on the iPad. No to the boys' check:
+  drop it from stop 2; I sit with the boys on live the first week, and how well Talk hears them is seen there." His go
+  took the eight stop-1 decisions and the `speech_runs` migration.
+- 23 Oct 2026, fix round 1: "what it reads does not match the text on the screen."
+  - "Read it to me" says the card's text, then its question, and never `read_aloud`. This replaces slice 1's choice
+    (`docs/wonder-wall-1-slice.md`, *Read aloud*).
+  - Including the question was mine: it has no button of its own, and a child who is read to needs it. He accepted the
+    result: "now says the screen word for word, good".
+- 23 Oct 2026, fix round 2: "Before a line goes to Google, drop the comma inside a number (3,400 → 3400) so it is
+  read as one number."
+  - Only the comma inside a number is handled. Every other shape is left, because Chirp 3 heard Google read it whole
+    (the list is under fix round 2).
+- 23 Oct 2026, stop 2: the go above.
+
+### Found along the way, for Brandon
+
+- **The brief's privacy line is not true as written.** It says "Nothing sent names a child (rule 7)".
+  - A card's words can carry the nickname (decision 6 at stop 1), and "Read it to me" now sends the card's text. Bug's
+    Look card opens with the nickname, so Google receives it and the stored recording says it.
+  - The privacy line written at the close (docs/08, *How Quark is built with Claude*, and for June) should say: the
+    nickname can go to Google as it goes to Anthropic, and nothing else about a child does. *Touches rule 7.*
+- **`read_aloud` is written but never said.** The card writer still makes it and the gate reads it. Dropping it from
+  `core/prompts/card.md`, with its check for a child who is read to, would save output tokens on every card. It bears
+  on docs/08's open "Too many words". This would be a change to the Sunday build, so a later job.
+- **The `speech:check` spend isn't counted** on `/parent/models`. It is a few cents, and only when checking.
+- **The report's opening line** says "nothing pushed"; that was true at stop 1 only. Everything above is pushed.
+- **The iPad dev server is still running** (`npm run dev:ipad`). It can be stopped at any time; it changes nothing on
+  its own.
+
+### Records to update at the close
+
+- `CLAUDE.md`: *Where we are*, and the stack line "Voice: browser speech APIs on iPad Safari first", which is
+  replaced by the Google voice and ears.
+- `docs/13-architecture.md`: *How it is built* gains the adapter and both routes.
+- `docs/03-touch-points.md`: the Talk button.
+- `docs/04-curation-engine.md`: *How the Wonder Wall is built*. Its "Read it to me" line is out of date: it now reads
+  the card's text and question in Sulafat's voice, from storage.
+- `docs/08-open-questions.md`: the *Decided:* lines above, with Brandon's words; slice 1's read-aloud decision marked
+  as replaced; the privacy line, corrected as above.
+- `docs/board.md`: this row. `README.md`: the status line. `.env.example` was updated in the job.
+
+**Size:** a slice (8 hours). About 40 minutes of work since go: 22 to stop 2, about 5 and 10 for the two fix rounds,
+and a few for the restart.
