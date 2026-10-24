@@ -9,6 +9,7 @@
 //   npm run fixture -- speech [n]           the last n calls to Google for the tutor's voice and ears, and the lines stored
 //   npm run fixture -- answers [n]          the last n answers on the wall (default 20) and the last sessions; a child is
 //                                           "child 1" or "child 2", oldest first, never by name
+//   npm run fixture -- words <date>         every card of a day: title, verdict, text, question, reader notes, and an answer in the text
 //   npm run fixture -- card <id>            one card: its words as shown, what "Read it to me" sends, and what is stored
 //   npm run fixture -- numbers <week>       every number shape in the week's spoken words, and how each goes to the voice
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
@@ -16,6 +17,7 @@
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
+import { givesAway } from "../core/curation/cards.ts";
 import { forVoice, readLine, speechPath } from "../core/wall/speech.ts";
 import { announceTarget } from "./target.ts";
 
@@ -213,15 +215,50 @@ if (command === "show") {
       for (const v of r.policy_notes?.validation ?? []) console.log(`      card check: ${v}`);
     }
   });
+} else if (command === "words") {
+  // Every card of one day, read-only, for reading the card prompt's work: per child, slot and layer, the title, the
+  // verdict, the text, the question, the gate's reader notes, and "ANSWER IN TEXT" when the text already holds an
+  // accepted answer by the hint check's word rule (card v6: never the answer before the question). Test only.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(arg ?? "")) throw new Error("Say which day: npm run fixture -- words 2026-10-25");
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  const rows = must(
+    await db.from("cards").select("child_id, slot, layer, policy, policy_notes, body, questions(answer_key)").eq("family_id", familyId).eq("day", arg).order("slot").order("layer"),
+    "cards",
+  ) as unknown as {
+    child_id: string;
+    slot: string;
+    layer: number;
+    policy: string;
+    policy_notes: { gate?: { reader?: string[] } } | null;
+    body: { title: string; text: string; question: string };
+    questions: { answer_key: { accept: string[]; rubric: string } }[];
+  }[];
+  let inText = 0;
+  let notes = 0;
+  kids.forEach((k, i) => {
+    console.log(`\nchild ${i + 1}:`);
+    for (const r of rows.filter((r) => r.child_id === k.id)) {
+      const key = r.questions[0]?.answer_key ?? { accept: [], rubric: "" };
+      const gives = givesAway(r.body.text, key);
+      if (gives) inText += 1;
+      const reader = r.policy_notes?.gate?.reader ?? [];
+      notes += reader.length;
+      console.log(`\n  ${r.slot} layer ${r.layer}, ${r.policy}: "${r.body.title}"${gives ? "  ANSWER IN TEXT" : ""}`);
+      console.log(`    ${r.body.text}\n    Q: ${r.body.question}\n    Accept: ${key.accept.join("; ") || "(open)"}`);
+      for (const n of reader) console.log(`    Reader: ${n}`);
+    }
+  });
+  console.log(`\n${rows.length} cards; ${inText} with an accepted answer in the text; ${notes} reader notes.`);
 } else if (command === "card") {
-  // One card, read-only: the words the card page shows, the line "Read it to me" says, and the writer's
-  // read_aloud (never said), each with whether it is stored in the tutor's voice. Test only: it prints a card.
+  // One card, read-only: the words the card page shows, the line "Read it to me" says, and, on a card written
+  // before card v6, the writer's read_aloud (never said), each with whether it is stored in the tutor's voice.
+  // Test only: it prints a card.
   if (!arg) throw new Error("Say which card: npm run fixture -- card <card id>");
   const row = must(await db.from("cards").select("day, slot, layer, body").eq("family_id", familyId).eq("id", arg).maybeSingle(), "cards") as {
     day: string;
     slot: string;
     layer: number;
-    body: { title: string; text: string; read_aloud: string; question: string };
+    body: { title: string; text: string; read_aloud?: string; question: string };
   };
   const stored = async (text: string) => ((await db.storage.from("content").createSignedUrl(speechPath(TUTOR_VOICE, text.trim()), 60)).data ? "stored" : "not stored");
   console.log(`${row.day} ${row.slot} layer ${row.layer}: ${row.body.title}`);
@@ -229,7 +266,7 @@ if (command === "show") {
     ["text, shown", row.body.text],
     ["question, shown", row.body.question],
     ["Read it to me sends to the voice", forVoice(readLine(row.body))],
-    ["read_aloud, never said", row.body.read_aloud],
+    ...(row.body.read_aloud ? [["read_aloud, never said", row.body.read_aloud] as [string, string]] : []),
   ];
   for (const [name, text] of parts) console.log(`\n${name}, ${await stored(text)}:\n  ${text}`);
 } else if (command === "numbers") {

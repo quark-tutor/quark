@@ -16,6 +16,7 @@
 
 import { parseArgs } from "node:util";
 import { createClient } from "@supabase/supabase-js";
+import { levelOf } from "../core/curation/cards.ts";
 import { gateFailed, gateSetup } from "../core/curation/gate-run.ts";
 import { BuildStopped, buildDays, prepareWeek, settingsWatch } from "../core/curation/week-job.ts";
 import { debugTo, meteredComplete, modelFor } from "../core/model.ts";
@@ -90,6 +91,8 @@ if (!gate.rulebook) {
   );
 }
 console.log(`Ideas on ${models.ideas}; cards on ${models.cards}; the gate on ${models.gate}. ${only ? `Only ${only.nickname}.` : `${children.length} children.`}`);
+// What each child's cards are written for, from the children's rows (levelOf(), as the week page shows it).
+for (const c of only ? [only] : children) console.log(`  ${c.nickname}: written for ${levelOf(c)}.`);
 if (args.plan) {
   console.log(`\n--plan: stopped before spending anything; nothing was written.${gate.documentChars !== null ? ` The gate's copy of the rulebook is ${gate.documentChars.toLocaleString()} characters.` : ""}`);
   process.exit(0);
