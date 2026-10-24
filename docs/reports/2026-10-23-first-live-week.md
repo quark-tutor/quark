@@ -482,3 +482,83 @@ These touch a feeling, a safety point, or one of the project's rules. The gate p
 3. **For the close, not this job:** the lens-question openers (`card.md` line 27 and `lib/lenses.ts`), the lessons
    said outright (`learns_to_act`), the loose facts, and the `db:push:live` question nobody answers, as bug lines in
    docs/08; the openers and the lessons as a proposed row for card v7, which the job does not add.
+
+## Stop 6's go (23 Oct 2026, 21:50 HST)
+
+Brandon: "go. The week page shows seven days, five first cards for each boy with pictures, Before you tap clean,
+titles as idea names. Also: I forgot the old iPad pairing on live's /parent, and of the two waiting items I approved
+one and rejected one; check whether the rejected item is on any card of this week and what that card shows without
+it."
+
+- **Both looks are done** (the brief: "go" here is Brandon's word that both looks are done). No card is held back
+  by hand; the week is tapped as it is.
+- **Done by Brandon on live, through `/parent`:** the old iPad's pairing forgotten (its device row gone; undone by
+  pairing it again); of the two items waiting at `/parent/content` (Musopen's Handel, *Israel in Egypt*, and the
+  CC BY-SA Rosetta Stone photograph), one approved and one rejected.
+
+**The rejected item is on no card of this week, and could not be,** whichever of the two it is:
+
+1. The build offers a topic only the items that are approved and not rejected (`core/curation/week-job.ts:143`),
+   and both were still waiting when M4 ran.
+2. Neither item's topic is in week 1. Handel's *Israel in Egypt* is plan week 3's listen topic
+   (`plan/ancient-egypt.yaml:575`); the Rosetta photograph is one of three sources of "Scribes, the Rosetta Stone
+   and Tutankhamun's tomb", plan week 4's then topic (`:631`). M3 and M4 printed week 1's seven Egypt topics, and
+   neither is among them.
+
+So no card shows anything different. Had a card used it: the wall shows a layer only while its item is still
+approved (`onWall()`, `core/wall/flow.ts:102`), so a rejected item takes its card off the wall, not just its picture;
+a first card's tile goes, and a deeper layer stops the chain at the one before. From now on the rejected item is
+never offered; each topic has another source (the 1888 Edison cylinder of *Israel in Egypt*; the 1985 Rosetta
+photograph and Carter in the tomb), and the approved one is offered when its topic's week comes.
+
+## Stop 7: the tap, and the iPads (23 Oct 2026, 21:50 HST)
+
+**A fix to the brief, decided:** the voice and Talk checks cannot be taken on Sunday. "Read it to me" says only a
+line on a card the child can see now (`core/wall/speech.ts:57`), and the wall shows a card only on its own day
+(`onWall()`: `row.day === today`, in Hawaii). Week 1 begins Monday, so on Sunday a paired iPad says "Nothing on the
+wall today." and has no card to tap; Talk lives on a card's page too. So Sunday is the tap and the pairing, and the
+two voice checks move to **Monday morning, on each boy's first card, with June there.** If the voice fails there,
+the card still works: the text is on the screen and the answer can be typed.
+
+### The tap
+
+**What it does:** a guardian taps **Looks good** on live's week page (`/parent/week/be339f66-4940-4fdb-acbc-84c8891b8e2b`).
+The week goes from `review` to `live`, and from Monday 26 Oct, midnight in Hawaii, each paired iPad shows that day's
+passed first cards.
+
+**What it touches:** **LIVE**, and **what the boys see from Monday**.
+
+**How it is undone:** **Take it back to review**, the same button, by any guardian, until Monday midnight in Hawaii. After
+that the page refuses ("This week has begun"), and a card is held back by SQL at a stop of its own.
+
+**Checked on test:** the tap and the way back were proved on test (20 Oct, `docs/reports/2026-10-20-looks-good-slice.md`),
+and test's proof week was tapped and used on June's iPad as Bug (21 and 22 Oct). M4 above showed live's week has
+nothing that stops the tap.
+
+### The iPads, each boy's
+
+**What it does, in this order** (`deploy/README.md`, step 4):
+
+1. Settings → Screen Time → Content & Privacy → Web Content → add the live address under **Always Allow**.
+2. Safari, at `<live address>/kid`.
+3. Share → **Add to Home Screen**.
+4. Open Quark **from the Home Screen** (a Home Screen app keeps its own cookies, apart from Safari's).
+5. On the laptop, live's `/parent`, that boy, **Get a code**.
+6. The six digits typed on the iPad. On Sunday the wall then says **"Nothing on the wall today."**: that is it working.
+7. Guided Access: triple-click, Start.
+
+**What it touches:** **LIVE**: one device row per iPad.
+
+**How it is undone:** **Forget this iPad** on `/parent`, as Brandon did tonight for the old one.
+
+**Checked on test:** pairing, on June's iPad as Bug, but in Safari against the dev server (21 Oct); the Home Screen app and Guided Access were never tried there (`docs/reports/2026-10-21-wonder-wall-1-slice.md`), so Sunday is their first run.
+
+### Monday morning, each iPad, on his first card
+
+- One tap of **Read it to me**: Sulafat's voice, on live, through Vercel. It is the first proof that
+  `GOOGLE_CREDENTIALS_JSON` works in production. The first tap of a line waits 4 to 5 seconds while it is made.
+- One hold of **Talk** with a word spoken: the word appears in the answer box.
+
+**Your step:** Sunday, the tap and both iPads; Monday morning, the two voice checks on each. Then **"go"**: every one
+passed, or the one that did not is named, with what it showed. After that I write the state to the report, and
+it is `/wwc:close`.
