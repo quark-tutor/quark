@@ -326,3 +326,53 @@ npm run week:build:live -- --week 1 --start 2026-10-26 --plan
 
 Paste everything it prints. The nicknames in it stay in the session; the report says "the older" and "the
 younger". Then M4, the build.
+
+## M3 is in (23 Oct 2026, 21:02 HST)
+
+From Brandon's screenshot, `Target: LIVE` first, then:
+
+1. **The plan order: passes.** "Week 1: The river, with short lessons: starting 2026-10-26, 7 days." Day 1 is word
+   for word the line expected: "Ancient Egypt on then (The Nile, from source to sea); short lessons: look great-wave,
+   wonder leap-years, listen carnival-of-the-animals, puzzle two-dice." Days 2 to 7 are the same as test's plan,
+   line for line. No `plan:import:live` is needed.
+2. **The reading levels: pass.** The older "written for chapter_books, age 9"; the younger "written for
+   chapter_books, age 7". M2's update took.
+3. Also read: "No topic built here touches a subject the family's settings hold back or keep parent-led." (Test's
+   invented family has two parent-led subjects in its week; the live family has none.) The gate still reads every
+   card. Its copy of the rulebook is 6,823 characters, the same as at the gate-live run of 20 Oct, so the live
+   rulebook has not changed since. The models are the three expected (ideas and gate on Opus 5.5, cards on Sonnet
+   5.5).
+
+## Stop M4: the week built on live, by your hand (23 Oct 2026, 21:02 HST)
+
+**What it does:** `npm run week:build:live -- --week 1 --start 2026-10-26` builds week 1 on live: seven days, both
+children, five day-slots a day, four layers each (280 cards), on card v6 and ideas v5, with pictures from live's
+approved items, then the gate reads every card. The theme ends in `review`: nothing reaches an iPad until a guardian
+taps Looks good (stop 7). It writes one `model_runs` row with the counts and the money.
+
+**What it touches:** **LIVE**: one new theme and its ideas, cards and questions. **Money:** about $13 to $14 of
+Anthropic spend (test's proof week, 21 Oct: $13.62; tonight's v6 day on test cost the same as a v5 day), under the
+$25 line. It takes a while: let it run to the end, about 15 to 20 minutes.
+
+**How it is undone:** nothing a child sees until the tap. A bad day is `--day d --rebuild` at a stop of its own; the
+whole week is M2's delete again, or `--rebuild`, each a stop of its own. The money cannot be undone.
+
+**If it stops part way:** it says so and leaves the theme `generating`; paste what it printed and stop there (a
+rebuild spends again, so it is its own stop). If the gate leaves any card pending, the run ends with an error;
+`gate:live -- --week 1` checks them again, at a stop of its own.
+
+**Checked on test:** the proof week on test was built the same way, seven days with pictures (21 Oct, $13.62); day 5
+was rebuilt tonight on v6, and the gate passed 40 of 40. M3 above showed live's plan, children, levels and rulebook.
+
+**What Code reads in what you paste:** each child's card count, the cards held back and why, the text-only
+day-slots, first cards without a picture, the gate's summary (passed, held back in code, held back by the checker,
+pending), the total spend, and the week page's address for stop 6.
+
+**Your step:** in your own PowerShell, in the repository:
+
+```
+npm run week:build:live -- --week 1 --start 2026-10-26
+```
+
+Paste everything it prints after the plan (the nicknames stay in the session). Then stop 6, your look at the week on
+live.
