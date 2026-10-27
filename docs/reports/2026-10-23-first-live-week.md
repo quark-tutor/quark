@@ -563,7 +563,7 @@ nothing that stops the tap.
 passed, or the one that did not is named, with what it showed. After that I write the state to the report, and
 it is `/wwc:close`.
 
-## Stop 7's results, and a fix round (26 Oct 2026, 21:06 to 21:35 HST)
+## Stop 7's results, and a fix round (26 Oct 2026, 21:06 to 21:20 HST)
 
 A new session resumed the job at stop 7 (21:06) and handed it back; Brandon answered with Monday's checks and
 Vercel's logs. **The boys' iPads run Quark as Home Screen apps on live, and the wall is in use** (Vercel's logs
@@ -634,7 +634,7 @@ the branch). Vercel then deploys it to the live address. Beyond the fix it carri
 `read_aloud` (the iPad never read it), the plan's reading-level line, the fixtures and the reports. Nothing else the
 boys see changes. `/wwc:release` at the close still fast-forwards from there.
 
-## Stop 7 again: the fix to `main` by your hand, then Talk on an iPad (26 Oct 2026, 21:38 HST)
+## Stop 7 again: the fix to `main` by your hand, then Talk on an iPad (26 Oct 2026, 21:21 HST)
 
 **What it does:** `git push origin phase-4-wonder-wall:main` moves `main` from `ab9a2f7` to this branch's head, a
 fast-forward, and Vercel builds it and makes it the live address's deployment.
@@ -657,3 +657,10 @@ build against test, before and after; 390 tests and the typecheck.
 Code then watches Vercel's production deployment of that commit (GitHub's record of it) and says when it is
 **Ready**. Then on one boy's iPad, a card, **one hold of Talk with a word spoken**: the word appears in the answer
 box. "go" means it did, or say what it showed.
+
+## `main` pushed, and deployed (26 Oct 2026, 21:26 HST)
+
+Brandon typed `! git push origin phase-4-wonder-wall:main`; it reached the session as text, not as a run command
+(`main` still at `ab9a2f7`), so Code ran that same command on those words: `ab9a2f7..b031221  phase-4-wonder-wall
+-> main`. Vercel's production deployment of `b031221` (GitHub deployment `7352757670`) reported **success at
+21:25:59 HST**, so the live address serves the fix. Waiting on: one hold of Talk on a boy's iPad.
