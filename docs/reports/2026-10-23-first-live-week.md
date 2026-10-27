@@ -562,3 +562,72 @@ nothing that stops the tap.
 **Your step:** Sunday, the tap and both iPads; Monday morning, the two voice checks on each. Then **"go"**: every one
 passed, or the one that did not is named, with what it showed. After that I write the state to the report, and
 it is `/wwc:close`.
+
+## Stop 7's results, and a fix round (26 Oct 2026, 21:06 to 21:35 HST)
+
+A new session resumed the job at stop 7 (21:06) and handed it back; Brandon answered with Monday's checks and
+Vercel's logs. **The boys' iPads run Quark as Home Screen apps on live, and the wall is in use** (Vercel's logs
+show cards opened and answers recorded from 20:28). Brandon's words:
+
+- **"Read it to me": passed.** "worked, Sulafat's voice, as on June's iPad." The first proof that
+  `GOOGLE_CREDENTIALS_JSON` works on Vercel.
+- **Talk: failed.** "Talk recorded but every hold ended 'That didn't come through.'" Every `POST /api/kid/hear` was
+  a 502 in about 500 ms, with calls only to Supabase (the device lookup's GET and `last_seen`'s PATCH), none to
+  Google, and no log lines.
+- **Also in the logs:** `GET /kid` and the card pages answered 200 but logged "getDevice: device lookup failed.
+  Error: During prerendering, fetch() rejects when the prerender is complete…" (24 errors in the hour).
+- **For the close, not this job** (Brandon): a recording and "Read it to me" can play at the same time, and one
+  should stop the other; and right answers in the boys' own words were judged wrong ("In the background." for
+  "Where in the picture is Mount Fuji hiding?"), which is the model-as-judge row, **moved to the top of Next**.
+
+Brandon: "Diagnose both from the code …, fix both, push, and tell me when Vercel has deployed so I can try Talk on
+an iPad."
+
+### Talk: the project was never found on Vercel
+
+`hear()` names the Google project in its address, and asked `getProjectId()` before any client was made. Given the
+key as JSON (Vercel's `GOOGLE_CREDENTIALS_JSON`), google-auth-library 11.1.0 does not read the project from it at
+that point: it looks for a key file, `GOOGLE_APPLICATION_CREDENTIALS` as a path, `gcloud`, and Google's metadata
+server, finds none on Vercel, and throws "Unable to detect a Project Id in the current environment". The route
+turns any throw into a 502 and logs nothing, which is what the logs show. On the laptop the key is a file, which the
+library does read, so every check passed there. "Read it to me" names no project, so it worked.
+
+- **Reproduced** with a made-up key and nothing else set: the old way throws that error (after 14 seconds of looking
+  on the laptop); with the key's own `project_id` passed in, it answers at once. No call to Google.
+- **Fixed** in `core/speech/google.ts`: the key's `project_id` is given to the library with the key.
+- **A test holds it** (`core/speech/google.test.ts`): the key only as JSON, nothing else naming a project, and
+  `hear()` must call the `quark-speech` project's address. It times out on the old code and passes on the new.
+
+### `/kid`: a second render the lookup was not meant for
+
+`partialPrefetching: true` (`next.config.ts`) makes Next 16.4.2 render every kid page twice: the page itself, then
+a "runtime prefetch" embedded in it, in which the device cookie can be read but every `fetch()` hangs until that
+render ends and then rejects. Supabase's client turns the rejection into an error value, and `getDevice()` logged
+it as a failed lookup and redirected to pairing, inside a render nobody sees. So the boys saw nothing wrong, but
+every visit logged an error and began a lookup it could never finish.
+
+- **Fixed** in `lib/device.ts`: the lookup waits on `connection()`, Next's way to say "only in a real request". In
+  the runtime prefetch it never starts; in the page and the API routes it goes on as before.
+- **Proved on a production build against test** (`npm run build`, `npm start`), with a device paired by the new
+  `fixture -- device 1`: before the fix one `GET /kid` logged the error once; after it, three logged nothing, the
+  wall rendered for that device (test's week is in review, so "Nothing on the wall today"), and the hear route
+  passed the device check. The device was forgotten after (`fixture -- forget`).
+- **New for testing:** `npm run fixture -- device <n>` pairs a device to child n on test and prints its cookie, so a
+  kid route can be asked with curl as a paired iPad asks it; `fixture -- forget <id>` ends it.
+
+`npm test`: 390 passed. `npm run typecheck`: clean. Lint is clean on the four changed files. Commit `77f187e`.
+Nothing was spent: no call to Google or Anthropic, and nothing touched live.
+
+### For the close (a proposal; the job adds no row)
+
+- The hear and say routes log nothing by design (never the child's words), so this failure showed only as a 502.
+  One line with the error's message alone, never the clip or its words, would have named the cause on the first
+  hold. Brandon's call.
+
+### What goes to `main`
+
+`main` is fast-forwarded to this branch on Brandon's words above, so Vercel deploys it to the live address. Beyond
+the fix it carries this branch's commits since the release (`ab9a2f7`): card v6 and ideas v5 (used only by
+`week:build`, run from the laptop), the week page without its "Read aloud:" line, the wall's reply without
+`read_aloud` (the iPad never read it), the plan's reading-level line, the fixtures and the reports. Nothing else the
+boys see changes. `/wwc:release` at the close still fast-forwards from there.
