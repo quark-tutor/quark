@@ -14,14 +14,19 @@
 //   npm run fixture -- numbers <week>       every number shape in the week's spoken words, and how each goes to the voice
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
 //                                           its item's approval, and the gate's reasons for a card held back
+//   npm run fixture -- device <n>           pair a device to child n (1 or 2, oldest first) and print its cookie, so
+//                                           the kid view can be asked with curl, as a paired iPad asks it
+//   npm run fixture -- forget <device id>   forget that device, as "Forget this iPad" does
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
 import { givesAway } from "../core/curation/cards.ts";
 import { forVoice, readLine, speechPath } from "../core/wall/speech.ts";
+import { createHash, randomBytes } from "node:crypto";
 import { announceTarget } from "./target.ts";
 
 const TUTOR_VOICE = "en-US-Chirp3-HD-Sulafat"; // core/speech.ts, which only the server may import
+const DEVICE_COOKIE = "quark_device"; // lib/pairing.ts, whose imports plain Node can't resolve
 
 announceTarget();
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -301,7 +306,20 @@ if (command === "show") {
     target: unknown;
   }[];
   for (const r of rows.reverse()) console.log(`${r.created_at}  ${r.action}  ${JSON.stringify(r.target)}`);
+} else if (command === "device") {
+  // A device row as claim_device_pairing writes it, without the six digits: the token is printed once and only
+  // its hash is kept (lib/pairing.ts).
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  const child = kids[Number(arg) - 1];
+  if (!child) throw new Error(`Say which child, 1 to ${kids.length}: npm run fixture -- device 1`);
+  const token = randomBytes(32).toString("base64url");
+  const tokenHash = createHash("sha256").update(token).digest("hex");
+  const [row] = must(await db.from("devices").insert({ family_id: familyId, child_id: child.id, token_hash: tokenHash }).select("id"), "devices") as { id: string }[];
+  console.log(`Paired device ${row.id} to child ${arg}. Its cookie:\n${DEVICE_COOKIE}=${token}\nForget it after: npm run fixture -- forget ${row.id}`);
+} else if (command === "forget") {
+  must(await db.from("devices").update({ revoked_at: new Date().toISOString() }).eq("family_id", familyId).eq("id", arg).select("id"), "devices");
+  console.log(`Forgot device ${arg}.`);
 } else {
-  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | speech [n] | card <id> | numbers <week> | day <date>");
+  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | speech [n] | card <id> | numbers <week> | day <date> | device <n> | forget <device id>");
   process.exit(1);
 }

@@ -1,6 +1,7 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { DEVICE_COOKIE, hashSecret } from "@/lib/pairing";
 
@@ -15,9 +16,13 @@ export type Device = {
 // Every kid-view server route starts here, and scopes everything it reads or writes to
 // device.childId and device.familyId. If the lookup itself fails, the iPad goes to the pairing
 // screen rather than an error page; a child can't do anything with an error page.
+// The lookup waits for a real request (connection()): Partial Prefetching (next.config.ts) renders each kid page
+// a second time as a runtime prefetch, where the cookie can be read but a fetch hangs and then fails, and that
+// failure was logged here as a failed lookup on every visit (Vercel's logs, 26 Oct 2026).
 export async function getDevice(): Promise<Device | null> {
   const token = (await cookies()).get(DEVICE_COOKIE)?.value;
   if (!token) return null;
+  await connection();
 
   const admin = createAdminClient();
   const { data, error } = await admin

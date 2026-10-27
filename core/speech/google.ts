@@ -11,12 +11,17 @@ let auth: GoogleAuth | undefined;
 
 // The service account's key. On the laptop GOOGLE_APPLICATION_CREDENTIALS names its file, kept outside the
 // repository; on Vercel, which has no files, GOOGLE_CREDENTIALS_JSON holds the key's JSON itself (so does
-// GOOGLE_APPLICATION_CREDENTIALS, if it starts with "{").
+// GOOGLE_APPLICATION_CREDENTIALS, if it starts with "{"). The project hear() names is the key's own: given only
+// the JSON, the library looks for it in a key file, gcloud and Google's metadata server, and on Vercel finds
+// none, so every Talk failed there (26 Oct 2026) while "Read it to me", which names no project, worked.
 function googleAuth(): GoogleAuth {
   if (auth) return auth;
   const named = process.env.GOOGLE_APPLICATION_CREDENTIALS?.trim();
   const json = process.env.GOOGLE_CREDENTIALS_JSON?.trim() || (named?.startsWith("{") ? named : undefined);
-  if (json) auth = new GoogleAuth({ credentials: JSON.parse(json), scopes: SCOPE });
+  if (json) {
+    const credentials = JSON.parse(json);
+    auth = new GoogleAuth({ credentials, projectId: credentials.project_id, scopes: SCOPE });
+  }
   else if (named) auth = new GoogleAuth({ keyFile: named, scopes: SCOPE });
   else throw new Error("Set GOOGLE_APPLICATION_CREDENTIALS in .env.local (see .env.example).");
   return auth;
