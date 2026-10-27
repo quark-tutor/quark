@@ -626,8 +626,34 @@ Nothing was spent: no call to Google or Anthropic, and nothing touched live.
 
 ### What goes to `main`
 
-`main` is fast-forwarded to this branch on Brandon's words above, so Vercel deploys it to the live address. Beyond
-the fix it carries this branch's commits since the release (`ab9a2f7`): card v6 and ideas v5 (used only by
+**Not pushed by Code.** The branch is pushed (`78eac6f..30e9699`); the push of it to `main` was refused by Claude
+Code's auto-mode classifier as a production deploy, and is not tried another way. It is Brandon's hand, in his own
+terminal, in the repository: `git push origin phase-4-wonder-wall:main` (a fast-forward: `main` is an ancestor of
+the branch). Vercel then deploys it to the live address. Beyond the fix it carries this branch's commits since the release (`ab9a2f7`): card v6 and ideas v5 (used only by
 `week:build`, run from the laptop), the week page without its "Read aloud:" line, the wall's reply without
 `read_aloud` (the iPad never read it), the plan's reading-level line, the fixtures and the reports. Nothing else the
 boys see changes. `/wwc:release` at the close still fast-forwards from there.
+
+## Stop 7 again: the fix to `main` by your hand, then Talk on an iPad (26 Oct 2026, 21:38 HST)
+
+**What it does:** `git push origin phase-4-wonder-wall:main` moves `main` from `ab9a2f7` to this branch's head, a
+fast-forward, and Vercel builds it and makes it the live address's deployment.
+
+**What it touches:** **what the boys see**: the live app on both iPads (Talk, and the wall's device lookup). Not
+the live database: no migration rides along.
+
+**How it is undone:** in Vercel, Deployments, the deployment before it (`main` at `ab9a2f7`), **Instant Rollback**;
+it takes effect at once. `main` itself is then fixed forward, never moved back (a force push is on the deny list).
+
+**Checked on test:** the hear test, red on the old code and green on the new; the device lookup on a production
+build against test, before and after; 390 tests and the typecheck.
+
+**Your step:** in the repository, in this session so its output lands here:
+
+```
+! git push origin phase-4-wonder-wall:main
+```
+
+Code then watches Vercel's production deployment of that commit (GitHub's record of it) and says when it is
+**Ready**. Then on one boy's iPad, a card, **one hold of Talk with a word spoken**: the word appears in the answer
+box. "go" means it did, or say what it showed.
