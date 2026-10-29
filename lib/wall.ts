@@ -7,7 +7,7 @@ import { runRow } from "@/core/runs";
 import type { MatchRule } from "@/core/wall/answer";
 import type { AttemptRow } from "@/core/wall/card";
 import { answer, cardFor, wallFor, type CardRow, type Judge, type Scope } from "@/core/wall/flow";
-import { JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_SCHEMA, judgeAnswer } from "@/core/wall/judge";
+import { JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_SCHEMA, JUDGE_THINKING, judgeAnswer } from "@/core/wall/judge";
 import { CLIP_RATE, heardText, parseLine, spokenUrl, type SpeechStore } from "@/core/wall/speech";
 import { hear, HEAR_MODEL, say, TUTOR_VOICE } from "@/core/speech";
 import type { Device } from "@/lib/device";
@@ -197,6 +197,7 @@ function judgeFor(device: Device): Judge {
         maxTokens: JUDGE_MAX_TOKENS,
         use: "judge",
         model: JUDGE_MODEL,
+        thinking: JUDGE_THINKING,
         json: JUDGE_SCHEMA,
         timeoutMs,
         onUsage: (u) => {

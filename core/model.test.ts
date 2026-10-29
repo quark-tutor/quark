@@ -41,6 +41,20 @@ describe("complete", () => {
     expect(create.mock.calls[0][0].model).toBe("gate-model");
   });
 
+  it("sends the judge's model from code, its effort beside the schema, and its time limit with no retries", async () => {
+    create.mockResolvedValue(reply('{"reason":"r","verdict":"right"}'));
+    const schema = { type: "object" };
+    await complete({ system: "sys", prompt: "hi", maxTokens: 300, use: "judge", model: "judge-model", thinking: "low", json: schema, timeoutMs: 2500 });
+    const [request, options] = create.mock.calls[0];
+    expect(request.model).toBe("judge-model");
+    expect(request.output_config).toEqual({ format: { type: "json_schema", schema }, effort: "low" });
+    expect(request.thinking).toBeUndefined();
+    expect(options).toEqual({ timeout: 2500, maxRetries: 0 });
+    await complete({ system: "sys", prompt: "hi", maxTokens: 300, use: "judge", model: "judge-model", thinking: "off" });
+    expect(create.mock.calls[1][0].thinking).toEqual({ type: "disabled" });
+    await expect(complete({ system: "sys", prompt: "hi", maxTokens: 300, use: "judge" })).rejects.toThrow(/names its model in code/);
+  });
+
   it("constrains the reply to a schema and parses it", async () => {
     create.mockResolvedValue(reply('{"passed":true}'));
     const schema = { type: "object", properties: { passed: { type: "boolean" } } };

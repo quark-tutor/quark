@@ -9,9 +9,11 @@ import type { AnswerKey } from "../curation/types.ts";
 // band. Pure: the call is given to it, so it is tested without a model.
 
 export const JUDGE_MODEL = "claude-haiku-5-5"; // Brandon, 28 Oct 2026, at stop 1
-// Haiku 5.5 thinks before it answers unless told not to, and on about 1 answer in 33 the thinking used up the whole
-// reply before the verdict was written (found at stop 1's go, 28 Oct 2026).
-export const JUDGE_THINKING: "off" | "low" | undefined = undefined;
+// Haiku 5.5 thinks before it answers, at medium effort unless told otherwise, and on 11 of 365 answers the thinking
+// used up the whole reply before the verdict was written, so the word rule judged (Brandon at stop 1's go, 28 Oct
+// 2026: "fix the replies that ran past the length cap"). At low effort 1 of 365 did, and it judged more right answers
+// right and answered faster; with thinking off it judged fewer right (scripts/judge-table.mts, 28 Oct 2026).
+export const JUDGE_THINKING: "off" | "low" | undefined = "low";
 export const JUDGE_MAX_TOKENS = 300;
 
 // The whole wait, both tries: a child is waiting on the reply.
