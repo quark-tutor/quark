@@ -151,7 +151,7 @@ if (command === "show") {
   const rows = must(
     await db
       .from("attempts")
-      .select("created_at, child_id, session_id, answer, correct, hints_used, seconds, mode, questions(cards(day, slot, layer))")
+      .select("created_at, child_id, session_id, answer, correct, verdict, judged_by, reasoning, hints_used, seconds, mode, questions(cards(day, slot, layer))")
       .eq("family_id", familyId)
       .order("created_at", { ascending: false })
       .limit(n),
@@ -162,6 +162,9 @@ if (command === "show") {
     session_id: string;
     answer: string;
     correct: boolean | null;
+    verdict: string | null;
+    judged_by: string | null;
+    reasoning: string | null;
     hints_used: number;
     seconds: number | null;
     mode: string;
@@ -169,9 +172,9 @@ if (command === "show") {
   }[];
   for (const r of rows.reverse()) {
     const c = r.questions?.cards;
-    const verdict = r.correct === null ? "open" : r.correct ? "right" : "not right";
+    const verdict = r.verdict ? `${r.verdict} (${r.judged_by})` : r.correct === null ? "open" : r.correct ? "right" : "not right";
     console.log(
-      `${r.created_at.slice(0, 19)}  ${who(r.child_id)}  ${c ? `${c.day} ${c.slot} layer ${c.layer}` : "?"}  ${verdict}  hints ${r.hints_used}  ${r.seconds ?? "-"}s  session ${r.session_id.slice(0, 8)}  "${r.answer}"`,
+      `${r.created_at.slice(0, 19)}  ${who(r.child_id)}  ${c ? `${c.day} ${c.slot} layer ${c.layer}` : "?"}  ${verdict}  hints ${r.hints_used}  ${r.seconds ?? "-"}s  session ${r.session_id.slice(0, 8)}  "${r.answer}"${r.reasoning ? `  judge: ${r.reasoning}` : ""}`,
     );
   }
   const sessions = must(
