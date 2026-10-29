@@ -33,9 +33,12 @@ describe("the kid view", () => {
     expect(direct).toEqual(["app/api/kid/pair/route.ts"]);
   });
 
-  it("logs nothing on the kid path, so no guess, nickname or reply reaches a log", () => {
+  it("logs nothing on the kid path but a failed hear's message, so no guess, nickname, reply or heard word reaches a log", () => {
     const logging = [...KID, "lib/wall.ts", ...sources("core/wall")].filter((p) => /\bconsole\./.test(code(p))).map(name);
-    expect(logging).toEqual([]);
+    expect(logging).toEqual(["app/api/kid/hear/route.ts"]);
+    expect(code("app/api/kid/hear/route.ts").match(/\bconsole\.[^;]*;/g)).toEqual([
+      `console.error("hear: Talk failed", error instanceof Error ? error.message : "unknown error");`,
+    ]);
   });
 
   it("has no link out and nothing that plays by itself", () => {

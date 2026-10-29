@@ -19,7 +19,11 @@ function googleAuth(): GoogleAuth {
   const named = process.env.GOOGLE_APPLICATION_CREDENTIALS?.trim();
   const json = process.env.GOOGLE_CREDENTIALS_JSON?.trim() || (named?.startsWith("{") ? named : undefined);
   if (json) {
-    const credentials = JSON.parse(json);
+    // JSON.parse's own message quotes the text around a fault, which here is the key, and the hear route logs
+    // a failure's message.
+    let credentials;
+    try { credentials = JSON.parse(json); }
+    catch { throw new Error("GOOGLE_CREDENTIALS_JSON is not valid JSON."); }
     auth = new GoogleAuth({ credentials, projectId: credentials.project_id, scopes: SCOPE });
   }
   else if (named) auth = new GoogleAuth({ keyFile: named, scopes: SCOPE });

@@ -30,4 +30,13 @@ describe("hear() on Vercel, with the key only as JSON", () => {
     expect(await hear(new Uint8Array(3200), { language: "en-US", sampleRate: 16000 })).toBe("the background");
     expect(urls).toEqual(["https://us-speech.googleapis.com/v2/projects/quark-speech/locations/us/recognizers/_:recognize"]);
   });
+
+  it("says a broken key is not valid JSON without quoting any of it, since the hear route logs the message", async () => {
+    vi.stubEnv("GOOGLE_APPLICATION_CREDENTIALS", "");
+    vi.stubEnv("GOOGLE_CREDENTIALS_JSON", '{"private_key": "-----BEGIN PRIVATE KEY-----secret"');
+    const { hear } = await import("./google");
+    await expect(hear(new Uint8Array(3200), { language: "en-US", sampleRate: 16000 })).rejects.toThrow(
+      /^GOOGLE_CREDENTIALS_JSON is not valid JSON\.$/,
+    );
+  });
 });
