@@ -9,7 +9,7 @@
 //   npm run fixture -- speech [n]           the last n calls to Google for the tutor's voice and ears, and the lines stored
 //   npm run fixture -- answers [n]          the last n answers on the wall (default 20) and the last sessions; a child is
 //                                           "child 1" or "child 2", oldest first, never by name
-//   npm run fixture -- words <date>         every card of a day: title, verdict, text, question, reader notes, and an answer in the text
+//   npm run fixture -- words <date>         every card of a day: title, verdict, text, question, hints, reader notes, and an answer in the text
 //   npm run fixture -- card <id>            one card: its words as shown, what "Read it to me" sends, and what is stored
 //   npm run fixture -- numbers <week>       every number shape in the week's spoken words, and how each goes to the voice
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
@@ -17,6 +17,8 @@
 //   npm run fixture -- device <n>           pair a device to child n (1 or 2, oldest first) and print its cookie, so
 //                                           the kid view can be asked with curl, as a paired iPad asks it
 //   npm run fixture -- forget <device id>   forget that device, as "Forget this iPad" does
+//   npm run fixture -- judge [model]        the judge of a child's answer over slice 1's invented answers and the answers
+//                                           to a hint, the word rule beside it (scripts/judge-table.mts); reads no database
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
 
 import { createClient } from "@supabase/supabase-js";
@@ -235,7 +237,7 @@ if (command === "show") {
     layer: number;
     policy: string;
     policy_notes: { gate?: { reader?: string[] } } | null;
-    body: { title: string; text: string; question: string };
+    body: { title: string; text: string; question: string; hints: string[] };
     questions: { answer_key: { accept: string[]; rubric: string } }[];
   }[];
   let inText = 0;
@@ -250,6 +252,7 @@ if (command === "show") {
       notes += reader.length;
       console.log(`\n  ${r.slot} layer ${r.layer}, ${r.policy}: "${r.body.title}"${gives ? "  ANSWER IN TEXT" : ""}`);
       console.log(`    ${r.body.text}\n    Q: ${r.body.question}\n    Accept: ${key.accept.join("; ") || "(open)"}`);
+      r.body.hints.forEach((h, j) => console.log(`    Hint ${j + 1}: ${h}`));
       for (const n of reader) console.log(`    Reader: ${n}`);
     }
   });
@@ -319,7 +322,9 @@ if (command === "show") {
 } else if (command === "forget") {
   must(await db.from("devices").update({ revoked_at: new Date().toISOString() }).eq("family_id", familyId).eq("id", arg).select("id"), "devices");
   console.log(`Forgot device ${arg}.`);
+} else if (command === "judge") {
+  await (await import("./judge-table.mts")).runJudgeTable(arg);
 } else {
-  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | speech [n] | card <id> | numbers <week> | day <date> | device <n> | forget <device id>");
+  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | speech [n] | card <id> | numbers <week> | day <date> | device <n> | forget <device id> | judge [model]");
   process.exit(1);
 }

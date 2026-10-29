@@ -1,0 +1,648 @@
+[
+ {
+  "child": 1,
+  "slot": "look",
+  "layer": 1,
+  "title": "Big Workers, Tiny Workers",
+  "text": "How was this made? In 1565 Pieter Bruegel painted The Harvesters with oil paint on an oak board. It shows farm workers cutting and gathering wheat on a hot summer day. Kiddo, look at the workers up close and then at the people working in the fields behind them. Their sizes are very different. Look for little stories too, like a man asleep under a tree and a group eating lunch.",
+  "question": "In The Harvesters, who is painted bigger: the workers in front or the people far back in the fields?",
+  "accept": [
+   "the workers in front",
+   "the ones in front",
+   "the close ones",
+   "the near people",
+   "front ones"
+  ],
+  "hints": [
+   "Find the man asleep under the tree. Now look for the tiny dots out in the fields. Which group would you have to squint to see?"
+  ],
+  "answer": "the tiny ones way out in the fields",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "look",
+  "layer": 2,
+  "title": "Small Means Far",
+  "text": "Bruegel had to make a flat wooden board look deep. The tiny people at the back of the painting are not really tiny. Something far from our eyes takes up a smaller part of what we can see, so it looks smaller, just like a friend walking away from you. Bruegel paints things smaller the farther they are meant to be. That is how a flat painting can look as if you could walk into it.",
+  "question": "A person near the back of the painting looks tiny. Are they really a tiny person?",
+  "accept": [
+   "no",
+   "no, just far away",
+   "they are far away",
+   "no, they are far"
+  ],
+  "hints": [
+   "Picture a friend running to the end of a long street. What happens to how big they look to you?"
+  ],
+  "answer": "they look smaller and smaller",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "look",
+  "layer": 3,
+  "title": "Air Makes Pale and Blue",
+  "text": "Bruegel used a second trick as well. Air is full of tiny bits of water and dust that scatter light. The more air between your eye and something, the paler and bluer it looks. Painters call this aerial perspective, while making faraway things smaller is called linear perspective. That is why the hills and the bay at the back of The Harvesters are pale and bluish and almost fade into the sky.",
+  "question": "Why do the hills and the sea at the back of the painting look pale and bluish?",
+  "accept": [
+   "they are far away",
+   "lots of air in between",
+   "the air makes them pale",
+   "because of the air",
+   "they are very far"
+  ],
+  "hints": [
+   "Think of a hill seen on a long car trip and a tree right beside the road. Which looks sharper and darker?"
+  ],
+  "answer": "the tree by the road",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "wonder",
+  "layer": 1,
+  "title": "Watching the Steps",
+  "text": "Kiddo, people who study volcanoes watch for signs that something huge is on its way. On Elephantine Island, people in Egypt watched for a sign too. A stone nilometer had steps leading down into the Nile, and each summer day the water covered more of them. Everyone noticed, and everyone knew the flood was coming. The river spilled over its banks and spread across the fields, and after some weeks the water went down again. Imagine standing on those steps and watching.",
+  "question": "If the water covers more and more of the nilometer steps each day, what is the river doing?",
+  "accept": [
+   "rising",
+   "getting higher",
+   "flooding",
+   "going up",
+   "coming up the steps"
+  ],
+  "hints": [
+   "Imagine you are standing on a dry step. What would have to happen to the water before it reached your feet?"
+  ],
+  "answer": "the water would have to get to my feet",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "wonder",
+  "layer": 2,
+  "title": "Rain You Never Saw",
+  "text": "Imagine you are a farmer beside the Nile. Hardly any rain falls on Egypt, yet your river swells every summer. The water comes from heavy monsoon rains on the Ethiopian highlands, far to the south. It rushes into the Nile and travels north. It carries dark mud washed off the mountains. When the flood spreads over the fields and slowly goes down, that mud, called silt, settles and makes the soil rich for the farmers' crops.",
+  "question": "Egypt gets almost no rain, so where did the flood water come from?",
+  "accept": [
+   "rain far south",
+   "rain in Ethiopia",
+   "rain in the mountains",
+   "rain in the highlands",
+   "from the south"
+  ],
+  "hints": [
+   "A river carries water from where it begins to where it ends. Where might this water have started its journey?"
+  ],
+  "answer": "at the beginning of the river i guess",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "wonder",
+  "layer": 3,
+  "title": "A Year Built Around a Flood",
+  "text": "The flood reached Egypt around July to September. The Egyptian year was built around it, with three seasons: Akhet (flood), Peret (growing) and Shemu (harvest). Officials measured each year's flood on stone gauges called nilometers, like the one on Elephantine Island. The height told them what harvest to expect. A flood that was too low left fields dry and could mean hunger, and one that was too high could wash away houses and dikes.",
+  "question": "Why did officials want to know how high the flood rose each year?",
+  "accept": [
+   "to predict the harvest",
+   "to know how much food",
+   "to guess the crops",
+   "to know if there'd be enough food",
+   "to plan the harvest"
+  ],
+  "hints": [
+   "Picture a year when the flood was very low. What would be different for the families later in the year?"
+  ],
+  "answer": "they would be hungry",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "listen",
+  "layer": 1,
+  "title": "A Beat for Your Feet",
+  "text": "Kiddo, can you find every step hiding in a march? The Stars and Stripes Forever by John Philip Sousa is a march, and its beat is steady and goes in twos, like walking feet. Stand up while it plays and step one foot on each beat. Listen for the steps as you go.",
+  "question": "While the march plays, which two feet does the beat take turns with?",
+  "accept": [
+   "left and right",
+   "left foot and right foot",
+   "left-right",
+   "both feet, one then the other"
+  ],
+  "hints": [
+   "Try walking across the room. What do your feet do, one after the other?"
+  ],
+  "answer": "they move forward and stomp on the floor",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "listen",
+  "layer": 1,
+  "title": "A Beat for Your Feet",
+  "text": "Kiddo, can you find every step hiding in a march? The Stars and Stripes Forever by John Philip Sousa is a march, and its beat is steady and goes in twos, like walking feet. Stand up while it plays and step one foot on each beat. Listen for the steps as you go.",
+  "question": "While the march plays, which two feet does the beat take turns with?",
+  "accept": [
+   "left and right",
+   "left foot and right foot",
+   "left-right",
+   "both feet, one then the other"
+  ],
+  "hints": [
+   "Try walking across the room. What do your feet do, one after the other?",
+   "When one foot is stepping forward, what is the other foot doing?"
+  ],
+  "answer": "it is standing on the floor",
+  "kind": "hint2"
+ },
+ {
+  "child": 1,
+  "slot": "listen",
+  "layer": 2,
+  "title": "Why the Beat Stays Steady",
+  "text": "Here is the next piece to collect: a clue about why a march never speeds up or slows down. A march keeps the same speed from start to finish so a band can play it while walking together. If the beat changed, the players' steps would stop matching, and they would bump into each other or fall out of line. Each player has to notice the others and stay with the beat. The beat works like a shared clock, and every foot lands on it at the same moment.",
+  "question": "Why does a march keep the same speed the whole way through?",
+  "accept": [
+   "so the band walks together",
+   "so everyone stays in step",
+   "so they can march and play",
+   "so nobody bumps into each other"
+  ],
+  "hints": [
+   "Think about what a band is doing with its legs while it plays."
+  ],
+  "answer": "walking",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "listen",
+  "layer": 2,
+  "title": "Why the Beat Stays Steady",
+  "text": "Here is the next piece to collect: a clue about why a march never speeds up or slows down. A march keeps the same speed from start to finish so a band can play it while walking together. If the beat changed, the players' steps would stop matching, and they would bump into each other or fall out of line. Each player has to notice the others and stay with the beat. The beat works like a shared clock, and every foot lands on it at the same moment.",
+  "question": "Why does a march keep the same speed the whole way through?",
+  "accept": [
+   "so the band walks together",
+   "so everyone stays in step",
+   "so they can march and play",
+   "so nobody bumps into each other"
+  ],
+  "hints": [
+   "Think about what a band is doing with its legs while it plays.",
+   "Imagine the drummer speeds up but the flute players do not. What would happen to their steps?"
+  ],
+  "answer": "their steps would get all mixed up and look silly",
+  "kind": "hint2"
+ },
+ {
+  "child": 1,
+  "slot": "listen",
+  "layer": 3,
+  "title": "The Piccolo's Second Tune",
+  "text": "Can you find a tune hiding above the other tune? Near the end of the march, the piccolo plays its own whistling tune. The piccolo is the smallest and highest flute, and it plays high over the rest of the band. A second tune played over the main one at the same time is called a countermelody. The low brass instruments answer it, so high and low sounds take turns over the steady marching beat.",
+  "question": "When the piccolo plays its own tune while the band plays the main tune, how many tunes are playing at once?",
+  "accept": [
+   "two",
+   "two tunes",
+   "2"
+  ],
+  "hints": [
+   "Listen for the main tune the band plays. Is the piccolo playing that very same tune?"
+  ],
+  "answer": "no",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "then",
+  "layer": 2,
+  "title": "What's Under the Silence?",
+  "text": "What's down there, underneath the quiet at the end of the story? A real wolf finally comes, and the boy shouts \"Wolf!\" again, but this time nobody comes. The two false alarms had taught the villagers that his shouts did not mean a wolf was there. His earlier lies made his true words sound like just another trick.",
+  "question": "When the real wolf came, why didn't the villagers come to help?",
+  "accept": [
+   "they didn't believe him",
+   "he lied before",
+   "they thought it was a trick",
+   "he fooled them twice",
+   "they thought he was joking"
+  ],
+  "hints": [
+   "Think back to the first two shouts. What had the villagers found out about the boy's shouts?",
+   "If a friend's warnings had turned out empty twice, how would you feel about the third one?"
+  ],
+  "answer": "kinda annoyed i guess",
+  "kind": "hint2"
+ },
+ {
+  "child": 1,
+  "slot": "then",
+  "layer": 3,
+  "title": "What's Under the Words?",
+  "text": "What's down there, underneath words that turn out to be wrong? What makes something a lie is what the speaker knows and means, not just whether the words turn out wrong. A mistake is fixed by finding out the truth. A lie costs trust, because people learn they cannot rely on that speaker.",
+  "question": "Sam says \"It's raining!\" because he really thinks it is, but it isn't. Is that a lie or a mistake?",
+  "accept": [
+   "a mistake",
+   "mistake",
+   "not a lie",
+   "he was wrong, not lying"
+  ],
+  "hints": [
+   "What did Sam think was true at the moment he spoke?"
+  ],
+  "answer": "that it was raining",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "puzzle",
+  "layer": 1,
+  "title": "The Farmer and the Snow",
+  "text": "Here's something funny: Wilson Bentley, a Vermont farmer, pointed a microscope at snowflakes and photographed them. Every flake in his pictures looks different from the others. But there's a joke hiding in them, because they all have the same number of arms. Kiddo, take a close look at the photographs. Can you find the number?",
+  "question": "Look at the snowflake photographs. How many arms does each snowflake have?",
+  "accept": [
+   "six",
+   "6",
+   "six arms",
+   "6 arms"
+  ],
+  "hints": [
+   "Pick one arm and put your finger on it. Then go around the flake in order. How will you know when you're back where you started?"
+  ],
+  "answer": "when i get to the first arm again",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "puzzle",
+  "layer": 1,
+  "title": "The Farmer and the Snow",
+  "text": "Here's something funny: Wilson Bentley, a Vermont farmer, pointed a microscope at snowflakes and photographed them. Every flake in his pictures looks different from the others. But there's a joke hiding in them, because they all have the same number of arms. Kiddo, take a close look at the photographs. Can you find the number?",
+  "question": "Look at the snowflake photographs. How many arms does each snowflake have?",
+  "accept": [
+   "six",
+   "6",
+   "six arms",
+   "6 arms"
+  ],
+  "hints": [
+   "Pick one arm and put your finger on it. Then go around the flake in order. How will you know when you're back where you started?",
+   "Try counting a second flake the same way. Do you get the same number as the first?"
+  ],
+  "answer": "yeah i think so",
+  "kind": "hint2"
+ },
+ {
+  "child": 1,
+  "slot": "puzzle",
+  "layer": 2,
+  "title": "The Square Snowflake Joke",
+  "text": "A snowflake is made of ice, and ice is made of tiny bits of water too small to see. When water freezes, those bits fit together in six-sided rings. The rings join into a six-sided shape like a hexagon, and the arms grow out from its corners. So the ring's six sides become the flake's six arms. Now let's imagine something silly: a snowflake built from a different kind of ring.",
+  "question": "Suppose the tiny bits of water fit together in four-sided rings instead of six-sided ones. How many arms would you expect a snowflake to grow?",
+  "accept": [
+   "four",
+   "4",
+   "four arms",
+   "4 arms"
+  ],
+  "hints": [
+   "In a real snowflake, what do the sides of the ring turn into?"
+  ],
+  "answer": "the arms",
+  "kind": "hint1"
+ },
+ {
+  "child": 1,
+  "slot": "puzzle",
+  "layer": 3,
+  "title": "The Snowflake That Never Notices",
+  "text": "Ice grows in a six-sided pattern, so a snowflake has six-fold symmetry. Turn it a sixth of a full turn and it looks exactly the same as before. It's like a prankster that keeps swapping places and says, \"Nothing changed!\" The arms match because all six grow at the same moment in the same air, so whatever shapes one arm shapes the others too. Fold a paper circle into sixths and cut it, and one snip makes the same shape in all six parts.",
+  "question": "You turn a snowflake a sixth of a turn at a time. How many times does it look the same as it goes all the way around once?",
+  "accept": [
+   "six",
+   "6",
+   "six times",
+   "6 times"
+  ],
+  "hints": [
+   "Picture a pizza cut into slices that are each one of those turns. How many slices make the whole pizza?",
+   "Does the very last turn bring the flake back to where it began? Think about whether that one counts."
+  ],
+  "answer": "yes it goes back to the start",
+  "kind": "hint2"
+ },
+ {
+  "child": 2,
+  "slot": "look",
+  "layer": 1,
+  "title": "Big People, Tiny People",
+  "text": "In 1565, Pieter Bruegel painted The Harvesters, a hot summer day of farm workers cutting wheat. How did he build a whole field on a flat board? Some people are big and some are just a dot. Look for little stories he noticed, like a man asleep under a tree and a group eating lunch.",
+  "question": "In The Harvesters, who is painted bigger: the workers in front or the people far back in the fields?",
+  "accept": [
+   "the workers in front",
+   "the ones in front",
+   "the close ones",
+   "the near people",
+   "front ones"
+  ],
+  "hints": [
+   "Put your finger on the very smallest people you can find. Where are they standing in the picture?"
+  ],
+  "answer": "way in the back",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "wonder",
+  "layer": 2,
+  "title": "Dry Sky, Full River",
+  "text": "Now be a farmer in Egypt. Almost no rain falls where you live. Yet every summer the river brings a flood. The flood carries dark mud called silt. When the water goes down, the silt stays on your fields and makes the soil rich.",
+  "question": "Egypt gets almost no rain, so where did the flood water come from?",
+  "accept": [
+   "rain far south",
+   "rain in Ethiopia",
+   "rain in the mountains",
+   "rain in the highlands",
+   "from the south"
+  ],
+  "hints": [
+   "Does a river begin right where you see it, or does its water start its trip somewhere else?"
+  ],
+  "answer": "somewhere else i think",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "wonder",
+  "layer": 2,
+  "title": "Dry Sky, Full River",
+  "text": "Now be a farmer in Egypt. Almost no rain falls where you live. Yet every summer the river brings a flood. The flood carries dark mud called silt. When the water goes down, the silt stays on your fields and makes the soil rich.",
+  "question": "Egypt gets almost no rain, so where did the flood water come from?",
+  "accept": [
+   "rain far south",
+   "rain in Ethiopia",
+   "rain in the mountains",
+   "rain in the highlands",
+   "from the south"
+  ],
+  "hints": [
+   "Does a river begin right where you see it, or does its water start its trip somewhere else?",
+   "If it did not rain on Egypt, could it have rained in a place the river runs from?"
+  ],
+  "answer": "yeah maybe",
+  "kind": "hint2"
+ },
+ {
+  "child": 2,
+  "slot": "listen",
+  "layer": 1,
+  "title": "Collect the Beats",
+  "text": "Can you find them all? Let's start collecting beats, Bug. \"The Stars and Stripes Forever\" is a march by John Philip Sousa. Its beat is steady and goes in twos, like walking feet. Stand up while it plays and step one foot on each beat.",
+  "question": "While the march plays, which two feet does the beat take turns with?",
+  "accept": [
+   "left and right",
+   "left foot and right foot",
+   "left-right",
+   "both feet, one then the other"
+  ],
+  "hints": [
+   "Stand up and march in place. Does the same foot go down every time?"
+  ],
+  "answer": "no",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "listen",
+  "layer": 1,
+  "title": "Collect the Beats",
+  "text": "Can you find them all? Let's start collecting beats, Bug. \"The Stars and Stripes Forever\" is a march by John Philip Sousa. Its beat is steady and goes in twos, like walking feet. Stand up while it plays and step one foot on each beat.",
+  "question": "While the march plays, which two feet does the beat take turns with?",
+  "accept": [
+   "left and right",
+   "left foot and right foot",
+   "left-right",
+   "both feet, one then the other"
+  ],
+  "hints": [
+   "Stand up and march in place. Does the same foot go down every time?",
+   "When one foot is up in the air, what is your other foot doing?"
+  ],
+  "answer": "its on the floor",
+  "kind": "hint2"
+ },
+ {
+  "child": 2,
+  "slot": "listen",
+  "layer": 2,
+  "title": "Why the Beat Stays Steady",
+  "text": "Can you find them all? Now let's collect a reason. A march keeps the same speed from start to finish so a band can play it while walking together. If the beat sped up or slowed down, the players' steps would stop matching. They would bump into each other or fall out of line. The beat works like a shared clock.",
+  "question": "Why does a march keep the same speed the whole way through?",
+  "accept": [
+   "so the band walks together",
+   "so everyone stays in step",
+   "so they can march and play",
+   "so nobody bumps into each other"
+  ],
+  "hints": [
+   "Picture a band walking down a street while it plays. What would happen if one row sped up?"
+  ],
+  "answer": "they would get ahead of everyone",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "listen",
+  "layer": 2,
+  "title": "Why the Beat Stays Steady",
+  "text": "Can you find them all? Now let's collect a reason. A march keeps the same speed from start to finish so a band can play it while walking together. If the beat sped up or slowed down, the players' steps would stop matching. They would bump into each other or fall out of line. The beat works like a shared clock.",
+  "question": "Why does a march keep the same speed the whole way through?",
+  "accept": [
+   "so the band walks together",
+   "so everyone stays in step",
+   "so they can march and play",
+   "so nobody bumps into each other"
+  ],
+  "hints": [
+   "Picture a band walking down a street while it plays. What would happen if one row sped up?",
+   "Think about players walking close beside each other, some faster and some slower. What could happen to them?"
+  ],
+  "answer": "someone might trip",
+  "kind": "hint2"
+ },
+ {
+  "child": 2,
+  "slot": "listen",
+  "layer": 3,
+  "title": "The Piccolo's Second Tune",
+  "text": "Can you find them all? Let's collect tunes. Near the end of the march, the piccolo plays its own whistling tune high above the band. The piccolo is the smallest and highest flute. This is called a countermelody: a second tune played over the main one at the same time. The low brass answer it, so high and low sounds take turns.",
+  "question": "When the piccolo plays its own tune while the band plays the main tune, how many tunes are playing at once?",
+  "accept": [
+   "two",
+   "two tunes",
+   "2"
+  ],
+  "hints": [
+   "Listen for the high whistling sound. Is the rest of the band still playing its main tune?"
+  ],
+  "answer": "yes",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "then",
+  "layer": 1,
+  "title": "What's Down Under the Shout?",
+  "text": "What's down there, under a very old story? Let's dig in. In a fable credited to Aesop, a shepherd boy watches the sheep and shouts \"Wolf!\" just for fun. The villagers run to guard the sheep. But there is no wolf, and the boy does it again. This picture was made long after Aesop's time.",
+  "question": "Why did the villagers run to the shepherd boy when he shouted \"Wolf!\"?",
+  "accept": [
+   "to help him",
+   "to save the sheep",
+   "they thought a wolf came",
+   "to chase the wolf",
+   "they believed him"
+  ],
+  "hints": [
+   "What did the villagers notice when they heard the shout?"
+  ],
+  "answer": "that the boy was yelling",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "then",
+  "layer": 3,
+  "title": "A Lie or a Mistake?",
+  "text": "Here is something hiding down deeper. What makes something a lie is what the speaker knows and means, not just whether the words turn out wrong. A person who says something they believe, and it turns out wrong, is in a different spot from a person who says it knowing it isn't true. One kind is fixed by finding out the truth. The other costs trust, because people learn they cannot rely on that speaker.",
+  "question": "Sam says \"It's raining!\" because he really thinks it is, but it isn't. Is that a lie or a mistake?",
+  "accept": [
+   "a mistake",
+   "mistake",
+   "not a lie",
+   "he was wrong, not lying"
+  ],
+  "hints": [
+   "What does Sam believe when he says it?"
+  ],
+  "answer": "that its raining",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "then",
+  "layer": 3,
+  "title": "A Lie or a Mistake?",
+  "text": "Here is something hiding down deeper. What makes something a lie is what the speaker knows and means, not just whether the words turn out wrong. A person who says something they believe, and it turns out wrong, is in a different spot from a person who says it knowing it isn't true. One kind is fixed by finding out the truth. The other costs trust, because people learn they cannot rely on that speaker.",
+  "question": "Sam says \"It's raining!\" because he really thinks it is, but it isn't. Is that a lie or a mistake?",
+  "accept": [
+   "a mistake",
+   "mistake",
+   "not a lie",
+   "he was wrong, not lying"
+  ],
+  "hints": [
+   "What does Sam believe when he says it?",
+   "Does Sam know the truth when he speaks?"
+  ],
+  "answer": "no",
+  "kind": "hint2"
+ },
+ {
+  "child": 2,
+  "slot": "puzzle",
+  "layer": 1,
+  "title": "A Farmer and His Snow",
+  "text": "What's funny about this? A Vermont farmer pointed a microscope at snow! His name was Wilson Bentley, and he photographed snowflakes. Bug, look at his pictures. Every flake looks different, but they all share one thing.",
+  "question": "Look at the snowflake photographs. How many arms does each snowflake have?",
+  "accept": [
+   "six",
+   "6",
+   "six arms",
+   "6 arms"
+  ],
+  "hints": [
+   "Pick one arm and put your finger on it. Then go around the flake one arm at a time. Where do you stop?"
+  ],
+  "answer": "back at the first arm",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "puzzle",
+  "layer": 1,
+  "title": "A Farmer and His Snow",
+  "text": "What's funny about this? A Vermont farmer pointed a microscope at snow! His name was Wilson Bentley, and he photographed snowflakes. Bug, look at his pictures. Every flake looks different, but they all share one thing.",
+  "question": "Look at the snowflake photographs. How many arms does each snowflake have?",
+  "accept": [
+   "six",
+   "6",
+   "six arms",
+   "6 arms"
+  ],
+  "hints": [
+   "Pick one arm and put your finger on it. Then go around the flake one arm at a time. Where do you stop?",
+   "Some arms are hard to see. Did you count any arm twice, or skip one?"
+  ],
+  "answer": "i think i skipped one",
+  "kind": "hint2"
+ },
+ {
+  "child": 2,
+  "slot": "puzzle",
+  "layer": 2,
+  "title": "Tiny Bits in Rings",
+  "text": "What's funny about this? Ice is made of tiny bits of water too small to see, and they snap together in rings. When water freezes, the bits make six-sided rings that join into a shape like a hexagon. The arms grow out from the six corners. So the ring's sides become the flake's arms.",
+  "question": "Suppose the tiny bits of water fit together in four-sided rings instead of six-sided ones. How many arms would you expect a snowflake to grow?",
+  "accept": [
+   "four",
+   "4",
+   "four arms",
+   "4 arms"
+  ],
+  "hints": [
+   "The arms grow out from the corners of the ring. What could you count on the ring to find the arms?"
+  ],
+  "answer": "the corners",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "puzzle",
+  "layer": 3,
+  "title": "The Spinning Trick",
+  "text": "What's funny about this? Spin a snowflake a little and it looks like nothing happened! Turn it one sixth of a full turn and it looks exactly the same. All the arms grow at the same moment in the same air, so what shapes one arm shapes them all. Fold a paper circle into sixths and cut it, and one cut makes the same shape in every part.",
+  "question": "You turn a snowflake a sixth of a turn at a time. How many times does it look the same as it goes all the way around once?",
+  "accept": [
+   "six",
+   "6",
+   "six times",
+   "6 times"
+  ],
+  "hints": [
+   "Picture a dot on one arm. After your first turn, where is the dot?"
+  ],
+  "answer": "on the next arm",
+  "kind": "hint1"
+ },
+ {
+  "child": 2,
+  "slot": "puzzle",
+  "layer": 3,
+  "title": "The Spinning Trick",
+  "text": "What's funny about this? Spin a snowflake a little and it looks like nothing happened! Turn it one sixth of a full turn and it looks exactly the same. All the arms grow at the same moment in the same air, so what shapes one arm shapes them all. Fold a paper circle into sixths and cut it, and one cut makes the same shape in every part.",
+  "question": "You turn a snowflake a sixth of a turn at a time. How many times does it look the same as it goes all the way around once?",
+  "accept": [
+   "six",
+   "6",
+   "six times",
+   "6 times"
+  ],
+  "hints": [
+   "Picture a dot on one arm. After your first turn, where is the dot?",
+   "Keep turning in your mind until the dot is back where it began. Which turn brings it home?"
+  ],
+  "answer": "the last one",
+  "kind": "hint2"
+ }
+]

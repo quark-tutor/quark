@@ -6,12 +6,15 @@ import { join } from "node:path";
 // The thin model adapter (CLAUDE.md). Everything that calls a language model goes through
 // complete(), so the provider can be swapped by rewriting this one file. Curation (ideas), writing
 // (cards) and the policy gate read their model names from separate env vars so each can run on the
-// model that suits it: facts on the strongest, writing on a cheaper one (decided 14 Oct 2026).
+// model that suits it: facts on the strongest, writing on a cheaper one (decided 14 Oct 2026). The
+// judge of a child's answer names its model in code (JUDGE_MODEL in core/wall/judge.ts), as the
+// tutor's voice does, and passes it as `model`.
 //
 // Prompt text never lives inline: `system` comes from core/prompts/ via readPrompt() or
 // kidFacingPrompt() (core/prompts.ts), and `prompt` carries the data for this one call.
 
-export type ModelUse = "curate" | "write" | "gate";
+export type ModelUse = "curate" | "write" | "gate" | "judge";
+type EnvUse = Exclude<ModelUse, "judge">;
 
 export type ImageType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
 export const IMAGE_TYPES: readonly ImageType[] = ["image/jpeg", "image/png", "image/gif", "image/webp"];
@@ -19,7 +22,7 @@ export const IMAGE_TYPES: readonly ImageType[] = ["image/jpeg", "image/png", "im
 // An image the model looks at alongside the prompt: a URL it fetches, or bytes we send.
 export type ModelImage = { url: string } | { data: Uint8Array; mediaType: ImageType };
 
-const modelEnv: Record<ModelUse, string> = {
+const modelEnv: Record<EnvUse, string> = {
   curate: "QUARK_MODEL_CURATE",
   write: "QUARK_MODEL_WRITE",
   gate: "QUARK_MODEL_GATE",
@@ -30,6 +33,8 @@ export type CompleteOptions = {
   prompt: string;
   maxTokens: number;
   use?: ModelUse; // which env var names the model; defaults to curate
+  model?: string; // the model itself, in place of the env var: the judge's, set in code
+  timeoutMs?: number; // give up on this request after this long, with none of the SDK's own retries
   images?: ModelImage[]; // shown before the prompt
   label?: string; // names the debug file: "ideas-day1-puzzle"
   // This one call's tokens, for a caller that prices it on its own (a server action shares the
@@ -80,7 +85,7 @@ function writeDebug(label: string | undefined, request: unknown, reply: unknown)
   writeFileSync(join(debugDir, name), JSON.stringify({ request, reply }, scrub, 2));
 }
 
-export function modelFor(use: ModelUse): string {
+export function modelFor(use: EnvUse): string {
   const name = process.env[modelEnv[use]];
   if (!name) throw new Error(`Set ${modelEnv[use]} in .env.local (see .env.example).`);
   return name;
@@ -98,8 +103,9 @@ function imageBlock(image: ModelImage): Anthropic.ImageBlockParam {
 export async function complete(options: CompleteOptions): Promise<string>;
 export async function complete<T>(options: CompleteOptions & { json: Record<string, unknown> }): Promise<T>;
 export async function complete(options: CompleteOptions & { json?: Record<string, unknown> }): Promise<unknown> {
-  const { system, prompt, maxTokens, use = "curate", images = [], json } = options;
-  const model = modelFor(use);
+  const { system, prompt, maxTokens, use = "curate", images = [], json, timeoutMs } = options;
+  if (use === "judge" && !options.model) throw new Error("The judge names its model in code: pass it as model.");
+  const model = options.model ?? modelFor(use as EnvUse);
   client ??= new Anthropic(); // reads ANTHROPIC_API_KEY
 
   const content: string | Anthropic.ContentBlockParam[] = images.length
@@ -114,7 +120,7 @@ export async function complete(options: CompleteOptions & { json?: Record<string
   };
   let response: Anthropic.Message;
   try {
-    response = await client.messages.create(request);
+    response = await client.messages.create(request, timeoutMs === undefined ? undefined : { timeout: timeoutMs, maxRetries: 0 });
   } catch (e) {
     writeDebug(options.label, request, { error: e instanceof Error ? e.message : String(e) });
     throw e;
