@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { PRICES, PRICES_CHECKED, SPEECH_PRICES, SPEECH_PRICES_CHECKED } from "@/core/prices";
 import { HEAR_MODEL, TUTOR_VOICE } from "@/core/speech";
 import { estimate, OLD_WEEK_ESTIMATE, type RecordedRun, type RunModel } from "@/core/runs";
+import { JUDGE_MODEL } from "@/core/wall/judge";
 import { requireGuardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
 import styles from "../beliefs/beliefs.module.css";
@@ -13,8 +14,9 @@ import own from "./models.module.css";
 export const metadata: Metadata = { title: "Models and costs · Quark" };
 
 // What Quark spends on language models and on which ones, read-only. The models are set in
-// .env.local (and Vercel's environment), never here (decided 16 Oct 2026). Runs come from
-// model_runs, which week:build and content:fetch write at the end of each run.
+// .env.local (and Vercel's environment), never here (decided 16 Oct 2026); the judge's in code. Runs
+// come from model_runs, which week:build and content:fetch write at the end of each run, and the
+// wall writes for each answer the judge reads (added up in a section of their own, not listed).
 export default function ModelsPage() {
   return (
     <main className={styles.page}>
@@ -32,6 +34,9 @@ const JOBS = [
 ] as const;
 
 type Run = RecordedRun & { id: string; started_at: string; theme_id: string | null; week: number | null; cost: number; cost_complete: boolean };
+
+// Two boys answer about 40 questions a day between them (docs/judge-slice.md, What is built, 5).
+const ANSWERS_A_DAY = 40;
 
 const money = (n: number) => `$${n < 10 ? n.toFixed(2) : n.toFixed(0)}`;
 const tokens = (n: number) => (n >= 10_000 ? `${Math.round(n / 1000).toLocaleString()}k` : n.toLocaleString());
@@ -62,7 +67,13 @@ async function Models() {
   const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone, dateStyle: "medium", timeStyle: "short" });
   const checked = new Date(`${PRICES_CHECKED}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", dateStyle: "long" });
   const children = kids.count ?? 0;
-  const all = runs.data ?? [];
+  const judged = (runs.data ?? []).filter((r) => r.kind === "judge");
+  const all = (runs.data ?? []).filter((r) => r.kind !== "judge");
+  const inMonth = (iso: string) => new Date(iso).toLocaleDateString("en-CA", { timeZone }).startsWith(monthStartOf(timeZone));
+  const judgedAll = judgeTally(judged);
+  const judgedMonth = judgeTally(judged.filter((r) => inMonth(r.finished_at)));
+  const judgePrice = PRICES[JUDGE_MODEL];
+  const anthropicKey = Boolean(process.env.ANTHROPIC_API_KEY);
   const themeTitle = new Map((themes.data ?? []).map((t) => [t.id, t.title as string]));
   const est = estimate(all, children);
   const spent = all.reduce((s, r) => s + Number(r.cost), 0);
@@ -197,6 +208,67 @@ async function Models() {
           {SPEECH_PRICES.say.freeCharactersPerMonth.toLocaleString()} characters Google gives free each month. The real bill
           is in the Google Cloud console.
         </p>
+      </section>
+
+      <section className={own.section}>
+        <h2>The judge of an answer</h2>
+        <p>
+          <strong>Anthropic&rsquo;s key: {anthropicKey ? "set up" : "not set up"}</strong>
+        </p>
+        <p className={styles.muted}>
+          When a child answers a card, <code>{JUDGE_MODEL}</code> reads the question, the answers the card accepts, the hints
+          already shown and the child&rsquo;s words, and says only whether it is right, close, an answer to the hint, or not
+          yet. The child hears a line written in advance for that; nothing the model writes reaches them. Its one line of
+          reasoning is kept with the answer for you. If it gives no verdict within three seconds, or the key isn&rsquo;t set
+          up, the old word rule judges instead. The model is set in <code>core/wall/judge.ts</code>
+          {judgePrice ? `, at $${judgePrice.input} / $${judgePrice.output} per million tokens in / out` : ""}.
+        </p>
+        {judgedAll.answers === 0 ? (
+          <p className={styles.muted}>No answers judged yet.</p>
+        ) : (
+          <>
+            <div className={own.scroll}>
+              <table className={own.table}>
+                <thead>
+                  <tr>
+                    <th>What</th>
+                    <th className={own.num}>This month</th>
+                    <th className={own.num}>Since the start</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      Answers sent to the judge
+                      <br />
+                      <span className={styles.meta}>and those the word rule judged instead</span>
+                    </td>
+                    <td className={own.num}>
+                      {judgedMonth.answers.toLocaleString()}
+                      <br />
+                      <span className={styles.meta}>{judgedMonth.fellBack.toLocaleString()}</span>
+                    </td>
+                    <td className={own.num}>
+                      {judgedAll.answers.toLocaleString()}
+                      <br />
+                      <span className={styles.meta}>{judgedAll.fellBack.toLocaleString()}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Cost</td>
+                    <td className={own.num}>{money(judgedMonth.cost)}</td>
+                    <td className={own.num}>{money(judgedAll.cost)}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className={styles.muted}>
+              About {money(judgedAll.cost / judgedAll.answers)} an answer, so about{" "}
+              {money((judgedAll.cost / judgedAll.answers) * ANSWERS_A_DAY * (365 / 12))} a month at {ANSWERS_A_DAY} answers a
+              day. An estimate, not a bill.
+            </p>
+          </>
+        )}
       </section>
 
       <section className={own.section}>
@@ -399,7 +471,15 @@ function tally(rows: SpeechRow[]) {
   return t;
 }
 
-const USE_NAMES: Record<string, string> = { curate: "ideas", write: "cards", gate: "gate" };
+// "2026-10": this month where the family lives.
+const monthStartOf = (timeZone: string) => new Date().toLocaleDateString("en-CA", { timeZone }).slice(0, 7);
+
+// The judge's rows, one per answer it read: how many, how many it gave no verdict on, and their cost.
+function judgeTally(rows: Run[]) {
+  return { answers: rows.length, fellBack: rows.filter((r) => !r.ok).length, cost: rows.reduce((s, r) => s + Number(r.cost), 0) };
+}
+
+const USE_NAMES: Record<string, string> = { curate: "ideas", write: "cards", gate: "gate", judge: "answers judged" };
 
 function ModelLine({ m }: { m: RunModel }) {
   return (
