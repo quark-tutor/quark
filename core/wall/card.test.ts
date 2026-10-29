@@ -57,6 +57,14 @@ describe("a card's state from its attempts", () => {
     expect(s).toEqual({ kind: "handed_off", at: 0, hintsSeen: 2 });
   });
 
+  it("spends a hint on not yet and close, none on an answer to the hint, and counts a row from before the judge as it did", () => {
+    const judged = (verdict: string | null): AttemptRow => ({ ...tried(1, false), verdict });
+    expect(chainState(chain, [judged("not_yet"), judged("close")])).toEqual({ kind: "answering", at: 0, hintsSeen: 2 });
+    expect(chainState(chain, [judged("not_yet"), judged("hint"), judged("hint"), judged("hint")])).toEqual({ kind: "answering", at: 0, hintsSeen: 1 });
+    expect(chainState(chain, [judged(null), judged(null), judged(null)])).toEqual({ kind: "handed_off", at: 0, hintsSeen: 2 });
+    expect(chainState(chain, [tried(1, false), judged("hint"), tried(1, false), judged("close")])).toEqual({ kind: "handed_off", at: 0, hintsSeen: 2 });
+  });
+
   it("reads attempts in time order and ignores other questions", () => {
     const first = tried(1, true);
     const wrongs = [tried(1, false), tried(1, false), tried(1, false)];
@@ -94,6 +102,13 @@ describe("the answer's reply", () => {
   it("gives the next card's id on a right answer, or the handoff when there is nothing deeper", () => {
     expect(answerReply("right", chain, chainState(chain, [tried(1, true)]))).toEqual({ outcome: "right", next: "card-2" });
     expect(answerReply("right", [layer(1)], chainState([layer(1)], [tried(1, true)]))).toEqual({ outcome: "right", handoff: "Ask a parent about 1." });
+  });
+
+  it("gives a clue after close, and the question again after an answer to the hint", () => {
+    const close = chainState(chain, [{ ...tried(1, false), verdict: "close" }]);
+    expect(answerReply("close", chain, close)).toEqual({ outcome: "close", hint: "Hint 1.1" });
+    const step = chainState(chain, [tried(1, false), { ...tried(1, false), verdict: "hint" }]);
+    expect(answerReply("hint", chain, step)).toEqual({ outcome: "to_question" });
   });
 
   it("gives the handoff after an open question's answer", () => {

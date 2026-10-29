@@ -33,11 +33,16 @@ describe("the kid view", () => {
     expect(direct).toEqual(["app/api/kid/pair/route.ts"]);
   });
 
-  it("logs nothing on the kid path but a failed hear's message, so no guess, nickname, reply or heard word reaches a log", () => {
+  it("logs nothing on the kid path but a failed hear's message and why the judge gave no verdict, so no guess, nickname, reply or heard word reaches a log", () => {
     const logging = [...KID, "lib/wall.ts", ...sources("core/wall")].filter((p) => /\bconsole\./.test(code(p))).map(name);
-    expect(logging).toEqual(["app/api/kid/hear/route.ts"]);
+    expect(logging.sort()).toEqual(["app/api/kid/hear/route.ts", "lib/wall.ts"]);
     expect(code("app/api/kid/hear/route.ts").match(/\bconsole\.[^;]*;/g)).toEqual([
       `console.error("hear: Talk failed", error instanceof Error ? error.message : "unknown error");`,
+    ]);
+    // The judge's fault is the error's first line (core/wall/judge.ts), and a failed record is the database's message.
+    expect(code("lib/wall.ts").match(/\bconsole\.[^;]*;/g)).toEqual([
+      `console.error("judge: the word rule judged instead:", r.fault);`,
+      `console.error("judge: could not record the run:", error.message);`,
     ]);
   });
 

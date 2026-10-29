@@ -8,7 +8,11 @@ import type { AnswerKey } from "../curation/types.ts";
 // What is sent names no child (rule 7): the nickname is taken out of the card's words, and the child is a grade
 // band. Pure: the call is given to it, so it is tested without a model.
 
-export const JUDGE_MODEL = "claude-haiku-5-5";
+export const JUDGE_MODEL = "claude-haiku-5-5"; // Brandon, 28 Oct 2026, at stop 1
+// Haiku 5.5 thinks before it answers unless told not to, and on about 1 answer in 33 the thinking used up the whole
+// reply before the verdict was written (found at stop 1's go, 28 Oct 2026).
+export const JUDGE_THINKING: "off" | "low" | undefined = undefined;
+export const JUDGE_MAX_TOKENS = 300;
 
 // The whole wait, both tries: a child is waiting on the reply.
 export const JUDGE_BUDGET_MS = 3000;

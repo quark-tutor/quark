@@ -4,7 +4,7 @@ import { costOf } from "./prices.ts";
 // What a run spent on models, as the scripts record it in model_runs and the models page reads it
 // back (docs/04, "How the models and costs page is built"). Counts and money only (rule 7).
 
-export type RunKind = "week:build" | "content:fetch" | "gate"; // gate: npm run gate on its own
+export type RunKind = "week:build" | "content:fetch" | "gate" | "judge"; // gate: npm run gate on its own; judge: one answer judged
 
 // One run's own tally of calls and tokens, per job and model. core/model.ts's meteredComplete() feeds
 // it, and runRow() prices what usage() returns. Pure, so it is tested without a model.

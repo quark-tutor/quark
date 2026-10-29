@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { answer, cardFor, wallFor, type AttemptInsert, type CardRow, type Scope, type SessionRow, type WallStore } from "./flow.ts";
+import { answer, cardFor, wallFor, type AttemptInsert, type CardRow, type Judge, type Scope, type SessionRow, type WallStore } from "./flow.ts";
+import type { JudgeInput } from "./judge.ts";
 
 // Decision 4's checks (docs/wonder-wall-1-slice.md). The fake store returns every card it holds, whatever is
 // asked, as if the query filtered nothing, so each check proves the code's own rule.
@@ -35,6 +36,7 @@ function card(id: string, o: Opts = {}): CardRow {
     itemId: o.itemId ?? null,
     item: o.item ?? null,
     question: { id: `q-${id}`, prompt: `Which way does it go, ${id}?`, answer_key: { accept: o.accept ?? (layer === 4 ? [] : [`answer${id}`]), rubric: `rubric ${id}` } },
+    level: o.level ?? null,
   };
 }
 
@@ -46,7 +48,7 @@ function fake(cards: CardRow[], timezone = "Pacific/Honolulu") {
     timezone: async () => timezone,
     cards: async () => cards,
     cardById: async ({ id }) => cards.find((c) => c.id === id) ?? null,
-    attempts: async () => attempts.map(({ question_id, correct, created_at }) => ({ question_id, correct, created_at })),
+    attempts: async () => attempts.map(({ question_id, correct, verdict, created_at }) => ({ question_id, correct, verdict, created_at })),
     lastSession: async (childId) => sessions.filter((s) => s.child_id === childId).at(-1) ?? null,
     startSession: async (row) => {
       const id = `session-${sessions.length + 1}`;
@@ -68,6 +70,7 @@ function fake(cards: CardRow[], timezone = "Pacific/Honolulu") {
 }
 
 const ask = (store: WallStore, cardId: string, guess: string, now = MONDAY) => answer(store, scope, { cardId, guess, seconds: 12 }, now, "every");
+const judged = (store: WallStore, cardId: string, guess: string, judge: Judge) => answer(store, scope, { cardId, guess, seconds: 12 }, MONDAY, "every", judge);
 const tiles = async (store: WallStore, now = MONDAY) => (await wallFor(store, scope, "Pip", now)).tiles.map((t) => t.cardId);
 
 afterEach(() => vi.restoreAllMocks());
@@ -187,13 +190,105 @@ describe("answering", () => {
     expect(sessions).toEqual([]);
   });
 
+  it("takes the judge's verdict: a right answer in the child's own words opens the next layer", async () => {
+    const { store, attempts } = fake([card("l1"), card("l2", { layer: 2 })]);
+    const judge = async () => ({ verdict: "right" as const, reasoning: "Says it in other words." });
+    expect(await judged(store, "l1", "in my own words", judge)).toEqual({ outcome: "right", next: "l2" });
+    expect(attempts[0]).toMatchObject({ correct: true, verdict: "right", judged_by: "model", reasoning: "Says it in other words." });
+  });
+
+  it("gives a clue for close, and spends a hint as not yet does", async () => {
+    const { store, attempts } = fake([card("l1")]);
+    const close = async () => ({ verdict: "close" as const, reasoning: "On the way." });
+    expect(await judged(store, "l1", "nearly", close)).toEqual({ outcome: "close", hint: "Hint l1.1" });
+    expect(await judged(store, "l1", "nearly again", close)).toEqual({ outcome: "close", hint: "Hint l1.2" });
+    expect(await judged(store, "l1", "still nearly", close)).toEqual({ outcome: "handoff", handoff: "Ask a parent about l1." });
+    expect(attempts.map((a) => a.correct)).toEqual([false, false, false]);
+  });
+
+  it("asks the question again after an answer to the hint, spending no hint and never handing off", async () => {
+    const { store, attempts } = fake([card("l1")]);
+    const verdicts = ["not_yet", "hint", "hint", "hint", "not_yet"] as const;
+    const replies = [];
+    for (const v of verdicts) replies.push(await judged(store, "l1", `guess ${v}`, async () => ({ verdict: v, reasoning: "" })));
+    expect(replies).toEqual([
+      { outcome: "not_yet", hint: "Hint l1.1" },
+      { outcome: "to_question" },
+      { outcome: "to_question" },
+      { outcome: "to_question" },
+      { outcome: "not_yet", hint: "Hint l1.2" },
+    ]);
+    expect(attempts.map((a) => [a.verdict, a.correct, a.hints_used])).toEqual([
+      ["not_yet", false, 0],
+      ["hint", false, 1],
+      ["hint", false, 1],
+      ["hint", false, 1],
+      ["not_yet", false, 1],
+    ]);
+    const shown = await cardFor(store, scope, "l1", MONDAY);
+    expect(shown && "card" in shown && shown.card.hints).toEqual(["Hint l1.1", "Hint l1.2"]);
+  });
+
+  it("writes nothing when the judge reads it as no guess at all", async () => {
+    const { store, attempts, sessions } = fake([card("l1")]);
+    expect(await judged(store, "l1", "asdfgh", async () => ({ verdict: "not_a_guess" as const, reasoning: "Letters at random." }))).toEqual({ outcome: "guess_first" });
+    expect(attempts).toEqual([]);
+    expect(sessions).toEqual([]);
+  });
+
+  it("falls to the word rule when the judge gives no verdict, and the reply is the rule's", async () => {
+    const { store, attempts } = fake([card("l1"), card("l2", { layer: 2 })]);
+    const none = async () => null;
+    expect(await judged(store, "l1", "something else", none)).toEqual({ outcome: "not_yet", hint: "Hint l1.1" });
+    expect(await judged(store, "l1", "answerl1", none)).toEqual({ outcome: "right", next: "l2" });
+    expect(attempts.map((a) => [a.verdict, a.judged_by, a.reasoning])).toEqual([
+      ["not_yet", "rule", null],
+      ["right", "rule", null],
+    ]);
+  });
+
+  it("gives the judge the card, the hints seen so far and the grade band, and never asks it about an open question", async () => {
+    const { store } = fake([card("l1", { level: "chapter_books, age 9" }), card("o", { slot: "look", accept: [] })]);
+    const asked: JudgeInput[] = [];
+    const judge = async (i: JudgeInput) => {
+      asked.push(i);
+      return { verdict: "not_yet" as const, reasoning: "" };
+    };
+    await judged(store, "l1", "first", judge);
+    await judged(store, "l1", "second", judge);
+    await judged(store, "o", "an open answer", judge);
+    expect(asked).toHaveLength(2);
+    expect(asked[1]).toEqual({
+      text: "Text l1",
+      question: "Which way does it go, l1?",
+      key: { accept: ["answerl1"], rubric: "rubric l1" },
+      hints: ["Hint l1.1"],
+      band: "4-5",
+      guess: "second",
+    });
+  });
+
   it("records one attempt per guess, as decision 3 says", async () => {
     const { store, attempts } = fake([card("l1")]);
     await ask(store, "l1", "  wrong one  ");
     await answer(store, scope, { cardId: "l1", guess: "x".repeat(300), seconds: 99999 }, MONDAY, "every");
-    expect(attempts[0]).toMatchObject({ family_id: FAMILY, child_id: PIP, question_id: "q-l1", mode: "teach", answer: "wrong one", correct: false, hints_used: 0, seconds: 12 });
+    expect(attempts[0]).toMatchObject({ family_id: FAMILY, child_id: PIP, question_id: "q-l1", mode: "teach", answer: "wrong one", correct: false, verdict: "not_yet", judged_by: "rule", reasoning: null, hints_used: 0, seconds: 12 });
     expect(attempts[1]).toMatchObject({ answer: "x".repeat(200), hints_used: 1, seconds: 3600 });
-    expect(Object.keys(attempts[0]).sort()).toEqual(["answer", "child_id", "correct", "created_at", "family_id", "hints_used", "mode", "question_id", "seconds", "session_id"]);
+    expect(Object.keys(attempts[0]).sort()).toEqual([
+      "answer",
+      "child_id",
+      "correct",
+      "created_at",
+      "family_id",
+      "hints_used",
+      "judged_by",
+      "mode",
+      "question_id",
+      "reasoning",
+      "seconds",
+      "session_id",
+      "verdict",
+    ]);
   });
 });
 
@@ -233,6 +328,19 @@ describe("what reaches the browser", () => {
     // Before any guess, no hint and no handoff; and nowhere an answer key, a rubric, an id or a verdict.
     expect(JSON.stringify([wall, c])).not.toMatch(/Hint l1|Ask a parent about l1/);
     expect(JSON.stringify([wall, c, replies])).not.toMatch(/answerl1|answerl2|rubric|q-l1|policy|passed|family-1|child-pip|device-1/);
+  });
+
+  it("holds a judged reply to the same fields, and never sends the judge's verdict word or reasoning", async () => {
+    const { store } = fake([card("l1", { slot: "look" }), card("l2", { slot: "look", layer: 2 })]);
+    const replies = [];
+    for (const verdict of ["not_yet", "hint", "close", "right"] as const) {
+      replies.push(await judged(store, "l1", `a ${verdict} guess`, async () => ({ verdict, reasoning: "SECRET REASONING for the parents" })));
+    }
+    for (const r of replies) {
+      for (const k of Object.keys(r!)) expect(["outcome", "hint", "handoff", "next"]).toContain(k);
+    }
+    expect(replies.map((r) => r!.outcome)).toEqual(["not_yet", "to_question", "close", "right"]);
+    expect(JSON.stringify(replies)).not.toMatch(/SECRET|reasoning|verdict|judged|not_a_guess|answerl1|rubric/);
   });
 
   it("logs no guess", async () => {

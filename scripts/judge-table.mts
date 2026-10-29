@@ -9,7 +9,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { judgeGuess } from "../core/wall/answer.ts";
-import { JUDGE_BUDGET_MS, JUDGE_MODEL, JUDGE_SCHEMA, judgeAnswer, type Verdict } from "../core/wall/judge.ts";
+import { JUDGE_BUDGET_MS, JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_SCHEMA, JUDGE_THINKING, judgeAnswer, type Verdict } from "../core/wall/judge.ts";
 import { pool } from "../core/curation/week.ts";
 import { costOf } from "../core/prices.ts";
 
@@ -80,7 +80,10 @@ export async function runJudgeTable(model: string | undefined) {
   ];
   const use = model ?? JUDGE_MODEL;
   const system = readPrompt("judge.md");
-  console.log(`The judge on ${use}, ${JUDGE_BUDGET_MS} ms a guess, over ${cases.length} invented answers (two at a time, as two children answering at once).`);
+  // JUDGE_THINKING=off|low|default: measure the judge thinking otherwise than core/wall/judge.ts sets it.
+  const asked = process.env.JUDGE_THINKING;
+  const thinking = asked === "off" || asked === "low" ? asked : asked === "default" ? undefined : JUDGE_THINKING;
+  console.log(`The judge on ${use}, thinking ${thinking ?? "as the model does by default"}, ${JUDGE_BUDGET_MS} ms a guess, over ${cases.length} invented answers (two at a time, as two children answering at once).`);
 
   const tokens = { input: 0, output: 0, calls: 0 };
   const results = await pool(cases, 2, async (c) => {
@@ -89,9 +92,10 @@ export async function runJudgeTable(model: string | undefined) {
       complete({
         system,
         prompt,
-        maxTokens: 300,
+        maxTokens: JUDGE_MAX_TOKENS,
         use: "judge",
         model: use,
+        thinking,
         json: JUDGE_SCHEMA,
         timeoutMs,
         onUsage: (u) => {

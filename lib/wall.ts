@@ -1,8 +1,13 @@
 import "server-only";
+import { after } from "next/server";
 import type { AnswerKey } from "@/core/curation/types";
+import { complete } from "@/core/model";
+import { readPrompt } from "@/core/prompts";
+import { runRow } from "@/core/runs";
 import type { MatchRule } from "@/core/wall/answer";
 import type { AttemptRow } from "@/core/wall/card";
-import { answer, cardFor, wallFor, type CardRow, type Scope } from "@/core/wall/flow";
+import { answer, cardFor, wallFor, type CardRow, type Judge, type Scope } from "@/core/wall/flow";
+import { JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_SCHEMA, judgeAnswer } from "@/core/wall/judge";
 import { CLIP_RATE, heardText, parseLine, spokenUrl, type SpeechStore } from "@/core/wall/speech";
 import { hear, HEAR_MODEL, say, TUTOR_VOICE } from "@/core/speech";
 import type { Device } from "@/lib/device";
@@ -11,7 +16,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 // Every read and write the kid view makes (docs/wonder-wall-1-slice.md, decision 4). It always starts from
 // getDevice(): the device cookie resolved to one child, and the service-role client scoped here, in code, to
 // that child and that child's family. The steps and the rule are in core/wall/flow.ts, which checks every row
-// again after the query. Nothing here logs a guess, a nickname or a reply.
+// again after the query. Nothing here logs a guess, a nickname or a reply; when the judge gives no verdict, one
+// line says why, the error's message alone.
 
 // "every" as briefed, until Brandon chooses at the iPad stop (21 Oct 2026); core/wall/answer.ts has "any".
 export const WALL_RULE: MatchRule = "every";
@@ -26,6 +32,7 @@ type Raw = {
   slot: string;
   layer: number;
   policy: string;
+  level: string | null;
   body: CardRow["body"];
   themes: { status: string; family_id: string } | null;
   ideas: {
@@ -46,7 +53,7 @@ type Raw = {
 };
 
 const COLUMNS =
-  "id, family_id, child_id, day, slot, layer, policy, body, themes!inner(status, family_id), " +
+  "id, family_id, child_id, day, slot, layer, policy, level, body, themes!inner(status, family_id), " +
   "ideas!inner(content_item_id, content_items(type, title, creator, url, license, attribution, approved, metadata, content_sources(name))), " +
   "questions(id, prompt, answer_key)";
 
@@ -60,6 +67,7 @@ function toRow(r: Raw): CardRow {
     slot: r.slot,
     layer: r.layer,
     policy: r.policy,
+    level: r.level,
     body: r.body,
     theme: r.themes,
     itemId: r.ideas?.content_item_id ?? null,
@@ -116,7 +124,7 @@ export function wallStore(): SpeechStore {
     async attempts(childId, questionIds) {
       if (!questionIds.length) return [];
       return must(
-        await db.from("attempts").select("question_id, correct, created_at").eq("child_id", childId).in("question_id", questionIds).returns<AttemptRow[]>(),
+        await db.from("attempts").select("question_id, correct, verdict, created_at").eq("child_id", childId).in("question_id", questionIds).returns<AttemptRow[]>(),
         "attempts",
       );
     },
@@ -172,5 +180,44 @@ export const sayLine = (device: Device, line: string, now = new Date()) => {
 export const hearClip = (device: Device, pcm: Uint8Array) =>
   heardText(wallStore(), scopeOf(device), pcm, { model: HEAR_MODEL, hear: (clip) => hear(clip, { sampleRate: CLIP_RATE }) });
 
+let judgePrompt: string | undefined;
+
+// The judge for this iPad's child (core/wall/judge.ts): the nickname is given only to be taken out of what is sent.
+// What it spent is written to model_runs after the reply has gone (counts and money only), so the child never
+// waits on it; the parents read it on /parent/models.
+function judgeFor(device: Device): Judge {
+  return async (input) => {
+    judgePrompt ??= readPrompt("judge.md");
+    const spent = { input: 0, output: 0, calls: 0 };
+    const startedAt = new Date();
+    const r = await judgeAnswer({ ...input, nickname: device.nickname }, ({ prompt, timeoutMs }) =>
+      complete({
+        system: judgePrompt!,
+        prompt,
+        maxTokens: JUDGE_MAX_TOKENS,
+        use: "judge",
+        model: JUDGE_MODEL,
+        json: JUDGE_SCHEMA,
+        timeoutMs,
+        onUsage: (u) => {
+          spent.input += u.input;
+          spent.output += u.output;
+          spent.calls += 1;
+        },
+      }),
+    );
+    if (!r.judgement) console.error("judge: the word rule judged instead:", r.fault);
+    // A row for every answer sent, so the page counts the ones the word rule judged too (ok false); a call that
+    // timed out reports no tokens.
+    after(async () => {
+      const row = runRow("judge", [{ use: "judge", model: JUDGE_MODEL, ...spent }], { ok: !!r.judgement, startedAt });
+      const { error } = await createAdminClient().from("model_runs").insert({ family_id: device.familyId, ...row });
+      if (error) console.error("judge: could not record the run:", error.message);
+    });
+    return r.judgement;
+  };
+}
+
+// A guess, judged by the model, or by the word rule when the model gives no verdict in time.
 export const sendAnswer = (device: Device, input: { cardId: string; guess: string; seconds: number | null }, now = new Date()) =>
-  answer(wallStore(), scopeOf(device), input, now, WALL_RULE);
+  answer(wallStore(), scopeOf(device), input, now, WALL_RULE, judgeFor(device));

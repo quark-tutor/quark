@@ -2,8 +2,10 @@ import { commonsMp3 } from "../content/commons.ts";
 import { credit } from "../content/credit.ts";
 import type { CardBody } from "../curation/cards.ts";
 import type { AnswerKey } from "../curation/types.ts";
+import { ageBand } from "../curation/gate.ts";
 import { todayIn } from "../curation/week.ts";
-import { judgeGuess, type MatchRule } from "./answer.ts";
+import { isGuess, judgeGuess, type MatchRule } from "./answer.ts";
+import type { Judgement, JudgeInput, Verdict } from "./judge.ts";
 import {
   answerReply,
   cardReply,
@@ -54,6 +56,7 @@ export type CardRow = {
   itemId: string | null; // the idea's content item, if it names one
   item: ItemRow | null;
   question: { id: string; prompt: string; answer_key: AnswerKey } | null;
+  level?: string | null; // what the card was written for: "chapter_books, age 9"
 };
 
 export type SessionRow = { id: string; started_at: string; ended_at: string | null; ended_reason: string | null };
@@ -66,9 +69,16 @@ export type AttemptInsert = {
   mode: "teach";
   answer: string;
   correct: boolean | null;
+  verdict: Verdict | null; // null for an open question's answer
+  judged_by: "model" | "rule" | null;
+  reasoning: string | null; // the judge's line, for the parents; never sent to the iPad
   hints_used: number;
   seconds: number | null;
 };
+
+// The judge of a guess (core/wall/judge.ts, given by lib/wall.ts): a verdict, or null when the model gave none in
+// time, and the word rule judges instead.
+export type Judge = (input: JudgeInput) => Promise<Judgement | null>;
 
 export type WallStore = {
   timezone(familyId: string): Promise<string>;
@@ -187,14 +197,24 @@ export async function cardFor(
   return { card: cardReply(chain, state, await mediaOf(store, rows[state.at])) };
 }
 
+// The grade band from what the card was written for ("chapter_books, age 9"), as the gate sends it; null when the
+// level carries no age.
+export function bandOf(level: string | null | undefined): string | null {
+  const age = Number(level?.match(/\bage (\d+)\b/)?.[1]);
+  return Number.isInteger(age) && age > 0 ? ageBand(age) : null;
+}
+
 // A guess on the layer the child is at. Refused, writing nothing, when the card isn't on the wall today, isn't
-// the layer the child is at, or is done. "I don't know" writes nothing and gets no hint.
+// the layer the child is at, or is done. "I don't know" writes nothing and gets no hint. The judge reads the
+// guess (docs/judge-slice.md); with no judge, or no verdict from it in time, the word rule judges, and the reply
+// is the same either way. An open question takes any real answer, with no judge.
 export async function answer(
   store: WallStore,
   scope: Scope,
   input: { cardId: string; guess: string; seconds: number | null },
   now: Date,
   rule: MatchRule,
+  judge?: Judge,
 ): Promise<AnswerReply | null> {
   const day = await today(store, scope, now);
   const row = await store.cardById({ familyId: scope.familyId, childId: scope.childId, id: input.cardId });
@@ -206,11 +226,28 @@ export async function answer(
 
   const here = chain[before.at];
   const guess = input.guess.trim().slice(0, ANSWER_MAX);
-  const judged = judgeGuess(guess, here.answerKey, row.question!.prompt, rule);
+  if (!isGuess(guess)) return answerReply("not_a_guess", chain, before);
+
+  let judged: Verdict | "open" = "open";
+  let by: AttemptInsert["judged_by"] = null;
+  let reasoning: string | null = null;
+  if (here.answerKey.accept.length) {
+    const hints = here.body.hints.slice(0, before.hintsSeen);
+    const j = judge ? await judge({ text: here.body.text, question: here.body.question, key: here.answerKey, hints, band: bandOf(row.level), guess }) : null;
+    if (j) {
+      judged = j.verdict;
+      by = "model";
+      reasoning = j.reasoning || null;
+    } else {
+      judged = judgeGuess(guess, here.answerKey, row.question!.prompt, rule) === "right" ? "right" : "not_yet";
+      by = "rule";
+    }
+  }
   if (judged === "not_a_guess") return answerReply(judged, chain, before);
 
   const session = await visit(store, scope, now);
   const correct = judged === "open" ? null : judged === "right";
+  const verdict = judged === "open" ? null : judged;
   const seconds = input.seconds === null || !Number.isFinite(input.seconds) ? null : Math.min(SECONDS_MAX, Math.max(0, Math.round(input.seconds)));
   await store.addAttempt({
     family_id: scope.familyId,
@@ -220,9 +257,12 @@ export async function answer(
     mode: "teach",
     answer: guess,
     correct,
+    verdict,
+    judged_by: by,
+    reasoning,
     hints_used: before.hintsSeen,
     seconds,
   });
-  const after = chainState(chain, [...attempts, { question_id: here.questionId, correct, created_at: now.toISOString() }]);
+  const after = chainState(chain, [...attempts, { question_id: here.questionId, correct, verdict, created_at: now.toISOString() }]);
   return answerReply(judged, chain, after);
 }

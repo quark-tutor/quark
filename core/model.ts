@@ -35,6 +35,8 @@ export type CompleteOptions = {
   use?: ModelUse; // which env var names the model; defaults to curate
   model?: string; // the model itself, in place of the env var: the judge's, set in code
   timeoutMs?: number; // give up on this request after this long, with none of the SDK's own retries
+  // How much the model thinks first. Left out, each model's own default (Haiku 5.5 thinks, at medium effort).
+  thinking?: "off" | "low";
   images?: ModelImage[]; // shown before the prompt
   label?: string; // names the debug file: "ideas-day1-puzzle"
   // This one call's tokens, for a caller that prices it on its own (a server action shares the
@@ -103,7 +105,7 @@ function imageBlock(image: ModelImage): Anthropic.ImageBlockParam {
 export async function complete(options: CompleteOptions): Promise<string>;
 export async function complete<T>(options: CompleteOptions & { json: Record<string, unknown> }): Promise<T>;
 export async function complete(options: CompleteOptions & { json?: Record<string, unknown> }): Promise<unknown> {
-  const { system, prompt, maxTokens, use = "curate", images = [], json, timeoutMs } = options;
+  const { system, prompt, maxTokens, use = "curate", images = [], json, timeoutMs, thinking } = options;
   if (use === "judge" && !options.model) throw new Error("The judge names its model in code: pass it as model.");
   const model = options.model ?? modelFor(use as EnvUse);
   client ??= new Anthropic(); // reads ANTHROPIC_API_KEY
@@ -116,11 +118,17 @@ export async function complete(options: CompleteOptions & { json?: Record<string
     max_tokens: maxTokens,
     system,
     messages: [{ role: "user", content }],
-    ...(json && { output_config: { format: { type: "json_schema", schema: json } } }),
+    ...(thinking === "off" && { thinking: { type: "disabled" } }),
+    ...((json || thinking === "low") && {
+      output_config: {
+        ...(json && { format: { type: "json_schema", schema: json } }),
+        ...(thinking === "low" && { effort: "low" }),
+      },
+    }),
   };
   let response: Anthropic.Message;
   try {
-    response = await client.messages.create(request, timeoutMs === undefined ? undefined : { timeout: timeoutMs, maxRetries: 0 });
+    response = await (timeoutMs === undefined ? client.messages.create(request) : client.messages.create(request, { timeout: timeoutMs, maxRetries: 0 }));
   } catch (e) {
     writeDebug(options.label, request, { error: e instanceof Error ? e.message : String(e) });
     throw e;

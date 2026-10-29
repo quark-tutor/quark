@@ -1,6 +1,6 @@
 import type { CardBody } from "../curation/cards.ts";
 import type { AnswerKey } from "../curation/types.ts";
-import type { Judged } from "./answer.ts";
+import type { Verdict } from "./judge.ts";
 
 // A card on the Wonder Wall: where a child is in a day-slot's chain of layers, worked out from the
 // attempts alone (nothing is kept in the browser, so a reload or the other iPad agree), and what each
@@ -19,7 +19,8 @@ export type ChainLayer = {
   answerKey: AnswerKey;
 };
 
-export type AttemptRow = { question_id: string; correct: boolean | null; created_at: string };
+// verdict is the judge's (core/wall/judge.ts); a row from before the judge has none.
+export type AttemptRow = { question_id: string; correct: boolean | null; verdict?: string | null; created_at: string };
 
 // at is the index of the layer in the chain. A card is done at the handoff: after the hints ran out
 // ("handed_off"), after an open question's answer ("open"), or after a right answer with no deeper layer
@@ -40,6 +41,10 @@ export function reachable<T extends { layer: number }>(layers: T[]): T[] {
   return out;
 }
 
+// A guess that spends a hint: one judged not yet or close. An answer to the hint is a step on the way, so it
+// spends none and never hands off (Brandon, 28 Oct 2026); a row from before the judge counts as it did.
+export const spendsHint = (a: AttemptRow) => !a.verdict || a.verdict === "not_yet" || a.verdict === "close";
+
 // Where the child is: one hint per wrong guess, the handoff after one more guess once the hints have run
 // out, and a right answer moves to the next layer. Attempts past the card's end are ignored.
 export function chainState(chain: ChainLayer[], attempts: AttemptRow[]): CardState {
@@ -55,6 +60,7 @@ export function chainState(chain: ChainLayer[], attempts: AttemptRow[]): CardSta
         right = true;
         break;
       }
+      if (!spendsHint(a)) continue;
       wrong += 1;
       if (wrong > hints) return { kind: "handed_off", at, hintsSeen: hints };
     }
@@ -94,8 +100,9 @@ export type CardReply = {
   handoff?: string; // only once reached
 };
 
+// to_question: the guess answered the hint, so the page asks the question again and no hint is spent.
 export type AnswerReply = {
-  outcome: "guess_first" | "not_yet" | "right" | "handoff" | "open";
+  outcome: "guess_first" | "not_yet" | "close" | "to_question" | "right" | "handoff" | "open";
   hint?: string;
   handoff?: string;
   next?: string; // the next layer's card id, once earned
@@ -123,15 +130,16 @@ export function cardReply(chain: ChainLayer[], state: CardState, media: Media | 
   };
 }
 
-// The reply to a guess, from the state after it was recorded. A guess that isn't a guess writes nothing
-// and gets no hint.
-export function answerReply(judged: Judged, chain: ChainLayer[], after: CardState): AnswerReply {
+// The reply to a guess, from the state after it was recorded: the verdict, never a word the judge wrote. A
+// guess that isn't a guess writes nothing and gets no hint; an answer to the hint gets the question again.
+export function answerReply(judged: Verdict | "open", chain: ChainLayer[], after: CardState): AnswerReply {
   if (judged === "not_a_guess") return { outcome: "guess_first" };
   const body = chain[after.at].body;
   if (judged === "open") return { outcome: "open", handoff: body.handoff };
   if (judged === "right") {
     return after.kind === "answering" ? { outcome: "right", next: chain[after.at].cardId } : { outcome: "right", handoff: body.handoff };
   }
+  if (judged === "hint") return { outcome: "to_question" };
   if (after.kind === "handed_off") return { outcome: "handoff", handoff: body.handoff };
-  return { outcome: "not_yet", hint: body.hints[after.hintsSeen - 1] };
+  return { outcome: judged === "close" ? "close" : "not_yet", hint: body.hints[after.hintsSeen - 1] };
 }
