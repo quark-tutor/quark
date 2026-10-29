@@ -20,7 +20,7 @@ is a path in this repository or a link; words alone have nothing to open.
 
 | Feature | Stage | Moved | Project | Depends on | Waiting on | Size | Where |
 |---|---|---|---|---|---|---|---|
-| The boys' first live week: card prompt v6 (the idea named, no answer before the question, `read_aloud` dropped), live week 1 deleted and built again to start Monday 26 Oct, read and tapped, both iPads paired to live | building | 23 Oct 2026 | Pilot | — | — | a job | `docs/first-live-week-slice.md`; `docs/reports/2026-10-23-first-live-week.md`; `docs/wonder-wall-1-slice.md`, *The week for Monday* |
+| The boys' first live week: card prompt v6 (the idea named, no answer before the question, `read_aloud` dropped), live week 1 deleted and built again to start Monday 26 Oct, read and tapped, both iPads paired to live | live | 28 Oct 2026 | Pilot | — | — | a job | `docs/first-live-week-slice.md`; `docs/reports/2026-10-23-first-live-week.md`; `docs/wonder-wall-1-slice.md`, *The week for Monday* |
 | The tutor's voice, both ways, from Google: Chirp 3 HD reads every line the tutor says (made on first tap, stored like a picture), Chirp 3 hears the child through a Talk button; one adapter, no browser voice in or out | live | 23 Oct 2026 | The tutor | — | — | a slice | `docs/tutor-voice-slice.md`; `docs/reports/2026-10-22-tutor-voice.md` |
 | Next.js to 16.4.2 before the release: 16.4.0 carries a critical advisory (image optimizer, SVG) and a high one (Server Actions, which Quark uses); the local production build stops on it, and Vercel's may; the bump, tests, typecheck, the build, a look | live | 23 Oct 2026 | — | — | — | an hour | `docs/next-16-4-2-slice.md`; `docs/reports/2026-10-22-next-16-4-2.md`; `docs/reports/2026-10-21-wonder-wall-1-slice.md`, *What could not be checked* |
 | Wonder Wall slice 1: today's five cards, layers, hints as written, the handoff, on a paired iPad | live | 23 Oct 2026 | Wonder Wall | — | — | a slice | `docs/wonder-wall-1-slice.md`; `docs/reports/2026-10-21-wonder-wall-1-slice.md`; `phase-4-wonder-wall` |
@@ -63,5 +63,3 @@ is a path in this repository or a link; words alone have nothing to open.
 | Ask-list rewrite: stops at steps, not commands; live actions run by Brandon’s hand | live | 18 Oct 2026 | — | — | — | a slice | `docs/working-with-claude-4-slice.md`; `working-with-claude-4` |
 | Working with Claude, Quark: the state board and the seven session skills | live | 17 Oct 2026 | — | — | — | a job | `docs/board-slice.md` |
 | Working with Claude, slice 1: ask-list, readback reader, plain-words rule | live | 16 Oct 2026 | — | — | — | — | `docs/working-with-claude-slice-1.md` |
-| Phase 2: Our Family's Beliefs, compare, rulebook, conduct questions and blocks | live | 11 Oct 2026 | — | — | — | — | `docs/09-family-values.md` |
-| Phase 1: foundation | live | 10 Oct 2026 | — | — | — | — | `docs/13-architecture.md` |

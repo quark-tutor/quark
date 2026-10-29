@@ -1,451 +1,162 @@
-# Report: the boys' first live week (`docs/first-live-week-slice.md`), 23 to 25 October 2026
+# Report: the boys' first live week (`docs/first-live-week-slice.md`), 23 to 28 October 2026
 
-Opus 5.5. Branch `phase-4-wonder-wall`, as the brief names. Nothing on live, nothing a child sees, nothing committed or
-pushed yet. This repository is public: the boys are "the older" and "the younger" here, never by name, and nothing
-pasted from a live printout is copied in with a nickname.
+Opus 5.5. Branch `phase-4-wonder-wall`, as the brief names. Pilot, slice 1; board row now *live*. This repository is
+public: the boys are "the older" and "the younger" here, never by name, and nothing pasted from a live printout is
+copied in with a nickname. The stop sections written during the job are in this file's history (`6f8c530` to
+`9faad2c`); this is the final report that replaces them.
 
-## Stop 1: after reading, and the new cards on test (23 Oct 2026, 17:12 HST)
+## What could not be checked
 
-**Where it stands.** Read: the brief and its read-first list (`docs/wonder-wall-1-slice.md` *The week for Monday*,
-`card.md` v5, `gate.md`, `cards.ts`, `gate.ts`, `core/wall/speech.ts`, docs/04's week and Sunday-build sections,
-docs/08's slice 1, voice, 2c-review, step 4d and Bugs sections, the voice report's findings, `deploy/README.md`,
-`vercel.json`). Step 1 is done and not committed:
+- **The hear log line has not run on Vercel.** It reaches production with the next release (the judge job's). Two
+  tests hold it: the route's only log call is the exact line, and a broken Google key's message quotes none of the
+  key. No real failure has written that line yet.
+- **Code never looked at live.** Every live result here comes from what Brandon ran, printed, pasted or saw: M1 to
+  M4, the week page, the tap, the iPads, and Vercel's logs on Monday. Code ran one command that touched production:
+  the push of `main` on Brandon's typed words (26 Oct).
+- **How well Talk hears the boys has not been measured.** Brandon's word is that it works; nobody has counted
+  misheard words. The boys' own Talk check was dropped in the voice slice ("seen on live in the first week").
+- **The reader-note counts are approximate.** They are Code's reading of 265 notes, and one note can say two things.
+- **The tap's own time is not recorded.** The week was tapped before Monday, and the wall was in use on Monday
+  evening.
 
-- **`core/prompts/card.md` v6**: the idea named (a new section), never the answer before the question (a new section),
-  no `read_aloud`, the reading-level line rewritten. The diff is at the end of this stop.
-- **`core/prompts/ideas.md` v5**: the idea's title is its name, kept when the idea comes back, and the question never
-  asks for it (decision 2 below).
-- **`read_aloud` is gone** from the card writer's schema and checks, the gate's prompt, the week page and the wall's
-  reply to the iPad. Stored cards keep theirs (no migration).
-- `npm test`: 389 passed. `npm run typecheck`: clean.
-- **One day of test's week was rebuilt twice** (day 5, Sunday 25 Oct; decision 1): $1.83 with the first wording,
-  $1.96 with the final one. **$3.79 on test**, nothing on live.
+## Not done
 
-### What the rebuilt day shows
+Nothing is left open. The brief was done in a different way in two places:
 
-Test's day 5, card v5 (built 21 Oct) against v6: Seurat's dots, sunlight and the sky, Beethoven's four notes (a parent
-plays it), Ra's sun boat (Egypt), the tangram. 40 cards, two invented children.
+- **The brief expected a migrations run on the push after go.** The push changed no migration, so the workflow did
+  not start and there was no run to watch. The last run on the branch is `39935530082` (22 Oct, green).
+- **Step 1 rebuilt test's day 5, not day 1.** Day 1 held 12 of Bug's answers, and `attempts` doesn't cascade, so a
+  rebuild of day 1 would have failed on the delete. Day 5 had the four-notes lesson and an interest door. Decided at
+  stop 1 and taken at Brandon's go.
 
-| | v5 | v6 |
+## Your look: Brandon's words
+
+- **Stop 1, card v6 on test (23 Oct, 17:38 HST).** Brandon: "go. June won't read the safety floor as a document;
+  she sits with the boys on live the first week, and that is her check. Strike "June reads the safety floor" from
+  Before the job, stop 6 and this row's Waiting on; the safety floor stays version 1 until a real card shows
+  otherwise."
+- **Stop 6, the week on live (23 Oct, 21:50 HST).** Brandon: "go. The week page shows seven days, five first cards
+  for each boy with pictures, Before you tap clean, titles as idea names." June read the week with the table under
+  *For June's read*, below.
+- **Stop 7, the tap and the iPads.** The tap and both pairings were done before Monday. On Monday (26 Oct, 21:06
+  HST), Brandon reported "Read it to me": "worked, Sulafat's voice, as on June's iPad", and Talk: "Talk recorded but
+  every hold ended 'That didn't come through.'" That started a fix round (below).
+- **Stop 7's go (28 Oct, 20:17 HST).** Brandon: "go. Talk and "Read it to me" both work on the boys' iPads since the
+  fix; three nights in and they're enjoying it."
+- **`/wwc:close` at the last stop (28 Oct, 20:22 HST).** Every check passed.
+
+## What was done
+
+### Step 1: card v6 and ideas v5, proved on test (23 Oct)
+
+- **`core/prompts/card.md` v6** has three new rules:
+  - **The idea named.** The title is the idea's name, word for word from the chain, and the card says it in its
+    words. The name is never what the question asks for.
+  - **The question before the answer.** A card never states its own answer before asking it. A later card says an
+    earlier card's answer plainly before building on it.
+  - **No `read_aloud`.** The reading-level line is rewritten without it.
+
+  Two more lines come from docs/08: a card that needs a parent's part says so from its first words (the four-notes
+  bug), and an interest is walked through, never named to the child (the announced door).
+- **`core/prompts/ideas.md` v5.** The idea's title is its name, kept when the idea comes back, and the question
+  never asks for it. Without this, the two children got different names for the same idea in 6 of 20 places,
+  because each child's cards are a separate call. Brandon's rule is "every time, with the same name", so the name is
+  stored on the shared idea.
+- **`read_aloud` is gone** from the card writer's schema and checks, the gate's copy of the card, the week page and
+  the wall's reply to the iPad. Stored cards keep the column; there is no migration.
+- **Rules 1 and 2 have no code check:** only the prompt, a test that the prompt carries them, and the gate's reader
+  notes. A card held back twice is an empty tile on a boy's wall.
+- **`week:build --plan`** now prints each child's reading level and age. New test-only fixture:
+  `fixture -- words <date>`.
+- **Test's day 5, rebuilt twice:** $3.79.
+
+| | v5 (21 Oct) | v6 |
 |---|---|---|
-| Titles, for example | "Seurat's Park Contest", "Who Does the Mixing?", "Same Pattern, New Clothes", "Clue 2: The Night Trip" | "Optical mixing", "Pointillism", "Scattering", "A motif", "Variation", "A score", "Myth", "Maat", "Area", "Tangram paradox" |
-| Title said in the card's own words (a strict word check) | 16 of 40 | 29 of 40 |
-| Same title for both children on the same idea | (each child's own) | 19 of 20 (only "Sunlight" against "White light") |
-| Reader notes saying the card gives its answer before the question | about 10 | 3 |
-| Reader notes saying the card leaves out what the child needs to answer | 2 | 7 |
-| Reader notes, all | 57 | 50 |
-| Verdicts | 40 passed (21 Oct) | 40 passed |
+| Titles, for example | "Seurat's Park Contest", "Who Does the Mixing?", "Same Pattern, New Clothes" | "Optical mixing", "Pointillism", "Scattering", "A motif", "Myth", "Maat", "Tangram paradox" |
+| Title said in the card's own words | 16 of 40 | 29 of 40 |
+| Same title for both children on the same idea | (each child's own) | 19 of 20 |
+| Reader notes: the answer before the question | about 10 | 3 |
+| Reader notes: the card leaves out what the child needs | 2 | 7 |
+| Verdicts | 40 passed | 40 passed |
 
-- **Titles that are not a concept's name** are the plain name of the thing, which the rule allows when an idea has
-  none: "A Sunday on La Grande Jatte", "The sun boat", "Beethoven's deafness", "The night journey", "Tangram figures".
-- **Of the 11 titles not found in their card's words**, most are said another way ("deaf" for "Beethoven's
-  deafness"); two are real misses: "Optical mixing" on the older child's card and "Variation" on the younger's.
-- **The trade in rule 2.** Answers given early fell from about 10 cards to 3; cards that stop short of what the child
-  needs rose from 2 to 7. Most of the 7 are where the idea's own answer is the story's turn (the question asks why the
-  sun comes back; the answer, "Ra beat the serpent", is exactly what the card may not say). The first wording had 9;
-  one more line (decision 3) brought it to 7. Recommended: leave it, and read for it at stop 6.
-- **Four-notes** (the bug of 21 Oct): the card that needs the music now opens "Ask Mom or Dad to play you the first
-  movement of Beethoven's Fifth, then listen for the four-note motif coming back"; v5's said "you would listen
-  closely" with no recording. The first card asks for the handwritten page instead, which it has.
-- **The interest door** (the bug of 16 Oct): each child had one first card opened by an interest, and both walked
-  through it unnamed (a model taken apart, for building bricks; lines drawn across a square, for drawing).
-- One card was held back by the checker on the first try (parent-led: a layer 4 card set the myth against science);
-  none on the final.
+The four-notes card now opens "Ask Mom or Dad to play you the first movement of Beethoven's Fifth…". The interest
+doors were walked through without being named.
 
-### Your look, on the laptop
+### On go (23 Oct, 17:38 to 17:41)
 
-The dev server is running (decision 10). Open
-`https://localhost:3000/parent/week/2766c559-3b8d-4464-9664-c387d0dbfbd1`, signed in as the test guardian, and read
-**Sunday 25 October** (day 5) for both children:
+- The brief got two fixes:
+  - M2 also sets the younger's reading level, because no `/parent` page sets one.
+  - Stop 7 pairs each iPad from inside the Home Screen app, because the app keeps its own cookies apart from
+    Safari's.
+- June's read of the floor was struck.
+- `scripts/family.local.json` (gitignored) was changed to match M2, so a later `seed:live` keeps the reading level.
+- Commits `6f8c530`, `6ebb262` and `5ce5b92`, pushed. 389 tests passed; typecheck clean.
 
-- "Every card's title is the name of the idea it teaches ('Perspective', not 'Big People, Tiny People'), and the name
-  appears in the card's words."
-- "No card gives its answer before its question."
+### M1: the two migrations on live (23 Oct, 20:37, Brandon's hand)
 
-The other six days are still v5 cards, for comparison.
+`npm run db:push:live` printed `Target: LIVE`, the database user, then applied
+`20261021000000_server_writes_weeks` and `20261022000000_speech_runs` in order, with no error.
 
-### What I decided (strike any you don't want)
+**Found:** the script never answers the CLI's `[Y/n]`, which takes its default, yes. Its comment says it asks
+first. It is now a bug line in docs/08.
 
-1. **Day 5 on test, not day 1.** Day 1 (21 Oct) holds 12 of Bug's answers, and `attempts` doesn't cascade, so
-   `--day 1 --rebuild` would set the week to `generating` and then fail on the delete. Day 5 has no answers, and it has
-   the four-notes lesson and an interest door. The brief's day 1 matters for M3's plan check, not for this proof.
-2. **The name lives on the shared idea (ideas v5), beyond the brief's three changes to `card.md`.** With `card.md`
-   alone, the two children got different names for the same idea in 6 of 20 places ("Rhythm" and "The returning
-   pattern"; "Dispersion" and "A prism"), because each child's cards are a separate call. Your rule is "every time,
-   with the same name", and a later week can only keep a name that is stored, so the idea's title (shared, stored,
-   and passed to the next day's ideas call) is now the name, and `card.md` takes it word for word. The chain reaches
-   the card writer as `Layer 1, named "Pointillism"`.
-3. **Rule 2 has one more line:** a later card says an earlier card's answer plainly before it builds on it, so the
-   child never needs to remember a card to answer this one.
-4. **Two lines beyond the three rules, both from docs/08:** the four-notes bug ("a card with no recording says from
-   its first words that a grown-up plays the music"; the brief's close counts it as closed by v6), and the announced
-   door (docs/08's open question, "the interest chooses the way in and is never named to the child"). Say "strike"
-   and either goes; it needs no new proof.
-5. **No code check for rules 1 and 2**, only the prompt, a Vitest check that the prompt carries them, and the gate's
-   reader notes. A card that fails a code check twice is held back, and on Monday a held-back first card is an empty
-   tile on a boy's wall. The hint check's word rule is too blunt for the text: it flags "who plays it" in "Ask Mom to
-   play" (7 such matches on the v5 day and 7 on the v6 day, mostly false).
-6. **`read_aloud` and the gate:** the gate read it as one more line of the card and never needed it; the only thing
-   that did was the card check "the whole card in read_aloud for a child who is read to", which goes ("Read it to me"
-   reads the text and the question). The wall also stops sending `read_aloud` to the iPad, which never used it.
-   `fixture -- card` prints it only on a card that has one.
-7. **`week:build --plan` now prints each child's reading level and age** ("Kiddo: written for chapter_books, age 9" on
-   test). M3's second check needs it, and the script printed none.
-8. **New for testing: `npm run fixture -- words <date>`** (test only, read-only): every card of a day with its title,
-   verdict, text, question, accepted answers and reader notes. The comparison above is from it.
-9. **Test's week 1 is in review now** (a day rebuild moves a week back), so Bug's wall on June's iPad is empty until
-   a guardian taps Looks good on test. Nothing in this job needs it.
-10. **The dev server.** My `npm run dev` at 17:08 found your `dev:ipad` server running (since 15:54), and from then
-    the week page answered 500 (Next's worker crashing). I stopped it (PID 21188) and started `npm run dev:ipad` again
-    as this session's background task; the week page answers again. It stops when this session ends; after that,
-    `npm run dev:ipad` in a window as before.
-
-### Fixed in the brief on go (it is not committed yet)
-
-1. **The younger boy's reading level has no `/parent` control.** M3's "Brandon sets it on live's `/parent`" cannot be
-   done: a reading level is set only by `seed:live` from `scripts/family.local.json` (gitignored), which has the older
-   at *chapter books* and the younger at *reads alone*. The brief already settles the level (both chapter books, from
-   the school's tests); the fix is where it is set. **M2 carries two more lines**, since you are in the live SQL
-   editor then, and M3's new printout confirms them:
-
-   ```sql
-   select id, birth_month, reading from children;                                  -- expect two rows: chapter_books, reads_alone
-   update children set reading = 'chapter_books' where reading = 'reads_alone';    -- the younger only
-   ```
-
-   LIVE; undone by setting that id back to `reads_alone`. On go I also change `scripts/family.local.json` to match
-   (local, gitignored), so a later `seed:live` does not put it back.
-2. **Stop 7's iPad steps are in the wrong order.** A Home Screen app keeps its own cookies, apart from Safari's
-   (`deploy/README.md`, step 4; the pairing box on `/parent` says "open Quark from the Home Screen and type"), so an
-   iPad paired in Safari opens unpaired from the Home Screen. The order becomes: Screen Time allows the live address;
-   Safari at `<live>/kid`; Share → Add to Home Screen; open Quark from the Home Screen; on the laptop, live's `/parent`,
-   that boy, **Get a code**; type the six digits on the iPad; Guided Access.
-
-### The stops and the risky steps
-
-- **M1** `db:push:live` (LIVE, Brandon's hand) stands: CLAUDE.md's *Migrations* line keeps a live migration at a stop,
-  since the workflow's live job waits on the unset `SUPABASE_DB_URL_LIVE`. The push on go runs the workflow on test;
-  there is no new migration, and I watch the run.
-- **M2** the delete (LIVE, cannot be undone), now with the reading level. **M3** the plan (LIVE, read only). **M4** the
-  build (LIVE, about **$14**: day 5 cost $1.96 with v6 against $1.71 to $1.88 a day with v5, and the live rulebook is
-  about 5% longer; under the $25 line). **Stop 6** your look and June's; **stop 7** the tap and the iPads (what the boys
-  see). Each has its stop.
-- **Not marked in the brief:** the reading-level write (now in M2), and the boys' nicknames in what M3 and M4 print
-  (the plan's settings lines, the reader notes). The paste stays in this session; the report names neither boy.
-- No planned command meets the deny list. Nothing between go and M1 needs your hands.
-- **Before the job:** June's read of the safety floor is still open (before M4); Google's key is in Vercel (16:21);
-  the iPads are Sunday's.
-
-### The board and the branch
-
-- `phase-4-wonder-wall` is checked out, as the brief names.
-- The row "The boys' first live week" is the top row of Next (your edit of today, uncommitted). No row is in hand.
-- **On go:** `git pull --rebase --autostash origin phase-4-wonder-wall`; the brief's two fixes above; the row to
-  *building* with today's date, committed with this report and the brief; then the prompts and code committed and
-  pushed, the migrations workflow watched, and **M1**'s four lines written for your hand.
-
-**Reply go to take all of these.**
-
-**Brandon's go (23 Oct 2026, 17:38 HST):** "go. June won't read the safety floor as a document; she sits with the boys
-on live the first week, and that is her check. Strike "June reads the safety floor" from Before the job, stop 6 and
-this row's Waiting on; the safety floor stays version 1 until a real card shows otherwise." Done on go: the brief's
-two fixes and the strike (*Before the job* 1, stop 6), the row to *building* with no Waiting on. For the decisions
-log at the close.
-
-### The diff of `core/prompts/card.md` (v5 to v6)
-
-```diff
--<!-- card v5 (20 Oct 2026: how the family wants its children to learn to act; v4: ...
-+<!-- card v6 (23 Oct 2026: the idea named, every time, with the same name, the chain's (ideas v5), and never what is asked; never the answer before the question, with what earlier cards taught said again; no read_aloud, since "Read it to me" reads the text and the question; a card that needs a parent's part says so from its first words; the interest is walked through, never named. v5, 20 Oct: ...
-
-+## Name the idea
-+
-+Most ideas have a name: perspective, erosion, a fraction, a round, a remainder, a leap year. Give the child that name, so they have a place to put what they learn, and the same name every time the idea comes back.
-+
-+- **The title is the idea's name**, as the chain gives it for each layer: use it word for word. It is the word or two someone who knows the subject would use ("Perspective", "Erosion", "A round"), or the plain name of what the idea is about ("The Nile's flood"); never a phrase that teases, puns or describes an action ("Big People, Tiny People", "Painting Far Away").
-+- **The card says the name plainly in its words**, and the text, the picture and the question show what it means: "Things far away look small. Painters call this perspective."
-+- **The same name every time.** Never a synonym of your own: the idea is called the same thing on every card, for every child, and in a later week.
-+- **The name is never what the question asks for.** The child is asked what the idea means or does, never to recall its name. If an idea's answer is its own name, that card's title and words leave the name out, and the next card gives it once the child has found the idea.
-+
-+## The question comes before the answer
-+
-+A card sets up its question and leaves the finding to the child. Its text never states the answer to its own question, in any words, before asking it: not "The Nile flows north. Which way does the Nile flow?" Give the child everything they need to work it out (what to look for in the picture, a clue, something they already know) and stop there. A later card says an earlier card's answer plainly before it builds on it ("Because the Nile flows north, ..."), so the child never needs to remember a card to answer this one; only this card's own answer is left out. The title and the picture's description keep it too.
-
--When you're given an interest as the way in, use it to open the first card only (...), and only if it fits honestly. It never changes what the card teaches, ...
-+When you're given an interest as the way in, use it to open the first card only (...), and only if it fits honestly. Walk through it; never name it to the child ("you love art", "imagine you're a painter"): the interest chooses what the card opens on, and the child sees it for themselves. It never changes what the card teaches, ...
-
--- **Reading level.** "Read to" means the child doesn't read yet: keep text to two or three short sentences, and make read_aloud the whole card, text and question together, as it will be spoken. "Reads alone" means short sentences and common words, up to about five sentences, with read_aloud a short spoken version. "Chapter books" means up to about seven sentences and richer words, with read_aloud a short spoken version.
-+- **Reading level.** "Read to" means the child doesn't read yet: keep text to two or three short sentences, which the tablet reads to the child with the question. "Reads alone" means short sentences and common words, up to about five sentences. "Chapter books" means up to about seven sentences and richer words.
-
-+- **A parent's part, from the first words.** When a card's question needs what the parent does and the card has no recording or picture of it, the card's text says so from its first words ("Ask Mom or Dad to play you the start of Beethoven's Fifth, then listen for ..."). Never "listen closely" to a recording the card doesn't have.
-
--- **title**: a few words.
-+- **title**: the idea's name, as above.
--- **read_aloud**: what the tablet says aloud, as above.
-```
-
-And `core/prompts/ideas.md` (v4 to v5):
-
-```diff
--- **title**: a few words.
-+- **title**: the idea's name, the word or two someone who knows the subject would use for it ("Perspective", "Erosion", "A round", "Scattering"); when it has no such name, the plain name of what it is about ("The Nile's flood", "Khufu's pyramid"). Never a phrase that teases, puns or describes an action. When an idea comes back from an earlier layer or day, keep its name; a new idea brings its own. Both children's cards take this name as their title and say it in their words.
--... It must not be answerable only by recalling a name or date the child was never told.
-+... It must not be answerable only by recalling a name or date the child was never told, and it never asks for the idea's own name.
-```
-
-## After the go (23 Oct 2026, 17:38 to 17:41 HST)
-
-- `git pull --rebase --autostash`: already up to date.
-- `6f8c530`: the row to *building* (no Waiting on), the brief with its fixes, and stop 1 with your go.
-- `scripts/family.local.json` (gitignored, never committed): the younger's reading level is now `chapter_books`, so
-  a later `seed:live` keeps M2's update.
-- `6ebb262`: card v6, ideas v5 and `read_aloud` gone; `5ce5b92`: the plan's reading-level line and `fixture -- words`.
-  Tests 389 passed, typecheck clean, both again before the commit.
-- **Pushed** (`ba8a2de..5ce5b92`). **No migrations run:** the workflow starts only on a push that changes
-  `supabase/migrations/` or the workflow file, and this one changed neither, so there is no run to watch (the brief
-  expected one). The latest run on the branch is still `39935530082` (22 Oct, green).
-
-## Stop M1: the two migrations on live, by your hand (23 Oct 2026, 17:41 HST)
-
-**What it does:** `npm run db:push:live` applies the two migrations live does not have, in order:
-`20261021000000_server_writes_weeks` (a signed-in guardian can no longer insert or update `themes`, `ideas`, `cards`,
-`questions`, `sessions` or `attempts`, or insert `audit_log` rows, through the data API; the server does all of it)
-and `20261022000000_speech_runs` (the table that counts what the tutor's voice and ears spend).
-
-**What it touches:** **LIVE**: grants on seven tables, and one new empty table. No row is changed. It comes after the
-release (done, `main` at `ab9a2f7` on Vercel), because the five `/parent` audit writes it moves to the server must
-already be there.
-
-**How it is undone:** by a new migration, itself a stop:
-
-```sql
-grant insert, update on themes, ideas, cards, questions to authenticated;
-grant insert, update on sessions, attempts to authenticated;
-grant insert on audit_log to authenticated;
-drop table speech_runs;
-```
-
-**Checked on test:** the workflow applied `20261021000000` (run `39584301538`, green) and `20261022000000` (run
-`39935530082`, green); on test the five moved audit writes worked, a guardian's direct write to a card and to the
-audit log was refused, and the voice wrote its rows (`$0.09`).
-
-**Your step:** in your own PowerShell, in the repository:
-
-```
-npm run db:push:live
-```
-
-It prints `Target: LIVE` first, then the database user, then the two migrations it applies. Say **"M1 is in"** with
-what it printed. Saturday's M2 to M4 follow.
-
-## M1 is in (23 Oct 2026, 20:37 HST)
-
-What it printed (Brandon's screenshot), in order: `Target: LIVE` with the live project's address; `Database user:
-postgres.<the live project's ref>`; `Finished supabase db push.`; the CLI's `Connecting to remote database...`, its
-question listing `20261021000000_server_writes_weeks.sql` and `20261022000000_speech_runs.sql` with `[Y/n]`; then
-`Applying migration` for each, in order. No error. Both migrations are on live. Code ran nothing against live and
-has not looked at it; the first sight of them working there is stop 6 (the live week page, and `/parent/models`,
-which reads `speech_runs`).
-
-**Found along the way (tooling, for the close as one bug line):** the CLI's `[Y/n]` is never answered.
-`scripts/db-push.mts` runs the CLI through `spawnSync` with no input, so the question meets an empty stdin and takes
-its default, yes. The output is held back to be scrubbed and printed only when the push is done, stdout before
-stderr, which is why `Finished` comes first. The file's comment says `db:push:live` "asks first"; it does not (the
-gate-live report of 20 Oct saw the same: "the CLI did not prompt"). Nothing went wrong: the stop is the guard, and
-"M1 is in" follows it. The fix is minutes: pass `--yes` and say so in the comment, so the script does what it says.
-
-## Stop M2: live week 1 deleted, and the younger's reading level, by your hand (23 Oct 2026, 20:37 HST)
-
-The brief has this on Saturday. Nothing holds it to Saturday: no child has seen live week 1 and no iPad is paired to
-live, so it can be done whenever you are ready.
-
-**What it does:** four statements in the live project's SQL editor, one at a time, each select read before the
-statement after it:
-
-```sql
-select id, week_start, plan_week, status from themes where plan_week = 1;   -- expect one row: 2026-10-19
-delete from themes where plan_week = 1 and week_start = '2026-10-19';       -- expect DELETE 1
-select id, birth_month, reading from children;                              -- expect two rows: chapter_books, reads_alone
-update children set reading = 'chapter_books' where reading = 'reads_alone'; -- expect UPDATE 1: the younger only
-```
-
-The delete takes the theme's ideas, cards, questions and any review rows with it (each `on delete cascade`). The
-`model_runs` rows of the 19 and 20 Oct builds stay, with their theme set to null, so `/parent/models` keeps the money.
-An answer recorded against one of its questions would stop the delete (`attempts` does not cascade): if it fails on
-`attempts_question_id_fkey`, nothing is deleted; paste the error and stop there.
-
-**What it touches:** **LIVE**: one theme and everything under it (one day, 40 cards); one child's reading level.
-
-**How it is undone:** the delete cannot be undone; the week can be built again, not restored, and no child ever saw
-it (`docs/reports/2026-10-20-gate-live.md`). The update is undone by
-`update children set reading = 'reads_alone' where id = '<the younger's id from the select>';`.
-
-**Checked on test:** the same cascade is what `--day 5 --rebuild` used tonight (the day's ideas deleted, their cards
-and questions with them; then built again). The reading level is read by `levelOf()`, which the build's plan now
-prints for each child, so M3 shows whether the update took. `scripts/family.local.json` already has the younger at
-`chapter_books`, so a later `seed:live` keeps it.
-
-**Your step:** the Supabase dashboard, the live project, SQL Editor, a new query. Run the four lines one at a time.
-Say **"M2 is in"** with what each printed (the row counts and the two reading levels are enough; the ids and birth
-months stay in the session, never in the report). Then M3, the plan check.
-
-## M2 is in (23 Oct 2026, 20:52 HST)
+### M2: live week 1 deleted, the younger at chapter books (23 Oct, 20:52, Brandon's hand)
 
 Brandon: "The select found one theme, 2026-10-19, in review. The delete succeeded. The children select showed two
-rows, chapter_books and reads_alone. The update succeeded." Live has no week now, and both children read at
-`chapter_books`; M3's plan shows the second.
+rows, chapter_books and reads_alone. The update succeeded."
 
-## Stop M3: the plan check on live, by your hand (23 Oct 2026, 20:52 HST)
+### M3: the plan check (23 Oct, 21:01, Brandon's hand)
 
-**What it does:** `npm run week:build:live -- --week 1 --start 2026-10-26 --plan` prints what week 1 would be on
-live and what the family's settings decide about it, then stops. It reads the plan, the children and the rulebook;
-`prepareWeek()` writes nothing and `--plan` exits before any model is called.
+Both checks passed:
 
-**What it touches:** **LIVE**, read only. Nothing written, nothing spent.
+- Day 1, word for word: "Ancient Egypt on then (The Nile, from source to sea); short lessons: look great-wave,
+  wonder leap-years, listen carnival-of-the-animals, puzzle two-dice."
+- Both boys "written for chapter_books" (ages 9 and 7).
+- The family's settings hold back nothing in the week. The gate's copy of the rulebook is unchanged since 20 Oct
+  (6,823 characters).
 
-**How it is undone:** nothing to undo.
+### M4: week 1 built on live (23 Oct, 21:20, Brandon's hand)
 
-**Checked on test:** the same command on test tonight (`--week 1 --plan`, test's week starting 21 Oct) printed day 1
-as below and one "written for" line per child, then "--plan: stopped before spending anything; nothing was written."
+Theme `be339f66-4940-4fdb-acbc-84c8891b8e2b`, Mon 26 Oct to Sun 1 Nov: 140 ideas and 280 cards in 571 seconds.
 
-**What Code checks in what you paste:**
+**The cards, for each boy:**
 
-1. Day 1 reads, word for word:
-   `Day 1: Ancient Egypt on then (The Nile, from source to sea); short lessons: look great-wave, wonder leap-years, listen carnival-of-the-animals, puzzle two-dice.`
-   If not, `plan:import:live` is a stop of its own before M4.
-2. Both children: `written for chapter_books, age N` (9 and 7). If either says `reads_alone`, the update is a stop
-   of its own before M4.
-3. Also read: the first line says `starting 2026-10-26, 7 days`, and the settings list names what the gate will hold
-   back or read as parent-led on live. Not a check that stops anything; it goes to stop 6 for your look.
+- 140 cards.
+- Lenses (day-slots): explore 6, build 6, humor 6, collect 6, story 6, compete 3, care 2.
+- 8 first cards opened by an interest.
+- 45 cards without a picture or recording.
+- 1 card held back by the card checks: on Thu 29 Oct, a hint that gives the answer away. That stops the older's
+  Audubon chain at layer 2 and the younger's Greenland chain at layer 1.
 
-**Your step:** in your own PowerShell, in the repository:
+**Pictures:** every first card has a picture or recording where its topic has one.
 
-```
-npm run week:build:live -- --week 1 --start 2026-10-26 --plan
-```
+**The gate** (Opus 5.5, safety floor v1): 278 of 280 passed. None was held back in code or by the checker, and none
+is pending.
 
-Paste everything it prints. The nicknames in it stay in the session; the report says "the older" and "the
-younger". Then M4, the build.
+**The money:** **$14.32** (ideas $1.85, cards $5.63, the gate $6.84, $0.025 a card).
 
-## M3 is in (23 Oct 2026, 21:01 HST)
+**What the reader notes say** (265 of 280 cards have one):
 
-From Brandon's screenshot, `Target: LIVE` first, then:
+1. **The lens's question pasted on as the opener: about 80 cards.** For example, "What's down there?" on maps and
+   tangrams, and "What's funny about…" on dice. `card.md` tells every card to open with the lens's question.
+2. **The answer before the question: about 40 cards**, one in seven, against about half on v5's day 1.
+3. **An earlier card's point not said again: about 20 cards.** For example, the Wright brothers never named, and
+   Verdi never introduced.
+4. **A lesson said outright: about 18 cards** ("that is worth copying"). It comes from the `learns_to_act` line.
+5. **Loose facts: about 15 cards.** For example, the leap-year drift "a few hundred years" where the card's own
+   numbers make about 700; and al-Biruni to Mellan "a thousand years", where it is about 650.
+6. **Hints that get vaguer, or give most of the answer: about 10 cards.**
+7. **Words hard for the younger: about 15 cards** ("Rayleigh scattering", 365.2422). This was expected now that he is
+   written for chapter books.
+8. **The interest doors: about 5 notes** say a comparison sits oddly. None says a door was named to the child.
 
-1. **The plan order: passes.** "Week 1: The river, with short lessons: starting 2026-10-26, 7 days." Day 1 is word
-   for word the line expected: "Ancient Egypt on then (The Nile, from source to sea); short lessons: look great-wave,
-   wonder leap-years, listen carnival-of-the-animals, puzzle two-dice." Days 2 to 7 are the same as test's plan,
-   line for line. No `plan:import:live` is needed.
-2. **The reading levels: pass.** The older "written for chapter_books, age 9"; the younger "written for
-   chapter_books, age 7". M2's update took.
-3. Also read: "No topic built here touches a subject the family's settings hold back or keep parent-led." (Test's
-   invented family has two parent-led subjects in its week; the live family has none.) The gate still reads every
-   card. Its copy of the rulebook is 6,823 characters, the same as at the gate-live run of 20 Oct, so the live
-   rulebook has not changed since. The models are the three expected (ideas and gate on Opus 5.5, cards on Sonnet
-   5.5).
+### For June's read (the cards a guardian should see)
 
-## Stop M4: the week built on live, by your hand (23 Oct 2026, 21:01 HST)
-
-**What it does:** `npm run week:build:live -- --week 1 --start 2026-10-26` builds week 1 on live: seven days, both
-children, five day-slots a day, four layers each (280 cards), on card v6 and ideas v5, with pictures from live's
-approved items, then the gate reads every card. The theme ends in `review`: nothing reaches an iPad until a guardian
-taps Looks good (stop 7). It writes one `model_runs` row with the counts and the money.
-
-**What it touches:** **LIVE**: one new theme and its ideas, cards and questions. **Money:** about $13 to $14 of
-Anthropic spend (test's proof week, 21 Oct: $13.62; tonight's two v6 builds of day 5 on test came to $3.79, about the same a day), under the
-$25 line. It takes a while: let it run to the end, about 15 to 20 minutes.
-
-**How it is undone:** nothing a child sees until the tap. A bad day is `--day d --rebuild` at a stop of its own; the
-whole week is M2's delete again, or `--rebuild`, each a stop of its own. The money cannot be undone.
-
-**If it stops part way:** it says so and leaves the theme `generating`; paste what it printed and stop there (a
-rebuild spends again, so it is its own stop). If the gate leaves any card pending, the run ends with an error;
-`gate:live -- --week 1` checks them again, at a stop of its own.
-
-**Checked on test:** the proof week on test was built the same way, seven days with pictures (21 Oct, $13.62); day 5
-was rebuilt tonight on v6, and the gate passed 40 of 40. M3 above showed live's plan, children, levels and rulebook.
-
-**What Code reads in what you paste:** each child's card count, the cards held back and why, the text-only
-day-slots, first cards without a picture, the gate's summary (passed, held back in code, held back by the checker,
-pending), the total spend, and the week page's address for stop 6.
-
-**Your step:** in your own PowerShell, in the repository:
-
-```
-npm run week:build:live -- --week 1 --start 2026-10-26
-```
-
-Paste everything it prints after the plan (the nicknames stay in the session). Then stop 6, your look at the week on
-live.
-
-## M4 is in (23 Oct 2026, 21:20 HST)
-
-From what Brandon pasted (the nicknames are left out here: "the older", "the younger"). Days are dated: day 1 is
-Mon 26 Oct, day 7 Sun 1 Nov.
-
-**The build:** theme `be339f66-4940-4fdb-acbc-84c8891b8e2b`, now in `review`; 140 ideas; 571 seconds (9.5 minutes).
-
-| | the older | the younger |
-|---|---|---|
-| Cards | 140 | 140 |
-| Lenses (day-slots) | explore 6, build 6, humor 6, collect 6, story 6, compete 3, care 2 | the same |
-| First cards opened by an interest | 8 | 8 |
-| Cards without a picture or recording | 45 | 45 |
-| Day-slots the card checks asked twice | 12 | 12 |
-| Held back by the card checks | 1 | 1 |
-
-- **Held back, the older:** Thu 29 Oct, look (Audubon's birds), layer 3: hint 2 gives the answer away ("Think of a
-  coloring book: the lines are printed first, and then what happens?"). His chain that day stops at layer 2: a
-  layer held back stops the child at the one before (`core/wall/card.ts`), so layer 4 is never reached.
-- **Held back, the younger:** Thu 29 Oct, then (why Greenland looks huge), layer 2: hint 3 gives the answer away. His
-  chain that day stops at layer 1.
-- Every day-slot had an approved item; no idea chain was sent back; every first card has a picture or recording
-  where its topic has one. So every day has five first cards for each boy.
-
-**The gate** (rulebook `b025a471`, safety floor v1, Opus 5.5): 280 cards, **278 passed**, 0 held back in code, 0 by
-the checker, 0 pending; 2 left as the card checks held them. The tap counts a held-back card as checked
-(`core/curation/live.ts`), so nothing here stops Looks good.
-
-**The money:** **$14.32** (ideas $1.85, cards $5.63, the gate $6.84, $0.025 a card), against the brief's "about $13"
-and under the $25 line. With test's $3.79 tonight, this job has spent $18.11.
-
-### What the reader notes say
-
-The gate left a reader note on 265 of the 280 cards (on 20 Oct, card v5's live day 1: 36 of 40). Notes never change
-a verdict. My count, by reading them; each is "about", since one note can say two things:
-
-1. **The lens's question pasted on as the opener, about 80 cards.** "What's down there?" (explore) opens maps,
-   fables, tangrams and Kitty Hawk; "What's funny about…" (humor) opens dice, snowflakes and the chessboard legend;
-   "Who won…" (compete), "Can you find them all?" (collect) and "Who looks after whom?" (care) likewise, and the
-   gate reads most of them as not fitting the card. This is not v6: `card.md` line 27 tells every card to open
-   "with the lens's question and framing", and the questions are `lib/lenses.ts` word for word. Test's day 5 had
-   it too (16 "down there"s on v5, 4 on v6). It is the biggest thing a boy will notice this week, and it is odd,
-   not harmful.
-2. **The answer before the question, about 40 cards** (the text or the question says what is then asked). Card v5's
-   live day 1 had it on about half; this week, about one card in seven. Better, not gone.
-3. **Something an earlier card taught, not said again, about 20 cards**: the Wright brothers never named (four
-   cards), Verdi never introduced (five), the knights-and-knaves rules not restated (three), the chessboard story
-   untold (three).
-4. **A lesson said outright, about 18 cards**: "that is worth copying", "thinking about both sides takes effort",
-   "careful counters make fewer mistakes"; from the `learns_to_act` line of card v5, kept in v6.
-5. **Facts a parent should know are loose, about 15 cards**: the leap-year drift (summer reaches winter in "a few
-   hundred years"; the card's own numbers make it about 700); every snowflake with six matching arms; Seurat's
-   green "not painted anywhere" (he used green dots); "a thousand years from al-Biruni to Mellan" (about 650);
-   the Canon's oldest copy "in his own hand" (it is a later copy); the Hōkūleʻa photo is the Yokohama arrival, not
-   the 1976 Tahiti sail; the fossil's cause and effect backwards; an ammonite as "a kind of shellfish"; a compass
-   needle that "stays put"; "the seven-piece rule" given as a tangram term, which it is not.
-6. **Hints**: about 10 where a later hint is vaguer than an earlier one, or one gives most of the answer.
-7. **The younger's words**: about 15 notes say a word or number is hard for seven or eight ("Rayleigh scattering",
-   365.2422, "a 137.5-degree turn", 7 percent interest). Expected from M2: he is written for chapter books now.
-8. **The interest doors**: about 5 say an interest comparison sits oddly on the card. None says a door was named
-   to the child; v6's rule held.
-
-### For June's read (the cards a guardian should see before the tap)
-
-These touch a feeling, a safety point, or one of the project's rules. The gate passed each:
+These touch a feeling, a safety point, or one of the project's rules. The gate passed each.
 
 | Day | Boy | Card | The reader note, short | Touches |
 |---|---|---|---|---|
-| Wed 28 Oct | older | wonder (new land from lava), layer 1 | hint 1: picture dipping a hot pan into cold water; a curious child might try it in the kitchen | safety |
+| Wed 28 Oct | older | wonder (new land from lava), layer 1 | hint 1: picture dipping a hot pan into cold water; a curious child might try it | safety |
 | Wed 28 Oct | older | look (Nakht's tomb), layer 4 | hint 2 asks him to think of something hard or scary in his own life | a feeling |
 | Sun 1 Nov | both | listen (Aloha ʻOe), layer 4 | "the song you'd want sung when you say goodbye" could be heard as about dying | a feeling |
 | Sun 1 Nov | younger | listen (Aloha ʻOe), layer 1 | a chipmunk joke about the Queen's farewell song | rule 1, and Hawaiʻi |
@@ -456,295 +167,133 @@ These touch a feeling, a safety point, or one of the project's rules. The gate p
 | Fri 30 Oct | both | then (Ra and the sun boat), layer 4 | "what Egyptians believed, not how the sun really moves" reads flat about a belief held deeply | rule 1 |
 | Fri 30 Oct | older | then (Ra), layer 3 | hint 3: picture a morning with no sun | a feeling, lightly |
 
-## Stop 6: your look, the week on live (23 Oct 2026, 21:20 HST)
-
-**Brandon, on the laptop at the live address, signed in, at `/parent/week/be339f66-4940-4fdb-acbc-84c8891b8e2b`:**
-
-- "The week page shows seven days, every day with five first cards for each boy, pictures on them, and the *Before
-  you tap* box names no card that isn't checked."
-- "The titles are the ideas' names."
-
-**June, the same page:** she reads the week, with the table above beside her.
-
-"go" here is Brandon's word that both looks are done. Do not tap Looks good yet: the tap is stop 7.
-
-**What I decided, and what I recommend (strike any you don't want):**
-
-1. **Tap this week as it is** (recommended). Nothing the gate holds a card back for is in it, and the patterns
-   above are the card prompt's, not the rulebook's; June sits with the boys this week, which is her check. A full
-   rebuild to fix the openers would cost about $14 more, want the whole read again, and should be proved on test
-   first.
-2. **If June wants one of the cards above gone,** name it at the go. The narrowest way is to hold back that one card
-   by SQL (`policy` to `blocked`, which stops his chain at the layer before, or takes the tile away for a layer 1).
-   It is LIVE, so it is a stop of its own with the line written out, undone by setting it back to `passed`. A day's
-   `--day d --rebuild` (about $2) changes every card of that day for both boys, so I do not recommend it for one
-   card.
-3. **For the close, not this job:** the lens-question openers (`card.md` line 27 and `lib/lenses.ts`), the lessons
-   said outright (`learns_to_act`), the loose facts, and the `db:push:live` question nobody answers, as bug lines in
-   docs/08; the openers and the lessons as a proposed row for card v7, which the job does not add.
-
-## Stop 6's go (23 Oct 2026, 21:50 HST)
-
-Brandon: "go. The week page shows seven days, five first cards for each boy with pictures, Before you tap clean,
-titles as idea names. Also: I forgot the old iPad pairing on live's /parent, and of the two waiting items I approved
-one and rejected one; check whether the rejected item is on any card of this week and what that card shows without
-it."
-
-- **Both looks are done** (the brief: "go" here is Brandon's word that both looks are done). No card is held back
-  by hand; the week is tapped as it is.
-- **Done by Brandon on live, through `/parent`:** the old iPad's pairing forgotten (its device row gone; undone by
-  pairing it again); of the two items waiting at `/parent/content` (Musopen's Handel, *Israel in Egypt*, and the
-  CC BY-SA Rosetta Stone photograph), one approved and one rejected.
-
-**The rejected item is on no card of this week, and could not be,** whichever of the two it is:
-
-1. The build offers a topic only the items that are approved and not rejected (`core/curation/week-job.ts:143`),
-   and both were still waiting when M4 ran.
-2. Neither item's topic is in week 1. Handel's *Israel in Egypt* is plan week 3's listen topic
-   (`plan/ancient-egypt.yaml:575`); the Rosetta photograph is one of three sources of "Scribes, the Rosetta Stone
-   and Tutankhamun's tomb", plan week 4's then topic (`:631`). M3 and M4 printed week 1's seven Egypt topics, and
-   neither is among them.
-
-So no card shows anything different. Had a card used it: the wall shows a layer only while its item is still
-approved (`onWall()`, `core/wall/flow.ts:102`), so a rejected item takes its card off the wall, not just its picture;
-a first card's tile goes, and a deeper layer stops the chain at the one before. From now on the rejected item is
-never offered; each topic has another source (the 1888 Edison cylinder of *Israel in Egypt*; the 1985 Rosetta
-photograph and Carter in the tomb), and the approved one is offered when its topic's week comes.
-
-## Stop 7: the tap, and the iPads (23 Oct 2026, 21:50 HST)
-
-**A fix to the brief, decided:** the voice and Talk checks cannot be taken on Sunday. "Read it to me" says only a
-line on a card the child can see now (`core/wall/speech.ts:57`), and the wall shows a card only on its own day
-(`onWall()`: `row.day === today`, in Hawaii). Week 1 begins Monday, so on Sunday a paired iPad says "Nothing on the
-wall today." and has no card to tap; Talk lives on a card's page too. So Sunday is the tap and the pairing, and the
-two voice checks move to **Monday morning, on each boy's first card, with June there.** If the voice fails there,
-the card still works: the text is on the screen and the answer can be typed.
-
-### The tap
-
-**What it does:** a guardian taps **Looks good** on live's week page (`/parent/week/be339f66-4940-4fdb-acbc-84c8891b8e2b`).
-The week goes from `review` to `live`, and from Monday 26 Oct, midnight in Hawaii, each paired iPad shows that day's
-passed first cards.
-
-**What it touches:** **LIVE**, and **what the boys see from Monday**.
-
-**How it is undone:** **Take it back to review**, the same button, by any guardian, until Monday midnight in Hawaii. After
-that the page refuses ("This week has begun"), and a card is held back by SQL at a stop of its own.
-
-**Checked on test:** the tap and the way back were proved on test (20 Oct, `docs/reports/2026-10-20-looks-good-slice.md`),
-and test's proof week was tapped and used on June's iPad as Bug (21 and 22 Oct). M4 above showed live's week has
-nothing that stops the tap.
-
-### The iPads, each boy's
-
-**What it does, in this order** (`deploy/README.md`, step 4):
-
-1. Settings → Screen Time → Content & Privacy → Web Content → add the live address under **Always Allow**.
-2. Safari, at `<live address>/kid`.
-3. Share → **Add to Home Screen**.
-4. Open Quark **from the Home Screen** (a Home Screen app keeps its own cookies, apart from Safari's).
-5. On the laptop, live's `/parent`, that boy, **Get a code**.
-6. The six digits typed on the iPad. On Sunday the wall then says **"Nothing on the wall today."**: that is it working.
-7. Guided Access: triple-click, Start.
-
-**What it touches:** **LIVE**: one device row per iPad.
-
-**How it is undone:** **Forget this iPad** on `/parent`, as Brandon did tonight for the old one.
-
-**Checked on test:** pairing, on June's iPad as Bug, but in Safari against the dev server (21 Oct); the Home Screen app and Guided Access were never tried there (`docs/reports/2026-10-21-wonder-wall-1-slice.md`), so Sunday is their first run.
-
-### Monday morning, each iPad, on his first card
-
-- One tap of **Read it to me**: Sulafat's voice, on live, through Vercel. It is the first proof that
-  `GOOGLE_CREDENTIALS_JSON` works in production. The first tap of a line waits 4 to 5 seconds while it is made.
-- One hold of **Talk** with a word spoken: the word appears in the answer box.
-
-**Your step:** Sunday, the tap and both iPads; Monday morning, the two voice checks on each. Then **"go"**: every one
-passed, or the one that did not is named, with what it showed. After that I write the state to the report, and
-it is `/wwc:close`.
-
-## Stop 7's results, and a fix round (26 Oct 2026, 21:06 to 21:20 HST)
-
-A new session resumed the job at stop 7 (21:06) and handed it back; Brandon answered with Monday's checks and
-Vercel's logs. **The boys' iPads run Quark as Home Screen apps on live, and the wall is in use** (Vercel's logs
-show cards opened and answers recorded from 20:28). Brandon's words:
-
-- **"Read it to me": passed.** "worked, Sulafat's voice, as on June's iPad." The first proof that
-  `GOOGLE_CREDENTIALS_JSON` works on Vercel.
-- **Talk: failed.** "Talk recorded but every hold ended 'That didn't come through.'" Every `POST /api/kid/hear` was
-  a 502 in about 500 ms, with calls only to Supabase (the device lookup's GET and `last_seen`'s PATCH), none to
-  Google, and no log lines.
-- **Also in the logs:** `GET /kid` and the card pages answered 200 but logged "getDevice: device lookup failed.
-  Error: During prerendering, fetch() rejects when the prerender is complete…" (24 errors in the hour).
-- **For the close, not this job** (Brandon): a recording and "Read it to me" can play at the same time, and one
-  should stop the other; and right answers in the boys' own words were judged wrong ("In the background." for
-  "Where in the picture is Mount Fuji hiding?"), which is the model-as-judge row, **moved to the top of Next**.
-
-Brandon: "Diagnose both from the code …, fix both, push, and tell me when Vercel has deployed so I can try Talk on
-an iPad."
-
-### Talk: the project was never found on Vercel
-
-`hear()` names the Google project in its address, and asked `getProjectId()` before any client was made. Given the
-key as JSON (Vercel's `GOOGLE_CREDENTIALS_JSON`), google-auth-library 11.1.0 does not read the project from it at
-that point: it looks for a key file, `GOOGLE_APPLICATION_CREDENTIALS` as a path, `gcloud`, and Google's metadata
-server, finds none on Vercel, and throws "Unable to detect a Project Id in the current environment". The route
-turns any throw into a 502 and logs nothing, which is what the logs show. On the laptop the key is a file, which the
-library does read, so every check passed there. "Read it to me" names no project, so it worked.
-
-- **Reproduced** with a made-up key and nothing else set: the old way throws that error (after 14 seconds of looking
-  on the laptop); with the key's own `project_id` passed in, it answers at once. No call to Google.
-- **Fixed** in `core/speech/google.ts`: the key's `project_id` is given to the library with the key.
-- **A test holds it** (`core/speech/google.test.ts`): the key only as JSON, nothing else naming a project, and
-  `hear()` must call the `quark-speech` project's address. It times out on the old code and passes on the new.
-
-### `/kid`: a second render the lookup was not meant for
-
-`partialPrefetching: true` (`next.config.ts`) makes Next 16.4.2 render every kid page twice: the page itself, then
-a "runtime prefetch" embedded in it, in which the device cookie can be read but every `fetch()` hangs until that
-render ends and then rejects. Supabase's client turns the rejection into an error value, and `getDevice()` logged
-it as a failed lookup and redirected to pairing, inside a render nobody sees. So the boys saw nothing wrong, but
-every visit logged an error and began a lookup it could never finish.
-
-- **Fixed** in `lib/device.ts`: the lookup waits on `connection()`, Next's way to say "only in a real request". In
-  the runtime prefetch it never starts; in the page and the API routes it goes on as before.
-- **Proved on a production build against test** (`npm run build`, `npm start`), with a device paired by the new
-  `fixture -- device 1`: before the fix one `GET /kid` logged the error once; after it, three logged nothing, the
-  wall rendered for that device (test's week is in review, so "Nothing on the wall today"), and the hear route
-  passed the device check. The device was forgotten after (`fixture -- forget`).
-- **New for testing:** `npm run fixture -- device <n>` pairs a device to child n on test and prints its cookie, so a
-  kid route can be asked with curl as a paired iPad asks it; `fixture -- forget <id>` ends it.
-
-`npm test`: 390 passed. `npm run typecheck`: clean. Lint is clean on the four changed files. Commit `77f187e`.
-Nothing was spent: no call to Google or Anthropic, and nothing touched live.
-
-### For the close (a proposal; the job adds no row)
-
-- The hear and say routes log nothing by design (never the child's words), so this failure showed only as a 502.
-  One line with the error's message alone, never the clip or its words, would have named the cause on the first
-  hold. Brandon's call.
-
-### What goes to `main`
-
-**Not pushed by Code.** The branch is pushed (`78eac6f..30e9699`); the push of it to `main` was refused by Claude
-Code's auto-mode classifier as a production deploy, and is not tried another way. It is Brandon's hand, in his own
-terminal, in the repository: `git push origin phase-4-wonder-wall:main` (a fast-forward: `main` is an ancestor of
-the branch). Vercel then deploys it to the live address. Beyond the fix it carries this branch's commits since the release (`ab9a2f7`): card v6 and ideas v5 (used only by
-`week:build`, run from the laptop), the week page without its "Read aloud:" line, the wall's reply without
-`read_aloud` (the iPad never read it), the plan's reading-level line, the fixtures and the reports. Nothing else the
-boys see changes. `/wwc:release` at the close still fast-forwards from there.
-
-## Stop 7 again: the fix to `main` by your hand, then Talk on an iPad (26 Oct 2026, 21:21 HST)
-
-**What it does:** `git push origin phase-4-wonder-wall:main` moves `main` from `ab9a2f7` to this branch's head, a
-fast-forward, and Vercel builds it and makes it the live address's deployment.
-
-**What it touches:** **what the boys see**: the live app on both iPads (Talk, and the wall's device lookup). Not
-the live database: no migration rides along.
-
-**How it is undone:** in Vercel, Deployments, the deployment before it (`main` at `ab9a2f7`), **Instant Rollback**;
-it takes effect at once. `main` itself is then fixed forward, never moved back (a force push is on the deny list).
-
-**Checked on test:** the hear test, red on the old code and green on the new; the device lookup on a production
-build against test, before and after; 390 tests and the typecheck.
-
-**Your step:** in the repository, in this session so its output lands here:
-
-```
-! git push origin phase-4-wonder-wall:main
-```
-
-Code then watches Vercel's production deployment of that commit (GitHub's record of it) and says when it is
-**Ready**. Then on one boy's iPad, a card, **one hold of Talk with a word spoken**: the word appears in the answer
-box. "go" means it did, or say what it showed.
-
-## `main` pushed, and deployed (26 Oct 2026, 21:26 HST)
-
-Brandon typed `! git push origin phase-4-wonder-wall:main`; it reached the session as text, not as a run command
-(`main` still at `ab9a2f7`), so Code ran that same command on those words: `ab9a2f7..b031221  phase-4-wonder-wall
--> main`. Vercel's production deployment of `b031221` (GitHub deployment `7352757670`) reported **success at
-21:25:59 HST**, so the live address serves the fix. Waiting on: one hold of Talk on a boy's iPad.
-
-## Resumed, and the last stop: Talk on a boy's iPad (28 Oct 2026, 20:13 HST)
-
-A new session resumed the job (`/wwc:job docs/first-live-week-slice.md`, 20:13) and read the records. Nothing was
-run or spent.
-
-**Where the job stands.** Every stop is done but one check:
-
-- Card v6 proved on test (stop 1). Both migrations on live (M1). Live week 1 deleted and the younger at chapter
-  books (M2). The plan check (M3). The week built on live: 278 of 280 cards passed (M4). The week read (stop 6), then
-  tapped, and both iPads paired as Home Screen apps (stop 7).
-- On Monday, "Read it to me" passed on live and Talk failed (every hold got a 502). The fix (`77f187e`) went to `main`
-  on your words. Vercel's production deployment of `b031221` succeeded at 21:25:59 HST on 26 Oct.
-- **Waiting on: one hold of Talk on a boy's iPad since that deploy.** The records don't say whether anyone has tried
-  it. Today's judge brief quotes answers the boys typed; it says nothing of Talk.
-- The boys have used the wall for three nights (the judge brief, 28 Oct).
-- **The branch:** `phase-4-wonder-wall`, as the brief names, at `f2ad9dc`, the same as `origin`. `main` is at
-  `b031221`, one report commit behind, so `main` has not moved.
-- **The board:** this row is at *building* (since 23 Oct); no other row is in hand.
-- **The money:** $18.11 in all: test $3.79 and live $14.32, against the brief's "about $15". Nothing since.
-
-**What I decided (strike any you don't want):**
-
-1. **The chat's edits of today stay as they are until the close.** These are the board's judge row moved to the top
-   of Next, its two rows at *not fully formed*, and `docs/judge-slice.md`. At the close they go in as they are, in a
-   commit of their own, before the close's records. That way the close's board change (this row to *live*) stands
-   alone, and the judge job's first commit is only its row's move.
-2. **What the close writes from this report's proposals** (the job adds no row). One bug line each in docs/08:
-   - the lens's question pasted on as a card's opener (`card.md` line 27, `lib/lenses.ts`);
-   - a lesson said outright (`learns_to_act`);
-   - loose facts a parent should know (M4's list);
-   - `db:push:live` never answers the CLI's `[Y/n]`, though its comment says it asks first;
-   - a recording and "Read it to me" can play at the same time;
-   - the hear and say routes log nothing when they fail.
-
-   A card v7 for the openers and the lessons goes in the report as a proposed row, for you. The model-as-judge row is
-   already at the top of Next (the chat, today).
-3. **I recommend `/wwc:close`, not `/wwc:release`.** `main` already serves every line the boys use. What remains is
-   records only, and a release would redeploy production with nothing changed for a child. The judge job's release
-   carries the records this week.
-
-**Your look, the one check left, in exact words:**
-
-- "On a boy's iPad, on a card, one hold of Talk with a word spoken puts the word in the answer box."
-
-If it failed, name what it showed: that is a fix round, and this stop comes again. If nobody has tried it yet, say
-"Talk not tried" with the close word. The close then records Talk on live as unproven: the fix was proved only on a
-production build against test, and a boy can still type his answer.
-
-Beyond this job, for your eye: week 1 ends Sunday 1 Nov. The wall is empty from Monday 2 Nov unless 28 more short
-lessons are picked by Saturday 31 Oct (a row at Next).
-
-## Stop 7's go, and the job's steps done (28 Oct 2026, 20:17 to 20:22 HST)
-
-Brandon: "go. Talk and "Read it to me" both work on the boys' iPads since the fix; three nights in and they're
-enjoying it. Yes to the one log line on a hear failure, never the child's words. One finding for the close: hints
-are written as questions, so the boys answer the hint instead of the original question and are judged wrong; it
-goes into the model-as-judge brief, which is next."
-
-- **Stop 7 passed.** Talk works on live on both boys' iPads, so `77f187e` is proven on Vercel. "Read it to me" was
-  proven on Monday. The boys are on live.
-- **The log line, done (`178b0f0`).** When Talk fails, the hear route now logs one line: `hear: Talk failed` and the
-  error's message. It never logs the clip, its words or the child. The answer is still a 502.
-  - **Why the key needed a fix too:** `JSON.parse` quotes the text around a fault in its message. Node 24, on a
-    broken key: `Unexpected token 'M', ..."ate_key": MIIEvQIBAD"... is not valid JSON`. So a malformed
-    `GOOGLE_CREDENTIALS_JSON` would have put a piece of the private key into Vercel's logs. The adapter now fails
-    with "GOOGLE_CREDENTIALS_JSON is not valid JSON." and quotes nothing.
-  - **The tests:** `lib/kid-wiring.test.ts` held "nothing on the kid path logs". It now holds that the hear route is
-    the one file that logs, and that its only log call is that exact line. `core/speech/google.test.ts` holds the
-    plain message: a broken key, and a message that quotes none of it.
-  - **The rule:** this changes slice 1's decision that nothing on the kid path logs, on your words. Rule 7 holds: no
-    child data reaches the log.
-  - **Checks:** 391 tests passed; typecheck clean; lint clean on the four files.
-  - **Not on live yet:** it reaches Vercel with the next release (the judge job's).
-- **The say route still logs nothing when it fails.** Your yes named hear, so I left say alone. It stays a bug line
-  at the close, replacing item 2's "the hear and say routes".
-- **The hints finding is already in the judge brief.** `docs/judge-slice.md`, *Why*, quotes you on it ("some of the
-  hints also sound like questions…"), and its board row says "hints framed as clues". The close records it here as
-  this job's finding, and I added nothing to the brief.
-
-**The state.** Every step of the brief is done but the close. Commits since the last push: `27d70fc` and `178b0f0`
-on `phase-4-wonder-wall`, not yet pushed (the close pushes them). The chat's board edits and `docs/judge-slice.md`
-are still uncommitted, for the close's own commit (decision 1 above). Money: $18.11, unchanged; this session spent
-nothing.
+### Stop 6's go (23 Oct, 21:50)
+
+- **The week was tapped as built.** No card was held back by hand.
+- **Done by Brandon on live, through `/parent`:**
+  - the old iPad's pairing forgotten;
+  - of the two items waiting (Musopen's Handel and the CC BY-SA Rosetta Stone photograph), one approved and one
+    rejected.
+- **The rejected item is on no card of this week, and could not be.**
+  - The build offers only approved items, and both were still waiting when M4 ran.
+  - Neither item's topic is in week 1: they are plan weeks 3 and 4.
+  - Had a card used it, `onWall()` would have taken that card off the wall.
+
+### Stop 7: the tap and the iPads
+
+- **The voice checks moved from Sunday to Monday morning.** The wall shows a card only on its own day, so on Sunday a
+  paired iPad has no card to read or answer.
+- **On both boys' iPads:** the live address allowed in Screen Time, Quark saved to the Home Screen, opened from
+  there, paired with a code from live's `/parent`, then Guided Access.
+
+### Monday's fix round (26 Oct, 21:06 to 21:26)
+
+- **Talk answered 502 on Vercel.**
+  - **Cause:** `hear()` names the Google project in its address. Given the key as JSON, google-auth-library 11.1.0
+    does not read the project from it. It looks for a key file, `gcloud` and Google's metadata server instead,
+    finds none on Vercel, and throws. On the laptop the key is a file, so every check passed there. "Read it to
+    me" names no project, so it worked.
+  - **Fix:** `core/speech/google.ts` gives the library the key's own `project_id`. A test sends the key only as
+    JSON: it timed out on the old code and passes on the new.
+- **`/kid` logged "getDevice: device lookup failed" on every visit.**
+  - **Cause:** `partialPrefetching` renders each kid page a second time as a runtime prefetch, where every `fetch()`
+    rejects.
+  - **Fix:** `getDevice()` now waits on `connection()`. Proved on a production build against test with a device
+    paired by the new `fixture -- device 1` (and `fixture -- forget`): one error before the fix, none in three
+    visits after it.
+- **Checks:** 390 tests passed; typecheck clean. Commit `77f187e`. Nothing spent, nothing on live.
+- **The push to `main`:** Claude Code's auto mode refused it as a production deploy, and Code did not try it another
+  way. Brandon typed `! git push origin phase-4-wonder-wall:main`. It reached the session as text, so Code ran that
+  command on his words: `ab9a2f7..b031221`. Vercel's production deployment of `b031221` succeeded at 21:25:59 HST.
+
+### 28 Oct: the go, and the hear log line (`178b0f0`)
+
+- **A failed hear now logs one line:** "hear: Talk failed" and the error's message. It never logs the clip, its
+  words or the child, and the child still gets a 502. Brandon: "Yes to the one log line on a hear failure, never the
+  child's words."
+- **A broken Google key now fails with a plain message.** `JSON.parse` quotes the text around a fault (Node 24, on a
+  broken key: `Unexpected token 'M', ..."ate_key": MIIEvQIBAD"... is not valid JSON`). So the new log line could have
+  put a piece of the private key into Vercel's logs. The adapter now fails with "GOOGLE_CREDENTIALS_JSON is not
+  valid JSON." and quotes nothing.
+- **The tests:** `lib/kid-wiring.test.ts` held "nothing on the kid path logs". It now holds that the hear route is
+  the one file that logs, and that its only call is that exact line. `core/speech/google.test.ts` holds the plain
+  message.
+- **Checks:** 391 tests passed; typecheck clean; lint clean on the four files.
+- **A rule changed:** this replaces slice 1's "nothing on the kid path logs", on Brandon's words. Rule 7 holds: no
+  child data reaches a log.
+
+### The close (28 Oct)
+
+- **The chat's edits of 28 Oct** were committed as they were, on their own (`af9b176`): the judge brief, its row to
+  the top of Next, and two rows at *not fully formed*.
+- **Records:**
+  - docs/04: *How a week is built* (the idea's name, card v6, live week 1's numbers and notes), *How the gate is
+    built*, *How a week goes live* and *How the Wonder Wall is built* (on live, the device lookup, the log line).
+  - docs/13: the key's project, the key's plain message, the log line.
+  - docs/08: a section of decisions, *The boys' first live week*. The two door questions are ticked, and "Too many
+    words" keeps only the word limit open.
+  - `CLAUDE.md` *Where we are* and the README status.
+- **Bugs in docs/08:**
+  - Deleted, closed by card v6: four-notes (21 Oct) and the announced door (16 Oct).
+  - Added, six new lines:
+    1. the lens-question openers;
+    2. lessons said outright;
+    3. loose facts;
+    4. a recording and "Read it to me" playing at once;
+    5. the say route's silent failure;
+    6. `db:push:live`'s unanswered `[Y/n]`.
+- **The board:**
+  - This row to *live* (28 Oct).
+  - Phase 1 and Phase 2, *live* since 10 and 11 Oct, deleted under the 14-day rule.
+  - Pilot has no slice at *later*, so nothing moved up.
+- **Board page:** `npm run docs:board`.
+- **The plate:** 391 tests passed; typecheck clean; `npm run build` clean.
+
+## Beyond the brief
+
+- **Beyond the brief's three card changes:** ideas v5 (the name on the shared idea), and two lines in card v6 (a
+  parent's part from the first words, the door never named).
+- **New tools and code:**
+  - `week:build --plan` prints the reading level.
+  - Test-only fixtures: `fixture -- words`, `fixture -- device`, `fixture -- forget`.
+  - The device-lookup fix and the hear log line, with the key's plain message.
+- **Found:**
+  - `db:push:live` never answers the CLI.
+  - Auto mode refuses a push to `main` as a production deploy, so it is Brandon's hand.
+  - Hints written as questions make the boys answer the hint, not the question (Brandon, 28 Oct). This is already
+    in `docs/judge-slice.md`, *Why*, and its board row.
+- **On Brandon's hand, on live:** the old iPad's pairing forgotten; one waiting item approved and one rejected.
+- **For Brandon: Pilot has no slice left on the board.** The close rule moves a project to *live* when its last
+  slice does, but Pilot's four weeks run to Sun 22 Nov, so I left its project row as it is. Say if it should go to
+  *live* now, or name its next slice. Week 2 itself sits in *Week 2 builds itself* (the 28 short lessons by Sat
+  31 Oct are a row at Next).
+
+## On live
+
+- **The database (Brandon's hand at each stop):**
+  - `20261021000000_server_writes_weeks` and `20261022000000_speech_runs` applied (M1).
+  - Live week 1 of 19 Oct deleted, and the younger set to `chapter_books` (M2).
+  - Week 1 built to start 26 Oct, 278 of 280 cards passed (M4), then tapped Looks good.
+  - Two iPads paired and the old one forgotten.
+  - One content item approved, one rejected.
+- **Production:** `main` at `b031221`, deployed on Vercel 26 Oct, 21:25:59 HST. It carries card v6, the Talk fix and
+  the device-lookup fix. The hear log line (`178b0f0`) is not on Vercel yet.
+- **What a child sees:** both boys have used the Wonder Wall on live since Monday 26 Oct, with "Read it to me" and
+  Talk working.
+- **Money:** $18.11 in all: test $3.79 (two rebuilds of day 5) and live $14.32 (M4). The brief estimated about $15;
+  each run stayed under the $25 line.
+
+## Commits
+
+`6f8c530`, `6ebb262`, `5ce5b92` (23 Oct: go, card v6, the plan line); the stop reports `db9c8eb`…`f2ad9dc`
+(23 to 26 Oct); `77f187e` (Talk and the device lookup, 26 Oct); `27d70fc`, `178b0f0`, `9faad2c` (28 Oct); `af9b176`
+(the chat's edits); and the close's commit. All on `phase-4-wonder-wall`.
+
+## What you now do differently
+
+- **To pair an iPad,** open Quark from the Home Screen first, then type the code there. A pairing made in Safari does
+  not carry over to the Home Screen app.
+- **When Talk fails** (once the next release is out), Vercel's logs will say why on a line starting
+  `hear: Talk failed`. "Read it to me" still fails silently; that is a bug line.
+
+cost: not read
