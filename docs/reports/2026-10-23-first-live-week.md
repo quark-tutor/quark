@@ -664,3 +664,54 @@ Brandon typed `! git push origin phase-4-wonder-wall:main`; it reached the sessi
 (`main` still at `ab9a2f7`), so Code ran that same command on those words: `ab9a2f7..b031221  phase-4-wonder-wall
 -> main`. Vercel's production deployment of `b031221` (GitHub deployment `7352757670`) reported **success at
 21:25:59 HST**, so the live address serves the fix. Waiting on: one hold of Talk on a boy's iPad.
+
+## Resumed, and the last stop: Talk on a boy's iPad (28 Oct 2026, 20:13 HST)
+
+A new session resumed the job (`/wwc:job docs/first-live-week-slice.md`, 20:13) and read the records. Nothing was
+run or spent.
+
+**Where the job stands.** Every stop is done but one check:
+
+- Card v6 proved on test (stop 1). Both migrations on live (M1). Live week 1 deleted and the younger at chapter
+  books (M2). The plan check (M3). The week built on live: 278 of 280 cards passed (M4). The week read (stop 6), then
+  tapped, and both iPads paired as Home Screen apps (stop 7).
+- On Monday, "Read it to me" passed on live and Talk failed (every hold got a 502). The fix (`77f187e`) went to `main`
+  on your words. Vercel's production deployment of `b031221` succeeded at 21:25:59 HST on 26 Oct.
+- **Waiting on: one hold of Talk on a boy's iPad since that deploy.** The records don't say whether anyone has tried
+  it. Today's judge brief quotes answers the boys typed; it says nothing of Talk.
+- The boys have used the wall for three nights (the judge brief, 28 Oct).
+- **The branch:** `phase-4-wonder-wall`, as the brief names, at `f2ad9dc`, the same as `origin`. `main` is at
+  `b031221`, one report commit behind, so `main` has not moved.
+- **The board:** this row is at *building* (since 23 Oct); no other row is in hand.
+- **The money:** $18.11 in all: test $3.79 and live $14.32, against the brief's "about $15". Nothing since.
+
+**What I decided (strike any you don't want):**
+
+1. **The chat's edits of today stay as they are until the close.** These are the board's judge row moved to the top
+   of Next, its two rows at *not fully formed*, and `docs/judge-slice.md`. At the close they go in as they are, in a
+   commit of their own, before the close's records. That way the close's board change (this row to *live*) stands
+   alone, and the judge job's first commit is only its row's move.
+2. **What the close writes from this report's proposals** (the job adds no row). One bug line each in docs/08:
+   - the lens's question pasted on as a card's opener (`card.md` line 27, `lib/lenses.ts`);
+   - a lesson said outright (`learns_to_act`);
+   - loose facts a parent should know (M4's list);
+   - `db:push:live` never answers the CLI's `[Y/n]`, though its comment says it asks first;
+   - a recording and "Read it to me" can play at the same time;
+   - the hear and say routes log nothing when they fail.
+
+   A card v7 for the openers and the lessons goes in the report as a proposed row, for you. The model-as-judge row is
+   already at the top of Next (the chat, today).
+3. **I recommend `/wwc:close`, not `/wwc:release`.** `main` already serves every line the boys use. What remains is
+   records only, and a release would redeploy production with nothing changed for a child. The judge job's release
+   carries the records this week.
+
+**Your look, the one check left, in exact words:**
+
+- "On a boy's iPad, on a card, one hold of Talk with a word spoken puts the word in the answer box."
+
+If it failed, name what it showed: that is a fix round, and this stop comes again. If nobody has tried it yet, say
+"Talk not tried" with the close word. The close then records Talk on live as unproven: the fix was proved only on a
+production build against test, and a boy can still type his answer.
+
+Beyond this job, for your eye: week 1 ends Sunday 1 Nov. The wall is empty from Monday 2 Nov unless 28 more short
+lessons are picked by Saturday 31 Oct (a row at Next).
