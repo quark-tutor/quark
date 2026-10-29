@@ -19,10 +19,14 @@
 //   npm run fixture -- forget <device id>   forget that device, as "Forget this iPad" does
 //   npm run fixture -- judge [model]        the judge of a child's answer over slice 1's invented answers and the answers
 //                                           to a hint, the word rule beside it (scripts/judge-table.mts); reads no database
-// unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does.
+//   npm run fixture -- today <date>         move that day's cards to today where the family lives and set their week
+//                                           live, for a look on June's iPad when test's week has no card today
+// unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
+// moves a date and sets a week live, as a guardian's Looks-good tap would, and writes an audit row naming itself.
 
 import { createClient } from "@supabase/supabase-js";
 import { givesAway } from "../core/curation/cards.ts";
+import { todayIn } from "../core/curation/week.ts";
 import { forVoice, readLine, speechPath } from "../core/wall/speech.ts";
 import { createHash, randomBytes } from "node:crypto";
 import { announceTarget } from "./target.ts";
@@ -322,9 +326,26 @@ if (command === "show") {
 } else if (command === "forget") {
   must(await db.from("devices").update({ revoked_at: new Date().toISOString() }).eq("family_id", familyId).eq("id", arg).select("id"), "devices");
   console.log(`Forgot device ${arg}.`);
+} else if (command === "today") {
+  // For a look on June's iPad (docs/judge-slice.md, stop 2): test's week may have no card today. Every card of the day
+  // named keeps its verdict and moves to today, and its week goes live. Test only, as everything here.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(arg ?? "")) throw new Error("Say which day to move: npm run fixture -- today 2026-10-25");
+  const tz = (must(await db.from("families").select("timezone").eq("id", familyId).single(), "families") as { timezone: string }).timezone;
+  const to = todayIn(tz);
+  const cards = must(await db.from("cards").select("id, theme_id, policy").eq("family_id", familyId).eq("day", arg), "cards") as { id: string; theme_id: string; policy: string }[];
+  if (cards.length === 0) throw new Error(`No cards on ${arg}.`);
+  const themes = [...new Set(cards.map((c) => c.theme_id))];
+  if (themes.length !== 1) throw new Error(`The cards of ${arg} are in ${themes.length} weeks; expected one.`);
+  const today = must(await db.from("cards").select("id").eq("family_id", familyId).eq("day", to), "cards") as unknown[];
+  if (today.length) throw new Error(`${to} already has ${today.length} cards; nothing moved.`);
+  console.log(`About to move the ${cards.length} cards of ${arg} (${cards.filter((c) => c.policy === "passed").length} passed) to ${to}, and set their week live.`);
+  must(await db.from("cards").update({ day: to }).eq("family_id", familyId).eq("day", arg).select("id"), "cards");
+  must(await db.from("themes").update({ status: "live" }).eq("family_id", familyId).eq("id", themes[0]).select("id"), "themes");
+  must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.today", target: { from: arg, to, theme: themes[0] } }).select("id"), "audit_log");
+  console.log(`Done. ${to} has the cards of ${arg}, and the week is live on test.`);
 } else if (command === "judge") {
   await (await import("./judge-table.mts")).runJudgeTable(arg);
 } else {
-  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | speech [n] | card <id> | numbers <week> | day <date> | device <n> | forget <device id> | judge [model]");
+  console.log("Usage: npm run fixture -- show <week> | unpass <week> | delete-week <week> | audit [n] | runs [n] | answers [n] | speech [n] | card <id> | numbers <week> | day <date> | device <n> | forget <device id> | judge [model] | today <date>");
   process.exit(1);
 }
