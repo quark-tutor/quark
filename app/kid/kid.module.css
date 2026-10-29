@@ -394,6 +394,18 @@
   flex-basis: 100%;
 }
 
+/* The question again, under the last reply and just above the box, so the box always answers the question and
+   never the clue (docs/judge-slice.md). Smaller than the question at the top, in the same words. */
+.again {
+  margin: 0;
+  padding-left: 12px;
+  border-left: 4px solid var(--line);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
 /* The child's own guess, kept on screen beside the reply it got. */
 .said {
   align-self: flex-end;

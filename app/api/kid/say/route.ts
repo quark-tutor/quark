@@ -3,7 +3,7 @@ import { getDevice } from "@/lib/device";
 import { sayLine } from "@/lib/wall";
 
 // "Read it to me" from the paired iPad (docs/tutor-voice-slice.md): the line is named by its card and part
-// ("<card id>.hint.0") or is one of the wall's own sentences ("wall.thinkAbout"), never free text. The answer is
+// ("<card id>.hint.0") or is one of the wall's own sentences ("wall.clue"), never free text. The answer is
 // a redirect to a signed URL to the line's audio in the tutor's voice, so the player, started inside the tap,
 // follows it and plays. The audio is made the first time and stored; a line the child can't see now is
 // refused. Nothing about the child is written, and nothing here logs.

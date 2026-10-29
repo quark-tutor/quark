@@ -3,8 +3,10 @@ import type { Slot } from "./card.ts";
 // Every sentence the Wonder Wall says of its own, in one place for June to read (docs/wonder-wall-1-slice.md,
 // decision 5). Effort words only, never brilliance words (rule 8; a test holds it), and the manner rules: no
 // sarcasm, no lecture, nothing about the child's past behaviour, no shame, always a way back in. They hold
-// under every family's praise setting. The reply to a guess that isn't judged right never says it was wrong:
-// the matcher misreads two in three right answers in a child's own words (Brandon, 21 Oct 2026: no "Not yet").
+// under every family's praise setting. The reply to a guess that isn't judged right never says it was wrong
+// (Brandon, 21 Oct 2026: no "Not yet"). Each verdict of the judge (core/wall/judge.ts) has its line here, and the
+// child hears only these, never a word the judge wrote (docs/judge-slice.md, 28 Oct 2026): a clue, not a question,
+// and an answer to the clue is thinking on the way, so the question is asked again.
 
 export const SLOT_NAMES: Record<Slot, string> = { look: "Look", wonder: "Wonder", listen: "Listen", then: "Then", puzzle: "Puzzle" };
 
@@ -21,7 +23,9 @@ export const SAY = {
   typeHere: "Type your answer",
   send: "That's my answer",
   guessFirst: "Have a guess first. Any guess is fine.",
-  thinkAbout: "Here's something to think about:",
+  clue: "Here's a clue:",
+  close: "You're close.",
+  toQuestion: "Good thinking. Now, the question:",
   right: "That's it.",
   deeper: "Go deeper",
   toTalkAbout: "That's one to talk about.",

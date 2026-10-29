@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { hearCost, sayCost } from "../prices.ts";
-import { chainState, isDone, type AttemptRow, type Slot } from "./card.ts";
+import { chainState, isDone, spendsHint, type AttemptRow, type Slot } from "./card.ts";
 import { ANSWER_MAX, chainOf, onWall, today, type Scope, type WallStore } from "./flow.ts";
 import { SAY } from "./words.ts";
 
@@ -20,7 +20,7 @@ export type SpeechStore = WallStore & {
 };
 
 // The wall's own sentences the tutor may say, from core/wall/words.ts.
-export const SPOKEN_REPLIES = ["nothingToday", "everythingDone", "guessFirst", "thinkAbout", "right", "toTalkAbout", "forAPerson", "didntSend"] as const;
+export const SPOKEN_REPLIES = ["nothingToday", "everythingDone", "guessFirst", "clue", "close", "toQuestion", "right", "toTalkAbout", "forAPerson", "didntSend"] as const;
 export type SpokenReply = (typeof SPOKEN_REPLIES)[number];
 
 export type Line =
@@ -30,7 +30,7 @@ export type Line =
 
 const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 
-// "<card id>.read", "<card id>.question", "<card id>.hint.0", "<card id>.handoff", or "wall.thinkAbout".
+// "<card id>.read", "<card id>.question", "<card id>.hint.0", "<card id>.handoff", or "wall.clue".
 export function parseLine(line: string): Line | null {
   const wall = /^wall\.(\w+)$/.exec(line);
   if (wall) return (SPOKEN_REPLIES as readonly string[]).includes(wall[1]) ? { wall: wall[1] as SpokenReply } : null;
@@ -40,12 +40,13 @@ export function parseLine(line: string): Line | null {
   return { cardId: card[1], part: card[2] as "read" | "question" | "handoff" };
 }
 
-// The hints a layer the child has finished showed: one per wrong guess before the right one.
+// The hints a layer the child has finished showed: one per wrong guess before the right one, and none for an
+// answer to the hint, as chainState() counts them.
 function hintsSeenBefore(attempts: AttemptRow[], questionId: string, hints: number): number {
   let wrong = 0;
   for (const a of [...attempts].filter((x) => x.question_id === questionId).sort((x, y) => x.created_at.localeCompare(y.created_at))) {
     if (a.correct !== false) break;
-    wrong += 1;
+    if (spendsHint(a)) wrong += 1;
   }
   return Math.min(wrong, hints);
 }

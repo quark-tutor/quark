@@ -68,7 +68,7 @@ describe("a line's name", () => {
   it("is a card and a part, or one of the wall's replies, and nothing else", () => {
     expect(parseLine(lineId(ID(1), "read"))).toEqual({ cardId: ID(1), part: "read" });
     expect(parseLine(lineId(ID(1), 0))).toEqual({ cardId: ID(1), part: "hint", hint: 0 });
-    expect(parseLine("wall.thinkAbout")).toEqual({ wall: "thinkAbout" });
+    expect(parseLine("wall.clue")).toEqual({ wall: "clue" });
     for (const bad of ["", "Hello there", `${ID(1)}.text`, `${ID(1)}.hint.x`, "wall.hello", "wall.typeHere", "not-a-uuid.read"]) {
       expect(parseLine(bad), bad).toBeNull();
     }
