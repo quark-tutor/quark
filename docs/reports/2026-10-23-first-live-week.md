@@ -715,3 +715,36 @@ production build against test, and a boy can still type his answer.
 
 Beyond this job, for your eye: week 1 ends Sunday 1 Nov. The wall is empty from Monday 2 Nov unless 28 more short
 lessons are picked by Saturday 31 Oct (a row at Next).
+
+## Stop 7's go, and the job's steps done (28 Oct 2026, 20:17 to 20:22 HST)
+
+Brandon: "go. Talk and "Read it to me" both work on the boys' iPads since the fix; three nights in and they're
+enjoying it. Yes to the one log line on a hear failure, never the child's words. One finding for the close: hints
+are written as questions, so the boys answer the hint instead of the original question and are judged wrong; it
+goes into the model-as-judge brief, which is next."
+
+- **Stop 7 passed.** Talk works on live on both boys' iPads, so `77f187e` is proven on Vercel. "Read it to me" was
+  proven on Monday. The boys are on live.
+- **The log line, done (`178b0f0`).** When Talk fails, the hear route now logs one line: `hear: Talk failed` and the
+  error's message. It never logs the clip, its words or the child. The answer is still a 502.
+  - **Why the key needed a fix too:** `JSON.parse` quotes the text around a fault in its message. Node 24, on a
+    broken key: `Unexpected token 'M', ..."ate_key": MIIEvQIBAD"... is not valid JSON`. So a malformed
+    `GOOGLE_CREDENTIALS_JSON` would have put a piece of the private key into Vercel's logs. The adapter now fails
+    with "GOOGLE_CREDENTIALS_JSON is not valid JSON." and quotes nothing.
+  - **The tests:** `lib/kid-wiring.test.ts` held "nothing on the kid path logs". It now holds that the hear route is
+    the one file that logs, and that its only log call is that exact line. `core/speech/google.test.ts` holds the
+    plain message: a broken key, and a message that quotes none of it.
+  - **The rule:** this changes slice 1's decision that nothing on the kid path logs, on your words. Rule 7 holds: no
+    child data reaches the log.
+  - **Checks:** 391 tests passed; typecheck clean; lint clean on the four files.
+  - **Not on live yet:** it reaches Vercel with the next release (the judge job's).
+- **The say route still logs nothing when it fails.** Your yes named hear, so I left say alone. It stays a bug line
+  at the close, replacing item 2's "the hear and say routes".
+- **The hints finding is already in the judge brief.** `docs/judge-slice.md`, *Why*, quotes you on it ("some of the
+  hints also sound like questions…"), and its board row says "hints framed as clues". The close records it here as
+  this job's finding, and I added nothing to the brief.
+
+**The state.** Every step of the brief is done but the close. Commits since the last push: `27d70fc` and `178b0f0`
+on `phase-4-wonder-wall`, not yet pushed (the close pushes them). The chat's board edits and `docs/judge-slice.md`
+are still uncommitted, for the close's own commit (decision 1 above). Money: $18.11, unchanged; this session spent
+nothing.
