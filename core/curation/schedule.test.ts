@@ -53,15 +53,29 @@ describe("weekSchedule", () => {
     );
   });
 
-  it("fits the 28 picked lessons into week 1 exactly", async () => {
+  it("fits the picked lessons into weeks 1 and 2 exactly, with the vote on Election Day", async () => {
     const { readFileSync } = await import("node:fs");
     const { join } = await import("node:path");
     const { parseLibrary } = await import("../../lib/plan");
     const lib = parseLibrary(readFileSync(join(__dirname, "..", "..", "plan", "short-lessons.yaml"), "utf8"));
     const lessons = lib.lessons.map((l) => ({ id: l.key, slot: l.slot, title: l.title }));
-    const week = weekSchedule({ week: 1, thread, lessons, used: new Set() });
-    expect(week[0].topics).toEqual({ look: "great-wave", wonder: "leap-years", listen: "carnival-of-the-animals", then: "egypt-1", puzzle: "two-dice" });
-    expect(week[6].topics).toEqual({ look: "van-gogh-bedroom", wonder: "how-fossils-form", listen: "aloha-oe", then: "egypt-7", puzzle: "sunflower-spirals" });
-    expect(() => weekSchedule({ week: 2, thread, lessons, used: new Set(lessons.map((l) => l.id)) })).toThrow(/Not enough short lessons for week 2/);
+    const shortIn = (week: ReturnType<typeof weekSchedule>) => week.flatMap((d) => SLOT_ORDER.filter((s) => s !== d.thread).map((s) => d.topics[s]));
+
+    const week1 = weekSchedule({ week: 1, thread, lessons, used: new Set() });
+    expect(week1[0].topics).toEqual({ look: "great-wave", wonder: "leap-years", listen: "carnival-of-the-animals", then: "egypt-1", puzzle: "two-dice" });
+    expect(week1[6].topics).toEqual({ look: "van-gogh-bedroom", wonder: "how-fossils-form", listen: "aloha-oe", then: "egypt-7", puzzle: "sunflower-spirals" });
+    const used = new Set(shortIn(week1));
+    expect(used).toEqual(new Set(lessons.slice(0, 28).map((l) => l.id)));
+
+    // Week 2 (picked 1 Nov 2026) starts Monday 2 Nov, so day 2 is Tuesday 3 Nov, Election Day.
+    const week2 = weekSchedule({ week: 2, thread, lessons, used });
+    expect(week2[0].topics).toEqual({ look: "snap-the-whip", wonder: "egypt-8", listen: "carillon-twinkle", then: "tele-words", puzzle: "measuring-feet" });
+    expect(week2[1].topics).toEqual({ look: "egypt-9", wonder: "why-ice-floats", listen: "steel-guitar", then: "duke-kahanamoku", puzzle: "how-a-vote-counts" });
+    expect(week2[6].topics).toEqual({ look: "vermeer-light", wonder: "egypt-14", listen: "mountain-king", then: "louis-braille", puzzle: "flag-arrays" });
+    expect(new Set(shortIn(week2))).toEqual(new Set(lessons.slice(28, 56).map((l) => l.id)));
+
+    // Week 3 has nothing left, so a Sunday firing for it refuses before spending.
+    const both = new Set([...used, ...shortIn(week2)]);
+    expect(() => weekSchedule({ week: 3, thread, lessons, used: both })).toThrow(/Not enough short lessons for week 3/);
   });
 });

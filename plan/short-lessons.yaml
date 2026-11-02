@@ -2,7 +2,8 @@
 # Decided 16 Oct 2026 (docs/08): a week is a mix, one slot a day for the running thread and four
 # for short lessons, taken in this file's order, the next unused lesson for each open slot.
 # Drafted by Claude Code, picked by Brandon and June; the candidates and why each picture was
-# picked are in plan/candidates/short-lessons.md.
+# picked are in plan/candidates/short-lessons.md (week 1's 28, 16 Oct 2026) and
+# plan/candidates/short-lessons-2.md (week 2's 28, picked 1 Nov 2026, added after week 1's).
 #
 # Format: lib/plan.ts (ShortLesson). Import with npm run plan:import. Summaries are for the tutor,
 # not the child: plain facts, the mechanism named. Every lesson says which values points it
@@ -266,6 +267,243 @@ sources:
     title: Seeding sunflower (Morgan Sessions)
     publisher: Wikimedia Commons
     url: https://commons.wikimedia.org/wiki/File:Seeding_sunflower_(Unsplash).jpg
+    license: CC0
+
+  # --- week 2 (picked 1 Nov 2026; plan/candidates/short-lessons-2.md) ---
+  # look
+  - id: met-homer-snap-the-whip
+    title: Snap the Whip, Winslow Homer, 1872
+    publisher: The Metropolitan Museum of Art, 50.41
+    url: https://www.metmuseum.org/art/collection/search/11140
+    license: CC0
+  - id: met-homer-snap-the-whip-engraving
+    title: Snap-the-Whip, after Winslow Homer, Harper's Weekly, 20 September 1873
+    publisher: The Metropolitan Museum of Art, 29.88.9(6)
+    url: https://www.metmuseum.org/art/collection/search/349160
+    license: CC0
+  - id: commons-durer-rhinoceros-nga
+    title: The Rhinoceros, Albrecht Dürer, 1515 (National Gallery of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Albrecht_Dürer,_The_Rhinoceros,_1515,_NGA_47903.jpg
+    license: CC0
+  - id: commons-cassatt-blue-armchair-nga
+    title: Little Girl in a Blue Armchair, Mary Cassatt, 1878 (National Gallery of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Mary_Cassatt,_Little_Girl_in_a_Blue_Armchair,_1878,_NGA_61368.jpg
+    license: CC0
+  - id: commons-owen-jones-moresque-5
+    title: Moresque No. 5, tile patterns from the Alhambra, Owen Jones, The Grammar of Ornament, 1868
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Owen_Jones_-_Grammar_of_Ornament_-_1868_-_plate_043_-_300ppi.jpg
+    license: public domain
+  - id: met-tile-panel-stars
+    title: Tile Panel, Iran, late 13th to first half of the 14th century
+    publisher: The Metropolitan Museum of Art, 1975.350.4
+    url: https://www.metmuseum.org/art/collection/search/452791
+    license: CC0
+  - id: commons-kapa-hma-1084
+    title: Kapa (bark cloth) from Hawaii, Honolulu Museum of Art 1084.1
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Kapa_(bark_cloth_from_Hawaii,_Honolulu_Museum_of_Art_accession_1084.1.jpg
+    license: CC0
+  - id: commons-kapa-hma-18th-century
+    title: Kapa (bark cloth) from Hawaii, late 18th to early 19th century (Honolulu Museum of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Kapa_(bark_cloth)_from_Hawaii,_late_18th-early_19th_century,_Honolulu_Academy_of_Arts.JPG
+    license: CC0
+  - id: met-vermeer-water-pitcher
+    title: Young Woman with a Water Pitcher, Johannes Vermeer, about 1662
+    publisher: The Metropolitan Museum of Art, 89.15.21
+    url: https://www.metmuseum.org/art/collection/search/437881
+    license: CC0
+  # wonder
+  - id: commons-noaa-iceberg-southern-ocean
+    title: Iceberg, Southern Ocean (NOAA Photo Library)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Iceberg._Southern_Ocean_-_Flickr_-_NOAA_Photo_Library.jpg
+    license: public domain (NOAA)
+  - id: commons-noaa-iceberg-revelle
+    title: The research ship Roger Revelle beside an Antarctic iceberg (NOAA Photo Library)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Post0032_-_Flickr_-_NOAA_Photo_Library.jpg
+    license: public domain (NOAA)
+  - id: commons-modis-hawaii-2017
+    title: The Hawaiian islands from orbit, MODIS, July 2017 (NASA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaii_(MODIS_2017-08-28).jpg
+    license: public domain (NASA)
+  - id: commons-nasa-waimea-canyon
+    title: Waimea Canyon, Kauaʻi (NASA Image of the Day)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Waimea_Canyon,_Kaua'i,_Image_of_the_Day_DVIDS856257.jpg
+    license: public domain (NASA)
+  - id: commons-noaa-lightning-oklahoma
+    title: Lightning, Oklahoma, 1 May 2009 (NOAA, Sean Waugh)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Nssl0217_-_Flickr_-_NOAA_Photo_Library.jpg
+    license: public domain (NOAA)
+  - id: commons-schott-magdeburg-hemispheres
+    title: The Magdeburg hemispheres, engraving after Gaspar Schott's account, 1657
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Magdeburg.jpg
+    license: public domain
+  - id: commons-loc-guericke-horses-1672
+    title: Teams of horses trying to pull apart the copper spheres, from Otto von Guericke's book of 1672 (Library of Congress)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Teams_of_horses_trying_unsuccessfully_to_pull_apart_vacuum-filled_copper_spheres,_also_depicted_in_detail_above,_in_Magdeburg_demonstration_for_Emperor_Ferdinand_III_LCCN92518531.jpg
+    license: public domain
+  - id: commons-usgs-hawaiian-hoary-bat
+    title: Hawaiian hoary bat, ʻōpeʻapeʻa (Frank Bonaccorso, USGS)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaiian_hoary_bat_Lasiurus_cinereus_semotus.jpg
+    license: public domain (USGS)
+  # listen
+  - id: commons-nps-carillon-twinkle
+    title: Twinkle, Twinkle, Little Star on the Netherlands Carillon (National Park Service), 2012
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Twinkle_Twinkle_Little_Star_on_the_Netherlands_Carillon.ogg
+    license: public domain (US National Park Service)
+  - id: commons-highsmith-netherlands-carillon
+    title: The Netherlands Carillon, Arlington, Virginia (Carol M. Highsmith)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Looking_W_at_Netherlands_Carillon_-_GW_Memorial_Parkway_-_Arlington_VA_USA_-_between_1980_and_2006.jpg
+    license: public domain
+  - id: commons-ferera-louise-portuguese-tango-1916
+    title: Hawaiian Portuguese Tango, Frank Ferera and Helen Louise, guitars, Victor, 1916
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Frank_Ferera,_Helen_Louise_-_Hawaiian_Portuguese_Tango.ogg
+    license: public domain (US recording of 1916)
+  - id: commons-kekuku-lat-1912
+    title: Joseph Kekuku, Los Angeles Times, 1912
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Joseph_Kekuku_in_the_Los_Angeles_Times_1912_(cropped).jpg
+    license: public domain
+  - id: commons-usaf-rockies-bumblebee-2007
+    title: Flight of the Bumblebee (Rimsky-Korsakov), Concert Band of the United States Air Force Band of the Rockies, 2007
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Flight_of_the_Bumblebee_-_Concert_Band_-_United_States_Air_Force_Band_of_the_Rockies.mp3
+    license: public domain (US Air Force)
+  - id: commons-joplin-maple-leaf-roll-1916
+    title: Maple Leaf Rag, played by Scott Joplin, from his piano roll of 1916
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Maple_leaf_rag_-_played_by_Scott_Joplin_1916_V2.ogg
+    license: public domain
+  - id: commons-joplin-1903
+    title: Scott Joplin, 1903 (St. Louis Globe-Democrat)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Scott_Joplin_19072.jpg
+    license: public domain
+  - id: commons-nps-hawaiian-petrel-haleakala
+    title: Hawaiian petrel, ʻuaʻu, calling at Haleakalā National Park (National Park Service), 2008
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaiian_Petrel_Haleakala_National_Park.ogg
+    license: public domain (US National Park Service)
+  - id: commons-nps-hawaiian-petrel-burrow
+    title: Hawaiian petrel in its burrow (National Park Service)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaiian_Petrel_Pterodroma_sandwichensis_in_burrow.jpg
+    license: public domain (US National Park Service)
+  - id: commons-musopen-mountain-king
+    title: In the Hall of the Mountain King (Grieg), Czech National Symphony Orchestra for Musopen, 2012
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Musopen_-_In_the_Hall_Of_The_Mountain_King.ogg
+    license: public domain
+  # then
+  - id: commons-nara-bell-telephone-patent
+    title: Alexander Graham Bell's telephone patent drawing, 7 March 1876 (National Archives)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Alexander_Graham_Bell's_Telephone_Patent_Drawing_and_Oath_-_NARA_-_302052_(page_2).jpg
+    license: public domain
+  - id: commons-duke-kahanamoku-1912
+    title: Duke Kahanamoku, Stockholm, 1912 (Axel Malmström)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Duke_Kahanamoku_1912.jpg
+    license: public domain
+  - id: commons-duke-kahanamoku-surfboard
+    title: Duke Paoa Kahanamoku with his surfboard, about 1910-15 (Hawaiʻi State Archives)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Anonymous_photograph_of_Duke_Paoa_Kahanamoku_with_his_surfboard_(PPWD-13-3-007).jpg
+    license: public domain
+  - id: commons-manookian-maui-snaring-sun
+    title: Maui Snaring the Sun, Arman Tateos Manookian, about 1927 (Honolulu Museum of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Maui_Snaring_the_Sun_by_Arman_Tateos_Manookian,_c._1927,_drawing,_Honolulu_Museum_of_Art.jpg
+    license: public domain
+  - id: commons-nps-haleakala-crater
+    title: Haleakalā Crater (National Park Service)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Haleakala_crater_(NPS).jpg
+    license: public domain (US National Park Service)
+  - id: commons-rackham-tortoise-hare-1912
+    title: The Hare and the Tortoise, Arthur Rackham, Aesop's Fables, 1912
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Tortoise_and_hare_rackham.jpg
+    license: public domain
+  - id: commons-winter-tortoise-hare-1919
+    title: The Tortoise and the Hare, Milo Winter, The Aesop for Children, 1919
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:The_Tortoise_and_the_Hare_-_Project_Gutenberg_etext_19994.jpg
+    license: public domain
+  - id: commons-thiriat-louis-braille
+    title: Louis Braille, engraving by Henri Thiriat, 1887
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Engraving_of_Louis_Braille_by_Henri_Thiriat_(cropped).jpg
+    license: public domain
+  - id: commons-braille-signs-brisbane-library
+    title: Braille signs at Brisbane Square Library (John Robert McPherson)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Braille_signs_at_Brisbane_Square_Library_P1450037.jpg
+    license: CC0
+  # puzzle
+  - id: commons-fotothek-feldmessen-1616
+    title: Measuring a field in rods and feet, from a German surveying book, 1616 (Deutsche Fotothek)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Fotothek_df_tg_0001710_Geometrie_^_Vermessung_^_Vermessungsinstrument_^_Messrute_^_Rute_^_Schuh.jpg
+    license: public domain
+  - id: commons-smithsonian-glass-ballot-box
+    title: Glass ballot box, about 1884 (National Museum of American History)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Glass_ballot_box_-_Smithsonian.jpg
+    license: public domain
+  - id: commons-smithsonian-wooden-ballot-box
+    title: Wooden ballot box, about 1870 (National Museum of American History)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Wooden_ballot_box_-_Smithsonian.jpg
+    license: public domain
+  - id: commons-playfair-bar-chart-1786
+    title: Exports and Imports of Scotland, 1780-81, William Playfair, The Commercial and Political Atlas, 1786
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:1786_Playfair_-_Exports_and_Imports_of_Scotland_to_and_from_different_parts_for_one_Year_from_Christmas_1780_to_Christmas_1781.jpg
+    license: public domain
+  - id: commons-hma-quilt-lei-mamo
+    title: Hawaiian quilt, Lei Mamo, late 19th century (Honolulu Museum of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaiian_quilt,_'Lei_Mamo',_late_19th_century.JPG
+    license: CC0
+  - id: commons-hma-quilt-na-kalaunu
+    title: Hawaiian quilt, Nā Kalaunu (Crowns), before 1918 (Honolulu Museum of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaiian_quilt,_Na_Kalaunu_(Crowns),.jpg
+    license: CC0
+  - id: commons-hawaii-quarter-1883
+    title: Quarter dollar (hapahā) of the Kingdom of Hawaiʻi, 1883
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:¼_Dollar_1883_Kalākaua_I._vz_-_MA-Shops.jpg
+    license: public domain
+  - id: commons-nmah-hawaii-dollar-1883
+    title: One dollar (akahi dala) of the Kingdom of Hawaiʻi, 1883 (National Museum of American History)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaii_1883_One_Dollar.jpg
+    license: public domain
+  - id: commons-proposed-48-star-flag-1912
+    title: The 48-star flag as planned, Evening Star, 30 June 1912
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Proposed_48_star_American_Flag.png
+    license: public domain
+  - id: commons-49-star-flag-1959
+    title: The 49-star flag, 1959 (newspaper drawing)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:49-star_American_Flag_(1959).png
     license: CC0
 
 lessons:
@@ -807,3 +1045,599 @@ lessons:
         angle), which packs the seeds with no gaps, and the spirals that show come in Fibonacci
         numbers. Pinecones and pineapples follow the same rule. Leonardo of Pisa, called Fibonacci,
         wrote about the sequence in 1202, in a puzzle about how fast rabbits multiply.
+
+  # ===== week 2: picked 1 Nov 2026 (plan/candidates/short-lessons-2.md) =====
+  # Week 2's thread (Egypt topics 8-14) takes wonder, look, listen, then, puzzle, then, wonder, so
+  # the week needs look 6, wonder 5, listen 6, then 5, puzzle 6, in this order within each slot.
+
+  # --- look ---
+  - key: snap-the-whip
+    subject: art
+    slot: look
+    title: Diagonal lines, and how Homer makes a still picture move
+    sources: [met-homer-snap-the-whip, met-homer-snap-the-whip-engraving]
+    values_points: []
+    summary:
+      "2-3": >-
+        In Winslow Homer's painting Snap the Whip (1872), boys hold hands in a long line and run
+        across a meadow outside a little red schoolhouse. The boys lean and tilt in slanting,
+        diagonal lines, which makes the still picture look as if it is moving. At the end of the
+        line, two boys have let go and fallen over.
+      "4-5": >-
+        In the game of snap the whip, the line swings around the boy at the front, and the ones at
+        the far end have to run fastest, because they go around the biggest circle in the same
+        time; that is why the end of the line lets go. Homer shows the motion with diagonals: bodies
+        leaning forward, legs stretched out, arms pulled tight, while the schoolhouse behind them
+        stands straight and still. Upright and flat lines look calm; slanting lines look like
+        movement. He painted two versions in 1872, and the Met's is the smaller one; the same scene
+        was printed as an engraving in Harper's Weekly magazine in 1873.
+
+  - key: durer-rhinoceros
+    subject: art
+    slot: look
+    title: A description, and the rhinoceros Dürer never saw
+    sources: [commons-durer-rhinoceros-nga]
+    values_points: []
+    summary:
+      "2-3": >-
+        In 1515 a real rhinoceros arrived by ship in Lisbon, Portugal, the first living one seen in
+        Europe for more than a thousand years. Albrecht Dürer, an artist in Germany, never saw it.
+        He made his famous picture from a letter describing it and a quick sketch, so his
+        rhinoceros looks as if it wears armor and has a little extra horn on its back. A picture
+        made from a description can only show what the words tell.
+      "4-5": >-
+        It was an Indian rhinoceros, sent to King Manuel I of Portugal as a gift from the ruler of
+        Gujarat, in India. In Nuremberg, Dürer worked from a letter and a sketch sent from Lisbon.
+        Real Indian rhinoceroses have thick folds of skin, and Dürer turned them into plates of
+        armor that look riveted together, gave the legs scales, and added a small twisted horn on
+        the shoulders that no rhinoceros has. His picture was a woodcut, printed again and again,
+        so thousands of copies spread, and for more than 200 years many books showed rhinoceroses
+        his way, until travelers drew real ones.
+
+  - key: blue-armchair
+    subject: art
+    slot: look
+    title: Body language, in Cassatt's Little Girl in a Blue Armchair
+    sources: [commons-cassatt-blue-armchair-nga]
+    values_points: []
+    summary:
+      "2-3": >-
+        Mary Cassatt, an American painter who lived in Paris, painted a little girl sprawled across
+        a big blue armchair, one arm behind her head, with a small dog asleep in the chair beside
+        her. Nobody has to say how she feels: the way she sits shows she is bored or tired. That is
+        body language.
+      "4-5": >-
+        Cassatt painted it in 1878. The girl was the daughter of a friend of the painter Edgar
+        Degas, and the dog was Cassatt's own small Brussels griffon. Body language is what a pose
+        says without words: the girl's sprawl and drooping head say she has had enough of sitting
+        still. Cassatt looked at her from low down, among big, puffy blue chairs, so the room seems
+        large and grown-up and the child small in it. Cassatt wrote years later that Degas advised
+        her on the background and even painted some of it.
+
+  - key: star-tiles
+    subject: art
+    slot: look
+    title: Tessellation, shapes that cover a floor with no gaps
+    sources: [commons-owen-jones-moresque-5, met-tile-panel-stars]
+    values_points: []
+    summary:
+      "2-3": >-
+        Some shapes fit together with no gaps and no overlaps, so they can cover a whole floor or
+        wall. Squares do it, and so do triangles and six-sided hexagons, like a bee's honeycomb. A
+        pattern like that is called a tessellation. Tile makers long ago cut stars and other shapes
+        that fit together the same way.
+      "4-5": >-
+        Of all the shapes with equal sides and equal angles, only three tessellate on their own:
+        the triangle, the square and the hexagon, because their corners fit exactly around a point
+        (six triangles, four squares or three hexagons make a full turn). Other shapes tessellate in
+        pairs, like eight-pointed stars with crosses between them. About 700 years ago, tile makers
+        in Iran cut glazed tiles into stars and other pieces and set them in mortar, and the
+        Alhambra palace in Granada, Spain, built mostly in the 1300s, has walls of interlocking tile
+        patterns that the designer Owen Jones drew and printed in color in 1868.
+
+  - key: hawaiian-kapa
+    subject: art
+    slot: look
+    title: Kapa, cloth beaten from bark and stamped with patterns
+    sources: [commons-kapa-hma-1084, commons-kapa-hma-18th-century]
+    values_points: []
+    summary:
+      "2-3": >-
+        Kapa is Hawaiian cloth made from bark. Kapa makers peeled the inner bark of the wauke plant,
+        soaked it and beat it with wooden beaters until it was thin and soft, then printed patterns
+        on it with small stamps carved from bamboo. The same lines and triangles repeat across the
+        cloth.
+      "4-5": >-
+        Wauke, the paper mulberry, came to Hawaiʻi in the voyaging canoes. Kapa makers, most of them
+        women, beat the soaked bark first with round beaters and then with four-sided beaters carved
+        with grooves, which pressed a pattern into the cloth like a watermark. They dyed it with
+        colors from plants and earth and decorated it with ʻohe kāpala, bamboo stamps carved with
+        lines, triangles and zigzags, a Hawaiian way of printing; one stamp pressed over and over
+        makes a repeating pattern. Kapa was used for clothing, such as the pāʻū skirt, and for bed
+        covers.
+
+  - key: vermeer-light
+    subject: art
+    slot: look
+    title: The light source, in Vermeer's woman with a water pitcher
+    sources: [met-vermeer-water-pitcher]
+    values_points: []
+    summary:
+      "2-3": >-
+        Johannes Vermeer, a Dutch painter, painted a young woman by a window, one hand on the open
+        window and the other on a silver water pitcher. Light comes in from the window on the left,
+        so everything is brightest on that side and the shadows fall away to the right. Finding
+        where the light comes from, the light source, helps you see the whole picture.
+      "4-5": >-
+        Vermeer painted this about 1662 in Delft, in the Netherlands, and in many of his paintings
+        the light comes through a window on the left. He watched how light changes across a room:
+        bright where it first lands, softer on the wall behind, and tinted blue in the shadows of the
+        woman's white headcloth. A map hangs on the wall, and a table covered with a rug holds a
+        jewel box and a basin. Artists say a picture has a light source, and every bright edge and
+        every shadow in it agrees with that one place.
+
+  # --- wonder ---
+  - key: why-ice-floats
+    subject: science
+    slot: wonder
+    title: Density, and why ice floats
+    sources: [commons-noaa-iceberg-southern-ocean, commons-noaa-iceberg-revelle]
+    values_points: []
+    summary:
+      "2-3": >-
+        When water freezes it gets bigger, so a chunk of ice weighs less than the same amount of
+        water, and it floats. That is why ice cubes bob at the top of a glass and an iceberg floats
+        in the sea, with most of it hidden under the water. A pond freezes on top first, and fish
+        live in the water underneath.
+      "4-5": >-
+        How heavy something is for its size is called density. Most things shrink and get denser
+        when they freeze, but water grows about 9 percent bigger, because its molecules lock into an
+        open, six-sided pattern in ice, the same pattern that gives a snowflake its six arms. So ice
+        is less dense than water and floats, with about nine-tenths of an iceberg under the surface.
+        In a lake in winter, the ice on top keeps the water below from freezing solid, so fish and
+        plants live through the cold.
+
+  - key: rain-shadow
+    subject: science
+    slot: wonder
+    title: The rain shadow, and why one side of an island is wet and the other dry
+    sources: [commons-modis-hawaii-2017, commons-nasa-waimea-canyon]
+    values_points: []
+    summary:
+      "2-3": >-
+        In Hawaiʻi the trade winds blow from the northeast, carrying damp air from the ocean. When
+        the wind meets a mountain, the air is pushed up, cools, and drops its water as rain, so that
+        side of the island is green and wet. By the time the air comes down the other side it is
+        dry, so that side is sunny and brown. The dry side is in the mountain's rain shadow.
+      "4-5": >-
+        Air cools as it rises, and cool air can't hold as much water vapor, so clouds and rain form
+        on the windward side of a mountain; coming down the leeward side, the air warms and dries
+        out. Hilo, on the windward side of the Big Island, gets about ten feet of rain a year, while
+        parts of the Kohala coast on the other side get less than a foot. On Kauaʻi, Mount
+        Waiʻaleʻale is one of the rainiest places on Earth, and Waimea Canyon, on the drier west
+        side, was carved by streams carrying that rain down from the mountains. From space, the
+        clouds can be seen piled up on the northeast sides of the islands.
+
+  - key: thunder-after-lightning
+    subject: science
+    slot: wonder
+    title: The speed of sound, counted from lightning to thunder
+    sources: [commons-noaa-lightning-oklahoma]
+    values_points: []
+    summary:
+      "2-3": >-
+        Lightning and thunder happen at the same moment, but we see the flash first and hear the
+        thunder later, because light travels much faster than sound. Sound takes about five seconds
+        to travel a mile. So if you count the seconds from the flash to the thunder and divide by
+        five, you know about how many miles away the lightning was. When thunder roars, go indoors.
+      "4-5": >-
+        Light travels about 186,000 miles a second, so the flash reaches us almost at once; sound in
+        air travels about 1,100 feet a second, roughly a mile in five seconds or a kilometer in
+        three. Thunder is the sound of air heated by the lightning, in a split second, hotter than
+        the surface of the Sun, so that it bursts outward. Counting from the flash to the bang and
+        dividing by five gives the distance in miles: 15 seconds is about 3 miles. Lightning can
+        strike 10 miles from a storm, so if you can hear thunder at all, it is close enough to be
+        dangerous, and the safe place is indoors.
+
+  - key: air-pressure
+    subject: science
+    slot: wonder
+    title: Air pressure, and the horses that couldn't pull two bowls apart
+    sources: [commons-schott-magdeburg-hemispheres, commons-loc-guericke-horses-1672]
+    values_points: []
+    summary:
+      "2-3": >-
+        Air presses on everything all the time, but we don't feel it because it pushes the same from
+        every side. About 370 years ago, Otto von Guericke put two copper bowls together and pumped
+        the air out from inside. With no air inside pushing back, the air outside held them together
+        so hard that teams of horses could not pull them apart.
+      "4-5": >-
+        Guericke, the mayor of Magdeburg in Germany, invented an air pump around 1650. His two
+        copper half-spheres were about 20 inches across; with the air pumped out, the air outside
+        pressed on them with about 15 pounds on every square inch, and two teams of horses pulling
+        in opposite directions could not separate them. When he let air back in through a valve,
+        they came apart by hand. He showed it to the emperor Ferdinand III in 1654 and in Magdeburg
+        afterward. The same air pressure holds a suction cup to a window and pushes a drink up a
+        straw.
+
+  - key: bat-echolocation
+    subject: science
+    slot: wonder
+    title: Echolocation, and Hawaiʻi's own bat
+    sources: [commons-usgs-hawaiian-hoary-bat]
+    values_points: []
+    summary:
+      "2-3": >-
+        The ʻōpeʻapeʻa, the Hawaiian hoary bat, is the only land mammal that lived in Hawaiʻi before
+        people came. It hunts flying insects at night. It makes clicking calls too high for us to
+        hear and listens for the echoes that bounce back off a moth, so it can find its food in the
+        dark. That is echolocation.
+      "4-5": >-
+        Echolocation means finding things by echo: the bat sends out short, very high calls, and from
+        how long each echo takes to come back, and which ear hears it first, it can tell how far
+        away a moth is and which way it is flying. The ʻōpeʻapeʻa weighs about half an ounce, roosts
+        alone in trees, and is found on all the main islands, most of all on Hawaiʻi Island; it is
+        Hawaiʻi's state land mammal. Dolphins use echolocation under water in the same way.
+
+  # --- listen ---
+  - key: carillon-twinkle
+    subject: music
+    slot: listen
+    title: The carillon, and one tune with three sets of words
+    sources: [commons-nps-carillon-twinkle, commons-highsmith-netherlands-carillon]
+    values_points: []
+    summary:
+      "2-3": >-
+        A carillon is a tower full of bells, each tuned to a different note, played from a keyboard
+        with the fists and feet. The Netherlands Carillon near Washington, D.C., has 50 bells. In
+        this recording it plays Twinkle, Twinkle, Little Star, and the same tune is also sung as the
+        ABC song and Baa, Baa, Black Sheep: one melody with three sets of words.
+      "4-5": >-
+        A carillon has at least 23 bells. The player sits at a keyboard of wooden levers pressed with
+        loosely closed fists, and pedals pressed with the feet, each wired to the clapper of one
+        bell, so a big bell's note keeps ringing long after it is struck. The melody of Twinkle,
+        Twinkle first appeared as a French song, Ah! vous dirai-je, maman, in 1761; Jane Taylor's
+        poem about a star was later sung to it, and so were the ABC song and Baa, Baa, Black Sheep.
+        Mozart wrote twelve variations on the French tune. The Netherlands Carillon was a thank-you
+        gift from the people of the Netherlands to the United States.
+
+  - key: steel-guitar
+    subject: music
+    slot: listen
+    title: The steel guitar, and the Hawaiian schoolboy who found its sound
+    sources: [commons-ferera-louise-portuguese-tango-1916, commons-kekuku-lat-1912]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Hawaiian steel guitar is played lying flat, with a smooth metal bar slid along the
+        strings, so the notes glide and slide into each other. The story is told that Joseph
+        Kekuku, a schoolboy at Lāʻie on Oʻahu, found a metal bolt, slid it along his guitar strings
+        and liked the sound. This recording, from 1916, is by Frank Ferera, a steel guitarist born in
+        Honolulu.
+      "4-5": >-
+        On an ordinary guitar a finger presses a string against a fret, so each note is fixed; on a
+        steel guitar the strings are raised off the frets and a steel bar slides along them, so the
+        player can glide between notes and bend them like a voice. Accounts of Kekuku's discovery in
+        the 1880s differ, but the one most told is that he began with a bolt, tried the back of a
+        knife and a steel comb, and ended with a polished steel bar, close to what players use
+        today. He left Hawaiʻi in 1904 and played across the United States and Europe, and the steel
+        guitar became so popular in the 1910s that its sound spread into American country music. In
+        this recording Ferera plays a duet with Helen Louise on a second guitar.
+
+  - key: bumblebee
+    subject: music
+    slot: listen
+    title: The chromatic scale, and how music buzzes like a bee
+    sources: [commons-usaf-rockies-bumblebee-2007]
+    values_points: []
+    summary:
+      "2-3": >-
+        In Flight of the Bumblebee, Nikolai Rimsky-Korsakov makes the music sound like a bee
+        darting around. He does it with very fast runs of notes that each move just a tiny step up
+        or down, like playing every key on a piano in a row, white and black. Those tiny steps make
+        the chromatic scale.
+      "4-5": >-
+        The chromatic scale uses all twelve notes in an octave, each a half step from the next, the
+        smallest step in most Western music; most tunes use only seven of the twelve. Rimsky-Korsakov
+        wrote the piece in 1899-1900 for his opera The Tale of Tsar Saltan, in which a prince is
+        turned into a bumblebee so he can fly across the sea. Fast, unbroken runs sliding up and
+        down by half steps, growing louder and softer, sound like a bee zooming close and away.
+        This recording is by a concert band of the United States Air Force, so the buzz is played
+        on wind instruments.
+
+  - key: maple-leaf-rag
+    subject: music
+    slot: listen
+    title: Syncopation, in Maple Leaf Rag, played by Scott Joplin
+    sources: [commons-joplin-maple-leaf-roll-1916, commons-joplin-1903]
+    values_points: []
+    summary:
+      "2-3": >-
+        Scott Joplin wrote Maple Leaf Rag in 1899. It is ragtime: the left hand keeps a steady
+        oom-pah beat, while the right hand's tune lands in between the beats, which makes it bouncy.
+        That is called syncopation. This is Joplin's own playing, saved on a piano roll in 1916.
+      "4-5": >-
+        Syncopation means putting the strong accents where you don't expect them, on the off-beats
+        between the steady beats; ragtime got its name from this "ragged" time. Joplin, born about
+        1868 in Texas, was a trained pianist and composer, and Maple Leaf Rag, published in Sedalia,
+        Missouri, and named after the Maple Leaf Club there, became one of the best-known pieces of
+        its day and earned him the name "King of Ragtime". A piano roll is a long paper roll with
+        holes punched where the keys were pressed, which a player piano plays back; this recording
+        was made from the holes of Joplin's own roll of 1916.
+
+  - key: hawaiian-petrel
+    subject: science
+    slot: listen
+    title: Nocturnal, the ʻuaʻu calling in the dark on Haleakalā
+    sources: [commons-nps-hawaiian-petrel-haleakala, commons-nps-hawaiian-petrel-burrow]
+    values_points: []
+    summary:
+      "2-3": >-
+        The ʻuaʻu, the Hawaiian petrel, is a seabird that spends its days far out at sea catching
+        food. It nests in deep burrows in the rocks high on Haleakalā, on Maui, and flies in and out
+        only after dark, calling to its mate with a long moan, "oo-ah-oo", which gave it its name.
+        An animal that is busy at night is nocturnal.
+      "4-5": >-
+        ʻUaʻu fly hundreds, even thousands, of miles out over the ocean to feed on squid and fish,
+        and come back to the same burrow year after year, arriving after nightfall. Haleakalā
+        National Park has more than a thousand of their burrows on the slopes of the crater, some in
+        cracks and lava tubes several feet deep. Each pair raises one chick a year. They are
+        endangered, so the park watches over the nests. Besides the moan they make yaps and barks,
+        a little like a small dog. This recording was made in the dark at Haleakalā by the National
+        Park Service in 2008.
+
+  - key: mountain-king
+    subject: music
+    slot: listen
+    title: Crescendo, in In the Hall of the Mountain King
+    sources: [commons-musopen-mountain-king]
+    values_points: []
+    summary:
+      "2-3": >-
+        In the Hall of the Mountain King, by Edvard Grieg, starts very softly, with low instruments
+        tiptoeing through one short tune. Then the tune is played again and again, each time louder
+        and faster, until the whole orchestra is crashing. Getting louder little by little is called
+        a crescendo.
+      "4-5": >-
+        Grieg wrote the music in 1875 for Henrik Ibsen's play Peer Gynt, for the scene where Peer
+        creeps into the hall of the troll king. The whole piece is one short tune repeated: it
+        begins in the bassoons and the low strings, very quietly, then climbs higher, adds more
+        instruments, and speeds up (an accelerando) while it grows louder (a crescendo), until it
+        ends in loud, crashing chords. Musicians mark a crescendo with a long, opening wedge under
+        the notes. Because the tune hardly changes, you can hear what loudness and speed alone do to
+        music.
+
+  # --- then ---
+  - key: tele-words
+    subject: literature
+    slot: then
+    title: A root word, tele-, "far", from the telephone to the telescope
+    sources: [commons-nara-bell-telephone-patent]
+    values_points: []
+    summary:
+      "2-3": >-
+        Tele- is a word part from Greek that means "far". A telephone carries a voice from far away,
+        a telescope helps you see far away, and television shows pictures from far away. Alexander
+        Graham Bell got his patent for the telephone in 1876. If you know what tele- means, you can
+        work out new words.
+      "4-5": >-
+        Many English words are built from Greek and Latin parts: telephone is tele (far) and phone
+        (sound or voice), telescope is tele and scope (look), and telegraph is tele and graph
+        (write). A word part that carries meaning like this is a root, and one that comes at the
+        front of a word, like tele-, works as a prefix. Bell's patent was granted on 7 March 1876,
+        and three days later he spoke over his telephone to his assistant: "Mr. Watson, come here,
+        I want to see you." The word telephone was already in use for earlier sound gadgets; Bell
+        gave the old word to a new machine.
+
+  - key: duke-kahanamoku
+    subject: history
+    slot: then
+    title: Heʻe nalu, and how Duke Kahanamoku took surfing to the world
+    sources: [commons-duke-kahanamoku-1912, commons-duke-kahanamoku-surfboard]
+    values_points: []
+    summary:
+      "2-3": >-
+        Duke Kahanamoku grew up swimming and surfing at Waikīkī in Honolulu. In 1912 he won the
+        Olympic gold medal for the 100-meter freestyle swim. Then he showed people in Australia and
+        California how to surf, so heʻe nalu, Hawaiian for "wave sliding", spread around the world.
+      "4-5": >-
+        Kahanamoku, born in Honolulu in 1890, swam with a powerful flutter kick and won Olympic gold
+        in Stockholm in 1912 and again in 1920. In Hawaiʻi, heʻe nalu was an old sport of chiefs and
+        commoners alike, ridden on long wooden boards. In 1914-15 Kahanamoku carved a board from
+        local wood and rode the waves at Freshwater Beach in Sydney, Australia, and he surfed and
+        taught in California too. He became known as the father of modern surfing and as Hawaiʻi's
+        ambassador of aloha, and a statue of him stands at Waikīkī.
+
+  - key: maui-and-the-sun
+    subject: literature
+    slot: then
+    title: Moʻolelo, and how Māui slowed the sun
+    sources: [commons-manookian-maui-snaring-sun, commons-nps-haleakala-crater]
+    values_points: [4]
+    perspective: several_fairly
+    summary:
+      "2-3": >-
+        In a Hawaiian moʻolelo, a story handed down by telling, Māui's mother Hina could never get
+        her kapa cloth dry, because the sun raced across the sky too fast. Māui climbed to the top of
+        Haleakalā, the "house of the sun", caught the sun's rays with strong ropes, and made the sun
+        promise to travel more slowly. Ever since, the story says, the days have been long enough.
+      "4-5": >-
+        Moʻolelo are Hawaiian stories, histories and legends kept by telling them aloud, generation
+        after generation, and many explain how something came to be. Māui is a hero of stories
+        across Polynesia, from Aotearoa (New Zealand) to Hawaiʻi; in Hawaiʻi he also fishes up
+        islands with a magic hook. In one telling, the sun agreed to go slowly for half the year,
+        which is why summer days are longer; in Honolulu a day in June has about thirteen and a half
+        hours of daylight, and a day in December under eleven. Haleakalā, on Maui, is a volcano
+        10,023 feet high, and people still climb it to watch the sun rise over its crater.
+
+  - key: tortoise-and-hare
+    subject: literature
+    slot: then
+    title: A moral, in The Tortoise and the Hare
+    sources: [commons-rackham-tortoise-hare-1912, commons-winter-tortoise-hare-1919]
+    values_points: []
+    summary:
+      "2-3": >-
+        In Aesop's fable, a hare laughs at a tortoise for being slow, so they race. The hare runs
+        far ahead and is so sure of winning that he lies down for a nap. The tortoise keeps going,
+        one step at a time, and crosses the finish line first. A fable ends with a short lesson
+        called a moral: slow and steady wins the race.
+      "4-5": >-
+        Aesop's fables come from ancient Greece, about 2,500 years ago; each is a short story,
+        usually with animals, told to teach one lesson, the moral, which is often said at the end.
+        The words of this one changed as people retold it, and "slow and steady wins the race" is
+        how it is said in English today. The hare loses not because he is slow but because he is
+        too sure of himself and stops trying; the tortoise wins by keeping on. Arthur Rackham drew
+        the race in 1912 and Milo Winter in 1919, and writers have retold it ever since.
+
+  - key: louis-braille
+    subject: history
+    slot: then
+    title: Braille, and the boy of fifteen who invented reading by touch
+    sources: [commons-thiriat-louis-braille, commons-braille-signs-brisbane-library]
+    values_points: []
+    summary:
+      "2-3": >-
+        Louis Braille lost his sight after an accident when he was three. At his school for blind
+        children in Paris, the books had big raised letters that were slow to read by touch. When
+        he was 15, he invented a better way: letters made of raised dots, in a small cell of six
+        places, that a fingertip can feel all at once. People still read braille today, in books
+        and on signs.
+      "4-5": >-
+        Braille was born in France in 1809. At school he learned of a code of raised dots made for
+        soldiers to read messages at night without a light; it used up to twelve dots for a sound,
+        too many for a fingertip. In 1824, at 15, he made it simpler: a cell two dots wide and three
+        tall, where each pattern of raised dots stands for a letter, a number or a punctuation mark,
+        and a fingertip covers a whole cell at once. Six places make 63 different patterns. He
+        published his system in 1829 and taught at the school; in 1854 it became France's official
+        system, and today braille is written in many languages and found on elevator buttons and
+        signs.
+
+  # --- puzzle ---
+  - key: measuring-feet
+    subject: math
+    slot: puzzle
+    title: A standard unit, from the days when a foot was somebody's foot
+    sources: [commons-fotothek-feldmessen-1616]
+    values_points: []
+    summary:
+      "2-3": >-
+        Long ago, a "foot" was measured with a real person's foot, so a foot measured by a tall man
+        was longer than one measured by a short man. That made trouble when people traded land or
+        cloth. So people agreed on one length for a foot that everyone uses, 12 inches. A length
+        everyone agrees on is a standard unit.
+      "4-5": >-
+        In 1535 a German book on measuring land, by Jacob Köbel, told how to make a fair "rod":
+        stand sixteen men, short and tall, in a line with their left feet heel to toe, and that
+        length is one rod; a sixteenth of it is a foot. Taking many feet together made the unit
+        fairer, but different towns still had different feet and rods. Today the foot is the same
+        everywhere: since 1959 it has been exactly 0.3048 meters, so a ruler in Hawaiʻi matches a
+        ruler in Maine. The woodcut, from a German surveying book of 1616, shows a man measuring a
+        field in rods and feet.
+
+  - key: how-a-vote-counts
+    subject: math
+    slot: puzzle
+    title: A majority, and how a vote is counted
+    sources: [commons-smithsonian-glass-ballot-box, commons-smithsonian-wooden-ballot-box]
+    values_points: [14]
+    perspective: several_fairly
+    summary:
+      "2-3": >-
+        When a group votes, each person gets one vote, and the votes are counted, often with tally
+        marks in bundles of five. If one choice gets more than half of all the votes, it has a
+        majority and wins. If two choices get the same number, it is a tie. Tuesday, 3 November, is
+        Election Day in the United States, when grown-ups vote.
+      "4-5": >-
+        With two choices, the one with more votes always has a majority, more than half. With three
+        or more, the one with the most votes may still have less than half: if 10 people vote 4, 3
+        and 3, the winner has the most votes, a plurality, but not a majority, and some groups then
+        vote again between the top two. Votes are counted with tally marks or by machine and checked
+        so everyone can trust the count; in the 1800s some towns used glass ballot boxes, so voters
+        could see the box was empty when voting began. Election Day in the United States is the
+        Tuesday after the first Monday in November, set by Congress in 1845, and in Hawaiʻi people
+        now vote by mail. This lesson is about counting votes, never about a party or a candidate.
+
+  - key: first-bar-chart
+    subject: math
+    slot: puzzle
+    title: The bar chart, invented in 1786
+    sources: [commons-playfair-bar-chart-1786]
+    values_points: []
+    summary:
+      "2-3": >-
+        A bar chart shows numbers as bars: the longer the bar, the bigger the number, so you can see
+        at a glance which is most and which is least. William Playfair, from Scotland, drew the
+        first one in 1786. His bars showed how much Scotland sold to and bought from other countries
+        in one year.
+      "4-5": >-
+        Playfair's bar chart, in his Commercial and Political Atlas of 1786, compared Scotland's
+        trade with 17 countries for the year from Christmas 1780 to Christmas 1781, with a pair of
+        bars for each country: what Scotland sold there (exports) and what it bought (imports). He
+        drew bars because he had numbers for only that one year, so a line across the years wasn't
+        possible. To read a bar chart, find the scale along the edge, then compare the lengths:
+        which is longest, which is shortest, and how much longer one is than another. Playfair also
+        drew the first line graphs and, later, the first pie chart.
+
+  - key: quilt-eighths
+    subject: math
+    slot: puzzle
+    title: Eighths, and the Hawaiian quilt cut from one folded cloth
+    sources: [commons-hma-quilt-lei-mamo, commons-hma-quilt-na-kalaunu]
+    values_points: []
+    summary:
+      "2-3": >-
+        A Hawaiian quilt pattern is cut from one big square of cloth folded into eight layers, like
+        folding paper to cut a snowflake. When the cloth is unfolded, the pattern has eight matching
+        parts, and each part is one eighth of the whole design. Fold a square in half, in half
+        again, and once more, and you have eighths.
+      "4-5": >-
+        Folding a square in half makes two equal parts, halves; folding again makes four, quarters;
+        a third fold makes eight, eighths, and one eighth is written 1/8. Hawaiian quilters fold the
+        cloth into eighths, cut a design of leaves, flowers or crowns through all the layers at
+        once, then open it and sew it onto a plain background, so every eighth is exactly the same.
+        Then they quilt it with rows of stitches that follow the shape outward, like ripples or
+        waves, called echo quilting. Hawaiian women made the quilt their own in the 1800s, with
+        designs from the plants and places of the islands, and families still hand the patterns
+        down.
+
+  - key: hawaiian-quarter
+    subject: math
+    slot: puzzle
+    title: A quarter, and the Kingdom of Hawaiʻi's hapahā
+    sources: [commons-hawaii-quarter-1883, commons-nmah-hawaii-dollar-1883]
+    values_points: []
+    summary:
+      "2-3": >-
+        In 1883 the Kingdom of Hawaiʻi made its own silver coins, with King Kalākaua's face on them.
+        The quarter dollar says HAPAHA, which means "one fourth part", because four quarters make
+        one dollar. The dollar coin says AKAHI DALA, "one dollar".
+      "4-5": >-
+        The 1883 coins were a dollar (akahi dala), a half dollar (hapalua), a quarter (hapahā) and a
+        dime (ʻumi keneta, "ten cents"); hapa means a part, so hapalua is one part of two and hapahā
+        one part of four. They were designed by Charles Barber and struck at the United States Mint
+        in San Francisco, the same size and silver as American coins, so the two could be used side
+        by side. A quarter is one fourth of a dollar, 25 cents, so 4 quarters, 2 halves or 10 dimes
+        each make a dollar. The back shows the kingdom's coat of arms and its motto, Ua mau ke ea o
+        ka ʻāina i ka pono, which is still Hawaiʻi's state motto.
+
+  - key: flag-arrays
+    subject: math
+    slot: puzzle
+    title: An array, and the stars on the flag in rows
+    sources: [commons-proposed-48-star-flag-1912, commons-49-star-flag-1959]
+    values_points: []
+    summary:
+      "2-3": >-
+        The stars on the flag of the United States sit in rows. From 1912 the flag had 48 stars in
+        6 rows of 8, and 6 times 8 is 48. In 1959 it had 49 stars in 7 rows of 7. When Hawaiʻi
+        became the 50th state, the stars were set in 9 rows: 5 rows of 6 and 4 rows of 5. Things set
+        out in equal rows are an array.
+      "4-5": >-
+        An array is a set of things in equal rows and columns: count one row and multiply by the
+        number of rows (6 × 8 = 48), and the same array shows division, because 48 shared into 6
+        equal rows is 8 in each, and 48 ÷ 8 = 6. The 50-star flag fits two arrays together, 5 rows
+        of 6 and 4 rows of 5, with the shorter rows tucked between the longer ones: 30 + 20 = 50.
+        Alaska became the 49th state in January 1959 and Hawaiʻi the 50th in August 1959, and each
+        new flag first flew on the Fourth of July after, in 1959 and 1960. The pictures are
+        newspaper drawings of the 48-star flag as it was planned in 1912 and of the 49-star flag.
