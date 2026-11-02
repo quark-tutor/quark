@@ -32,7 +32,39 @@ A free hint button turns into something to tap for the reaction, the same way ki
 - **One question, one way to answer.** Nothing decorative to tap. Young kids answer by voice, which takes more thought than tapping.
 - **Thinking happens off the screen.** The screen starts the thinking, and paper, conversation and the dinner table finish it.
 
-**As built in the Wonder Wall's slice 1 (22 Oct 2026):** the hints are the card's written ones, one at a time after a guess that isn't judged right, each under the child's own guess; a model's guiding question is a later slice. Answers are typed, with the iPad keyboard's dictation as the family's setting; spoken answers in the app are a later slice. A guess is judged in code, which misreads many right answers in a child's own words, so the reply never says a guess was wrong. docs/04, *How the Wonder Wall is built*.
+**As built in the Wonder Wall's slice 1 (22 Oct 2026):** the hints are the card's written ones, one at a time after a guess that isn't judged right, each under the child's own guess; a model's guiding question is a later slice. Answers are typed, with the iPad keyboard's dictation as the family's setting; spoken answers in the app are a later slice. A guess is judged in code, which misreads many right answers in a child's own words, so the reply never says a guess was wrong. docs/04, *How the Wonder Wall is built*. Since the tutor's slice 2 (28 Oct 2026), a model judges the guess and the written hints are framed as clues (below); a child can answer by voice with Talk since 23 Oct (docs/13).
+
+## How the judge of an answer is built
+
+Built 28 Oct 2026, the tutor's slice 2 (`docs/judge-slice.md`; report `docs/reports/2026-10-28-judge.md`), on `phase-4-wonder-wall`: proven on `quark-test` and on June's iPad as Bug (1 Nov 2026). Its migration is on live since 1 Nov 2026, by Brandon's hand; the code reaches the boys with a release (CLAUDE.md, *Where we are*, says when). Decisions in docs/08, *The model as judge of an answer*.
+
+- **The judge.** `judgeAnswer()` in `core/wall/judge.ts`, with its prompt `core/prompts/judge.md` v1, through the `judge` job of `core/model.ts`. The model is one line in code, `JUDGE_MODEL`, Haiku 5.5 (Brandon, 28 Oct 2026), thinking at low effort (`JUDGE_THINKING`), at most 300 tokens back. It reads the card's words, the question, the accepted answers and the key's note on what counts, the hints shown so far, the grade band from the card's level, and the child's words. Wherever the card's words or the child's carry the nickname, it goes as "the child" (a test holds it); nothing else about the child or the family goes (rule 7). It returns a reason of at most 15 words and one verdict:
+  - `right`: the child's words mean what an accepted answer means, in any wording; a guess holding both of a question's two choices is not right;
+  - `close`: the right idea, missing the point that makes it the answer;
+  - `hint`: the words answer the latest clue rather than the question (before any clue was shown, it counts as `not_yet`);
+  - `not_yet`: a real guess that is not it;
+  - `not_a_guess`: "I don't know" and the like, which `isGuess()` also catches before any call.
+- **A child is never kept waiting on the model.** The judge has 3 seconds in all (`JUDGE_BUDGET_MS`), with a second try only when the first failed with a second or more left. Past that, or on any error, the word rule (`judgeGuess()`, docs/04) judges, the reply is the word rule's, and the server logs one line: the error's message, never the child's words. A question with no accepted answers (every layer 4) calls no model.
+- **What the child hears is never the model's.** It is a line from `core/wall/words.ts` for the verdict (`answerReply()` in `core/wall/card.ts`):
+  - `right`: "That's it." and Go deeper;
+  - `close`: "You're close.", then "Here's a clue:" and the next hint;
+  - `hint`: "Good thinking. Now, the question:" and the question again, with no hint spent;
+  - `not_yet`: "Here's a clue:" and the next hint;
+  - `not_a_guess`: "Have a guess first. Any guess is fine.", with nothing written.
+
+  The reply's fields are unchanged, and a test holds that the judge's line never leaves the server.
+- **Hints spent, and the handoff.** `chainState()` counts a guess against the hints only when its verdict is `not_yet` or `close`, or when it has no verdict (a row from before the judge). So an answer to a clue spends no hint and never hands off. The hints still run out on `not_yet` and `close` guesses, and one more guess ends the card at a person.
+- **The page.** After every reply the question is shown again, smaller, just above the box, so the box always answers the question. A clue has its own "Read it to me". The hints' own wording is the card prompt's: they are framed as clues here, not yet written as clues.
+- **What is kept.** On `attempts`: `verdict`, `judged_by` (`model`, or `rule` when the word rule judged) and `reasoning`, the judge's line. Migration `20261029000000_attempt_verdict` added them; it was on test from 28 Oct and on live from 1 Nov 2026. `correct` is written as before: true for `right`; false for `close`, `hint` and `not_yet`. These are for the parents' log and never go to the iPad. Each answer judged also writes one `model_runs` row (kind `judge`, counts and money, no child). `/parent/models` shows those rows in a section of their own, "The judge of an answer": answers sent, those the word rule judged instead, the cost this month and since the start, a month at 40 answers a day, and whether Anthropic's key is set. They stay out of *Every run*.
+- **Measured** with `npm run fixture -- judge [model]`. It runs on test only and reads no database. It takes slice 1's 105 questions with 332 invented answers, plus 33 answers to a clue written from test's cards by an agent that never saw the prompt. Haiku 5.5 at low effort:
+  - judged 206 of 210 right answers right, where the word rule judged 84;
+  - judged none of the 105 wrong answers and none of the 17 both-choice answers right;
+  - caught 24 of 33 answers to a clue;
+  - sent 2 of 365 to the word rule;
+  - waited a median 1.10 s, 1.55 s at the 90th percentile;
+  - cost $0.00018 a call, about $0.25 a month for two boys at 40 answers a day.
+
+  On the dev server, against test, a whole reply took 3.5 to 3.7 s, and 6.2 s when the model ran past its limit; the laptop's database reads cross the Pacific. On live the first answers after the release are timed (Brandon, 1 Nov 2026).
 
 ## The session ends when the thinking stops (proposed)
 
