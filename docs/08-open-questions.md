@@ -356,6 +356,7 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
 
+- 1 Nov 2026, `content:fetch:live` (tooling): with 46 new items it printed only `Target: LIVE` for 12 minutes, though every item was stored, so it looked stuck; expected: a line as each item is fetched, then the table. `scripts/content-fetch.mts`. Size: minutes.
 - 26 Oct 2026, a card on the Wonder Wall (phase 4): a recording and "Read it to me" can play at the same time; expected: starting one stops the other. `app/kid/player.tsx`, `app/kid/read-aloud.tsx`. Size: an hour.
 - 26 Oct 2026, "Read it to me" on Vercel (phase 4): a failure answers 502 and logs nothing, so its cause cannot be seen; expected: one line with the error's message alone, as the hear route logs since 28 Oct. `app/api/kid/say/route.ts`. Size: minutes.
 - 23 Oct 2026, live week 1's cards (phase 3): about 80 of 280 open with the lens's question pasted on ("What's down there?" on a map, a fable, a tangram; "What's funny about…" on dice), and the gate's reader notes call most of them a poor fit; expected: the lens shapes the way in, never a stock opener that doesn't fit the card. `core/prompts/card.md` line 27, `lib/lenses.ts`. Size: a job.
