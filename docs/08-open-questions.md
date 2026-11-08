@@ -257,6 +257,21 @@ Briefs: `docs/week-2-slice.md` (1 Nov) and `docs/week-3-slice.md` (7 Nov), which
 - **Decided (9 Nov 2026, 10:52): the week 4 row.** Brandon: "Yes to the week 4 row." At the top of Next, in project *Week 2 builds itself*: week 4's 32 short lessons, picked from the 51 candidates by Saturday 14 Nov.
 - **Decided (9 Nov 2026, 11:01): the job closed and released.** Brandon typed `/wwc:release` at the last stop (*Your look*), his go for the look, after the reasons were in the report. *Replaces* the brief's close and hold (stop 4), written before the lines made ahead closed and came to wait on this release.
 
+## A theme a week: decided in the brief and the job (8 Nov 2026)
+
+Brief: `docs/theme-a-week-slice.md` (*Week 2 builds itself*), in a worktree branch `worktree-theme-a-week`, made from `phase-4-wonder-wall`; report `docs/reports/2026-11-08-theme-a-week.md`. Week 5's theme is the Moon (`plan/the-moon.yaml`, sequence 2); the bank of themes is `plan/candidates/themes.md`.
+
+- **Decided (8 Nov 2026, in the brief): the Hawaiʻi standard.** A Hawaiʻi topic or lesson is offered only when it clears "would a child who lives here learn something". It is written in specifics from sources deeper than an encyclopedia:
+  - the Hawaiʻi State Archives digital collections;
+  - the Hawaiian-language newspapers on Chronicling America;
+  - Fornander's collected moʻolelo and other public-domain tellings, named as the telling used;
+  - the Hawaiian Volcano Observatory and NPS Hawaiʻi;
+  - the Honolulu Museum of Art's CC0 works;
+  - Ulukau, where its license allows.
+
+  Brandon and June judge each Hawaiʻi offer at the pick, and may hand Code a line of what they or the boys know, which is written in (nothing naming a child). A Hawaiʻi theme week is written with June, at stop 1 or in the Saturday job, never checked after the fact. Brandon: the boys "live in Hawaii and know more about it than the tutor in many real ways. A lot of the Hawaii cards are poor in comparison." *Replaces* "Hawaiʻi in every slot, at least one" (the practice of 1 and 7 Nov 2026); weeks 2 and 3 on live are not rewritten.
+- **Decided (8 Nov 2026, stop 2): a Hawaiʻi line inside a theme about something else clears the standard when it ties the topic to what the boys know firsthand.** It is there for the tie, not to teach Hawaiian culture, which the boys learn from a Kumu. So the Moon keeps its two lines: day 1's basalt, the same rock as Hawaiʻi Island's lava flows, and day 3's Apollo crews training on Kīlauea and at Kapoho in 1969 and 1970, with NASA's photograph of Lovell and Haise on Kīlauea. Brandon: "the Hawaiʻi lines stay: they talk about local rocks the boys have real experience with, a real tie-in; they're not trying to teach Hawaiian culture to a child who is already learning from a Kumu."
+
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
 Brandon's review of the 14 Oct day 1 cards: a lot of words, one picture, and lines no human tutor would write. The worst was "Wren, you love art" on the listen card: it tells a child what he is instead of letting him see it for himself. Not a rule against definitional statements, which would bite later (calling a child a helper can be the right thing at the right moment). The question is the tutor's voice. Proposed as step 4d, after 2b, since a card that starts from a picture needs the picture.

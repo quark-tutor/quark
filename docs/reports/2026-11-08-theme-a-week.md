@@ -331,3 +331,24 @@ lessons)" today, or more once week 4's are in.
 Paste all three outputs. Then step 4 (the Saturday brief), then stop 3, the release.
 
 **Size:** a slice, 8 hours. The clock ran 36 minutes to stop 1, then from go (08:47) to this stop (09:00).
+
+### Go (8 Nov, 10:48 HST)
+
+Brandon: "go. All three pass. The Moon's fine, the 11 pictures are fine, and the Hawaiʻi lines stay: they talk
+about local rocks the boys have real experience with, a real tie-in; they're not trying to teach Hawaiian culture to
+a child who is already learning from a Kumu. Quote that in docs/08 with the standard. (a): I'll tell you "week 3
+closed" tonight. One finding, not for this job: finding 11 new items among 208 approved on /parent/content is a
+hunt; the page could show newest first or group by week."
+
+- **All three checks passed:** the week 5 plan on test, the 11 items and their credits, and the two Hawaiʻi lines.
+- **The two Hawaiʻi lines stay** in `plan/the-moon.yaml`: day 1's basalt and day 3's crews on Kīlauea and at
+  Kapoho, with the Lovell and Haise photograph. Brandon's words and the standard are now in docs/08, *A theme a
+  week*. The rest of this job's decisions join them at the release.
+- **M1, M2 and the live plan go way (a).** When Brandon says "week 3 closed", I rebase this branch onto the closed
+  phase branch, run the tests and the import on test again, and push it onto `phase-4-wonder-wall`. Then, in the
+  main checkout, Brandon deletes the two untracked briefs, pulls, and runs the three.
+- **Step 4 runs now:** the Saturday brief, `docs/saturday-pick-slice.md`.
+- **Brandon's finding, for him and not for this job:** `/parent/content` lists every approved item in one run, so
+  finding a week's new ones among 208 is a hunt. The page could show the newest first, or group the items by week.
+  It is a different feature from this brief, so I add no row; `/wwc:idea` files it if he wants it on the board.
+  Until then, each Saturday's stop 2 names the new items by title, as this one did.
