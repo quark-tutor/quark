@@ -20,6 +20,7 @@ is a path in this repository or a link; words alone have nothing to open.
 
 | Feature | Stage | Moved | Project | Depends on | Waiting on | Size | Where |
 |---|---|---|---|---|---|---|---|
+| `/parent/content` is a hunt (11 new items among 208 approved): show the newest first, or group them by week or theme (Brandon, 8 Nov 2026) | not fully formed | 8 Nov 2026 | — | — | — | — | |
 | Math tutored in a recognizable way: the cards teach ideas, reading, culture and engineering well, but not arithmetic practice (June's ask, 8 Nov 2026); explore a new format (a card or a day) built from an openly licensed math curriculum, before deciding | not fully formed | 8 Nov 2026 | — | — | — | — | |
 | A theme a week: each Saturday the parents pick next week's theme from Code's suggestions, Code writes its seven topics, the Sunday build builds them beside 28 short lessons (week 5's, from 23 Nov: the Moon) | building | 8 Nov 2026 | Week 2 builds itself | — | — | a slice | `docs/theme-a-week-slice.md`; `plan/candidates/themes.md`; `docs/reports/2026-11-08-theme-a-week.md` |
 | The tutor's lines made ahead: each night at 3 am Hawaii, every passed card of the day beginning has its lines made in the tutor's voice and stored, so no first tap waits 4–5 seconds; and "Read it to me" shows it is busy from the tap until the voice starts | live | 9 Nov 2026 | The tutor | The tutor's voice | — | a job | `docs/lines-ahead-slice.md`; `docs/reports/2026-11-07-lines-ahead.md`; `docs/reports/2026-10-22-tutor-voice.md`, *Slices for The tutor* |
