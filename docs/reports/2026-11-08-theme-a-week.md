@@ -182,3 +182,152 @@ Brandon: "go. The Moon. Yes to the row, taken before Wonder Wall slice 2. The en
 - **The test env file is in the worktree,** copied by Brandon's hand. The brief's *Before the job* now says so.
 - **Everything under *Decided here* is taken.**
 - **The pull** brought this worktree's branch from `1f2dc5c` to `3c6b314`, the tip of `phase-4-wonder-wall`.
+
+## Stop 2 (8 Nov, 09:00 HST): your look on the laptop, then M1, M2 and the live plan by your hand
+
+### Where the job stands
+
+- **Step 2 is done:** the code, `6fc820c`, pushed to `origin/worktree-theme-a-week`.
+  - **The plan's rules** (`lib/plan.ts`):
+    - a stretch after the first must be one chapter of seven topics;
+    - `sequenceProblems()` refuses a gap or a clash.
+  - **The schedule** (`core/curation/schedule.ts`):
+    - `stretchForWeek()` finds which stretch holds a week, from every stretch's sequence and topic count, and
+      refuses a week no stretch holds, naming the file to write;
+    - `weekSchedule()` takes the week's own thread from its day 1.
+  - **The week build** (`core/curation/week-job.ts`): `prepareWeek()` loads every stretch, not just the first.
+  - **The import** (`scripts/import-plan.mts`) refuses a gap or a clash before it writes anything.
+  - **The flag:** `week:build --stretch` is gone.
+  - **Added while building:** the Sunday build (`core/curation/cron.ts`) took only the short-lessons error as a
+    refusal, so "No theme for week N" would have ended a firing as *failed*. It is now a refusal too, and the
+    `/parent` line says it in plain words (`core/curation/sunday-line.ts`): "Sunday's build refused at 6:02 am: no
+    theme for week 6: the plan's stretches reach week 5. Nothing was spent."
+  - **Tests and typecheck:** 439 tests pass, 10 of them new, and the typecheck is clean. The schedule test holds
+    Egypt's weeks 1 to 4 exactly as before.
+- **Step 3 is done on test.**
+  - **The file:** `plan/the-moon.yaml` (`cd3605e`, pushed) holds seven topics, sequence 2, with both summaries and
+    11 sources. No values point is marked, and no age of the Moon or its craters is given.
+  - **`plan:import`** imported three files: Ancient Egypt 56 rows; short lessons 168 rows (84 lessons, the same
+    library as the phase branch, which has not moved); the Moon 16 rows.
+  - **`content:fetch`** brought in 11 items in 102 seconds, for **$0.15**. All 11 were approved automatically with
+    no flags, and nothing new waits. The one "to check by hand" is Egypt's old Musopen Handel.
+- **The dev server** is running from this worktree on test, at http://localhost:3000.
+- **The Met's description could not be read** (the page answered 429). The Friedrich summary is written from the
+  painting as it looks, plus the Met's data: about 1825 to 1830, 2000.51.
+
+### `npm run week:build -- --week 5 --start 2026-11-23 --plan`, on test, whole
+
+```
+Target: test (mnftudfnnfvxilnmwvvo.supabase.co)
+Week 5: The Moon, with short lessons: starting 2026-11-23, 7 days.
+  Day 1: The Moon on look (The Moon's seas, and the map that named them); short lessons: wonder why-ice-floats, listen carillon-twinkle, then tele-words, puzzle measuring-feet.
+  Day 2: The Moon on wonder (A crater, and why the Moon keeps every one); short lessons: look snap-the-whip, listen steel-guitar, then duke-kahanamoku, puzzle how-a-vote-counts.
+  Day 3: The Moon on then (A lunar landing, and Apollo 11's footprints in the Sea of Tranquility); short lessons: look durer-rhinoceros, wonder rain-shadow, listen bumblebee, puzzle first-bar-chart.
+  Day 4: The Moon on listen (The sustain pedal, and Debussy's Clair de lune); short lessons: look blue-armchair, wonder thunder-after-lightning, then maui-and-the-sun, puzzle quilt-eighths.
+  Day 5: The Moon on look (A figure seen from behind, in Friedrich's Two Men Contemplating the Moon); short lessons: wonder air-pressure, listen maple-leaf-rag, then tortoise-and-hare, puzzle hawaiian-quarter.
+  Day 6: The Moon on then (Science fiction, and Jules Verne's From the Earth to the Moon); short lessons: look star-tiles, wonder bat-echolocation, listen hawaiian-petrel, puzzle flag-arrays.
+  Day 7: The Moon on puzzle (Distance, and about thirty Earths between the Earth and the Moon); short lessons: look hawaiian-kapa, wonder kolea-migration, listen mountain-king, then louis-braille.
+What the family's settings decide before anything is spent (the gate holds these back in code, or reads them as parent-led):
+  Kiddo: day 2 puzzle (A majority, and how a vote is counted): Subject 14 (Government, voting and parties) is blocked by a guardian.
+  Kiddo: day 4 then (Moʻolelo, and how Māui slowed the sun): Subject 4 (Other religions: equally true, partly true, or mistaken?) is parent-led.
+  Bug: day 2 puzzle (A majority, and how a vote is counted): Subject 14 (Government, voting and parties) is blocked by a guardian.
+  Bug: day 4 then (Moʻolelo, and how Māui slowed the sun): Subject 4 (Other religions: equally true, partly true, or mistaken?) is parent-led.
+Ideas on claude-opus-5-5; cards on claude-sonnet-5-5; the gate on claude-opus-5-5. 2 children.
+  Kiddo: written for chapter_books, age 9.
+  Bug: written for reads_alone, age 7.
+--plan: stopped before spending anything; nothing was written. The gate's copy of the rulebook is 6,495 characters.
+```
+
+**What it shows.**
+- **The thread:** seven days. The Moon takes look, wonder, then, listen, look, then and puzzle, its seven topics in
+  the file's order, from day 1.
+- **The title** names the theme: "Week 5: The Moon, with short lessons".
+- **The short lessons are test's leftovers:** test never built a week 2, so week 2's 28 count as unused there. On
+  live, week 5's 28 are the ones picked on Saturday 21 Nov.
+- **The settings lines** fall on two of those leftovers, not on the Moon: test's own block on subject 14 (the
+  vote lesson, excepted by the brief), and a parent-led Māui. No line touches a Moon topic, as expected, since the
+  Moon marks no values point.
+
+### Your look (on the laptop)
+
+1. **Where:** the week 5 plan above.
+   - **Do:** read day 1 to day 7, then "What the family's settings decide".
+   - **See:**
+     - seven days;
+     - each day's thread slot names one of the Moon's seven topics, in order;
+     - the other four slots have a short lesson;
+     - the week's title names the theme;
+     - no "blocked", "Don't bring it up" or "Not yet" line, apart from test's subject 14.
+   - Pass □ Fail □ (if it fails, say what you saw)
+2. **Where:** http://localhost:3000/parent/content on the dev server, as the test guardian.
+   - **Do:** scroll the 11 new items among the approved ones and read each credit line. They are *Two Men
+     Contemplating the Moon*, the Apollo 11 full Moon, Riccioli's map, the bootprint, Lovell and Haise at
+     Kīlauea, the Verne telescope, the Moon in front of the Earth, the Clair de lune recording, Debussy by Nadar,
+     Daedalus crater and Tycho.
+   - **See:**
+     - every picture is one you would put in front of the boys;
+     - every credit reads right;
+     - nothing waits.
+   - Pass □ Fail □ (if it fails, say what you saw)
+3. **Where:** `plan/the-moon.yaml`, the two Hawaiʻi lines. This is the Hawaiʻi standard: your call, since you
+   picked the Moon without ruling on them.
+   - **Do:** read day 1's older summary ("basalt, a dark lava rock, the same kind of rock as the lava flows on
+     Hawaiʻi Island"), then day 3's older summary ("in 1969 and 1970 crews trained on Kīlauea's lava fields and at
+     Kapoho, on Hawaiʻi Island"), with NASA's photograph of Lovell and Haise on Kīlauea.
+   - **See:** each one gives a child who lives here something to learn. Otherwise name the one to strike: I take
+     the line out, and for day 3 the photograph with it, before M1.
+   - Pass □ Fail □
+
+"go" means all three passed. A failure named without the word go is a fix round.
+
+### Then, only on go, by your hand: M1, M2 and the live plan
+
+**Where they run.** They need this branch's code and the Moon file, and the week 3 job is still open in the main
+checkout. Two ways:
+- **(a) Recommended: after the week 3 job has closed.**
+  - Tell me "week 3 closed". I rebase onto the closed phase branch, run the tests, and push this branch onto
+    `phase-4-wonder-wall`, so the brief's code is on the brief's branch.
+  - Then, in the main checkout: delete the two untracked briefs (`docs/theme-a-week-slice.md` and
+    `docs/second-stretch-slice.md`), then `git pull`, then the three commands below.
+  - No second copy of the live key is made.
+- **(b) Now, from this worktree.**
+  - Copy the live env file in, run the three, then delete the copy.
+  - This is faster, but leaves a second copy of the live key on disk for a few minutes.
+
+Whichever way, run M1 before Saturday 14 Nov's week 4 job imports its lessons on live, or from a tree that has
+them. At M1, the import must print the library as the phase branch holds it: "Short lessons: 168 rows (84
+lessons)" today, or more once week 4's are in.
+
+**M1: `npm run plan:import:live`**
+- **What it does:** writes the Moon's 16 rows into live's plan, and writes Egypt's 56 and the library's 168 again,
+  unchanged.
+- **What it touches:** **LIVE**, `plan_topics`. The code on Vercel ignores the Moon until the release, because its
+  first-stretch query still picks Egypt (sequence 1). So Sunday 15 Nov's build of week 4 is unchanged.
+- **How it is undone:** delete the Moon's rows by the key prefix `the-moon/`. No idea or card points at them
+  before 22 Nov.
+- **Checked on test:** yes, above.
+
+**M2: `npm run content:fetch:live`**
+- **What it does:** fetches, flags and stores the Moon's 11 items. About $0.15, as on test.
+- **What it touches:** **LIVE**, `content_items` and the private bucket. It prints nothing until it is done (the
+  1 Nov bug line), so wait for the table.
+- **How it is undone:** the items are unused until a card offers one; any item can be rejected at live's
+  `/parent/content`.
+- **Checked on test:** yes, above.
+
+**M3: `npm run week:build:live -- --week 5 --start 2026-11-23 --plan`**
+- **What it does:** reads live's plan for week 5. **LIVE**, read only, spends nothing.
+- **What to expect today:** weeks 1 to 3 on live have used all 84 lessons and week 5's 28 are not picked yet, so
+  it stops before printing the days. The pass is this exact line:
+
+  `Not enough short lessons for week 5: the look card needs 5 and 0 are left; the wonder card needs 6 and 0 are left; the listen card needs 6 and 0 are left; the then card needs 5 and 0 are left; the puzzle card needs 6 and 0 are left. Add lessons to plan/short-lessons.yaml and run npm run plan:import.`
+
+- **How to read it.** Those counts are the Moon's slots. Egypt's old reading would ask 7 a slot, and a missing
+  Moon would say "No theme for week 5".
+- **If week 4's 32 are on live and not yet built,** it prints seven days with week 4's lessons in them. Read those
+  days as the brief says: a "Not yet" or "blocked" line on a Moon topic is rewritten or swapped before the close.
+- **The seven-day read with the real 28** is the Saturday 21 Nov job's.
+
+Paste all three outputs. Then step 4 (the Saturday brief), then stop 3, the release.
+
+**Size:** a slice, 8 hours. The clock ran 36 minutes to stop 1, then from go (08:47) to this stop (09:00).
