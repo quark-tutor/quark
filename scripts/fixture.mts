@@ -13,6 +13,7 @@
 //   npm run fixture -- card <id>            one card: its words as shown, what "Read it to me" sends, and what is stored
 //   npm run fixture -- numbers <week>       every number shape in the week's spoken words, and how each goes to the voice
 //   npm run fixture -- lines <week>         per day and child, the lines the night's firing would make, their characters and cost
+//   npm run fixture -- lines <date>         per child, each card on the wall that day, its id and how many of its lines are stored
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
 //                                           its item's approval, and the gate's reasons for a card held back
 //   npm run fixture -- device <n>           pair a device to child n (1 or 2, oldest first) and print its cookie, so
@@ -312,6 +313,40 @@ if (command === "show") {
   for (const [shape, s] of [...shapes.entries()].sort((a, b) => b[1].count - a[1].count)) {
     const sent = forVoice(shape) === shape ? "as written" : `sent as ${forVoice(shape)}`;
     console.log(`${shape}  ×${s.count}  ${sent}  ${[...s.examples].map((e) => `“${e}”`).join("  ")}`);
+  }
+} else if (command === "lines" && /^\d{4}-\d{2}-\d{2}$/.test(arg ?? "")) {
+  // One day, read-only: per child, each card the wall can show, its id and title, and how many of its lines are
+  // stored in the tutor's voice, made ahead or by a tap. For picking a card for a look before and after a firing.
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  const rows = must(
+    await db
+      .from("cards")
+      .select("id, family_id, child_id, day, slot, layer, policy, body, themes(status, family_id), ideas(content_item_id, content_items(approved)), questions(id)")
+      .eq("family_id", familyId)
+      .eq("day", arg),
+    "cards",
+  ) as unknown as (Omit<CardRow, "theme" | "item" | "itemId" | "question"> & {
+    themes: { status: string; family_id: string } | null;
+    ideas: { content_item_id: string | null; content_items: { approved: boolean } | null } | null;
+    questions: { id: string }[];
+  })[];
+  const asRow = (r: (typeof rows)[number]): CardRow => ({
+    ...r,
+    theme: r.themes,
+    itemId: r.ideas?.content_item_id ?? null,
+    item: r.ideas?.content_items ? ({ approved: r.ideas.content_items.approved } as CardRow["item"]) : null,
+    question: r.questions[0] ? { id: r.questions[0].id, prompt: "", answer_key: { accept: [], rubric: "" } } : null,
+  });
+  const stored = async (path: string) => !!(await db.storage.from("content").createSignedUrl(path, 60)).data;
+  for (const [i, k] of kids.entries()) {
+    const lines = dayLines(rows.filter((r) => r.child_id === k.id).map(asRow), { familyId, childId: k.id, deviceId: "" }, arg, TUTOR_VOICE);
+    console.log(`child ${i + 1}: ${lines.length} lines on the wall`);
+    for (const id of [...new Set(lines.map((l) => l.cardId))]) {
+      const own = lines.filter((l) => l.cardId === id);
+      const r = rows.find((x) => x.id === id)!;
+      const kept = await Promise.all(own.map((l) => stored(l.path)));
+      console.log(`  ${r.slot.padEnd(6)} layer ${r.layer}  ${id}  "${r.body.title}"  read line ${kept[0] ? "stored" : "not stored"}, ${kept.filter(Boolean).length} of ${own.length} stored`);
+    }
   }
 } else if (command === "lines") {
   // What the night's firing would make for each day of a week (docs/lines-ahead-slice.md), per child: the lines its

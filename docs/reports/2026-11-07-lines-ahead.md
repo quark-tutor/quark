@@ -126,3 +126,146 @@ Copy the file with the command above, then reply go to take all of these.
 **Go (7 Nov, 21:03 HST).** Brandon copied the test env file into the worktree with one `!` command, then typed
 "go". `lines-ahead` was made from `phase-4-wonder-wall` at `c6d9e38`; it had no origin branch, so there was
 nothing to pull. The row moved to *building*.
+
+## Stop 2: Your look, on the laptop (7 Nov, 21:20 HST)
+
+**Where it stands.** Built, and proven on `quark-test` through the dev server. Nothing on live, nothing a child
+sees: the new cron entry and the busy button reach the boys only with Sunday's release. The tests (427) and the
+typecheck pass, lint is clean on every file changed, and `npm run build` is clean, with the new route at 300 seconds
+in the build's function settings. Pushed: `lines-ahead`. It has no migration, so no workflow ran. Size clock: 0.4
+hours on a job sized at 4.
+
+### The numbers, measured
+
+Test holds one week, the proof week from 21 Oct (it has no week 2 or 3), counted with the firing's own code
+(`fixture -- lines 1`):
+
+| Day on test | Passed cards | Lines (files) | Characters | At list price |
+|---|---|---|---|---|
+| 21 Oct | 38 | 201 | 32,877 | $0.99 |
+| 22 Oct | 38 | 200 | 32,103 | $0.96 |
+| 23 Oct | 37 | 182 | 29,969 | $0.90 |
+| 24 Oct | 39 | 204 | 32,822 | $0.98 |
+| 26 Oct | 40 | 213 | 33,989 | $1.02 |
+| 27 Oct | 34 | 131 | 20,116 | $0.60 |
+| 1 Nov | 40 | 210 | 35,848 | $1.08 |
+
+- **A day on average:** 192 lines, 31,100 characters, $0.93 at list price.
+- **A day with all 40 cards passed:** about 210 lines and 34,000 to 36,000 characters, about $1.05.
+- **The read lines** are about 470 characters each (the longest line is 722), more than stop 1's estimate of 380.
+- **Repeats:** about 15 lines a day are the same for both children and are made once.
+- **A month:** about 930,000 characters at the average. A month of full days runs a little past Google's free
+  million, by a dollar or two at list price. Stop 1's estimate stands: inside the free tier or near it, a few
+  dollars at most.
+
+### The firing on test
+
+The day of 26 Oct (40 passed, never answered) was moved to today with `fixture -- today 2026-10-26`. Its week was
+already live on test. Before the firing, none of its lines were stored. `npm run cron:speech` against the dev
+server replied:
+
+```
+HTTP 200 after 88s
+{
+  "outcome": "made",
+  "day": "2026-11-07",
+  "lines": 223,
+  "made": 223,
+  "already": 0,
+  "failed": 0,
+  "left": 0,
+  "characters": 34237,
+  "cost": 1.0271,
+  "seconds": 87.2
+}
+```
+
+- 223 lines: 213 for the two children's 40 cards and the wall's 10 sentences. They took 87 seconds, under the
+  240-second line, at about 150 a minute, which was the pace limit at work.
+- A second firing replied `nothing` in 5 seconds, with "every line of 2026-11-07 is stored already". That is what a
+  night costs with nothing new: no call to Google.
+- The audit log holds two rows a firing (`speech.ahead`, started and ended), with the day, the counts, the cost and
+  the seconds. No child is named.
+
+### Checked with curl, as a paired test device (paired with `fixture -- device 1`, forgotten after)
+
+- On the look's card, the read line and the question redirected to the stored audio in 0.9 to 1.6 seconds, and the
+  audio came back in 0.7 seconds (141,504 bytes).
+- `hint.0`, `hint.1` and the handoff answered 404, though all three are stored: rule 3 holds on the route itself.
+- `/api/cron/speech` without the secret answered 401.
+
+### What was built
+
+- **The firing** (`core/wall/speech-ahead.ts`, pure, 12 tests), as planned at stop 1. Its database side is in
+  `lib/speech-ahead.ts`, the route is `app/api/cron/speech/route.ts`, and `vercel.json` has a ninth entry,
+  `0 13 * * *`.
+- **One source of words.** `core/wall/speech.ts` gains `partWords()`, `voiceText()` and `makeSpeech()`. The tap
+  (`spokenUrl()`) and the firing take a line's words, its voice text and its path from the same three functions.
+  The tap still checks a stored line with a single signing call.
+- **The rule-3 test** is at the function the say route calls: a hint and the handoff made ahead give `null` (the
+  route's 404) until earned and reached, and are then served with no call to the voice. curl checked the route
+  itself, above.
+- **"Read it to me"** says "Getting it ready…" from the tap until the audio's `playing` event, then "Stop".
+  A screen reader hears it as busy. A tap while it is getting ready or playing stops it.
+- **The two bug lines** from docs/08:
+  - The recording and "Read it to me" share one "one sound at a time" signal (`app/kid/one-at-a-time.ts`), so
+    starting either stops the other.
+  - The say route logs one line on a failure, "say: Read it to me failed" and the error's first line. *This touches
+    rule 7.* Anything the error quotes is taken out, because Google can quote the words it was sent and a card's
+    words can hold a nickname. That is one step stricter than the hear route's line.
+- **`/parent/models`** has one line under the voice's totals: when the last firing ran, how many lines it made for
+  which day, how many were stored already, and the cost. The page's sentence on the voice now says lines are made
+  overnight, or else on the first tap.
+- **For testing:**
+  - `npm run cron:speech` (the cron script is now `scripts/cron.mts`, with the route as an option, and `cron:week`
+    is unchanged).
+  - `fixture -- lines <week>` gives the counts above. `fixture -- lines <date>` lists each card on the wall that
+    day, with its id and how many of its lines are stored.
+  - `fixture -- code <n>` makes a pairing code, so the laptop's browser can be paired as a test child without
+    signing in.
+
+### Spend
+
+Google: 34,237 characters on test ($1.03 at list price, inside the free tier). Anthropic: $0. Live: nothing.
+
+### Test's state after this
+
+- Test's cards of 26 Oct are now dated 7 Nov, and every line of them is stored.
+- Two devices were paired and forgotten.
+- Four `speech.ahead` audit rows.
+- The dev server is running on localhost:3000 (test).
+
+### Your look
+
+**Before the checks:** pair the laptop's browser as test's child 1.
+1. In this terminal, type `! npm run fixture -- code 1`.
+2. Open `http://localhost:3000/kid/pair` in the laptop's browser and type the six digits within ten minutes.
+3. The wall greets the child.
+
+The card is on the wall only on 7 Nov. **If you look after midnight**, first type
+`! npm run fixture -- today 2026-11-07`. That moves the same cards to the new day, and their lines stay stored.
+
+**Check 1, the busy words and a quick start**
+- **Where:** `http://localhost:3000/kid/card/d849fc09-c782-4380-885c-3efa1aaf437d` ("A Head Made of Harvest", look,
+  layer 1), a card whose lines the firing made.
+- **Do:** 1. Tap "Read it to me". 2. Look at the button from the tap until the voice starts.
+- **See:** the button says "Getting it ready…", then "Stop" once the voice starts, about a second after the tap,
+  not four to five.
+- Pass □ Fail □ — if fail, what you saw.
+
+**Check 2, a line made ahead is still said only once earned**
+- **Where:** the same card, with no guess given.
+- **Do:** 1. In the browser's address bar, open
+  `http://localhost:3000/api/kid/say?line=d849fc09-c782-4380-885c-3efa1aaf437d.hint.0`.
+- **See:** a 404 page showing `{"ok":false}`, and nothing plays.
+- Pass □ Fail □ — if fail, what you saw.
+
+**Check 3, one sound at a time** (one of the two bug lines, not in the brief's look)
+- **Where:** `http://localhost:3000/kid/card/c4159028-db5b-4f2b-85cb-c0d61ff47ffd` ("Who Starts First?", listen,
+  layer 1), which has a recording.
+- **Do:** 1. Tap "Play". 2. While the recording plays, tap "Read it to me".
+- **See:** the recording stops when the voice starts, and the two are never heard together.
+- Pass □ Fail □ — if fail, what you saw.
+
+At the last stop, type `/wwc:close` to close and hold. Typed clean, it is your go for the look; name a failure
+without it.

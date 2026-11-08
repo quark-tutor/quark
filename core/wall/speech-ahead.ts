@@ -26,6 +26,7 @@ export const BUDGET_SECONDS = 240; // the Sunday build's line: no new line is st
 export const FAILURES_TO_STOP = 3; // Google down, or the key wrong: stop asking
 
 export type AheadLine = { path: string; text: string };
+export type CardLine = AheadLine & { cardId: string; layer: number; rank: number }; // rank 0 is the read line
 
 const PARTS = (body: ChainLayer["body"]): CardPart[] => [
   { part: "read" },
@@ -36,13 +37,13 @@ const PARTS = (body: ChainLayer["body"]): CardPart[] => [
 
 // Every line one child's cards of a day can give, layer by layer (the read lines first in each layer, the lines a
 // child taps most), each once. `rows` are that child's cards of the day; chainOf() keeps the ones the wall can show.
-export function dayLines(rows: CardRow[], scope: Scope, day: string, voice: string): (AheadLine & { layer: number; rank: number })[] {
-  const out: (AheadLine & { layer: number; rank: number })[] = [];
+export function dayLines(rows: CardRow[], scope: Scope, day: string, voice: string): CardLine[] {
+  const out: CardLine[] = [];
   for (const slot of SLOTS) {
     for (const layer of chainOf(rows, scope, day, slot).chain) {
       PARTS(layer.body).forEach((part, rank) => {
         const text = voiceText(partWords(layer.body, part));
-        if (text) out.push({ path: speechPath(voice, text), text, layer: layer.layer, rank });
+        if (text) out.push({ path: speechPath(voice, text), text, cardId: layer.cardId, layer: layer.layer, rank });
       });
     }
   }
@@ -56,7 +57,7 @@ export const wallLines = (voice: string): AheadLine[] =>
 // The night's lines in the order they are made: the wall's sentences, then layer 1's read lines for every child,
 // layer 1's other lines, then layer 2 and on, each file once. If the time runs out, what is left is what a child
 // is least likely to tap first.
-export function nightLines(wall: AheadLine[], children: (AheadLine & { layer: number; rank: number })[][]): AheadLine[] {
+export function nightLines(wall: AheadLine[], children: CardLine[][]): AheadLine[] {
   const ordered = children.flat().sort((a, b) => a.layer - b.layer || Math.min(a.rank, 1) - Math.min(b.rank, 1));
   const seen = new Set<string>();
   return [...wall, ...ordered]
