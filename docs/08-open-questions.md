@@ -193,6 +193,7 @@ Brief: `docs/judge-slice.md` (the tutor, slice 2), on `phase-4-wonder-wall`; rep
 - **Decided (28 Oct 2026, stop 1's go): Anthropic's key is in Vercel's Production and Preview environments,** and the release's stop names it as a check. Brandon: "The Anthropic key is in Vercel's Production and Preview now; the release's stop names it as a check."
 - **Decided (1 Nov 2026, stop 2's go): the look passed, and the time to a reply is measured on live.** Brandon: "go. Every check passed on June's iPad as Bug. The replies take a few seconds to start on the dev server; time the first answers on live after the release." On the dev server a whole reply took 3.5 to 6.2 seconds, against the brief's "about two seconds".
 - **Decided (1 Nov 2026, M1): the verdict columns are on live, by Brandon's hand,** before the release, because the code on Vercel ignores them. Brandon: "M1 is in. … No error."
+- **Decided (8 Nov 2026): check 6 passed in use, on live, and the judge's row is live.** Brandon: "The judge: check 6 passed in use. Replies on live come back fast enough that the boys don't notice a wait." It replaces the brief's "within about two seconds of 'That's my answer'", which was never timed with a clock: the boys' use is the measure.
 
 ## The tutor's lines made ahead: decided in the brief and the job (7 and 8 Nov 2026)
 
