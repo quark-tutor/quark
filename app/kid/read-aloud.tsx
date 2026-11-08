@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { SAY } from "@/core/wall/words";
 import { started, useOneAtATime } from "./one-at-a-time";
+import { useStopsOnLeave } from "./stops-on-leave";
 import styles from "./kid.module.css";
 
 // "Read it to me": the tutor's voice (docs/tutor-voice-slice.md), from Quark's own route, on a tap only, never by
@@ -10,14 +11,16 @@ import styles from "./kid.module.css";
 // sets the player's address and starts it in the same moment, because iPad Safari plays sound only when it
 // starts inside the tap; the route answers with the stored audio, made overnight or on the first tap anywhere.
 // From the tap until the voice starts the button says it is getting the line ready (docs/lines-ahead-slice.md),
-// then "Stop" while it plays. A tap while it is getting ready or playing stops it, and starting it stops anything
-// else playing, a recording too, so only one thing is ever heard at a time.
+// then "Stop" while it plays. A tap while it is getting ready or playing stops it. Starting it stops any other line
+// of the tutor's, so the voice says one line at a time; a card's recording plays on under it, by design (Brandon,
+// 8 Nov 2026). Leaving the card stops it.
 type State = "idle" | "loading" | "playing";
 
 export function ReadAloud({ line, small = false }: { line: string; small?: boolean }) {
   const audio = useRef<HTMLAudioElement>(null);
   const [state, setState] = useState<State>("idle");
   useOneAtATime(audio);
+  useStopsOnLeave(audio);
 
   function toggle() {
     const a = audio.current;

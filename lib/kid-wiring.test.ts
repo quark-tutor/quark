@@ -86,6 +86,18 @@ describe("the tutor's voice and ears (docs/tutor-voice-slice.md)", () => {
     expect(AHEAD.test(code("lib/wall.ts"))).toBe(false);
   });
 
+  it("say one line at a time, and a recording plays on under the voice by design (Brandon, 8 Nov 2026)", () => {
+    const ONE = /one-at-a-time/;
+    // Only "Read it to me" takes part; the recording's player never hears it start.
+    expect(KID.filter((p) => ONE.test(code(p))).map(name)).toEqual(["app/kid/read-aloud.tsx"]);
+  });
+
+  it("stop every sound on a card when the card is left (Brandon, 8 Nov 2026)", () => {
+    const sounds = KID.filter((p) => /<audio\b/.test(code(p)));
+    expect(sounds.map(name).sort()).toEqual(["app/kid/player.tsx", "app/kid/read-aloud.tsx"]);
+    for (const p of sounds) expect(code(p), name(p)).toMatch(/useStopsOnLeave\(audio\)/);
+  });
+
   it("use no browser speech engine anywhere", () => {
     const engines = [...sources("app"), ...sources("core"), ...sources("lib")].filter((p) => /speechSynthesis|SpeechRecognition|SpeechSynthesisUtterance/.test(code(p))).map(name);
     expect(engines).toEqual([]);

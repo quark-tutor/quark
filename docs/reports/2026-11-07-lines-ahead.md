@@ -269,3 +269,62 @@ The card is on the wall only on 7 Nov. **If you look after midnight**, first typ
 
 At the last stop, type `/wwc:close` to close and hold. Typed clean, it is your go for the look; name a failure
 without it.
+
+Brandon (8 Nov, 06:28 HST): "Checks 1 and 2 pass. Check 3 fails on purpose: the recording stopping when "Read it
+to me" starts breaks what the boys love most, listening to the music while Quark reads to them. Take that change
+out: a recording and the tutor's voice may play together, by design. Keep "one line at a time" for the voice
+itself. Delete the 26 Oct bug line in docs/08 and record this as a decision (Brandon, 8 Nov 2026)."
+
+And, in the same round: "One more for the same fix round: leaving the card stops every sound on it. I've seen the
+boys go to a completely different screen with the Listen recording still playing. Record it with the other
+decision (Brandon, 8 Nov 2026), and give the look a check for it."
+
+## Stop 2 again: Your look, fix round 1 (8 Nov, 06:40 HST)
+
+Both changes are made on `lines-ahead`. Checks 1 and 2 passed and are not repeated. Check 3 is rewritten, and check
+4 is new. The tests (429, two new), the typecheck, the lint of the kid view and the production build pass. Nothing
+touched live. Size clock: about 0.6 hours on a job sized at 4.
+
+### What changed
+
+- **A recording and the voice play together.** `app/kid/player.tsx` is back to playing on its own: starting "Read
+  it to me" never stops it, and it never stops the voice. **One line at a time** stays for the voice: starting any
+  "Read it to me" on the page (the card's, a clue's, the handoff's) stops another line the tutor is saying
+  (`app/kid/one-at-a-time.ts`, now used only by `app/kid/read-aloud.tsx`). A test holds that the player takes no
+  part.
+- **Leaving a card stops every sound on it.** The cause of what you saw: Next.js 16 does not unmount a page you
+  leave. It hides it with React's `<Activity>` (to keep its state for the back button), so the card's `<audio>`
+  stays in the page and plays on behind the next screen. Both players now pause as the page is hidden
+  (`app/kid/stops-on-leave.ts`, a layout-effect cleanup, as Next's guide to preserved pages says). A test holds
+  that every `<audio>` on the kid view uses it. **What follows:** "Go deeper" opens the next card, so it also stops a
+  recording that is playing. *Live has the same cause today:* the boys' iPads run `main`, which has none of this,
+  until Sunday's release carries it.
+- **docs/08:** the 26 Oct bug line about the recording and the voice is deleted. Both decisions are recorded under
+  a new heading, "The tutor's lines made ahead", which the close fills with the job's other decisions. The say
+  route's bug line is fixed in this job, and the close removes it with the records.
+
+### Your look
+
+The laptop's browser is still paired as test's child 1, and the cards from 7 Nov are on today's wall. If the wall
+asks to pair, type `! npm run fixture -- code 1` and enter the digits at `http://localhost:3000/kid/pair`.
+
+**Check 3, the music under the voice, and one line at a time**
+- **Where:** `http://localhost:3000/kid/card/c4159028-db5b-4f2b-85cb-c0d61ff47ffd` ("Who Starts First?", listen,
+  layer 1), which has a recording. Reload the page first, so it has the new code.
+- **Do:** 1. Tap "Play". 2. While the recording plays, tap "Read it to me". 3. Type `a new tune` in the box and tap
+  "That's my answer". A clue appears with its own small "Read it to me". 4. Tap the big "Read it to me" under the
+  card's words, and while it reads, tap the clue's small one.
+- **See:** at step 2, the recording plays on under the voice. At step 4, the card's line stops as the clue's line
+  starts, and the recording plays on through both.
+- Pass □ Fail □ — if fail, what you saw.
+
+Step 3 writes one attempt on test and asks the judge once (about $0.0002 on test).
+
+**Check 4, leaving the card stops every sound on it**
+- **Where:** the same card.
+- **Do:** 1. Tap "Play". 2. Tap "Read it to me". 3. While both play, tap "Back to the wall" at the top.
+- **See:** the wall, in silence. Both the recording and the voice stop as you leave.
+- Pass □ Fail □ — if fail, what you saw.
+
+At the last stop, type `/wwc:close` to close and hold. Typed clean, it is your go for the look; name a failure
+without it.
