@@ -4,6 +4,10 @@ Written 7 Nov 2026 by Claude Code, step 1 of `docs/week-3-slice.md`. A proposal:
 Brandon and June pick 28; step 2 writes those into `plan/short-lessons.yaml` (summaries, sources, values points),
 and this file stays as the record of why each was offered.
 
+**Picked (7 Nov 2026, Brandon and June):** the 28 as marked. In run order: look 1-5; wonder 9-14; listen 17-22;
+then 25-29; puzzle 33-38. They are the last 28 lessons of `plan/short-lessons.yaml`, where their summaries were
+written and their facts checked. Not taken, and kept here for week 4: 6, 7, 8, 15, 16, 23, 24, 30, 31, 32, 39, 40.
+
 Twelve are the ones week 2 did not take (`plan/candidates/short-lessons-2.md`, numbers 7, 8, 14, 15, 16, 23, 24,
 29, 31, 32, 39, 40), each checked again and re-numbered here; 28 are new.
 

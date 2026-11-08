@@ -3,7 +3,8 @@
 # for short lessons, taken in this file's order, the next unused lesson for each open slot.
 # Drafted by Claude Code, picked by Brandon and June; the candidates and why each picture was
 # picked are in plan/candidates/short-lessons.md (week 1's 28, 16 Oct 2026) and
-# plan/candidates/short-lessons-2.md (week 2's 28, picked 1 Nov 2026, added after week 1's).
+# plan/candidates/short-lessons-2.md (week 2's 28, picked 1 Nov 2026, added after week 1's) and
+# plan/candidates/short-lessons-3.md (week 3's 28, picked 7 Nov 2026, added after week 2's).
 #
 # Format: lib/plan.ts (ShortLesson). Import with npm run plan:import. Summaries are for the tutor,
 # not the child: plain facts, the mechanism named. Every lesson says which values points it
@@ -504,6 +505,257 @@ sources:
     title: The 49-star flag, 1959 (newspaper drawing)
     publisher: Wikimedia Commons
     url: https://commons.wikimedia.org/wiki/File:49-star_American_Flag_(1959).png
+    license: CC0
+  # --- week 3 (picked 7 Nov 2026; plan/candidates/short-lessons-3.md) ---
+  # look
+  - id: commons-leyster-self-portrait-nga
+    title: Self-Portrait, Judith Leyster, about 1630 (National Gallery of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Judith_Leyster,_Self-Portrait,_c._1630,_NGA_37003.jpg
+    license: CC0
+  - id: commons-borrell-escaping-criticism
+    title: Escaping Criticism, Pere Borrell del Caso, 1874 (Bank of Spain, Madrid)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Flucht_vor_der_Kritik,_Pere_Borrell_del_Caso_-_9626.jpg
+    license: public domain
+  - id: met-edouart-kate-and-harry-lucas
+    title: Kate and Harry Lucas, playing with a dog and a bird, Auguste Edouart
+    publisher: The Metropolitan Museum of Art, 60.603.13
+    url: https://www.metmuseum.org/art/collection/search/786115
+    license: CC0
+  - id: met-edouart-magic-lantern
+    title: The Magic Lantern, Auguste Edouart, about 1835
+    publisher: The Metropolitan Museum of Art, 38.145.392
+    url: https://www.metmuseum.org/art/collection/search/365307
+    license: CC0
+  - id: met-netsuke-seated-hare-minko
+    title: Netsuke of a Seated Hare, Minkō
+    publisher: The Metropolitan Museum of Art, 1985.399.24
+    url: https://www.metmuseum.org/art/collection/search/59676
+    license: CC0
+  - id: commons-nps-puuloa-petroglyphs-a
+    title: Petroglyphs at Puʻuloa, Hawaiʻi Volcanoes National Park (NPS, 2012)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Petroglyphs_at_Pu%27uloa_in_Hawai%27i_Volcanoes_National_Park_(a053f199-6686-4b71-93fb-85a47aaa76c1).JPG
+    license: public domain (US National Park Service)
+  - id: commons-nps-puuloa-petroglyphs-b
+    title: Petroglyphs at Puʻuloa, Hawaiʻi Volcanoes National Park (NPS, 2012), a second view
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Petroglyphs_at_Pu%27uloa_in_Hawai%27i_Volcanoes_National_Park_(eba7619c-6e53-46fb-8520-2ae0736c7540).JPG
+    license: public domain (US National Park Service)
+  # wonder
+  - id: commons-usfws-pacific-golden-plover
+    title: A Pacific golden plover, the kōlea (US Fish and Wildlife Service)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Pacific_golden_plover_(7123153921).jpg
+    license: public domain (US Fish and Wildlife Service)
+  - id: commons-usfws-pluvialis-fulva
+    title: A Pacific golden plover (O. W. Johnson, US Fish and Wildlife Service)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Pluvialis_fulvaUSFWS003413A.jpg
+    license: public domain (US Fish and Wildlife Service)
+  - id: met-herolt-poppy-metamorphosis
+    title: A Poppy in Three Stages of Flowering, with a Caterpillar, Pupa and Butterfly, Johanna Helena Herolt (née Graff)
+    publisher: The Metropolitan Museum of Art, 2005.4
+    url: https://www.metmuseum.org/art/collection/search/366733
+    license: CC0
+  - id: commons-merian-banana-1705
+    title: Banana flower and fruit, with a caterpillar, pupa and moth, Maria Sibylla Merian, Metamorphosis insectorum Surinamensium, 1705
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Maria_Sibylla_Merian_Banana_Flower_and_Fruit,_from_Metamorphosis_insectorum_Surinamensium_1705.jpg
+    license: public domain
+  - id: commons-thayer-luna-caterpillar-1909
+    title: A luna moth caterpillar in its own position and turned over, from Thayer's Concealing-Coloration in the Animal Kingdom, 1909
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Thayer_Concealing-Coloration_Plate_XII_-_Luna_Caterpillar_a)_in_position_b)_inverted.jpg
+    license: public domain
+  - id: commons-thayer-white-fowl-1909
+    title: A white fowl without countershading, from Thayer's Concealing-Coloration in the Animal Kingdom, 1909
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:White_fowl_lacking_counter-shading_from_Thayer_1909.jpg
+    license: public domain
+  - id: commons-hooke-micrographia-schem-11
+    title: Cork under the microscope, Robert Hooke, Micrographia, 1665 (Schem. XI)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Micrographia_Schem_11.jpg
+    license: public domain
+  - id: commons-hooke-cork-cells
+    title: Hooke's cork cells, from Micrographia, 1665 (detail)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Cork_Micrographia_Hooke.png
+    license: public domain
+  - id: commons-noaa-acropora-ffs
+    title: Acropora coral at French Frigate Shoals, Northwestern Hawaiian Islands (Andy Collins, NOAA), 2005
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Acropora_coral_ffs.jpg
+    license: public domain (NOAA)
+  - id: aic-tosa-autumn-maples
+    title: Autumn Maples with Poem Slips, Tosa Mitsuoki, about 1675
+    publisher: The Art Institute of Chicago, 1977.157
+    url: https://www.artic.edu/artworks/127644
+    license: CC0
+  - id: aic-inness-autumn-woods
+    title: Autumn Woods, George Inness, 1891-94
+    publisher: The Art Institute of Chicago, 1911.34
+    url: https://www.artic.edu/artworks/64736
+    license: CC0
+  # listen
+  - id: met-maelzel-metronome
+    title: Metronome, Johann Nepomuk Maelzel, about 1821
+    publisher: The Metropolitan Museum of Art, 1979.1.2
+    url: https://www.metmuseum.org/art/collection/search/503169
+    license: CC0
+  - id: commons-metronome-60bpm
+    title: A metronome at 60 beats a minute (recording)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Metronome_60bpm.wav
+    license: CC0
+  - id: commons-usab-taps-on-bugle
+    title: Taps, played on the bugle by a member of the United States Army Band (recording)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Taps_on_bugle.ogg
+    license: public domain (United States Army)
+  - id: met-key-bugle-in-c
+    title: Bugle in C, Thomas Key, London, 1811
+    publisher: The Metropolitan Museum of Art, 1975.270a, b
+    url: https://www.metmuseum.org/art/collection/search/504065
+    license: CC0
+  - id: commons-haw-oumuamua
+    title: ʻOumuamua, the name said in Hawaiian (recording), 2017
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Haw-oumuamua.oga
+    license: CC0
+  - id: commons-stsci-oumuamua-impression
+    title: An artist's impression of ʻOumuamua (NASA, ESA and STScI, 2018)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Artist%E2%80%99s_Impression_of_%60Oumuamua_(2018-25-4204).png
+    license: public domain (NASA)
+  - id: commons-stsci-pan-starrs-observatory
+    title: The Pan-STARRS observatory on Haleakalā, Maui (STScI)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Pan-STARRS_Observatory_(2019-12-4315).jpg
+    license: public domain
+  - id: commons-sos-morse-code
+    title: SOS in Morse code (recording, made on a computer)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:SOS_morse_code.ogg
+    license: public domain
+  - id: commons-brady-samuel-morse
+    title: Samuel F. B. Morse, Mathew Brady, about 1860-65 (National Archives)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Samuel_F.B._Morse,_inventor_of_the_telegraph_-_NARA_-_526779_(cropped).jpg
+    license: public domain
+  - id: commons-saint-antoine-organ-bwv-565
+    title: The opening of the Toccata and Fugue in D minor, on the organ of the abbey church of Saint-Antoine-l'Abbaye, France (recording), 2022
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Saint-Antoine-l%27Abbaye_-_Abbatiale_Saint-Antoine_-_Orgue_-_Extrait_de_la_Toccata_et_fugue_en_r%C3%A9_mineur_BWV_565_de_Jean-S%C3%A9bastien_Bach.ogg
+    license: CC0
+  - id: met-appleton-pipe-organ
+    title: Pipe Organ, Thomas Appleton, Boston, 1830
+    publisher: The Metropolitan Museum of Art, 1982.59.1-.105
+    url: https://www.metmuseum.org/art/collection/search/503670
+    license: CC0
+  - id: commons-smith-armstrong-st-louis-blues-1925
+    title: The St. Louis Blues, Bessie Smith with Louis Armstrong, cornet, and Fred Longshaw, reed organ (recording), 1925
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Bessie_Smith_and_Louis_Armstrong_-_The_St._Louis_Blues_(1925).mp3
+    license: public domain
+  - id: commons-van-vechten-bessie-smith-1936
+    title: Bessie Smith, photographed by Carl Van Vechten, 1936
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Bessie_Smith_(1936)_by_Carl_Van_Vechten.jpg
+    license: public domain
+  # then
+  - id: commons-ipm-gutenberg-press
+    title: A replica of Gutenberg's press (International Printing Museum)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Gutenberg_press.png
+    license: CC0
+  - id: commons-amman-buchdrucker-1568
+    title: The Printer (Der Buchdrucker), woodcut by Jost Amman, 1568
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Buchdrucker-1568.png
+    license: public domain
+  - id: commons-si-rhinecanthus-rectangulus
+    title: The reef triggerfish, humuhumunukunukuāpuaʻa (Sandra Raredon, Smithsonian Institution)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Rhinecanthus_rectangulus_SI.jpg
+    license: public domain (Smithsonian Institution)
+  - id: commons-humber-tricycle-1880s
+    title: Viscount Bury on a Humber Roadster tricycle, 1880s
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Viscount_Bury_on_a_Humber_Roadster_tricycle_1880s.jpg
+    license: public domain
+  - id: commons-marsh-triceratops-1896
+    title: The skeleton of Triceratops, O. C. Marsh, 1896
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Triceratops_prorsus_old.jpg
+    license: public domain
+  - id: commons-nellie-bly-1890
+    title: Nellie Bly, about 1890
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Nellie_Bly_(1864-1922)_circa_1890.png
+    license: public domain
+  - id: commons-leslies-nellie-bly-reception-1890
+    title: The crowd meeting Nellie Bly's train, Frank Leslie's Illustrated Newspaper, 8 February 1890
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Nellie_Bly_Reception_1890.jpg
+    license: public domain
+  - id: commons-rackham-crow-and-pitcher
+    title: The Crow and the Pitcher, Arthur Rackham, Aesop's Fables, 1912
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Aesops_Fables-Rackham-059.jpg
+    license: public domain
+  - id: commons-hollar-crow-and-pitcher
+    title: The Crow and the Pitcher, etching by Wenceslaus Hollar, 17th century
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Wenceslas_Hollar_-_The_crow_and_the_pitcher_(State_1).jpg
+    license: public domain
+  # puzzle
+  - id: commons-usfws-snow-geese-flock
+    title: A flock of snow geese (US Fish and Wildlife Service), 2004
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Flock_of_Snow_Geese_(5269142865).jpg
+    license: public domain (US Fish and Wildlife Service)
+  - id: met-quart-measure
+    title: Quart Measure, pewter, British for the American market, 1700-1800
+    publisher: The Metropolitan Museum of Art, 10.125.462c
+    url: https://www.metmuseum.org/art/collection/search/5000
+    license: CC0
+  - id: met-pint-measure
+    title: Pint Measure, pewter, British for the American market, 1750-1800
+    publisher: The Metropolitan Museum of Art, 10.125.462d
+    url: https://www.metmuseum.org/art/collection/search/4999
+    license: CC0
+  - id: commons-noaa-highest-mountains
+    title: Mauna Kea and Mount Everest compared, from sea level and from base (NOAA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Comparison_of_Highest_Mountains.jpg
+    license: public domain (NOAA)
+  - id: commons-usgs-mauna-kea-triangulation-1925
+    title: Harry Kawamoto and J. O. Kilmartin at the Mauna Kea triangulation station, 29 October 1925 (USGS)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Harry_Kawamoto_and_J.O._Kilmartin_at_Mauna_Kea_triangulation_station._Hawaii._1925.jpg
+    license: public domain (US Geological Survey)
+  - id: met-chandlee-sundial
+    title: Sundial, Goldsmith Chandlee, about 1800
+    publisher: The Metropolitan Museum of Art, 1986.9
+    url: https://www.metmuseum.org/art/collection/search/8026
+    license: CC0
+  - id: commons-hgs-oahu-map-1881
+    title: Oahu, Hawaiian Islands, Hawaiian Government Survey, W. D. Alexander, Surveyor General, map by C. J. Lyons, 1881, scale 1:60,000 (Library of Congress copy, with the Oahu Railway added in red, 1898)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Hawaiian_Government_Survey;_W._D._Alexander,_Surveyor_General,_Oahu,_Hawaiian_Islands;_map_by_C._J._Lyons,_from_trigonometic_surveys_by_W._D._Alexander,_C._J._Lyons,_J._F._Brown,_M._D._Monsarrat_and_LOC_98688461.jpg
+    license: public domain
+  - id: commons-plimpton-322
+    title: Plimpton 322, a Babylonian clay tablet of numbers, about 1800 BCE
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Plimpton_322.jpg
+    license: public domain
+  - id: met-hasius-pair-case-watch
+    title: Pair-case watch, Jacob Hasius, about 1695
+    publisher: The Metropolitan Museum of Art, 17.190.1499a, b
+    url: https://www.metmuseum.org/art/collection/search/194091
     license: CC0
 
 lessons:
@@ -1641,3 +1893,607 @@ lessons:
         Alaska became the 49th state in January 1959 and Hawaiʻi the 50th in August 1959, and each
         new flag first flew on the Fourth of July after, in 1959 and 1960. The pictures are
         newspaper drawings of the 48-star flag as it was planned in 1912 and of the 49-star flag.
+
+  # ===== week 3: picked 7 Nov 2026 (plan/candidates/short-lessons-3.md) =====
+  # Week 3's thread (Egypt topics 15-21) takes look, listen, then, puzzle, then, wonder, look, so
+  # the week needs look 5, wonder 6, listen 6, then 5, puzzle 6, in this order within each slot.
+  # Taps (listen, 2nd) lands on Wednesday 11 Nov, Veterans Day; Nellie Bly (then, 4th) on
+  # Saturday 14 Nov, the day she set off in 1889.
+
+  # --- look ---
+  - key: leyster-self-portrait
+    subject: art
+    slot: look
+    title: A self-portrait, and Judith Leyster painting herself at work
+    sources: [commons-leyster-self-portrait-nga]
+    values_points: []
+    summary:
+      "2-3": >-
+        About 1630, Judith Leyster painted a picture of herself at work. She sits at her easel with
+        a brush in her hand and turns to smile at us, as if we had just come into the room; on the
+        easel is the painting she is making, a man playing a fiddle. A picture an artist makes of
+        herself or himself is a self-portrait, and most are painted by looking in a mirror.
+      "4-5": >-
+        Leyster worked in Haarlem, in the Netherlands, and in 1633 she joined the city's painters'
+        guild, which very few women did, and took students of her own. After she died her
+        paintings were forgotten, and some were sold as the work of Frans Hals, a famous painter of
+        the same town. In 1893 a painting bought as a Hals was found to carry her mark, the letters
+        JL with a star, and since then more of her pictures have been found. In the self-portrait
+        her face, her hand and the brush are painted with quick, loose strokes, so she seems to
+        have stopped for only a moment.
+
+  - key: escaping-criticism
+    subject: art
+    slot: look
+    title: Trompe l'oeil, and the boy who climbs out of the frame
+    sources: [commons-borrell-escaping-criticism]
+    values_points: []
+    summary:
+      "2-3": >-
+        In the painting Escaping Criticism, made in Spain in 1874 by Pere Borrell del Caso, a boy
+        seems to be climbing out of a picture frame into our room. His hands grip the frame, one
+        foot is already over the edge, and his eyes are wide open. It is all paint on a flat
+        canvas, made to fool the eye; a picture like that is called trompe l'oeil, French for
+        "fool the eye".
+      "4-5": >-
+        Trompe l'oeil painters use tricks that make flat things look solid and near: shadows where
+        light would really fall, things painted at life size, and edges that seem to come out over
+        the frame. Borrell paints the frame itself as part of the picture, and the boy's hands and
+        foot come over it, so our eyes read the frame as a real window he is stepping through. The
+        title seems to be a joke: the boy is escaping from the painting, and perhaps from the
+        critics who judge paintings. Painters have played this game for a very long time; an old
+        Greek story tells of a painter whose grapes looked so real that birds flew down to peck
+        them. The painting belongs to the Bank of Spain, in Madrid.
+
+  - key: edouart-silhouettes
+    subject: art
+    slot: look
+    title: A silhouette, and a whole scene cut from black paper
+    sources: [met-edouart-kate-and-harry-lucas, met-edouart-magic-lantern]
+    values_points: []
+    summary:
+      "2-3": >-
+        A silhouette is a picture of only the outline of someone or something, filled in black,
+        like a shadow. Auguste Edouart cut his silhouettes from black paper with scissors, without
+        drawing them first. In this one Kate and Harry Lucas are playing with a dog and a bird,
+        and even with no faces, eyes or colors we can tell what each of them is doing from the
+        shapes alone.
+      "4-5": >-
+        Edouart was a Frenchman who worked in Britain and then in America, from 1839 to 1849, and
+        cut thousands of likenesses, usually of the whole body, standing on a drawn or painted
+        floor. Because only the outline shows, the cutter has to choose the pose that tells the
+        most: a raised arm, a bent knee, a dog jumping up. Silhouettes were popular because they
+        were quick and cheap next to a painted portrait. The word comes from the name of a French
+        minister, Étienne de Silhouette, in the 1750s; why his name stuck is told in different
+        ways. The Magic Lantern is a second scene of Edouart's, cut about 1835.
+
+  - key: netsuke-hare
+    subject: art
+    slot: look
+    title: A miniature, and a whole hare carved small enough to hide in a hand
+    sources: [met-netsuke-seated-hare-minko]
+    values_points: []
+    summary:
+      "2-3": >-
+        In old Japan people wore the kimono, which has no pockets. To carry small things they hung
+        a little pouch or box from their sash on a cord, and at the top of the cord was a small
+        carving that stopped it slipping through, called a netsuke. Minkō carved this netsuke of a
+        sitting hare from wood and horn about 200 years ago, and it is only about an inch tall.
+        Something made very small but complete is a miniature.
+      "4-5": >-
+        A netsuke was handled every day and rubbed against clothes, so it had to be small, smooth
+        and strong: carvers made animals curled up tight, with no thin parts that could snap off,
+        and the cord went through two holes carved in the underside. The Met's hare is 2.7
+        centimeters tall and 3.7 wide, and the carver, Minkō, still carved the whole animal in detail.
+        Netsuke were carved from wood, ivory, horn and other hard materials from the 1600s on, and
+        when Japanese people began wearing Western clothes with pockets in the late 1800s they
+        stopped being needed, and collectors began to keep them as small works of art.
+
+  - key: puuloa-petroglyphs
+    subject: art
+    slot: look
+    title: A petroglyph, and the pictures pecked into lava at Puʻuloa
+    sources: [commons-nps-puuloa-petroglyphs-a, commons-nps-puuloa-petroglyphs-b]
+    values_points: []
+    summary:
+      "2-3": >-
+        At Puʻuloa, in Hawaiʻi Volcanoes National Park on the island of Hawaiʻi, people long ago
+        made more than 23,000 pictures in hard, smooth lava by pecking at it with harder stones.
+        There are circles, dots, lines, people and canoes. A picture made in rock this way is a
+        petroglyph, from two Greek words meaning rock and carving.
+      "4-5": >-
+        The petroglyphs were made long before writing came to Hawaiʻi, on pāhoehoe, the smooth kind
+        of lava, by tapping with a hard stone until a shape was pecked into the surface. Many are
+        small round holes and circles; others are people drawn with lines and triangles, canoes
+        with sails, and patterns. The makers left no written key, so what most of them mean is not
+        known for sure, and people still look closely and wonder. Visitors walk on a boardwalk so
+        the rock is not worn away.
+
+  # --- wonder ---
+  - key: kolea-migration
+    subject: science
+    slot: wonder
+    title: Migration, and the kōlea that flies from Alaska to Hawaiʻi
+    sources: [commons-usfws-pacific-golden-plover, commons-usfws-pluvialis-fulva]
+    values_points: []
+    summary:
+      "2-3": >-
+        The kōlea, the Pacific golden plover, spends the summer in Alaska, where it lays its eggs,
+        and the winter in Hawaiʻi. Every August and September it flies about 3,000 miles over open
+        ocean to Hawaiʻi without stopping, because it cannot rest on the water, and in April it
+        flies back north. A journey an animal makes every year with the seasons is a migration.
+      "4-5": >-
+        The flight takes three to four days and nights of steady flapping, and before it leaves a
+        kōlea eats until it has stored extra fat, the fuel for the trip. Scientists who marked kōlea
+        found that many come back to the same lawn, park or field in Hawaiʻi year after year and
+        chase other kōlea away from it. In spring their feathers change: the face, neck and chest
+        turn black edged with white, ready for nesting; in Hawaiʻi in winter they are speckled brown
+        and gold. How they find a few small islands in the middle of the Pacific is still being
+        studied; birds are known to steer by the sun, the stars and the Earth's magnetic field.
+
+  - key: merian-metamorphosis
+    subject: science
+    slot: wonder
+    title: Metamorphosis, and Maria Sibylla Merian drawing a caterpillar's whole life
+    sources: [met-herolt-poppy-metamorphosis, commons-merian-banana-1705]
+    values_points: []
+    summary:
+      "2-3": >-
+        Many insects change shape completely as they grow. A caterpillar eats and grows, then
+        makes a hard case around itself, called a pupa, and inside it the caterpillar's body is
+        rebuilt into a butterfly or a moth. This change is called metamorphosis. Maria Sibylla
+        Merian, an artist born in Germany in 1647, raised caterpillars and painted each stage on the
+        plant it eats.
+      "4-5": >-
+        Merian watched the same insects from egg to caterpillar to pupa to adult and drew the whole
+        life on one page, with the plant it fed on. In 1699, when she was 52, she sailed with her
+        younger daughter, Dorothea, to Suriname, in South America, and spent about two years
+        drawing the insects and plants there; her book, Metamorphosis insectorum Surinamensium,
+        came out in 1705. Its banana plate shows a green caterpillar, its dark red pupa and the moth
+        it becomes. Her elder daughter, Johanna Helena Herolt, also an artist, painted the poppy
+        with a caterpillar, a pupa and a butterfly.
+
+  - key: countershading
+    subject: science
+    slot: wonder
+    title: Countershading, and why so many animals are dark on top and pale underneath
+    sources: [commons-thayer-luna-caterpillar-1909, commons-thayer-white-fowl-1909]
+    values_points: []
+    summary:
+      "2-3": >-
+        Many animals are darker on their backs and paler underneath: deer, sharks, many fish and
+        many birds. Light comes from above, so it makes an animal's back brighter and leaves its
+        belly in shadow. The dark back and pale belly cancel that out, so the animal looks flat and
+        is hard to see. This kind of camouflage is called countershading.
+      "4-5": >-
+        Abbott Thayer, an American painter, explained countershading in a book written with his son
+        Gerald in 1909, and it is sometimes called Thayer's law. A painter knows that shading is
+        what makes a flat drawing look round, so Thayer saw that an animal shaded the opposite way
+        would lose its roundness and look flat. A caterpillar that feeds hanging upside down under a
+        twig is shaded the other way round, darker on the side that faces up; in its own position it
+        almost disappears, and turned over, as the book shows, it stands out plainly. The book's
+        second picture is a white bird without countershading.
+
+  - key: hooke-cells
+    subject: science
+    slot: wonder
+    title: A cell, and Robert Hooke looking at cork
+    sources: [commons-hooke-micrographia-schem-11, commons-hooke-cork-cells]
+    values_points: []
+    summary:
+      "2-3": >-
+        In 1665 Robert Hooke, an English scientist, cut a very thin slice of cork, the light bark
+        that bottle stoppers are made from, and looked at it through his microscope. He saw rows of
+        tiny boxes, like a honeycomb, and called them cells, from a Latin word for a small room.
+        Every living thing is made of cells.
+      "4-5": >-
+        Hooke put what he saw into a book of drawings, Micrographia, in 1665, with pictures of a
+        flea, the eye of a fly and the cork. The cork's cells were empty: cork is the dead outer bark
+        of the cork oak, and what he saw were the walls left behind. Living cells are full of a
+        jelly-like stuff and far too small to see without a microscope; a person's body is made of
+        trillions of them, and a cell makes new cells by dividing in two. Hooke worked out that a
+        cube of cork one inch on each side held more than a billion cells.
+
+  - key: coral-polyps
+    subject: science
+    slot: wonder
+    title: A polyp, and why coral is an animal
+    sources: [commons-noaa-acropora-ffs]
+    values_points: []
+    summary:
+      "2-3": >-
+        Coral looks like rock or a plant, but it is made by animals. Each coral is a crowd of tiny
+        animals called polyps, each one a soft tube with a ring of tentacles around its mouth,
+        related to jellyfish and sea anemones. Each polyp builds a hard cup of limestone under
+        itself, and over many years millions of cups build a reef. This coral grows at French
+        Frigate Shoals, in the Northwestern Hawaiian Islands.
+      "4-5": >-
+        Most reef-building corals have tiny algae living inside them: the algae use sunlight to make
+        food and share it with the polyp, and the polyp gives them a safe home, which is why reef
+        corals grow only in clear, shallow, warm water that sunlight reaches. At night many polyps
+        also stretch out their tentacles to catch tiny drifting animals. When the water stays too
+        hot, corals push out their algae and turn white, which is called bleaching, and they can
+        starve if it lasts. French Frigate Shoals is part of Papahānaumokuākea, one of the largest
+        protected areas of ocean in the world.
+
+  - key: autumn-leaves
+    subject: science
+    slot: wonder
+    title: Chlorophyll, and why leaves turn red and gold in the fall
+    sources: [aic-tosa-autumn-maples, aic-inness-autumn-woods]
+    values_points: []
+    summary:
+      "2-3": >-
+        Leaves are green because they are full of chlorophyll, a green stuff that uses sunlight to
+        make food for the plant. In the fall, many trees in places with cold winters stop making
+        chlorophyll, and as the green fades, the yellow and orange that were in the leaf all along
+        show through. Hawaiʻi stays warm, so few of its trees do this.
+      "4-5": >-
+        As the days grow shorter and colder, trees such as maples, oaks and birches get ready for
+        winter: the chlorophyll breaks down and the yellow and orange pigments, carotenoids, the
+        same family of colors as in carrots, show through; many maples also make new red pigments
+        in the fall. Then a layer of cells forms where each leaf joins its twig, the leaf falls, and
+        the tree rests through the winter. In Japan people have gone out to see red maples in the
+        fall for hundreds of years; Tosa Mitsuoki painted maple leaves with poems hung in the
+        branches about 1675, and George Inness painted American woods in the fall in the 1890s.
+
+  # --- listen ---
+  - key: metronome-tempo
+    subject: music
+    slot: listen
+    title: Tempo, and the metronome that counts the beats in a minute
+    sources: [commons-metronome-60bpm, met-maelzel-metronome]
+    values_points: []
+    summary:
+      "2-3": >-
+        A metronome makes a steady tick so a musician can keep the same speed. The number on it says
+        how many beats it ticks in one minute: at 60 it ticks once every second, and at 120 twice
+        every second. The speed of a piece of music is its tempo. This recording beeps at 60, so it
+        keeps time with the second hand of a clock.
+      "4-5": >-
+        Johann Nepomuk Maelzel began making and selling metronomes about 1815. Inside, a weighted rod
+        swings back and forth like an upside-down pendulum, and sliding the weight up the rod makes
+        it swing more slowly. Beethoven was one of the first composers to write metronome numbers
+        into his music, so players could know the speed he wanted. Musicians also name tempos in
+        Italian: largo is very slow, andante is a walking pace, allegro is fast and presto is very
+        fast. The Met's metronome, made about 1821, is one of Maelzel's, in a wooden case.
+
+  - key: taps-bugle
+    subject: music
+    slot: listen
+    title: A bugle call, and Taps, played with only four notes
+    sources: [commons-usab-taps-on-bugle, met-key-bugle-in-c]
+    values_points: [20]
+    perspective: several_fairly
+    summary:
+      "2-3": >-
+        A bugle is a brass horn with no valves or keys, so a player can make only a few notes, by
+        changing how the lips buzz into it. Taps is a bugle call played with just four different
+        notes, 24 notes in all. It is played at the end of the day for lights out, and at
+        ceremonies to honor people who have served in the military, as on Veterans Day, 11
+        November.
+      "4-5": >-
+        A bugle's notes come from the way the air in its tube vibrates: the player's lips can make
+        it sound a low note or higher notes that fit together with it, but not the notes in between,
+        which is why bugle calls are made of a few notes in patterns. Armies used bugle calls to give
+        orders that could be heard far away: wake up, come to meals, gather. Taps was first played in
+        1862, made from an older call. Veterans Day began as Armistice Day: the fighting of the
+        First World War stopped at 11 o'clock on the 11th day of the 11th month, 1918, and the
+        United States now keeps the day to thank everyone who has served. The Met's bugle was made in
+        London in 1811 by Thomas Key, of silver covered in gold.
+
+  - key: okina-oumuamua
+    subject: literature
+    slot: listen
+    title: The ʻokina, the first sound of ʻOumuamua, the visitor from another star
+    sources: [commons-haw-oumuamua, commons-stsci-oumuamua-impression, commons-stsci-pan-starrs-observatory]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Hawaiian alphabet has 13 letters: the vowels a, e, i, o and u, and the consonants h, k,
+        l, m, n, p, w and the ʻokina. The ʻokina, written ʻ, stands for a quick stop in the voice,
+        like the catch in the middle of "uh-oh". It can change a word: pau means finished, and paʻu
+        means soot. ʻOumuamua, the name of a visitor from space, begins with an ʻokina, and the
+        recording says the name in Hawaiian.
+      "4-5": >-
+        On 19 October 2017 the Pan-STARRS telescope on Haleakalā, on Maui, spotted a small object
+        moving so fast, on such a path, that it could not belong to our Sun: it had come from
+        another star, the first visitor of its kind ever seen. Hawaiian language experts named it
+        ʻOumuamua, a scout, or a messenger from afar that arrives first. Telescopes saw it only as a
+        moving point of light that grew brighter and dimmer as it tumbled, which suggests a long or
+        flat shape, so every picture of it is an artist's guess. It was already leaving when it was
+        found, and it is heading out of the solar system, far beyond reach.
+
+  - key: morse-code
+    subject: history
+    slot: listen
+    title: Morse code, and messages in short and long sounds
+    sources: [commons-sos-morse-code, commons-brady-samuel-morse]
+    values_points: []
+    summary:
+      "2-3": >-
+        Morse code spells out letters with short and long signals, called dots and dashes, which can
+        be sent as clicks, beeps or flashes of light. Samuel Morse and Alfred Vail worked it out for
+        the telegraph, which sent messages along a wire as bursts of electricity. SOS, the call for
+        help, is three short, three long and three short: dot-dot-dot, dash-dash-dash, dot-dot-dot.
+      "4-5": >-
+        Morse was a painter before he became an inventor, and the first long-distance telegraph
+        message went from Washington to Baltimore, about 40 miles, on 24 May 1844. In the code the
+        commonest letters get the shortest signals, E a single dot and T a single dash, so messages
+        are quicker to send. Countries agreed in 1906 on SOS as the signal for a ship in trouble,
+        because its pattern is easy to send and hard to mistake; it does not stand for any words.
+        The recording was made on a computer, and the photograph of Morse was taken by Mathew Brady
+        about 1860.
+
+  - key: pipe-organ
+    subject: music
+    slot: listen
+    title: The pipe organ, thousands of pipes with a note for each
+    sources: [commons-saint-antoine-organ-bwv-565, met-appleton-pipe-organ]
+    values_points: []
+    summary:
+      "2-3": >-
+        A pipe organ makes music by blowing air through pipes. When the player presses a key, air
+        flows into a pipe and it sounds a note: a long pipe plays a low note and a short pipe a high
+        one. Big organs have keyboards for the hands, a keyboard of pedals for the feet, and
+        thousands of pipes.
+      "4-5": >-
+        An organ's pipes come in sets called stops, each with its own sound, some like flutes and
+        some like trumpets, and the player pulls knobs to choose which sets sound; in a large organ
+        the longest pipes are 32 feet long and play notes so low they are felt as much as heard. The
+        recording is the opening of the Toccata and Fugue in D minor, which is usually said to be by
+        Johann Sebastian Bach, though some musicians think someone else wrote it, played on the
+        organ of the abbey church at Saint-Antoine-l'Abbaye, in France. The Met's organ was built by
+        Thomas Appleton in Boston in 1830 and stands 16 feet tall.
+
+  - key: st-louis-blues
+    subject: music
+    slot: listen
+    title: Call and response, as Bessie Smith sings and Louis Armstrong answers
+    sources: [commons-smith-armstrong-st-louis-blues-1925, commons-van-vechten-bessie-smith-1936]
+    values_points: []
+    summary:
+      "2-3": >-
+        In 1925 the singer Bessie Smith recorded The St. Louis Blues, and the young Louis Armstrong
+        played the cornet with her. Bessie Smith sings a line, then Armstrong's cornet answers it, as
+        if the two were talking. Music where one part calls and another answers is called call and
+        response.
+      "4-5": >-
+        Call and response came to America with African music and African American work songs, where
+        a leader sang a line and the group sang back, and it runs through the blues, jazz and rock.
+        W. C. Handy wrote The St. Louis Blues in 1914; in this recording, made in New York, Smith
+        sings, Armstrong answers in the gap after each line, and Fred Longshaw plays a reed organ.
+        Bessie Smith was called the Empress of the Blues and was one of the best-selling singers of
+        the 1920s, and Armstrong became one of the most famous trumpet players and singers of all
+        time. The photograph of Bessie Smith was taken in 1936, eleven years after the recording.
+
+  # --- then ---
+  - key: movable-type
+    subject: history
+    slot: then
+    title: Movable type, and Gutenberg's letters that could be used again
+    sources: [commons-ipm-gutenberg-press, commons-amman-buchdrucker-1568]
+    values_points: []
+    summary:
+      "2-3": >-
+        Long ago every book in Europe was copied out by hand, which could take months. About 1450,
+        in Mainz, in Germany, Johannes Gutenberg made each letter as its own small block of metal.
+        The blocks could be set side by side to spell out a whole page, inked and pressed onto
+        paper, then taken apart and set again for the next page. Letters that can be moved and used
+        again are called movable type.
+      "4-5": >-
+        Gutenberg made his letters by pouring melted metal, mostly lead, into a mold, so he could
+        cast thousands of identical copies of each letter; each one is made backwards, as in a
+        mirror, so that it prints the right way round. His press worked with a big screw, like the
+        presses used to squeeze grapes, and pressed the paper evenly onto the inked type. A print
+        shop could now make hundreds of copies of a book, and books became cheaper and more common
+        across Europe. Movable type had been invented earlier in China, about 1040, by Bi Sheng, who
+        made his letters from baked clay. The woodcut of 1568 shows a print shop: one man sets type,
+        one inks it, one pulls the press.
+
+  - key: humuhumu
+    subject: literature
+    slot: then
+    title: A compound word, and humuhumunukunukuāpuaʻa
+    sources: [commons-si-rhinecanthus-rectangulus]
+    values_points: []
+    summary:
+      "2-3": >-
+        Hawaiʻi's state fish has one of the longest names of any fish: humuhumunukunukuāpuaʻa. It is a
+        compound word, a word made by joining smaller words. Humuhumu is the Hawaiian name for a
+        triggerfish, nukunuku means a snout, and ā puaʻa means like a pig, so, as the Hawaiian
+        Dictionary gives it, the name means a triggerfish with a snout like a pig. English has
+        compound words too, like sunflower and starfish.
+      "4-5": >-
+        The humuhumunukunukuāpuaʻa is a reef triggerfish, also called the wedgetail or rectangular
+        triggerfish, marked with bold dark and pale patches and stripes. When it is
+        frightened it dives into a hole in the reef and raises a spine on its back to lock itself in;
+        that spine can be lowered only when a second, smaller spine behind it is pressed down, like a
+        trigger, which is how triggerfish got their name. It was first named Hawaiʻi's state fish in
+        1985, and named again in 2006. Many Hawaiian words double a sound: nukunuku doubles nuku, a
+        beak or snout.
+
+  - key: tri-words
+    subject: literature
+    slot: then
+    title: A prefix, and tri-, "three", from the tricycle to Triceratops
+    sources: [commons-humber-tricycle-1880s, commons-marsh-triceratops-1896]
+    values_points: []
+    summary:
+      "2-3": >-
+        A prefix is a small part at the start of a word that changes its meaning. Tri- means three:
+        a triangle has three angles, a tricycle has three wheels, and a trio is a group of three.
+        Triceratops, a dinosaur, has a name that means three-horned face: it had two long horns over
+        its eyes and a short one on its nose.
+      "4-5": >-
+        Many English prefixes come from Latin and Greek: tri- is in both, uni- means one, as in
+        unicycle and unicorn, and bi- means two, as in bicycle and biplane. Knowing a prefix opens
+        words never met before: a tripod stands on three legs, and to triple a number is to make it
+        three times as big. Triceratops was named in 1889 by the American scientist Othniel Charles
+        Marsh, from fossil bones found in the western United States; tri- (three), cerat- (horn) and
+        -ops (face) are all from Greek. In the 1880s grown-ups rode big tricycles because they were
+        steadier than the tall bicycles of the time.
+
+  - key: nellie-bly
+    subject: history
+    slot: then
+    title: Circumnavigation, and Nellie Bly going around the world in 72 days
+    sources: [commons-nellie-bly-1890, commons-leslies-nellie-bly-reception-1890]
+    values_points: []
+    summary:
+      "2-3": >-
+        On 14 November 1889, Nellie Bly, a newspaper reporter in New York, set off to travel all the
+        way around the world. In a famous story by Jules Verne, a man called Phileas Fogg goes around
+        the world in 80 days, and she wanted to beat him. She did it in 72 days, by ship and by train,
+        carrying just one small bag. Going all the way around the world is a circumnavigation.
+      "4-5": >-
+        Nellie Bly was the pen name of Elizabeth Cochrane, a reporter for the New York World. She
+        sailed east across the Atlantic to England, crossed to France, where she visited Jules Verne,
+        then went on through the Suez Canal to Ceylon, Singapore, Hong Kong and Japan, crossed the
+        Pacific to San Francisco, and rode a special train across the United States. She arrived back
+        on 25 January 1890, 72 days, 6 hours and 11 minutes after she left, and crowds came to meet
+        her. Circum- means around, as in circle and circumference, and navigation comes from the
+        Latin for ship, so circumnavigation means sailing all the way around.
+
+  - key: crow-and-pitcher
+    subject: literature
+    slot: then
+    title: Displacement, and Aesop's crow that raised the water with pebbles
+    sources: [commons-rackham-crow-and-pitcher, commons-hollar-crow-and-pitcher]
+    values_points: []
+    summary:
+      "2-3": >-
+        In one of Aesop's fables, a thirsty crow finds a pitcher with a little water at the bottom,
+        too low for its beak to reach. It drops in pebbles, one by one, and each pebble pushes some
+        water up out of its way, until the water rises high enough to drink. When something put into
+        water pushes the water aside, it is called displacement.
+      "4-5": >-
+        An object put into water takes up space, so the water has to go somewhere, and in a narrow
+        pitcher it can only go up: the level rises by as much room as the stones take up. People have
+        told the crow's story for more than 2,000 years. In 2009, scientists at the University of
+        Cambridge tested it with rooks, birds in the crow family: each rook was given a tall tube with
+        a little water and a worm floating on it, out of reach, and the rooks dropped stones in until
+        they could reach the worm, and chose bigger stones over small ones. Arthur Rackham drew the
+        crow for a book of Aesop's fables in 1912.
+
+  # --- puzzle ---
+  - key: estimate-a-flock
+    subject: math
+    slot: puzzle
+    title: An estimate, and counting a flock too big to count
+    sources: [commons-usfws-snow-geese-flock]
+    values_points: []
+    summary:
+      "2-3": >-
+        Sometimes there are too many things to count one by one, like a huge flock of snow geese.
+        Instead, count the birds in one small patch, see how many patches of the same size the flock
+        fills, and multiply. If one patch has 20 geese and the flock fills 10 patches, there are
+        about 20 times 10, which is 200. An answer that is close but not exact is an estimate.
+      "4-5": >-
+        People who count birds estimate big flocks this way: they count a block of birds, such as 10
+        or 100, then judge how many blocks the whole flock makes. An estimate is better when the patch
+        counted is a fair sample, not the thickest or the emptiest part of the flock. Rounding helps
+        too: 48 patches of 21 birds is close to 50 times 20, which is 1,000. Snow geese nest in the
+        Arctic and fly south each fall, and in winter they gather in flocks of thousands on marshes
+        and fields in many parts of the United States.
+
+  - key: quarts-and-pints
+    subject: math
+    slot: puzzle
+    title: Capacity, and cups, pints, quarts and gallons
+    sources: [met-quart-measure, met-pint-measure]
+    values_points: []
+    summary:
+      "2-3": >-
+        How much a container holds is its capacity. In the United States milk and juice are measured
+        in cups, pints, quarts and gallons: 2 cups make a pint, 2 pints make a quart, and 4 quarts
+        make a gallon. These two old pewter measures were made to hold a quart and a pint.
+      "4-5": >-
+        Quart comes from the Latin for a fourth, because a quart is a quarter of a gallon. So a gallon
+        is 4 quarts, 8 pints or 16 cups, and a half gallon is 2 quarts. Before there were standard
+        sizes everyone could trust, towns kept official measures, and in colonial America officials
+        called sealers checked shopkeepers' measures against them, so a pint bought in one shop was
+        the same as a pint in another. These pewter measures were made in Britain in the 1700s to be
+        sold in America.
+
+  - key: mauna-kea-sea-level
+    subject: math
+    slot: puzzle
+    title: Sea level, and why Everest is the highest and Mauna Kea the tallest
+    sources: [commons-noaa-highest-mountains, commons-usgs-mauna-kea-triangulation-1925]
+    values_points: []
+    summary:
+      "2-3": >-
+        Mountains are measured from sea level, the height of the ocean's surface. Mount Everest's top
+        is 29,032 feet above sea level, higher than any other mountain on Earth. Mauna Kea's top is
+        13,803 feet above sea level. But Mauna Kea starts far below the waves, on the ocean floor, and
+        measured from there to its top it is about 33,500 feet, taller than Everest.
+      "4-5": >-
+        Measuring from sea level gives every mountain the same starting line, so Everest is the
+        highest mountain: its top is the farthest above the sea. Tallest means from the bottom of the
+        mountain to its top, and about 19,700 feet of Mauna Kea are under water, so from base to top
+        it is the tallest mountain on Earth; Everest starts on land that is already high. Where you
+        start measuring changes the answer. In 1925 surveyors of the United States Geological Survey
+        measured heights on the island of Hawaiʻi by sighting from one marked station to another, and
+        one of their stations was on Mauna Kea's summit.
+
+  - key: sundial
+    subject: math
+    slot: puzzle
+    title: A sundial, and telling time by a shadow
+    sources: [met-chandlee-sundial]
+    values_points: []
+    summary:
+      "2-3": >-
+        A sundial tells the time with a shadow. A slanted piece sticks up from the dial, called the
+        gnomon, and the sun makes it cast a shadow onto lines marked with the hours. As the sun
+        crosses the sky during the day, the shadow moves too, and it points to the hour. A sundial
+        works only when the sun is shining.
+      "4-5": >-
+        The shadow points away from the sun: in the morning, with the sun in the east, it falls to the
+        west, and in the afternoon to the east; it is shortest at midday, when the sun is highest. For
+        a sundial to be right, its gnomon has to point north and slant at an angle that matches how
+        far the place is from the equator, so a sundial is made for one part of the world. Sundial
+        time and clock time are not always the same: through the year a sundial runs up to about a
+        quarter of an hour fast or slow. Goldsmith Chandlee, an American clockmaker, made this brass
+        sundial about 1800.
+
+  - key: oahu-map-scale
+    subject: math
+    slot: puzzle
+    title: A map scale, and how far an inch is on a map of Oʻahu
+    sources: [commons-hgs-oahu-map-1881]
+    values_points: []
+    summary:
+      "2-3": >-
+        A map is a drawing of land made much smaller, and its scale tells how much smaller. This map
+        of Oʻahu was drawn in 1881 by the Hawaiian Government Survey. Its scale is 1 to 60,000: one
+        inch on the map stands for 60,000 inches of real land, which is almost a mile. So two places 3
+        inches apart on the map are almost 3 miles apart.
+      "4-5": >-
+        A scale can be written as a ratio, 1 to 60,000, or drawn as a scale bar, a ruler printed on
+        the map: lay a strip of paper between two places, mark it, and hold it against the bar to read
+        the distance. 60,000 inches is 5,000 feet, and a mile is 5,280 feet. The Hawaiian Government
+        Survey, led by W. D. Alexander, measured the islands by triangulation: from a carefully
+        measured line, surveyors measured the angles to far-off marks and worked out the distances
+        from them. The numbers in the sea are depths, in fathoms of six feet, and this copy has the
+        line of the Oahu Railway added in red ink in 1898.
+
+  - key: base-sixty
+    subject: math
+    slot: puzzle
+    title: Base sixty, and why an hour has 60 minutes
+    sources: [commons-plimpton-322, met-hasius-pair-case-watch]
+    values_points: []
+    summary:
+      "2-3": >-
+        We count in tens, but for time we count in sixties: 60 seconds make a minute, and 60 minutes
+        make an hour. That comes from the Babylonians, who lived about 4,000 years ago in what is now
+        Iraq and counted in groups of sixty. Counting in groups of sixty is called base sixty.
+      "4-5": >-
+        Sixty is easy to share: it divides evenly by 2, 3, 4, 5, 6, 10, 12, 15, 20 and 30, so a half,
+        a third, a quarter, a fifth or a sixth of an hour is a whole number of minutes. Babylonian
+        scribes wrote numbers by pressing a reed into wet clay, making wedge-shaped marks; the tablet
+        called Plimpton 322, about 3,800 years old, is covered with them in rows and columns. We still
+        use sixties for the degrees around a circle: 360, which is six sixties. The pair-case watch
+        was made in the Netherlands by Jacob Hasius about 1695.
