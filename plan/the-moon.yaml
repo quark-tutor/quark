@@ -1,0 +1,211 @@
+# The Moon: a theme, one week (week 5, Monday 23 to Sunday 29 November 2026), for grade bands 2-3 and 4-5.
+# Picked by Brandon and June on 8 Nov 2026 from plan/candidates/themes.md (docs/theme-a-week-slice.md): a theme
+# is one week, seven topics, one a day, in this file's order, on the slot each names, beside the week's 28 short
+# lessons (decided 8 Nov 2026, docs/08). The Moon is full at 4:55 am on Tuesday 24 November, Hawaiʻi time.
+#
+# Format: lib/plan.ts. Import with npm run plan:import. Sequence 2: Egypt (sequence 1) holds weeks 1 to 4, so this
+# holds week 5. Summaries are for the tutor, not the child: plain facts, the mechanism named, as exact as the
+# source. No values point is touched; no age of the Moon or its craters is given (point 5).
+
+stretch: the-moon
+title: The Moon
+sequence: 2
+
+sources:
+  - id: commons-apollo11-full-moon
+    title: The full Moon photographed from Apollo 11 on the way home, 21 July 1969 (NASA, AS11-44-6667)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:AS11-44-6667_-_Full_Moon_Photographed_From_Apollo_11_Spacecraft.jpg
+    license: public domain (NASA)
+  - id: commons-riccioli-moon-map-1651
+    title: Map of the Moon, Giovanni Battista Riccioli, Almagestum novum, 1651
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Riccioli1651MoonMap.jpg
+    license: public domain
+  - id: commons-apollo11-daedalus-crater
+    title: Daedalus crater on the far side of the Moon, photographed from Apollo 11, July 1969 (NASA, AS11-44-6609)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Lunar_crater_Daedalus.jpg
+    license: public domain (NASA)
+  - id: commons-lro-tycho-mosaic
+    title: Tycho crater, Lunar Reconnaissance Orbiter wide-angle mosaic (NASA/GSFC/Arizona State University), 2011
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:LRO_WAC_Tycho_crater_mosaic.jpg
+    license: public domain (NASA)
+  - id: commons-apollo11-bootprint
+    title: Buzz Aldrin's bootprint in the Sea of Tranquility, 20 July 1969 (NASA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Apollo_11_bootprint.jpg
+    license: public domain (NASA)
+  - id: commons-nasa-lovell-haise-kilauea-1970
+    title: Apollo 13's James Lovell and Fred Haise practicing a Moon walk on Kīlauea, January 1970 (NASA, S70-20253)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Lovell_and_Haise_geology_training_(S70-20253).jpg
+    license: public domain (NASA)
+  - id: commons-goedhart-clair-de-lune
+    title: Clair de lune (Claude Debussy), Suite bergamasque, Laurens Goedhart, piano (recording), 2011
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Clair_de_lune_(Claude_Debussy)_Suite_bergamasque.ogg
+    license: public domain (released by the performer)
+  - id: commons-nadar-debussy-1908
+    title: Claude Debussy, about 1908 (Atelier Nadar)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Claude_Debussy_ca_1908,_foto_av_F%C3%A9lix_Nadar.jpg
+    license: public domain
+  - id: met-friedrich-two-men-moon
+    title: Two Men Contemplating the Moon, Caspar David Friedrich, about 1825-30
+    publisher: The Metropolitan Museum of Art, 2000.51
+    url: https://www.metmuseum.org/art/collection/search/438417
+    license: CC0
+  - id: commons-verne-moon-telescope-1866
+    title: The telescope in the Rocky Mountains, De la Terre à la Lune, Jules Verne, Hetzel, 1866 (Polona)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:De_la_Terre_a_la_Lune_1866_(140548264).jpg
+    license: public domain
+  - id: commons-dscovr-moon-crossing-earth
+    title: The Moon passing in front of the Earth, seen from a million miles away by NASA's EPIC camera on DSCOVR, 16 July 2015
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Globe_epc_2015198_lrg.jpg
+    license: public domain (NASA)
+
+weeks:
+  - week: 1
+    title: The Moon
+    why: >-
+      The Moon is full early on Tuesday of this week, so the children can go outside and see what the cards show.
+      The week follows the Moon from its seas and craters to the people who walked on it, the music, painting and
+      story it inspired, and how far away it is.
+    topics:
+      - subject: geography
+        slot: look
+        title: The Moon's seas, and the map that named them
+        sources: [commons-apollo11-full-moon, commons-riccioli-moon-map-1651]
+        parent_note: >-
+          The Moon is full at 4:55 am on Tuesday 24 November (Hawaiʻi time), so on Monday evening it is all but
+          full: step outside with the boys after dark and find the dark seas from the card.
+        summary:
+          "2-3": >-
+            The dark patches on the Moon are called seas, but there is no water in them. They are wide, flat plains
+            of dark rock that was once hot, melted lava: it flowed out, filled huge low places and cooled hard. The
+            lighter parts of the Moon are higher, rougher land. In 1651 an Italian astronomer, Giovanni Riccioli,
+            published a map of the Moon and gave the seas names, such as the Sea of Tranquility and the Sea of Rains,
+            which are still used today.
+          "4-5": >-
+            Mare (MAR-ay), plural maria (MAR-ee-uh), is Latin for sea: astronomers with early telescopes thought the
+            smooth dark patches might be water. They are basalt, a dark lava rock, the same kind of rock as the lava
+            flows on Hawaiʻi Island; the lava spread out and filled giant basins, which is why the seas are flatter
+            and darker than the bright, rugged highlands around them. Riccioli's map of 1651, drawn with Francesco
+            Grimaldi, named them after weather and moods: the Sea of Tranquility, the Sea of Serenity, the Sea of
+            Rains, the Ocean of Storms. The same side of the Moon always faces the Earth, so these seas are what
+            everyone on Earth has always seen.
+      - subject: science
+        slot: wonder
+        title: A crater, and why the Moon keeps every one
+        sources: [commons-apollo11-daedalus-crater, commons-lro-tycho-mosaic]
+        summary:
+          "2-3": >-
+            A crater is a round hole made when a rock from space smashes into the ground. The rock hits so fast that
+            it blasts out a bowl much bigger than itself and throws dust and stones around it in a ring. The Moon is
+            covered with craters, big and small, because it has no air, wind, rain or rivers to wear them away. Most
+            small rocks that head for the Earth burn up in the air as shooting stars, and wind, water and plants wear
+            down and cover the craters that are made.
+          "4-5": >-
+            A rock from space hits at many miles a second and explodes as it strikes, so craters come out round
+            whatever angle the rock came in at. A big crater can have a mountain in its middle, where the ground
+            bounced back up, and bright streaks of thrown-out rock, called rays, running out from it: Tycho has both,
+            and its rays show plainly at full moon, even through binoculars. Daedalus, on the far side of the Moon,
+            is about 58 miles across; Apollo 11's crew photographed it from orbit. With no air to slow a falling rock
+            and no weather to wear a crater down, only a later crater changes an old one. Craters help scientists:
+            each one digs up rock from below the surface, so they show what the Moon is made of underneath.
+      - subject: history
+        slot: then
+        title: A lunar landing, and Apollo 11's footprints in the Sea of Tranquility
+        sources: [commons-apollo11-bootprint, commons-nasa-lovell-haise-kilauea-1970]
+        summary:
+          "2-3": >-
+            On 20 July 1969, two American astronauts, Neil Armstrong and Buzz Aldrin, landed on the Moon in a small
+            spacecraft called the Eagle, while a third, Michael Collins, circled above them. Armstrong was the first
+            person ever to step onto the Moon, and Aldrin followed. They walked in the Sea of Tranquility for about
+            two and a half hours, picked up Moon rocks to bring home, and took photographs, including one of
+            Aldrin's bootprint in the gray dust.
+          "4-5": >-
+            The Moon has no air, wind or rain, so nothing blows the bootprints away, and they should last a very long
+            time. Aldrin photographed his bootprint on purpose, to show how the Moon's dust packs down under a boot,
+            which mattered for planning later landings. The Eagle stayed on the Moon about 21 and a half hours, and
+            the crew brought back about 47 pounds of rock. Apollo crews practiced being geologists on Earth in places
+            that look like the Moon: in 1969 and 1970 crews trained on Kīlauea's lava fields and at Kapoho, on
+            Hawaiʻi Island, because that lava is like the rock of the Moon's seas. As he stepped down, Armstrong said,
+            as it was heard, "That's one small step for man, one giant leap for mankind"; he said later he meant "a
+            man".
+      - subject: music
+        slot: listen
+        title: The sustain pedal, and Debussy's Clair de lune
+        sources: [commons-goedhart-clair-de-lune, commons-nadar-debussy-1908]
+        summary:
+          "2-3": >-
+            Clair de lune is French for moonlight. Claude Debussy, a French composer, wrote this quiet piano piece,
+            and it was printed in 1905 as part of a set of pieces called the Suite bergamasque. It sounds soft and
+            blurred, like moonlight on water, partly because the pianist presses the right-hand pedal, the sustain
+            pedal, which lets each note keep ringing after the key comes up, so the notes blend into each other.
+          "4-5": >-
+            Inside a piano, each key throws a felt hammer against its strings, and a felt damper rests on the strings
+            to stop them sounding when the key comes back up. The sustain pedal lifts every damper at once, so the
+            struck notes ring on and other strings ring along with them; a pianist lets the pedal up and presses it
+            again as the chords change, so the sound blends without turning into a muddle. Debussy took the title
+            from a poem by Paul Verlaine, also called Clair de lune. He began the suite around 1890 and kept changing
+            it until it was printed in 1905. The recording is a modern one by Laurens Goedhart, who released it to
+            the public domain.
+      - subject: art
+        slot: look
+        title: A figure seen from behind, in Friedrich's Two Men Contemplating the Moon
+        sources: [met-friedrich-two-men-moon]
+        summary:
+          "2-3": >-
+            Caspar David Friedrich, a German painter, made this painting nearly 200 years ago. Two men stand on a
+            rocky path at dusk, one resting his hand on the other's shoulder, beside a huge twisted tree that is half
+            pulled out of the ground and a big rock. They are looking at a thin crescent Moon, with a bright point of
+            light beside it, low in an orange and gray sky. We see the men from behind, so we cannot see their faces:
+            we look where they are looking, and see the Moon with them.
+          "4-5": >-
+            Friedrich painted this scene more than once; the Met's version is from about 1825 to 1830. Painting
+            people from behind was one of his favorite ideas, and German has a word for such a figure, Rückenfigur,
+            "figure from the back". Because their faces are hidden, a viewer stands in their place, and the painting
+            becomes about what it feels like to look at the Moon. The dark tree and rock frame the bright sky, which
+            draws the eye to the crescent. Friedrich drew outdoors in sketchbooks but put his paintings together in
+            the studio, choosing each part for the feeling it gives.
+      - subject: literature
+        slot: then
+        title: Science fiction, and Jules Verne's From the Earth to the Moon
+        sources: [commons-verne-moon-telescope-1866]
+        summary:
+          "2-3": >-
+            Jules Verne, a French writer, wrote From the Earth to the Moon in 1865. In it, the members of a club in
+            Baltimore build a giant cannon, called the Columbiad, down in the ground in Florida, to fire a hollow
+            metal shell at the Moon, and three men ride inside it. Verne made the story up, but he worked out his
+            numbers carefully, so it is called science fiction: a made-up story built on real science.
+          "4-5": >-
+            In the book, the club works out how fast the shell must go to get away from the Earth's pull, about seven
+            miles a second, and builds a giant telescope on a peak of the Rocky Mountains to watch it fly. In the
+            sequel, Around the Moon (1870), the travelers circle the Moon without landing and fall back into the
+            Pacific Ocean, where a ship picks them up. A hundred and four years after the first book, Apollo 11 also
+            carried three men from Florida, and came home by splashing down in the Pacific. Verne got some things
+            wrong: a cannon's sudden push would have crushed the travelers, and real rockets keep pushing all the way
+            up instead of one big bang at the start.
+      - subject: math
+        slot: puzzle
+        title: Distance, and about thirty Earths between the Earth and the Moon
+        sources: [commons-dscovr-moon-crossing-earth]
+        summary:
+          "2-3": >-
+            The Moon is about 239,000 miles away. The Earth is about 8,000 miles wide, and about 30 Earths in a row
+            would fill the space between the Earth and the Moon. The Moon is smaller than the Earth: it is a little
+            more than 2,000 miles across, about a quarter as wide, so four Moons side by side would be a little wider
+            than the Earth.
+          "4-5": >-
+            The Moon is on average about 238,900 miles away and the Earth is about 7,918 miles across, so
+            238,900 ÷ 7,918 is about 30: thirty Earths in a row (30 × 7,918 = 237,540 miles) nearly reach the Moon.
+            The Moon is 2,159 miles across, about 0.27 of the Earth's width, a little more than a quarter. Its
+            distance changes during the month, between about 226,000 and 252,000 miles, because its path around the
+            Earth is not a perfect circle, and light crosses it in about 1.3 seconds. In 2015 a NASA camera about a
+            million miles away photographed the Moon passing in front of the Earth; the Moon looks a little bigger
+            there than its true size, because it was nearer the camera than the Earth was.
