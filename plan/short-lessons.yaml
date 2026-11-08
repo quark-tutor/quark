@@ -610,16 +610,11 @@ sources:
     publisher: Wikimedia Commons
     url: https://commons.wikimedia.org/wiki/File:Metronome_60bpm.wav
     license: CC0
-  - id: commons-usab-taps-on-bugle
-    title: Taps, played on the bugle by a member of the United States Army Band (recording)
+  - id: commons-schumann-heink-wiegenlied-1915
+    title: Wiegenlied (Brahms's Lullaby), sung by Ernestine Schumann-Heink (recording), 1915
     publisher: Wikimedia Commons
-    url: https://commons.wikimedia.org/wiki/File:Taps_on_bugle.ogg
-    license: public domain (United States Army)
-  - id: met-key-bugle-in-c
-    title: Bugle in C, Thomas Key, London, 1811
-    publisher: The Metropolitan Museum of Art, 1975.270a, b
-    url: https://www.metmuseum.org/art/collection/search/504065
-    license: CC0
+    url: https://commons.wikimedia.org/wiki/File:Brahms_-_Schumann-Heink_-_Wiegenlied_(Berceuse)_(1915).ogg
+    license: public domain
   - id: commons-haw-oumuamua
     title: ʻOumuamua, the name said in Hawaiian (recording), 2017
     publisher: Wikimedia Commons
@@ -1897,8 +1892,9 @@ lessons:
   # ===== week 3: picked 7 Nov 2026 (plan/candidates/short-lessons-3.md) =====
   # Week 3's thread (Egypt topics 15-21) takes look, listen, then, puzzle, then, wonder, look, so
   # the week needs look 5, wonder 6, listen 6, then 5, puzzle 6, in this order within each slot.
-  # Taps (listen, 2nd) lands on Wednesday 11 Nov, Veterans Day; Nellie Bly (then, 4th) on
-  # Saturday 14 Nov, the day she set off in 1889.
+  # Nellie Bly (then, 4th) lands on Saturday 14 Nov, the day she set off in 1889. Taps, picked for
+  # Wednesday 11 Nov, Veterans Day, was taken out on 7 Nov: live's plan held it back for both boys
+  # (values point 20, Not yet until age 10), so Brahms's Lullaby takes its place.
 
   # --- look ---
   - key: leyster-self-portrait
@@ -2158,29 +2154,27 @@ lessons:
         Italian: largo is very slow, andante is a walking pace, allegro is fast and presto is very
         fast. The Met's metronome, made about 1821, is one of Maelzel's, in a wooden case.
 
-  - key: taps-bugle
+  - key: brahms-lullaby
     subject: music
     slot: listen
-    title: A bugle call, and Taps, played with only four notes
-    sources: [commons-usab-taps-on-bugle, met-key-bugle-in-c]
-    values_points: [20]
-    perspective: several_fairly
+    title: Triple meter, and why a lullaby rocks
+    sources: [commons-schumann-heink-wiegenlied-1915]
+    values_points: []
     summary:
       "2-3": >-
-        A bugle is a brass horn with no valves or keys, so a player can make only a few notes, by
-        changing how the lips buzz into it. Taps is a bugle call played with just four different
-        notes, 24 notes in all. It is played at the end of the day for lights out, and at
-        ceremonies to honor people who have served in the military, as on Veterans Day, 11
-        November.
+        Brahms's Lullaby rocks like a cradle because it counts in threes: ONE-two-three,
+        ONE-two-three, with the first beat of each group a little stronger than the other two. Music
+        that counts in threes is in triple meter. A march counts in twos, LEFT-right, LEFT-right, for
+        walking feet. Johannes Brahms wrote this lullaby in 1868, and this recording, sung in German,
+        was made in 1915.
       "4-5": >-
-        A bugle's notes come from the way the air in its tube vibrates: the player's lips can make
-        it sound a low note or higher notes that fit together with it, but not the notes in between,
-        which is why bugle calls are made of a few notes in patterns. Armies used bugle calls to give
-        orders that could be heard far away: wake up, come to meals, gather. Taps was first played in
-        1862, made from an older call. Veterans Day began as Armistice Day: the fighting of the
-        First World War stopped at 11 o'clock on the 11th day of the 11th month, 1918, and the
-        United States now keeps the day to thank everyone who has served. The Met's bugle was made in
-        London in 1811 by Thomas Key, of silver covered in gold.
+        Brahms wrote the lullaby, Wiegenlied in German, in 1868 for a friend, Bertha Faber, when her
+        baby son was born, and set it to old German words that begin "Good evening, good night". In
+        music the beats are grouped into bars, also called measures, and the meter says how many beats
+        each bar has: two for a march, three for a lullaby or a waltz, four for many songs. The waltz
+        is another dance in three, which is why lullabies and waltzes both seem to sway. The singer,
+        Ernestine Schumann-Heink, was one of the most famous singers of her day, and the recording
+        crackles because it was made more than a hundred years ago.
 
   - key: okina-oumuamua
     subject: literature

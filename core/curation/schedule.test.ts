@@ -53,7 +53,7 @@ describe("weekSchedule", () => {
     );
   });
 
-  it("fits the picked lessons into weeks 1, 2 and 3 exactly, with the vote on Election Day and Taps on Veterans Day", async () => {
+  it("fits the picked lessons into weeks 1, 2 and 3 exactly, with the vote on Election Day and Nellie Bly on her day", async () => {
     const { readFileSync } = await import("node:fs");
     const { join } = await import("node:path");
     const { parseLibrary } = await import("../../lib/plan");
@@ -74,12 +74,12 @@ describe("weekSchedule", () => {
     expect(week2[6].topics).toEqual({ look: "vermeer-light", wonder: "egypt-14", listen: "mountain-king", then: "louis-braille", puzzle: "flag-arrays" });
     expect(new Set(shortIn(week2))).toEqual(new Set(lessons.slice(28, 56).map((l) => l.id)));
 
-    // Week 3 (picked 7 Nov 2026) starts Monday 9 Nov: Taps on day 3, Wednesday 11 Nov, Veterans Day, and Nellie Bly
-    // on day 6, Saturday 14 Nov, the day she set off in 1889.
+    // Week 3 (picked 7 Nov 2026) starts Monday 9 Nov: Nellie Bly on day 6, Saturday 14 Nov, the day she set off in 1889,
+    // and Brahms on day 3 in the place of Taps, which live's settings hold back for both boys (point 20, until age 10).
     const both = new Set([...used, ...shortIn(week2)]);
     const week3 = weekSchedule({ week: 3, thread, lessons, used: both });
     expect(week3[0].topics).toEqual({ look: "egypt-15", wonder: "kolea-migration", listen: "metronome-tempo", then: "movable-type", puzzle: "estimate-a-flock" });
-    expect(week3[2].topics).toEqual({ look: "escaping-criticism", wonder: "countershading", listen: "taps-bugle", then: "egypt-17", puzzle: "mauna-kea-sea-level" });
+    expect(week3[2].topics).toEqual({ look: "escaping-criticism", wonder: "countershading", listen: "brahms-lullaby", then: "egypt-17", puzzle: "mauna-kea-sea-level" });
     expect(week3[5].topics).toEqual({ look: "puuloa-petroglyphs", wonder: "egypt-20", listen: "pipe-organ", then: "nellie-bly", puzzle: "oahu-map-scale" });
     expect(week3[6].topics).toEqual({ look: "egypt-21", wonder: "autumn-leaves", listen: "st-louis-blues", then: "crow-and-pitcher", puzzle: "base-sixty" });
     expect(new Set(shortIn(week3))).toEqual(new Set(lessons.slice(56, 84).map((l) => l.id)));
