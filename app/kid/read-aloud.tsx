@@ -1,53 +1,52 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { SAY } from "@/core/wall/words";
+import { started, useOneAtATime } from "./one-at-a-time";
 import styles from "./kid.module.css";
 
 // "Read it to me": the tutor's voice (docs/tutor-voice-slice.md), from Quark's own route, on a tap only, never by
 // itself (rule 4). The line is named by its card and part ("<card id>.hint.0"), never sent as words. The tap
 // sets the player's address and starts it in the same moment, because iPad Safari plays sound only when it
-// starts inside the tap; the route answers with the stored audio, made on the first tap anywhere. A second tap
-// stops it, and starting one stops any other, so only one thing is ever read at a time.
-const STARTED = "quark:read-aloud";
+// starts inside the tap; the route answers with the stored audio, made overnight or on the first tap anywhere.
+// From the tap until the voice starts the button says it is getting the line ready (docs/lines-ahead-slice.md),
+// then "Stop" while it plays. A tap while it is getting ready or playing stops it, and starting it stops anything
+// else playing, a recording too, so only one thing is ever heard at a time.
+type State = "idle" | "loading" | "playing";
 
 export function ReadAloud({ line, small = false }: { line: string; small?: boolean }) {
   const audio = useRef<HTMLAudioElement>(null);
-  const [reading, setReading] = useState(false);
-
-  useEffect(() => {
-    const a = audio.current;
-    const other = (e: Event) => {
-      if ((e as CustomEvent<HTMLAudioElement>).detail !== a) a?.pause();
-    };
-    window.addEventListener(STARTED, other);
-    return () => {
-      window.removeEventListener(STARTED, other);
-      a?.pause();
-    };
-  }, []);
+  const [state, setState] = useState<State>("idle");
+  useOneAtATime(audio);
 
   function toggle() {
     const a = audio.current;
     if (!a) return;
-    if (reading) {
+    if (state !== "idle") {
       a.pause();
-      setReading(false);
+      setState("idle");
       return;
     }
-    window.dispatchEvent(new CustomEvent(STARTED, { detail: a }));
+    started(a);
     const src = `/api/kid/say?line=${encodeURIComponent(line)}`;
     if (a.getAttribute("src") !== src) a.src = src;
     else a.currentTime = 0;
-    setReading(true);
-    void a.play().catch(() => setReading(false));
+    setState("loading");
+    void a.play().catch(() => setState("idle"));
   }
 
+  const idle = () => setState("idle");
   return (
     <>
-      <audio ref={audio} preload="none" onPause={() => setReading(false)} onEnded={() => setReading(false)} onError={() => setReading(false)} />
-      <button type="button" className={small ? styles.readSmall : styles.read} onClick={toggle} aria-pressed={reading}>
-        {reading ? SAY.stop : SAY.readIt}
+      <audio ref={audio} preload="none" onPlaying={() => setState("playing")} onPause={idle} onEnded={idle} onError={idle} />
+      <button
+        type="button"
+        className={small ? styles.readSmall : styles.read}
+        onClick={toggle}
+        aria-pressed={state !== "idle"}
+        aria-busy={state === "loading"}
+      >
+        {state === "loading" ? SAY.gettingReady : state === "playing" ? SAY.stop : SAY.readIt}
       </button>
     </>
   );

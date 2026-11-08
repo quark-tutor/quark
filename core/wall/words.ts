@@ -17,6 +17,7 @@ export const SAY = {
   doneToday: "Done for today",
   back: "Back to the wall",
   readIt: "Read it to me",
+  gettingReady: "Getting it ready…", // from the tap until the voice starts (docs/lines-ahead-slice.md)
   stop: "Stop",
   play: "Play",
   pause: "Pause",

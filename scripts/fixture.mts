@@ -12,10 +12,12 @@
 //   npm run fixture -- words <date>         every card of a day: title, verdict, text, question, hints, reader notes, and an answer in the text
 //   npm run fixture -- card <id>            one card: its words as shown, what "Read it to me" sends, and what is stored
 //   npm run fixture -- numbers <week>       every number shape in the week's spoken words, and how each goes to the voice
+//   npm run fixture -- lines <week>         per day and child, the lines the night's firing would make, their characters and cost
 //   npm run fixture -- day <date>           per child and slot, what the wall can show that day: each layer's verdict,
 //                                           its item's approval, and the gate's reasons for a card held back
 //   npm run fixture -- device <n>           pair a device to child n (1 or 2, oldest first) and print its cookie, so
 //                                           the kid view can be asked with curl, as a paired iPad asks it
+//   npm run fixture -- code <n>             a six-digit pairing code for child n, as /parent makes one, to type at /kid/pair
 //   npm run fixture -- forget <device id>   forget that device, as "Forget this iPad" does
 //   npm run fixture -- judge [model]        the judge of a child's answer over slice 1's invented answers and the answers
 //                                           to a hint, the word rule beside it (scripts/judge-table.mts); reads no database
@@ -27,8 +29,11 @@
 import { createClient } from "@supabase/supabase-js";
 import { givesAway } from "../core/curation/cards.ts";
 import { todayIn } from "../core/curation/week.ts";
+import { sayCost } from "../core/prices.ts";
+import type { CardRow } from "../core/wall/flow.ts";
 import { forVoice, readLine, speechPath } from "../core/wall/speech.ts";
-import { createHash, randomBytes } from "node:crypto";
+import { dayLines, nightLines, wallLines } from "../core/wall/speech-ahead.ts";
+import { createHash, randomBytes, randomInt } from "node:crypto";
 import { announceTarget } from "./target.ts";
 
 const TUTOR_VOICE = "en-US-Chirp3-HD-Sulafat"; // core/speech.ts, which only the server may import
@@ -308,6 +313,52 @@ if (command === "show") {
     const sent = forVoice(shape) === shape ? "as written" : `sent as ${forVoice(shape)}`;
     console.log(`${shape}  ×${s.count}  ${sent}  ${[...s.examples].map((e) => `“${e}”`).join("  ")}`);
   }
+} else if (command === "lines") {
+  // What the night's firing would make for each day of a week (docs/lines-ahead-slice.md), per child: the lines its
+  // passed cards give, through the firing's own dayLines(), as if the week were live, with their characters and
+  // what they come to at list price. Read-only, and it prints no card's words.
+  const t = await theme(Number(arg));
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  const rows = must(
+    await db.from("cards").select("id, child_id, day, slot, layer, policy, body, questions(id)").eq("theme_id", t.id).eq("policy", "passed").order("day"),
+    "cards",
+  ) as unknown as { id: string; child_id: string; day: string; slot: string; layer: number; policy: string; body: CardRow["body"]; questions: { id: string }[] }[];
+  const asLive = (r: (typeof rows)[number]): CardRow => ({
+    ...r,
+    family_id: familyId,
+    theme: { status: "live", family_id: familyId },
+    itemId: null,
+    item: null,
+    question: r.questions[0] ? { id: r.questions[0].id, prompt: "", answer_key: { accept: [], rubric: "" } } : null,
+  });
+  const wall = wallLines(TUTOR_VOICE);
+  console.log(`Week ${t.plan_week} (${t.status}), from ${t.week_start}: ${rows.length} passed cards. The wall's own sentences: ${wall.length} lines, ${wall.reduce((a, l) => a + l.text.length, 0)} characters, made once ever.`);
+  const all = { lines: 0, characters: 0, read: 0, readCharacters: 0, longest: 0 };
+  const days = [...new Set(rows.map((r) => r.day))];
+  for (const day of days) {
+    const per = kids.map((k) =>
+      dayLines(rows.filter((r) => r.day === day && r.child_id === k.id).map(asLive), { familyId, childId: k.id, deviceId: "" }, day, TUTOR_VOICE),
+    );
+    const night = nightLines([], per);
+    const characters = night.reduce((a, l) => a + l.text.length, 0);
+    all.lines += night.length;
+    all.characters += characters;
+    for (const l of per.flat().filter((l) => l.rank === 0)) {
+      all.read += 1;
+      all.readCharacters += l.text.length;
+    }
+    all.longest = Math.max(all.longest, ...night.map((l) => l.text.length));
+    const cards = kids.map((k) => rows.filter((r) => r.day === day && r.child_id === k.id).length);
+    console.log(
+      `${day}: ${per.map((p, i) => `child ${i + 1} ${cards[i]} cards, ${p.length} lines`).join("; ")}; ${night.length} files, ${characters.toLocaleString()} characters, $${sayCost(characters).toFixed(2)} at list price`,
+    );
+  }
+  const n = days.length || 1;
+  console.log(
+    `A day on average: ${(all.lines / n).toFixed(0)} lines, ${Math.round(all.characters / n).toLocaleString()} characters, $${sayCost(all.characters / n).toFixed(2)}; ` +
+      `read lines ${Math.round(all.read / n)} a day, about ${Math.round(all.readCharacters / Math.max(all.read, 1))} characters each; the longest line ${all.longest}. ` +
+      `A 30-day month at this rate: ${Math.round((all.characters / n) * 30).toLocaleString()} characters.`,
+  );
 } else if (command === "audit") {
   const n = arg ? Number(arg) : 12;
   const rows = must(await db.from("audit_log").select("created_at, action, target").eq("family_id", familyId).order("created_at", { ascending: false }).limit(n), "audit_log") as {
@@ -326,6 +377,19 @@ if (command === "show") {
   const tokenHash = createHash("sha256").update(token).digest("hex");
   const [row] = must(await db.from("devices").insert({ family_id: familyId, child_id: child.id, token_hash: tokenHash }).select("id"), "devices") as { id: string }[];
   console.log(`Paired device ${row.id} to child ${arg}. Its cookie:\n${DEVICE_COOKIE}=${token}\nForget it after: npm run fixture -- forget ${row.id}`);
+} else if (command === "code") {
+  // A six-digit pairing code for child n, as /parent makes one (app/parent/actions.ts), for pairing the laptop's
+  // browser at /kid/pair on the dev server without signing in as a guardian. It lasts ten minutes and is printed
+  // once; only its hash is kept, as a guardian's would be.
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  const child = kids[Number(arg) - 1];
+  if (!child) throw new Error(`Say which child, 1 to ${kids.length}: npm run fixture -- code 1`);
+  const [guardian] = must(await db.from("guardians").select("id").eq("family_id", familyId).order("created_at").limit(1), "guardians") as { id: string }[];
+  if (!guardian) throw new Error("Test's family has no guardian to make the code as.");
+  const code = randomInt(0, 1_000_000).toString().padStart(6, "0");
+  const codeHash = createHash("sha256").update(code).digest("hex");
+  must(await db.from("device_pairings").insert({ family_id: familyId, child_id: child.id, code_hash: codeHash, created_by: guardian.id }).select("id"), "device_pairings");
+  console.log(`Pairing code for child ${arg}: ${code}. Type it at /kid/pair on the dev server within ten minutes.`);
 } else if (command === "forget") {
   must(await db.from("devices").update({ revoked_at: new Date().toISOString() }).eq("family_id", familyId).eq("id", arg).select("id"), "devices");
   console.log(`Forgot device ${arg}.`);

@@ -6,6 +6,7 @@ import { PRICES, PRICES_CHECKED, SPEECH_PRICES, SPEECH_PRICES_CHECKED } from "@/
 import { HEAR_MODEL, TUTOR_VOICE } from "@/core/speech";
 import { estimate, OLD_WEEK_ESTIMATE, type RecordedRun, type RunModel } from "@/core/runs";
 import { JUDGE_MODEL } from "@/core/wall/judge";
+import { AHEAD_ACTION, type AheadTarget } from "@/core/wall/speech-ahead";
 import { requireGuardian } from "@/lib/guardian";
 import { createClient } from "@/lib/supabase/server";
 import styles from "../beliefs/beliefs.module.css";
@@ -50,7 +51,7 @@ async function Models() {
 
   // Row-level security keeps the runs to the guardian's own family.
   const supabase = await createClient();
-  const [family, kids, runs, themes, speech] = await Promise.all([
+  const [family, kids, runs, themes, speech, ahead] = await Promise.all([
     supabase.from("families").select("timezone").single(),
     supabase.from("children").select("id", { count: "exact", head: true }),
     supabase
@@ -60,8 +61,17 @@ async function Models() {
       .returns<Run[]>(),
     supabase.from("themes").select("id, title"),
     supabase.from("speech_runs").select("kind, characters, seconds, cost, created_at").returns<SpeechRow[]>(),
+    // The night's firing's last end row (docs/lines-ahead-slice.md).
+    supabase
+      .from("audit_log")
+      .select("created_at, target")
+      .eq("action", AHEAD_ACTION)
+      .neq("target->>outcome", "started")
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .returns<AheadRow[]>(),
   ]);
-  for (const r of [family, kids, runs, themes, speech]) if (r.error) throw new Error(r.error.message);
+  for (const r of [family, kids, runs, themes, speech, ahead]) if (r.error) throw new Error(r.error.message);
 
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone, dateStyle: "medium", timeStyle: "short" });
@@ -147,8 +157,8 @@ async function Models() {
         <p className={styles.muted}>
           The tutor reads a card, a hint or a handoff aloud in one voice, <code>{TUTOR_VOICE}</code>, and hears a
           child&rsquo;s spoken answer through Talk with <code>{HEAR_MODEL}</code>, both from Google Cloud. A line&rsquo;s
-          audio is made the first time a child taps it and kept, so a line is paid for once; a clip is paid for each time,
-          by its length. Quark keeps no recording of a child and no words but the answer the child sends. The voice is set
+          audio is made overnight, at 3 am, for every card of the day, or else the first time a child taps it, and kept,
+          so a line is paid for once; a clip is paid for each time, by its length. Quark keeps no recording of a child and no words but the answer the child sends. The voice is set
           in <code>core/speech.ts</code>; the key is never shown here.
         </p>
         <div className={own.scroll}>
@@ -208,6 +218,7 @@ async function Models() {
           {SPEECH_PRICES.say.freeCharactersPerMonth.toLocaleString()} characters Google gives free each month. The real bill
           is in the Google Cloud console.
         </p>
+        <p className={styles.muted}>{aheadLine(ahead.data?.[0] ?? null, when)}</p>
       </section>
 
       <section className={own.section}>
@@ -469,6 +480,20 @@ function tally(rows: SpeechRow[]) {
     t.cost += Number(r.cost);
   }
   return t;
+}
+
+type AheadRow = { created_at: string; target: AheadTarget };
+
+// The night's firing in one line: when it ran, the day it made lines for, how many, and what they came to.
+function aheadLine(row: AheadRow | null, when: (iso: string) => string): string {
+  if (!row) return "Lines made ahead: none yet. Each night at 3 am, every line of the day's cards is made in the tutor's voice, so a child's first tap doesn't wait.";
+  const t = row.target;
+  const at = `Lines made ahead, last at ${when(row.created_at)}`;
+  if (t.outcome === "refused" || t.outcome === "nothing") return `${at}: none made, as ${t.reason ?? "it gave no reason"}.`;
+  const day = t.day ? new Date(`${t.day}T12:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long", month: "short", day: "numeric" }) : "the day";
+  const made = `${(t.made ?? 0).toLocaleString()} of ${(t.lines ?? 0).toLocaleString()} lines for ${day} (${(t.already ?? 0).toLocaleString()} stored already), ${money(t.cost ?? 0)} at list price`;
+  if (t.outcome === "failed") return `${at}: ${made}. It failed (${t.error ?? "no reason given"}), so the first taps make the rest.`;
+  return `${at}: ${made}${t.left ? `; ${t.left.toLocaleString()} left for the first taps` : ""}.`;
 }
 
 // "2026-10": this month where the family lives.

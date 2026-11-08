@@ -8,6 +8,7 @@
     { "path": "/api/cron/week", "schedule": "0 0 * * 1" },
     { "path": "/api/cron/week", "schedule": "0 2 * * 1" },
     { "path": "/api/cron/week", "schedule": "0 4 * * 1" },
-    { "path": "/api/cron/week", "schedule": "0 6 * * 1" }
+    { "path": "/api/cron/week", "schedule": "0 6 * * 1" },
+    { "path": "/api/cron/speech", "schedule": "0 13 * * *" }
   ]
 }

@@ -6,9 +6,9 @@ import { SAY } from "./words.ts";
 
 // What the tutor says aloud and what it hears (docs/tutor-voice-slice.md), against a store, as flow.ts is.
 // A line is named by its card and part, never by free text from the browser, and is said only when the child
-// can see it now: a hint once earned, the handoff once reached (rule 3). Its audio is made the first time it
-// is asked for and stored at a path from the voice and the words, so a line costs once a voice, and nothing
-// about the child is written. A clip the child says is heard and its words handed back; neither is kept
+// can see it now: a hint once earned, the handoff once reached (rule 3). Its audio is made overnight with the
+// rest of the day's lines (speech-ahead.ts), or else the first time it is asked for, and stored at a path from
+// the voice and the words, so a line costs once a voice, and nothing about the child is written. A clip the child says is heard and its words handed back; neither is kept
 // here (the answer the child sends is an attempt, as before). Nothing here logs.
 
 export type SpeechRun = { family_id: string; kind: "say" | "hear"; model: string; characters: number; seconds: number; cost: number };
@@ -67,9 +67,20 @@ export async function lineText(store: WallStore, scope: Scope, line: Line, now: 
   const { body, questionId } = chain[at];
   if (line.part === "hint") {
     const seen = at === state.at ? state.hintsSeen : hintsSeenBefore(attempts, questionId, body.hints.length);
-    return line.hint < seen ? (body.hints[line.hint] ?? null) : null;
+    return line.hint < seen ? partWords(body, line) : null;
   }
-  if (line.part === "handoff") return at === state.at && isDone(state) ? body.handoff : null;
+  if (line.part === "handoff") return at === state.at && isDone(state) ? partWords(body, line) : null;
+  return partWords(body, line);
+}
+
+export type CardPart = { part: "read" | "question" | "handoff" } | { part: "hint"; hint: number };
+
+// The words of one part of a card, whoever may hear them: lineText() gives them only once the child can see the
+// part, and the night's firing (speech-ahead.ts) makes every part ahead from the same words, so a line made ahead
+// is the very file a tap plays.
+export function partWords(body: { text: string; question: string; hints: string[]; handoff: string }, line: CardPart): string | null {
+  if (line.part === "hint") return body.hints[line.hint] ?? null;
+  if (line.part === "handoff") return body.handoff;
   return line.part === "read" ? readLine(body) : body.question;
 }
 
@@ -88,23 +99,29 @@ export const forVoice = (text: string) => text.replace(/(?<![\d.,])\d{1,3}(?:,\d
 // a change to forVoice() makes a line again rather than replaying the old reading.
 export const speechPath = (voice: string, text: string) => `speech/${voice}/${createHash("sha256").update(text).digest("hex")}.mp3`;
 
-// A signed URL to the line's audio in the tutor's voice: the stored file, or one made now and stored. Null when
-// the child can't see the line now.
-export async function spokenUrl(
-  store: SpeechStore,
-  scope: Scope,
-  line: Line,
-  now: Date,
-  voice: { name: string; say: (text: string) => Promise<Uint8Array> },
-): Promise<string | null> {
-  const words = (await lineText(store, scope, line, now))?.trim();
-  if (!words) return null;
-  const text = forVoice(words);
+// The words as they go to the voice, or null when there are none.
+export const voiceText = (words: string | null | undefined) => {
+  const trimmed = words?.trim();
+  return trimmed ? forVoice(trimmed) : null;
+};
+
+export type Voice = { name: string; say: (text: string) => Promise<Uint8Array> };
+
+// Has the voice say the words, stores the audio at its path, and records the call (counts and money only).
+export async function makeSpeech(store: SpeechStore, familyId: string, path: string, text: string, voice: Voice): Promise<void> {
+  await store.putSpeech(path, await voice.say(text));
+  await store.addSpeechRun({ family_id: familyId, kind: "say", model: voice.name, characters: text.length, seconds: 0, cost: sayCost(text.length) });
+}
+
+// A signed URL to the line's audio in the tutor's voice: the stored file (made ahead overnight, or by an earlier
+// tap), or one made now and stored. Null when the child can't see the line now.
+export async function spokenUrl(store: SpeechStore, scope: Scope, line: Line, now: Date, voice: Voice): Promise<string | null> {
+  const text = voiceText(await lineText(store, scope, line, now));
+  if (!text) return null;
   const path = speechPath(voice.name, text);
   const stored = await store.speechUrl(path);
   if (stored) return stored;
-  await store.putSpeech(path, await voice.say(text));
-  await store.addSpeechRun({ family_id: scope.familyId, kind: "say", model: voice.name, characters: text.length, seconds: 0, cost: sayCost(text.length) });
+  await makeSpeech(store, scope.familyId, path, text, voice);
   return store.speechUrl(path);
 }
 

@@ -330,19 +330,31 @@ describe("a firing", () => {
 describe("vercel.json", () => {
   const vercel = JSON.parse(readFileSync(new URL("../../vercel.json", import.meta.url), "utf8")) as { crons: { path: string; schedule: string }[] };
 
-  it("has the eight Sunday firings, once each, two hours apart in Hawaii time, on one path", () => {
-    const hawaii = vercel.crons.map((c) => {
+  it("has nine entries: the Sunday build's eight and the tutor's lines made ahead, on two paths", () => {
+    expect(vercel.crons).toHaveLength(9);
+    expect(new Set(vercel.crons.map((c) => c.path))).toEqual(new Set(["/api/cron/week", "/api/cron/speech"]));
+  });
+
+  it("has the eight Sunday firings, once each, two hours apart in Hawaii time", () => {
+    const week = vercel.crons.filter((c) => c.path === "/api/cron/week");
+    const hawaii = week.map((c) => {
       const m = c.schedule.match(/^0 (\d{1,2}) \* \* ([01])$/); // one fixed hour on one fixed day: valid on Hobby
       expect(m, c.schedule).not.toBeNull();
       const utc = Number(m![1]);
       return { weekday: utc < 10 ? (Number(m![2]) + 6) % 7 : Number(m![2]), hour: (utc - 10 + 24) % 24 }; // Hawaii is UTC-10 all year
     });
     expect(hawaii).toEqual([6, 8, 10, 12, 14, 16, 18, 20].map((hour) => ({ weekday: 0, hour })));
-    expect(new Set(vercel.crons.map((c) => c.path))).toEqual(new Set(["/api/cron/week"]));
-    expect(new Set(vercel.crons.map((c) => c.schedule)).size).toBe(8);
+    expect(new Set(week.map((c) => c.schedule)).size).toBe(8);
   });
 
-  it("points at a route that stops at five minutes, the Hobby limit", () => {
-    expect(readFileSync(new URL("../../app/api/cron/week/route.ts", import.meta.url), "utf8")).toMatch(/export const maxDuration = 300;/);
+  it("makes the tutor's lines once a day at 3 am Hawaii, which Hobby allows (once a day, within the hour)", () => {
+    const speech = vercel.crons.filter((c) => c.path === "/api/cron/speech");
+    expect(speech).toEqual([{ path: "/api/cron/speech", schedule: "0 13 * * *" }]); // 13:00 UTC is 3 am in Hawaii
+  });
+
+  it("points at routes that stop at five minutes, the Hobby limit", () => {
+    for (const route of ["week", "speech"]) {
+      expect(readFileSync(new URL(`../../app/api/cron/${route}/route.ts`, import.meta.url), "utf8"), route).toMatch(/export const maxDuration = 300;/);
+    }
   });
 });
