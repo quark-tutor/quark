@@ -221,6 +221,15 @@ describe("a firing", () => {
       refusedTwice(w);
     });
 
+    it("a week no theme holds, or stretches out of order (a theme a week, 8 Nov 2026)", async () => {
+      const w = world({ library: "No theme for week 6: the plan's stretches reach week 5. Write plan/<theme>.yaml with sequence: 3 (one week: seven topics), then run npm run plan:import." });
+      expect(await fire(w)).toMatchObject({ outcome: "refused", reason: expect.stringMatching(/^No theme for week 6/) });
+      refusedTwice(w);
+      const w2 = world({ library: "The plan's stretches are out of order: no stretch has sequence 2; the sequence runs 1, 2, 3... with no gap. Fix the files under plan/ and run npm run plan:import." });
+      expect(await fire(w2)).toMatchObject({ outcome: "refused" });
+      refusedTwice(w2);
+    });
+
     it("a gate that cannot run", async () => {
       const w = world({ gate: "the saved rulebook is older than the family's answers: open /parent/beliefs/rulebook once so it saves" });
       expect(await fire(w)).toMatchObject({ outcome: "refused", reason: expect.stringMatching(/older than the family's answers/) });

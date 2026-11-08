@@ -6,6 +6,10 @@ import { PERSPECTIVE, type Perspective } from "./values.ts";
 // in the file's order, on the slot each names, and its weeks are the thread's chapters. A short
 // lesson is one idea chain on one slot, not tied to a stretch or a week (decided 16 Oct 2026,
 // docs/08). npm run plan:import turns both into plan_topics rows with planRows() and libraryRows().
+//
+// The stretches run in `sequence` order, 1, 2, 3 with no gap, each starting the week after the one
+// before it ends. Egypt, sequence 1, is 24 topics (weeks 1 to 4); every stretch after it is a theme,
+// one week of seven topics, picked by the parents on a Saturday (decided 8 Nov 2026, docs/08).
 
 export const SUBJECTS = ["history", "geography", "science", "art", "music", "literature", "math"] as const;
 export const SLOTS = ["look", "wonder", "listen", "then", "puzzle"] as const;
@@ -80,6 +84,25 @@ export const isLibrary = (doc: unknown): doc is Library => !!doc && typeof doc =
 const text = (v: unknown) => typeof v === "string" && v.trim() !== "";
 const KEY = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
+// A theme is one week: seven topics, one a day (decided 8 Nov 2026).
+export const THEME_TOPICS = 7;
+
+// What is wrong with the order of the stretches, in plain words: two with one sequence, or a gap.
+// Each is named as the caller knows it (plan/<file> for the import, the key prefix for the database).
+export function sequenceProblems(stretches: { name: string; sequence: number }[]): string[] {
+  const problems: string[] = [];
+  const bySequence = new Map<number, string[]>();
+  for (const s of stretches) bySequence.set(s.sequence, [...(bySequence.get(s.sequence) ?? []), s.name]);
+  for (const [n, names] of [...bySequence].sort((a, b) => a[0] - b[0])) {
+    if (names.length > 1) problems.push(`${names.join(" and ")} have the same sequence, ${n}; each stretch needs its own`);
+  }
+  const top = Math.max(0, ...bySequence.keys());
+  for (let n = 1; n <= top; n++) {
+    if (!bySequence.has(n)) problems.push(`no stretch has sequence ${n}; the sequence runs 1, 2, 3... with no gap`);
+  }
+  return problems;
+}
+
 // The sources list, the same for stretches and the library. Returns the ids it found.
 function checkSources(sources: PlanSource[] | undefined, errors: string[]): Set<string> {
   const ids = new Set<string>();
@@ -124,7 +147,8 @@ function checkPoints(points: number[] | undefined, perspective: Perspective | un
 
 // Everything wrong with a stretch, in plain words. Empty when it's valid.
 // Every week needs science, art, music, literature, math, and history or geography; every topic
-// needs a slot and a summary for both grade bands.
+// needs a slot and a summary for both grade bands. With no subject twice, a theme's seven topics
+// are the seven subjects, one each.
 export function validatePlan(plan: Plan): string[] {
   const errors: string[] = [];
   if (!plan || typeof plan !== "object") return ["not a YAML mapping"];
@@ -136,6 +160,13 @@ export function validatePlan(plan: Plan): string[] {
 
   const weeks = plan.weeks ?? [];
   if (weeks.length === 0) errors.push("no weeks");
+  // Every stretch after the first is a theme: one chapter of seven topics, one a day.
+  if (Number.isInteger(plan.sequence) && plan.sequence > 1) {
+    const topics = weeks.reduce((n, w) => n + (w?.topics?.length ?? 0), 0);
+    if (weeks.length !== 1 || topics !== THEME_TOPICS) {
+      errors.push(`a theme after the first stretch is one week: one chapter of ${THEME_TOPICS} topics (this has ${weeks.length} chapter${weeks.length === 1 ? "" : "s"} and ${topics} topic${topics === 1 ? "" : "s"})`);
+    }
+  }
   weeks.forEach((w, i) => {
     const where = `week ${w?.week ?? "?"}`;
     if (w?.week !== i + 1) errors.push(`weeks must be numbered 1, 2, 3... in order; found ${w?.week} at position ${i + 1}`);

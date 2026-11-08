@@ -133,7 +133,7 @@ export type CronDeps<B> = {
   recentRows: (familyId: string, since: Date) => Promise<CronRow[]>;
   audit: (familyId: string, target: CronTarget) => Promise<string>; // the new row's id
   envProblem: () => string | null; // a model name or the API key missing
-  prepare: (week: number, start: string) => Promise<B>; // throws "Not enough short lessons…" when the library is short
+  prepare: (week: number, start: string) => Promise<B>; // throws "Not enough short lessons…" when the library is short, "No theme for week…" when no stretch holds the week
   gateProblem: (prepared: B) => string | null; // no rulebook, or one older than the guardians' answers
   build: (prepared: B, run: { day: number; rebuild: boolean; onTheme: (themeId: string) => Promise<void> }) => Promise<BuiltDay>;
   gatePending: (themeId: string) => Promise<{ problem: string } | { passed: number; heldBack: number; pending: number; cost: number }>;
@@ -229,7 +229,7 @@ export async function cronFiring<B>(deps: CronDeps<B>, ctx: { schedule: string |
       prepared = await deps.prepare(week!, (next as { start: string }).start);
     } catch (e) {
       const message = e instanceof Error ? e.message : String(e);
-      if (/^Not enough short lessons/.test(message)) return await end("refused", { reason: clean(oneLine(message)) });
+      if (/^(Not enough short lessons|No theme for week|The plan's stretches are out of order)/.test(message)) return await end("refused", { reason: clean(oneLine(message)) });
       throw e;
     }
     const noGate = deps.gateProblem(prepared);

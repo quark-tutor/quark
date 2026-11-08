@@ -38,6 +38,12 @@ describe("Sunday's build, in a line", () => {
       reason: "Not enough short lessons for week 2: the look card needs 7 and 0 are left. Add lessons to plan/short-lessons.yaml and run npm run plan:import.",
     }, 2);
     expect(sundayLine(rows, TZ, now)).toBe("Sunday's build refused at 6:02 am: not enough short lessons for week 2: the look card needs 7 and 0 are left. Nothing was spent.");
+    // A week with no theme, said the same way (a theme a week, 8 Nov 2026).
+    const noTheme = firing(6, null, {
+      outcome: "refused",
+      reason: "No theme for week 6: the plan's stretches reach week 5. Write plan/<theme>.yaml with sequence: 3 (one week: seven topics), then run npm run plan:import.",
+    }, 2);
+    expect(sundayLine(noTheme, TZ, now)).toBe("Sunday's build refused at 6:02 am: no theme for week 6: the plan's stretches reach week 5. Nothing was spent.");
     // An environment name is not lowercased.
     expect(sundayLine(firing(6, null, { outcome: "refused", reason: "QUARK_MODEL_GATE isn't set where the build runs" }, 2), TZ, now)).toContain("refused at 6:02 am: QUARK_MODEL_GATE isn't set");
   });

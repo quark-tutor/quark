@@ -12,7 +12,7 @@ const dayMs = 86_400_000;
 
 // A refusal's reason as a sentence in the middle of a line: without the instruction aimed at whoever runs Quark.
 const tidy = (reason: string) => {
-  const cut = reason.replace(/\.? Add lessons to .*$/, "").replace(/\.$/, "");
+  const cut = reason.replace(/\.? (Add lessons to |Write plan\/|Fix the files under plan\/).*$/, "").replace(/\.$/, "");
   return /^[A-Z][a-z]/.test(cut) ? cut[0].toLowerCase() + cut.slice(1) : cut;
 };
 

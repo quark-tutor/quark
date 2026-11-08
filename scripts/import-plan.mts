@@ -14,6 +14,7 @@ import {
   parsePlan,
   planRows,
   planWarnings,
+  sequenceProblems,
   validateLibrary,
   validatePlan,
   type PlanRow,
@@ -26,8 +27,8 @@ const key = process.env.SUPABASE_SECRET_KEY;
 if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SECRET_KEY in the env file (.env.local, or .env.live.local for a :live script).");
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
-// Each file as the rows it becomes, with the key prefix its rows share.
-type Unit = { file: string; title: string; prefix: string; rows: PlanRow[]; count: string };
+// Each file as the rows it becomes, with the key prefix its rows share; a stretch's sequence too.
+type Unit = { file: string; title: string; prefix: string; rows: PlanRow[]; count: string; sequence?: number };
 
 const dir = join(import.meta.dirname, "..", "plan");
 const units: Unit[] = readdirSync(dir)
@@ -45,8 +46,13 @@ const units: Unit[] = readdirSync(dir)
     if (errors.length) throw new Error(`plan/${f}:\n  ${errors.join("\n  ")}`);
     if (`${doc.stretch}.yaml` !== f) throw new Error(`plan/${f}: stretch must match the file name`);
     for (const w of planWarnings(doc)) console.warn(`plan/${f}: warning: ${w}`);
-    return { file: f, title: doc.title, prefix: `${doc.stretch}/`, rows: planRows(doc), count: `${doc.weeks.length} weeks` };
+    return { file: f, title: doc.title, prefix: `${doc.stretch}/`, rows: planRows(doc), count: `${doc.weeks.length} weeks`, sequence: doc.sequence };
   });
+
+// The stretches run 1, 2, 3 with no gap and no two alike (docs/04, "The long-term plan"): checked across
+// the files, before anything is written.
+const order = sequenceProblems(units.filter((u) => u.sequence !== undefined).map((u) => ({ name: `plan/${u.file}`, sequence: u.sequence! })));
+if (order.length) throw new Error(`The plan's stretches are out of order:\n  ${order.join("\n  ")}`);
 
 for (const unit of units) {
   const ids = new Map<string, string>();

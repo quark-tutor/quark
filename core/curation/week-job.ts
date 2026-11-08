@@ -18,7 +18,7 @@ import { writeCards } from "./cards.ts";
 import { subjectWatch, type GateReport } from "./gate.ts";
 import { gateTheme, type GateSetup } from "./gate-run.ts";
 import { sourceRefs, writeIdeaChain } from "./ideas.ts";
-import { DAYS_IN_WEEK, weekSchedule, type Scheduled } from "./schedule.ts";
+import { DAYS_IN_WEEK, stretchForWeek, weekSchedule, weekThread, type Scheduled, type StretchSpan } from "./schedule.ts";
 import type { IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic } from "./types.ts";
 import { addDays, buildWeek, nextMonday, todayIn, type WeekChild, type WeekDeps, type WeekReport } from "./week.ts";
 
@@ -36,9 +36,8 @@ function must<R extends Reply>(r: R, what: string): NonNullable<R["data"]> {
 // --- Before spending ---
 
 export type PrepareOptions = {
-  week: number; // the family's week N of the plan
+  week: number; // the family's week N of the plan; its thread is the stretch that holds it (stretchForWeek)
   start?: string; // YYYY-MM-DD, day 1. Default: the week's own, else counted on from week 1's, else next Monday
-  stretch?: string; // the thread; default: the plan's first stretch
   child?: string; // build for one child only: an id or a nickname
 };
 
@@ -106,12 +105,21 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   const pointNames = new Map(points.map((p) => [p.number as number, p.name as string]));
 
   // The week, mixed: the thread on one slot a day, short lessons on the rest (docs/04, "How a week is mixed").
-  const firstStretch = must(
-    await db.from("plan_topics").select("key").eq("kind", "week").eq("grade_band", "2-3").order("sequence").limit(1),
-    "plan_topics",
-  );
-  const stretch = opts.stretch ?? firstStretch[0]?.key.split("/")[0];
-  if (!stretch) throw new Error("plan_topics has no stretch. Run npm run plan:import.");
+  // The thread is the stretch that holds this week, found from every stretch's sequence and topic count.
+  const outline = must(await db.from("plan_topics").select("key, kind, sequence").eq("kind", "thread").eq("grade_band", "2-3"), "plan_topics") as {
+    key: string;
+    sequence: number;
+  }[];
+  if (outline.length === 0) throw new Error("plan_topics has no stretch. Run npm run plan:import.");
+  const spans = new Map<string, StretchSpan>();
+  for (const r of outline) {
+    const name = r.key.split("/")[0];
+    const span = spans.get(name) ?? { stretch: name, sequence: r.sequence, topics: 0 };
+    if (span.sequence !== r.sequence) throw new Error(`Stretch "${name}" has topics with two sequences. Run npm run plan:import.`);
+    span.topics++;
+    spans.set(name, span);
+  }
+  const { stretch, weekInStretch } = stretchForWeek([...spans.values()], week);
   const stretchRows = must(await db.from("plan_topics").select(COLUMNS).like("key", `${stretch}/%`), "plan_topics") as PlanRowDb[];
   if (stretchRows.length === 0) throw new Error(`No stretch "${stretch}" in plan_topics. Check plan/${stretch}.yaml and npm run plan:import.`);
   const shortRows = must(await db.from("plan_topics").select(COLUMNS).eq("kind", "short"), "plan_topics") as PlanRowDb[];
@@ -134,7 +142,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   const lessonIds = new Set(lessonRows.map((r) => r.id));
   const used = new Set(themes.filter((t) => t.plan_week !== null && t.plan_week < week).flatMap((t) => t.topic_ids as string[]).filter((id) => lessonIds.has(id)));
   const own = new Set(((existing?.topic_ids ?? []) as string[]).filter((id) => lessonIds.has(id)));
-  const schedule = weekSchedule({ week, thread: threadRows.map(scheduled), lessons: lessonRows.map(scheduled), used, own });
+  const schedule = weekSchedule({ week, thread: weekThread(threadRows, weekInStretch).map(scheduled), lessons: lessonRows.map(scheduled), used, own });
 
   const items = must(
     await db

@@ -8,8 +8,9 @@
 //   npm run week:build -- --week 1 --day 3                  (just day 3, into the week's theme; the Sunday build does this, a day a firing)
 //   npm run week:build -- --week 1 --day 3 --rebuild        (clear day 3 and build it again, and only that day)
 //   npm run week:build -- --week 1 --days 1 --plan          (what would be built, and what the family's settings decide; spends nothing)
-// Options: --debug (write each model request and reply to .quark-debug/), --stretch (the thread; default: the plan's first stretch), --start YYYY-MM-DD (default: next Monday, or
-// counted on from week 1's start). The theme ends in status 'review'; nothing goes live here.
+// Options: --debug (write each model request and reply to .quark-debug/), --start YYYY-MM-DD (default: next Monday, or
+// counted on from week 1's start). The week's thread is the stretch that holds it, found from the plan's
+// sequence (docs/04, "The long-term plan"). The theme ends in status 'review'; nothing goes live here.
 // Cards are written with policy 'pending', and the gate checks them at the end (core/curation/gate-run.ts):
 // each leaves 'pending' only as 'passed' or 'blocked'. Anything the gate leaves pending ends the run
 // with an error; npm run gate -- --week N checks them again.
@@ -29,7 +30,6 @@ announceTarget();
 const { values: args } = parseArgs({
   options: {
     week: { type: "string" },
-    stretch: { type: "string" },
     child: { type: "string" },
     days: { type: "string" },
     day: { type: "string" },
@@ -66,7 +66,7 @@ const models = { ideas: modelFor("curate"), cards: modelFor("write"), gate: mode
 const meter = makeMeter();
 const complete = meteredComplete(meter);
 
-const p = await prepareWeek(db, { week, start: args.start, stretch: args.stretch, child: args.child });
+const p = await prepareWeek(db, { week, start: args.start, child: args.child });
 const { plan, children, only } = p;
 
 const first = day ?? 1; // the first day built

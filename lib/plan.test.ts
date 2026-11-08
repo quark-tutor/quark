@@ -10,6 +10,7 @@ import {
   parsePlan,
   planRows,
   planWarnings,
+  sequenceProblems,
   validateLibrary,
   validatePlan,
   type Library,
@@ -39,7 +40,7 @@ function smallPlan(): Plan {
   return {
     stretch: "test",
     title: "Test",
-    sequence: 2,
+    sequence: 1, // the first stretch, which may have any number of chapters (a theme after it is one week)
     sources: [{ id: "met-1", title: "A thing", publisher: "The Met", url: "https://example.org/1", license: "CC0" }],
     weeks: [
       {
@@ -113,6 +114,33 @@ describe("validatePlan", () => {
   it("rejects something that isn't a plan", () => {
     expect(validatePlan(null as never)).toEqual(["not a YAML mapping"]);
   });
+
+  it("wants a theme after the first stretch to be one week of seven topics (decided 8 Nov 2026)", () => {
+    const plan = { ...smallPlan(), sequence: 2 };
+    expect(validatePlan(plan)).toEqual(["a theme after the first stretch is one week: one chapter of 7 topics (this has 1 chapter and 6 topics)"]);
+    plan.weeks[0].topics.push(topic("history", "look") as Plan["weeks"][0]["topics"][0]);
+    expect(validatePlan(plan)).toEqual([]);
+    plan.weeks.push({ ...plan.weeks[0], week: 2 });
+    expect(validatePlan(plan)).toEqual(["a theme after the first stretch is one week: one chapter of 7 topics (this has 2 chapters and 14 topics)"]);
+  });
+});
+
+describe("sequenceProblems", () => {
+  it("is empty for 1, 2, 3 in any order", () => {
+    expect(sequenceProblems([{ name: "b", sequence: 2 }, { name: "a", sequence: 1 }, { name: "c", sequence: 3 }])).toEqual([]);
+  });
+
+  it("names a gap and a clash", () => {
+    expect(sequenceProblems([{ name: "plan/a.yaml", sequence: 1 }, { name: "plan/b.yaml", sequence: 3 }, { name: "plan/c.yaml", sequence: 3 }])).toEqual([
+      "plan/b.yaml and plan/c.yaml have the same sequence, 3; each stretch needs its own",
+      "no stretch has sequence 2; the sequence runs 1, 2, 3... with no gap",
+    ]);
+  });
+
+  it("finds none in the plan's own files", () => {
+    const stretches = files.map((f) => parsePlan(readFileSync(join(dir, f), "utf8"))).filter((d) => !isLibrary(d));
+    expect(sequenceProblems(stretches.map((d) => ({ name: d.stretch, sequence: d.sequence })))).toEqual([]);
+  });
 });
 
 describe("planWarnings", () => {
@@ -152,7 +180,7 @@ describe("planRows", () => {
   it("puts the week's why in the week row and hangs topics under their band's week", () => {
     expect(rows[1]).toMatchObject({ subject: "week", slot: null, title: "The river", summary: "Everything starts here.", grade_band: "4-5", parent_key: null });
     const art = rows.find((r) => r.key === "test/w1/art/4-5")!;
-    expect(art).toMatchObject({ parent_key: "test/w1/4-5", slot: "look", summary: "Older.", sequence: 2, week: 1 });
+    expect(art).toMatchObject({ parent_key: "test/w1/4-5", slot: "look", summary: "Older.", sequence: 1, week: 1 });
     expect(art.sources).toEqual([expect.objectContaining({ id: "met-1", license: "CC0" })]);
   });
 
