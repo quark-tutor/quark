@@ -114,3 +114,103 @@ Size: a job (4 hours); about 25 minutes in all (21 to stop 1, 3 from go).
 - CLAUDE.md *Where we are*: one line.
 - The merge into `phase-4-wonder-wall`: the main checkout's untracked copy of the brief must be deleted first, or the
   merge there refuses.
+
+## Fix round 1 (8 Nov 2026, 15:51 HST)
+
+Not closed: a fix round back to stop 1. Brandon:
+
+> Not closed yet; a fix round. June and I talked it through. Rewrite the proposal with two strands, built in this
+> order:
+>
+> Strand 1, first: the puzzle slot becomes a math circle. One real problem a day with a mathematical idea inside it
+> (parity, invariants, fair sharing into fractions, counting two ways, estimation), from a progression of ideas kept
+> in a file, each problem about something someone actually built or figured out, with the person and the history in
+> it; the hint conversation and the handoff do the teaching; the same idea comes back weeks later in a new costume.
+> Sources: the public-domain puzzle literature (Dudeney, Loyd, Carroll) and the thread themes. No publisher. No new
+> tile.
+>
+> Strand 2, later: the fluency floor, five minutes, as the Practice tile was proposed, but with no Illustrative
+> Mathematics anywhere; the order from the grade standards, written by Code, the nudges in the school's methods.
+>
+> The frame, for docs/08: we prepare them for the future the way Walt Disney thought of it, as a place of progress
+> and opportunity for people willing to look closely and try, where ingenuity and faithfulness to tradition build
+> something better. Math is the tool of people who make things. The older boy starts a real math circle on
+> Saturdays; the younger is too young for it, so this is his.
+
+**Done.**
+
+- **The proposal, rewritten** in two strands, in the brief's eight sections and in order. It keeps June's four
+  answers and quotes Brandon's words whole under *Decided*. What stands from 12:32 is now strand 2's. Illustrative
+  Mathematics is gone, and so is every publisher in the survey. The first version is at `358b00b`.
+- **Read for strand 1's fit** (from `origin/worktree-theme-a-week`, not merged):
+  - `weekSchedule()` on that branch;
+  - the Moon's file (one topic on the puzzle slot, "Distance, and about thirty Earths");
+  - `docs/saturday-pick-slice.md` (28 short lessons a Saturday; the Moon's week takes 6 on the puzzle slot);
+  - the 18 puzzle lessons of weeks 1 to 3;
+  - `card.md` v6 and `ideas.md` v5;
+  - `core/curation/ideas.ts` and `cards.ts` (a card takes its accepted answers from the idea chain; `parentNote`
+    already becomes the first handoff);
+  - `plan_topics` in the migrations (one `summary` a row, so the four steps need a column).
+- **A fact check of every source and history line**, by an agent reading the sources' own pages (web only, $0 of
+  API money). The proposal uses only what it confirmed, with these corrections:
+  - Tartaglia is not shown to have set the 8, 5 and 3 jugs, so he is out. A Dudeney crossing takes that place.
+  - Bachet's race to 100 was not found in his text. It stays as a return costume, marked to be checked in the build
+    or swapped.
+  - Bachet's 1, 3, 9 and 27 weights are in his second edition, 1624, not 1612.
+  - The year and title of Loyd's vanishing puzzle were not confirmed. Only "he patented one in 1896" is used.
+  - The Gauss story's 1 to 100 is not in its first source (1856), so Alcuin's ladder of pigeons (about 800)
+    replaces it.
+  - The Egyptian 3, 4, 5 rope is Cantor's guess of 1882, with no evidence. It is named as a caution.
+  - The Common Core's 3.OA.A.1 names equal groups; arrays are in 3.OA.A.3.
+  - The 2023 Progressions' CC BY line could not be confirmed this time; the Arizona page says "All rights
+    reserved". So F1 takes the floor's nudges from the strategies the standards themselves name, and the Progressions
+    are not used.
+- **Pushed:** not yet; with this stop's commit.
+
+**Found, for Brandon:**
+
+- **The circle can run with almost no new machinery.** `weekSchedule()` already takes a slot's next unused lesson,
+  in file order, only on the days the theme leaves it. So the circle's problems ride the puzzle slot's queue, and a
+  theme's puzzle day makes the file wait a day by itself.
+- **The new pieces are few:**
+  - one migration (a `steps` column on `plan_topics`, live at a stop by Brandon's hand);
+  - `writeIdeaChain()` taking the puzzle chain from the file, not a model;
+  - a circle section in `card.md`;
+  - the Saturday pick's count, 22 lessons, not 28.
+- **The parents cannot see a card's answers today.** `/parent/week` shows none. So a parent called over at a
+  handoff has nothing to look at: C8.
+
+## Stop 1 again: the proposal in two strands (8 Nov 2026, 16:05 HST)
+
+**Where the job stands.**
+
+- `docs/math-practice-proposal.md` is rewritten in two strands, the circle first. It is printed whole after this
+  report.
+- Nothing is built, nothing on test or live is touched, and no API money was spent.
+- Size: a job (4 hours). About 40 minutes in all: 21 to stop 1, 3 from go, about 15 in this round.
+
+**For Brandon and June.**
+
+1. **The eleven open choices, C1 to C9, F1 and B1** (the table at the end of the proposal). Recommended: all
+   Proposed. On yes, each is marked decided in the proposal with your words. Then the last stop.
+2. **Anything to explore further** (another idea in the table, a costume swapped, the rhythm) is another fix round
+   back to this stop.
+
+Reply go to take all of these.
+
+**For the close, after your reply** (replacing the last stop's list):
+
+- docs/08, a new section, "Math practice":
+  - the frame, in Brandon's words;
+  - June's four answers;
+  - both rounds' decisions.
+- The board: the inbox row clarified, then rows on Brandon's yes:
+  1. Math circle, slice 1: the puzzle slot becomes a math circle (a job; `next`).
+  2. The circle's next block, every three weeks (a standing row, an hour; `later`, due before the circle's week 4).
+  3. The fluency floor, slice 2: whole numbers on a sixth tile (a job; `later`).
+  4. The floor's fractions, time and money, and word problems, only if the parents ask (`someday`).
+
+  The inbox row is only on `worktree-theme-a-week`, so the rows land cleanly once that branch is merged into
+  `phase-4-wonder-wall`.
+- CLAUDE.md *Where we are*: one line.
+- Before the merge into `phase-4-wonder-wall`, the main checkout's untracked copy of the brief is deleted.
