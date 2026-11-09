@@ -352,3 +352,116 @@ hunt; the page could show newest first or group by week."
   finding a week's new ones among 208 is a hunt. The page could show the newest first, or group the items by week.
   It is a different feature from this brief, so I add no row; `/wwc:idea` files it if he wants it on the board.
   Until then, each Saturday's stop 2 names the new items by title, as this one did.
+
+## Stop 2, continued (9 Nov, 12:47 HST): rebased and pushed onto `phase-4-wonder-wall`; M1, M2 and the live plan by your hand
+
+Resumed at 12:43 HST on Brandon's word: "This job is resumed, not new. … Week 3 is closed and released (main is at
+3af36b8, 9 Nov). Pick up where the report stops: rebase this branch onto phase-4-wonder-wall, run the tests, push
+onto phase-4-wonder-wall, then stop for M1 with the exact commands for my hand."
+
+### Where the job stands
+
+- **Rebased** onto `92030b7`, the release's records on `phase-4-wonder-wall`. Two conflicts, both in docs:
+  - **The board.** This row stays at *building*, at the top. The two rows the week 3 job moved to *live* stay as it
+    left them. The project's goal now reads "the week builds itself: each Sunday the build makes next week on live
+    from the theme and the short lessons the parents picked on Saturday, and a guardian's tap makes it live; week 3
+    was the first …". "28" is dropped, since week 4 takes 32.
+  - **docs/08.** Both sides kept: the phase branch's *Math practice* and *Weeks 2 and 3 on live*, then this job's
+    *A theme a week*.
+- **Tests:** 441 pass (439 at stop 2, plus the plan test's two for the Moon file), and the typecheck is clean.
+- **The import on test, from the rebased tree:**
+
+  ```
+  Target: test (mnftudfnnfvxilnmwvvo.supabase.co)
+  Ancient Egypt: 56 rows (4 weeks)
+  Short lessons: 168 rows (84 lessons)
+  The Moon: 16 rows (1 week)
+  Imported 3 files.
+  ```
+
+  The library is 84 lessons, the same as live holds; week 4's 32 are not on the phase branch yet.
+- **Added while doing it:** the import printed "The Moon: 16 rows (1 weeks)". It now says "1 week" (`fc9dc22`).
+- **Week 5's plan on test,** read again from the rebased tree: the same seven days as at stop 2.
+- **Pushed:** `phase-4-wonder-wall` `92030b7..fc9dc22`, a fast-forward. There is no migration, so no workflow ran.
+  - The old remote branch `worktree-theme-a-week` is deleted; its commits are on the phase branch, rebased.
+  - This worktree's branch now tracks `origin/phase-4-wonder-wall`, and the rest of the job's pushes go there.
+- **Checked for M1:** `main` (`3af36b8`, on Vercel) picks its stretch as the lowest `sequence`
+  (`core/curation/week-job.ts`, `.order("sequence").limit(1)`). So the Moon's rows on live leave Sunday 15 Nov's
+  build of week 4 as it is.
+- **Step 4,** the Saturday brief (`docs/saturday-pick-slice.md`), was done on 8 Nov and came through the rebase.
+
+### What I need from you
+
+1. **The math inbox row came back with the rebase.** "Math tutored in a recognizable way" (*not fully formed*) was
+   filed on this branch at 09:02 on 8 Nov. The math practice job answered it the same day, in its own worktree: the
+   proposal is decided and its four rows are on the board. Only you clarify the inbox.
+   - **My recommendation: strike it.** On yes, I delete the row at the release.
+2. **M1, M2 and the live plan, by your hand,** below.
+
+### By your hand: the main checkout first, then M1, M2 and M3
+
+Type each line at the prompt, one at a time. The `!` runs it here, so its output lands in this conversation. Each
+line starts with a `cd` into the main checkout, where the live env file already is, so no second copy of the live
+key is made.
+
+**Line 0, the main checkout.** It is on `phase-4-wonder-wall` at `92030b7`, clean apart from the two untracked
+briefs. Git will not pull over an untracked file the pull brings in (`docs/theme-a-week-slice.md`). This deletes both
+briefs, as decided at stop 1, then fast-forwards to this stop's commit:
+
+`! cd /c/Users/BrandonReisen/Documents/quark && rm docs/theme-a-week-slice.md docs/second-stretch-slice.md && git pull --ff-only && git log --oneline -1`
+
+The last line should be this stop's commit, "Report: rebased onto the release's records and pushed onto
+phase-4-wonder-wall …". If it is not, stop there and tell me.
+
+**M1: `plan:import:live`**
+
+`! cd /c/Users/BrandonReisen/Documents/quark && npm run plan:import:live`
+
+- **What it does:** writes the Moon's 16 rows into live's plan, and writes Egypt's 56 and the library's 168 again,
+  unchanged.
+- **What it touches:** **LIVE**, `plan_topics`. The code on Vercel ignores the Moon until the release (checked
+  above), so Sunday 15 Nov's build of week 4 is unchanged.
+- **How it is undone:** delete the Moon's rows by the key prefix `the-moon/`. No idea or card points at them before
+  22 Nov.
+- **Checked on test:** yes, above, from the same tree.
+- **The pass:** the first line is `Target: LIVE (…)`, and the rest reads exactly as on test:
+  `Ancient Egypt: 56 rows (4 weeks)`, `Short lessons: 168 rows (84 lessons)`, `The Moon: 16 rows (1 week)`,
+  `Imported 3 files.` A library count other than 84 lessons means stop and tell me.
+- **When:** today, straight after line 0. Saturday 14 Nov's week 4 job imports from the phase branch, which now
+  holds the Moon too, so from here on every import carries both.
+
+**M2: `content:fetch:live`**
+
+`! cd /c/Users/BrandonReisen/Documents/quark && npm run content:fetch:live`
+
+- **What it does:** fetches, flags and stores the Moon's 11 items. About $0.15, as on test.
+- **What it touches:** **LIVE**, `content_items` and the private bucket. It prints nothing until it is done (about
+  100 seconds on test; the 1 Nov bug line), so wait for the table.
+- **How it is undone:** the items are unused until a card offers one; any item can be rejected at live's
+  `/parent/content`.
+- **Checked on test:** yes, at stop 2: 11 items, all approved automatically with no flags.
+- **The pass:** the Moon's 11 items, each approved, and nothing new waiting.
+
+**M3: the plan on live, spending nothing**
+
+`! cd /c/Users/BrandonReisen/Documents/quark && npm run week:build:live -- --week 5 --start 2026-11-23 --plan`
+
+- **What it does:** reads live's plan for week 5. **LIVE**, read only; it spends nothing and writes nothing.
+- **What to expect today:** weeks 1 to 3 on live have used all 84 lessons, and week 5's 28 are not picked yet, so it
+  stops before printing the days. The pass is this exact line:
+
+  `Not enough short lessons for week 5: the look card needs 5 and 0 are left; the wonder card needs 6 and 0 are left; the listen card needs 6 and 0 are left; the then card needs 5 and 0 are left; the puzzle card needs 6 and 0 are left. Add lessons to plan/short-lessons.yaml and run npm run plan:import.`
+
+- **How to read it:** those counts are the Moon's slots. Egypt's old reading would ask 7 a slot, and a missing Moon
+  would say "No theme for week 5". The seven-day read with the real 28 is the Saturday 21 Nov job's.
+
+### Then
+
+The records for the release: docs/04, docs/08, `CLAUDE.md` *Where we are*, the README status and the board, as the
+brief's step 5 lists. Then the last stop, stop 3: the release, before Sunday 22 Nov's 6 am firing.
+
+**Size:** a slice, 8 hours. The clock ran 36 minutes to stop 1, 08:47 to 09:00 to stop 2, 10:48 to 10:53 for step 4,
+and 12:43 to 12:47 today: about an hour in all.
+
+**At this stop:** run line 0, then M1, M2 and M3, in order, and say yes or no to striking the math inbox row. Reply
+go to take all of these.
