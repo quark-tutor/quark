@@ -271,3 +271,6 @@ Size: a job (4 hours); about 50 minutes in all:
 - **CLAUDE.md** *Where we are*: one line.
 - **The merge** into `phase-4-wonder-wall`: the main checkout's untracked copy of the brief is deleted first, or the
   merge there refuses.
+
+**The rows, on Brandon's yes** (8 Nov 2026, 16:38 HST): "Yes to the four rows: the circle's slice 1 at next, the
+next-block row and the floor at later, the rest at someday." The job adds no row, so the close writes them.
