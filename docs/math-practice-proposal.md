@@ -145,7 +145,7 @@ weeks 4 to 6 bring each one back in a new costume.
 | 1 | Fair sharing, into fractions | Ahmes's loaves among ten men (the Rhind papyrus, Egypt, about 1550 BC) | Alcuin's three sons and thirty flasks, ten full, ten half full, ten empty (about 800) |
 | 2 | Counting two ways | Alcuin's ladder of 100 steps, a pigeon on the first, two on the second… | Dürer's magic square, where every row, column and diagonal makes 34 (*Melencolia I*, 1514) |
 | 3 | Estimating from a small part | Archimedes counting grains of sand by the poppy seed (*The Sand Reckoner*, about 250 BC) | a theme's costume: the Moon week's thirty Earths, or a later theme's |
-| 4 | Odd and even | Euler's seven bridges of Königsberg (1735): every shore touches an odd number of bridges | Chapman's 15 puzzle, and why two tiles can never be swapped (Johnson and Story, 1879) |
+| 4 | Odd and even | Euler's seven bridges of Königsberg (1735): every piece of land touches an odd number of bridges | Chapman's 15 puzzle, and why two tiles can never be swapped (Johnson and Story, 1879) |
 | 5 | States and moves | Alcuin's wolf, goat and cabbages | a crossing from Dudeney's *Amusements in Mathematics*, which has a chapter of them (1917) |
 | 6 | A plan that always wins | Dudeney's Kayles: leave two matching rows, then copy (*The Canterbury Puzzles*, 1907) | the race to 100, adding 1 to 10 each turn, as told of Bachet's book of 1612 (checked against his text in the build, or another costume) |
 | 7 | Guess, check and scale | Ahmes's "a quantity and its seventh make 19", met first as a number and its half that make 9 | Fibonacci's rule of false position (*Liber Abaci*, 1202, chapter 13) |
@@ -270,8 +270,8 @@ What changes from that version:
   - *Strand 2* adds one row per answer and each child's step (decided at 12:32; *touches rule 7*).
   - Neither sends anything new to a model.
 - **Rule 8 (effort words).** The frame says it: the future belongs to "people willing to look closely and try." A
-  costume tells what its person noticed and tried (Ahmes cut the loaves in halves first; Euler counted the bridges at
-  each shore), never that they were a genius. The floor's words stand: "Try again.", "This one is for a person.",
+  costume tells what its person noticed and tried (Ahmes cut the loaves in halves first; Euler counted the bridges on
+  each piece of land), never that they were a genius. The floor's words stand: "Try again.", "This one is for a person.",
   "That's today's practice."
 - **Rule 1 (not a brainwashing engine).** The costumes come from many places and times: Egypt, Greece, Charlemagne's
   court, France, Königsberg, Victorian England, the themes. A tradition is shown with respect ("faithfulness to
