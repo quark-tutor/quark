@@ -208,6 +208,40 @@ Brief: `docs/lines-ahead-slice.md` (the tutor, slice 3), in a worktree branch `l
 - **Decided (8 Nov 2026, stop 2's fix round): leaving a card stops every sound on it,** the recording and the tutor's voice. Brandon: "leaving the card stops every sound on it. I've seen the boys go to a completely different screen with the Listen recording still playing." The cause: Next.js 16 does not unmount a page left behind but hides it with React's `<Activity>`, so its `<audio>` stays in the document and plays on; both players now pause as the page is hidden (`app/kid/stops-on-leave.ts`; `lib/kid-wiring.test.ts` holds that every `<audio>` on the kid view does). "Go deeper" opens the next card, so it stops a recording too.
 - **Decided (8 Nov 2026, `/wwc:close` at *Your look*, 06:52 HST): the look passed.** Checks 1 and 2 (the busy words and a quick start; a hint made ahead refused until earned) passed at the first look, Brandon: "Checks 1 and 2 pass." Checks 3 and 4 (the music under the voice and one line at a time; leaving the card stops every sound) passed after fix round 1, on his clean `/wwc:close`.
 
+## Math practice: decided in the proposal (8 Nov 2026)
+
+Brief: `docs/math-practice-brief-slice.md`, an exploration, not a build (phase 4). It ran in a worktree branch, `worktree-math-practice`, merged into `phase-4-wonder-wall` at the close. The deliverable is the proposal, `docs/math-practice-proposal.md`; the report is `docs/reports/2026-11-08-math-practice-brief.md`. Nothing is built, nothing on test or live changed, and no API money was spent. June's ask (8 Nov 2026): the cards teach ideas, reading, culture, social studies and engineering well, but do not tutor mathematics in a recognizable way.
+
+- **The frame (Brandon, 8 Nov 2026):** "we prepare them for the future the way Walt Disney thought of it, as a place of progress and opportunity for people willing to look closely and try, where ingenuity and faithfulness to tradition build something better. Math is the tool of people who make things. The older boy starts a real math circle on Saturdays; the younger is too young for it, so this is his."
+- **June's words (8 Nov 2026), to the proposal's four questions:**
+  - What "recognizable" looks like: "Answering multiple math problems where the focus is on the math, not interpreting a verbal question."
+  - The school's program: "They haven't told us the name, but they don't solve problems the way I did 30 years ago. I would guess Common Core is right."
+  - Minutes a day: "Probably 5 is about right."
+  - Taught in ʻōlelo Hawaiʻi: "No. English."
+- **Decided (8 Nov 2026, fix round 1): two strands, built in this order.** Brandon: "Strand 1, first: the puzzle slot becomes a math circle. One real problem a day with a mathematical idea inside it (parity, invariants, fair sharing into fractions, counting two ways, estimation), from a progression of ideas kept in a file, each problem about something someone actually built or figured out, with the person and the history in it; the hint conversation and the handoff do the teaching; the same idea comes back weeks later in a new costume. Sources: the public-domain puzzle literature (Dudeney, Loyd, Carroll) and the thread themes. No publisher. No new tile. Strand 2, later: the fluency floor, five minutes, as the Practice tile was proposed, but with no Illustrative Mathematics anywhere; the order from the grade standards, written by Code, the nudges in the school's methods." *Replaces* the version decided at go the same day (12:32): one strand, a sixth tile whose order came from Illustrative Mathematics' first edition (CC BY 4.0), with the Progressions' stages. Its tile details stand for strand 2.
+- **Decided (8 Nov 2026, go at 12:32), standing for strand 2:**
+  - a sixth tile, Practice: eight problems a set, one set a day, yesterday's misses first, no second set;
+  - a wrong answer gets "Try again.", then a nudge, then "This one is for a person.", and the screen never shows the answer (*touches rule 3*; the parents kept the rule for arithmetic facts);
+  - the level moves up after a clean set, back after two problems go to a person, and either guardian can move it;
+  - no voice on practice;
+  - judged in code, $0 a day;
+  - generated sums do not go through the gate, and the parents read the steps file before it ships (*touches rule 5*);
+  - a `practice_answers` table and each child's step (*touches rule 7*);
+  - word problems last, only if the parents ask. Brandon: "slice 2 drops the word problems, or puts them last; the focus is the math, not reading a question."
+- **Decided (8 Nov 2026, 16:32, go after fix round 1): all Proposed, with one addition.** Brandon: "go. All Proposed. One addition to C3: a check in the build that every number and accepted answer in a circle card matches the file, not just the prompt asking for it; a card that differs is held back like a gate failure." So:
+  - **C1, the sources:** the public-domain puzzle literature is Dudeney, Loyd and Carroll and the older books they drew on (the Rhind papyrus, Alcuin, Archimedes, Fibonacci, Bachet, Euler). Problems are retold in Quark's words, never in a modern translation's.
+  - **C2, the file:** `plan/math-circle.yaml`. Each problem is whole: its person, history and sources, four steps and their answers, the leader's questions for hints, and a parent's part. A validator checks it.
+  - **C3, the four steps:** the file writes them, and a parent reads them before they ship. The Sunday build words them for each boy and changes no number. A card check in code holds back, as `blocked` with the reason in `cards.policy_notes`, any circle card whose numbers or accepted answers differ from the file.
+  - **C4, the rhythm:** blocks of six weeks. Three weeks meet ideas; the next three bring each back three weeks later in a new costume.
+  - **C5, the boys:** both, pitched at the younger, with layers 3 and 4 reaching the older. Nothing is tied to the Saturday circle beyond an idea a parent names.
+  - **C6, a theme's puzzle day:** at most one a week, written as a circle problem in the theme's costume; the file waits a day.
+  - **C7, history and pictures:** every history line is checked and cited, or left out. Pictures are chosen fresh, never an old book's caricature (*touches rule 1*).
+  - **C8, the parents at the handoff:** today's problem and its answers on `/parent`, on slice 1's cut list.
+  - **C9, the migration:** a `steps` column on `plan_topics`, to live at slice 1's stop by Brandon's hand.
+  - **F1, the floor's nudges:** the strategies the grade standards themselves name (make a ten, place value, the number line, arrays, equal groups), written once per step by Code. *Replaces* "from the Progressions" (12:32): this round could not confirm the 2023 edition's open licence.
+  - **B1, the build:** slice 1 the circle; the circle's next block every three weeks; slice 2 the floor, with whole numbers; the rest only if asked.
+- **Decided (8 Nov 2026, 16:38): the board's rows.** Brandon: "Yes to the four rows: the circle's slice 1 at next, the next-block row and the floor at later, the rest at someday."
+
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
 Brandon's review of the 14 Oct day 1 cards: a lot of words, one picture, and lines no human tutor would write. The worst was "Wren, you love art" on the listen card: it tells a child what he is instead of letting him see it for himself. Not a rule against definitional statements, which would bite later (calling a child a helper can be the right thing at the right moment). The question is the tutor's voice. Proposed as step 4d, after 2b, since a card that starts from a picture needs the picture.
@@ -370,6 +404,7 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
 
+- 8 Nov 2026, a worktree brief's branch (tooling): `claude --worktree math-practice` made the branch `worktree-math-practice` from `main` (`1f2dc5c`), 25 commits behind `phase-4-wonder-wall`, where the brief says "made from `phase-4-wonder-wall`"; go's `git pull --rebase origin phase-4-wonder-wall` brought it there; expected: a worktree brief's branch starts from the phase branch it names, or its go says to bring it there. `docs/math-practice-brief-slice.md`. Size: minutes.
 - 1 Nov 2026, `content:fetch:live` (tooling): with 46 new items it printed only `Target: LIVE` for 12 minutes, though every item was stored, so it looked stuck; expected: a line as each item is fetched, then the table. `scripts/content-fetch.mts`. Size: minutes.
 - 23 Oct 2026, live week 1's cards (phase 3): about 80 of 280 open with the lens's question pasted on ("What's down there?" on a map, a fable, a tangram; "What's funny about…" on dice), and the gate's reader notes call most of them a poor fit; expected: the lens shapes the way in, never a stock opener that doesn't fit the card. `core/prompts/card.md` line 27, `lib/lenses.ts`. Size: a job.
 - 23 Oct 2026, live week 1's cards (phase 3): about 18 say a lesson outright ("that is worth copying", "careful counters make fewer mistakes"), from how the family wants its children to learn to act; expected: the card shows the person or the act and leaves the lesson to the child. `core/prompts/card.md`. Size: an hour.
