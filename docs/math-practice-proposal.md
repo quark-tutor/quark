@@ -2,9 +2,9 @@
 
 For Brandon and June. Written 8 November 2026 by Claude Code from the brief `docs/math-practice-brief-slice.md`,
 and rewritten the same afternoon in fix round 1, after Brandon and June talked it through. It is an exploration:
-nothing is built, nothing on test or live is changed, and no API money was spent. Each open choice has its options
-and one marked **Proposed**; they are gathered at the end. The first version (one strand, a Practice tile ordered
-from a published curriculum) is in git at `358b00b`.
+nothing is built, nothing on test or live is changed, and no API money was spent. Each open choice had its options
+and one marked **Proposed**; all are now decided and gathered at the end. The first version (one strand, a Practice
+tile ordered from a published curriculum) is in git at `358b00b`.
 
 **Decided (8 Nov 2026, fix round 1).** Brandon:
 
@@ -29,6 +29,11 @@ What stands from go at 12:32 (Brandon, with June's answers) is now strand 2's: e
 then a person, never the answer, judged in code, and word problems last, only if the parents ask. The rest of that
 version (its order of steps, its sources, its slices) is replaced by this page.
 
+**Decided (8 Nov 2026, 16:32, after fix round 1).** Brandon: "go. All Proposed. One addition to C3: a check in the
+build that every number and accepted answer in a circle card matches the file, not just the prompt asking for it; a
+card that differs is held back like a gate failure." So C1 to C9, F1 and B1 are decided as proposed. C3 gains a
+check in code (sections 3, 5, 6 and 7). The options below are kept as they were offered.
+
 ## In short
 
 - **Two strands, in this order.** First, the puzzle card becomes a small math circle every day. Later, a five-minute
@@ -37,10 +42,10 @@ version (its order of steps, its sources, its slices) is replaced by this page.
   about a real person who built or figured something out: Ahmes sharing loaves, Euler's seven bridges, Alcuin's
   wolf, goat and cabbages. Its four layers are a circle session in small: a small case, a bigger case, the pattern,
   and the why. The hints are a leader's questions, and the handoff gives the child something to do with a parent's
-  hands. The problems come from a file, `plan/math-circle.yaml`, in an order that builds. **Proposed:** the file
+  hands. The problems come from a file, `plan/math-circle.yaml`, in an order that builds. **Decided:** the file
   holds each problem whole, with its four questions and their answers, so a person reads the math once and no model
-  remakes it on Sunday. Each idea comes back three weeks later in a new costume. It needs no new tile, no Saturday
-  work and no new spend.
+  remakes it on Sunday. A check in code holds back any card whose numbers or accepted answers differ from the file.
+  Each idea comes back three weeks later in a new costume. It needs no new tile, no Saturday work and no new spend.
 - **Strand 2, the fluency floor.** The Practice tile as proposed this morning: eight problems a day, about five
   minutes, judged in code, $0 a day. The order of steps comes from the Common Core grade standards, written by
   Code. The nudges teach the methods the standards themselves name (make a ten, place value, the number line,
@@ -199,7 +204,11 @@ no new tile, and strand 2 is (a).
 - **Who writes the four steps.** (a) **Proposed:** the file. A person reads the math and the answers once, before
   they ship, and the Sunday build turns them into each boy's words without changing a number. (b) The Sunday build's
   model writes them from a summary, as for every short lesson today: no new code, but a model remakes math problems
-  and their answer keys every week, and the gate does not check arithmetic.
+  and their answer keys every week, and the gate does not check arithmetic. **Decided with (a)** (Brandon): a check
+  in the build, in code, not only the prompt asking for it. Every number in a circle card (its text, question, hints
+  and handoff, with number words read as numbers) must appear in its problem in the file. Its accepted answers must
+  be the file's. A card that differs is held back like a gate failure: `blocked`, with the reason in
+  `cards.policy_notes`, so the parents see it on the week page before Looks good.
 - **The rhythm.** (a) **Proposed:** blocks of six weeks. For three weeks the circle meets a new idea each day. For
   the next three it brings each one back in the same order, three weeks to the day after it was met, in a new
   costume and a step deeper. The next block goes on with new ideas and brings the first block's back once more. It
@@ -262,7 +271,8 @@ What changes from that version:
   set. What brings a child back is the problem itself and the person at the handoff, not a reward.
 - **Rule 5 (nothing unchecked) and the gate.**
   - *Strand 1*: every circle card is a card and passes the gate, as now. The people and histories carry values
-    points like any lesson, and the gate reads them.
+    points like any lesson, and the gate reads them. It must also pass the card check of C3: its numbers and
+    accepted answers match the file, or it is held back.
   - *Strand 2*: generated sums do not go through the gate. They hold no subject the rulebook could hold back, and the
     parents read the steps file before it ships (decided at 12:32).
 - **Rule 7 (minimal data).**
@@ -271,8 +281,8 @@ What changes from that version:
   - Neither sends anything new to a model.
 - **Rule 8 (effort words).** The frame says it: the future belongs to "people willing to look closely and try." A
   costume tells what its person noticed and tried (Ahmes cut the loaves in halves first; Euler counted the bridges on
-  each piece of land), never that they were a genius. The floor's words stand: "Try again.", "This one is for a person.",
-  "That's today's practice."
+  each piece of land), never that they were a genius. The floor's words stand: "Try again.", "This one is for a
+  person.", "That's today's practice."
 - **Rule 1 (not a brainwashing engine).** The costumes come from many places and times: Egypt, Greece, Charlemagne's
   court, France, Königsberg, Victorian England, the themes. A tradition is shown with respect ("faithfulness to
   tradition"), and an old book's prejudice is left out, as in section 2.
@@ -290,6 +300,9 @@ What changes from that version:
 - **The ideas.** `writeIdeaChain()` makes the puzzle slot's chain from the file's steps, with no model call.
 - **The card prompt.** `card.md` gains a circle section (v7): keep every number and question as written, hints as a
   leader's questions, the handoff with the parent's part.
+- **The card check** (C3). Code holds back, as the gate does, a circle card whose numbers or accepted answers differ
+  from its step in the file. It runs before the gate, spends nothing, and has a test that changes a number and sees
+  the card held back.
 - **The Saturday pick.** It no longer picks puzzle lessons: 22 a week, not 28 (the Moon's week: look 5, wonder 6,
   listen 6, then 5). Its brief changes its counts.
 - **The circle's next block.** Code writes it about every three weeks, ahead of time, for the parents' read.
@@ -307,16 +320,17 @@ What changes from that version:
 
 1. **Slice 1: the math circle in the puzzle slot** (a job). The file's first three weeks (18 problems), the
    validator, the import, the migration, the schedule's puzzle queue, the chain from the file, card v7's circle
-   section, the Saturday brief's counts, and the `/parent` block of today's problem. Cut list if it runs long: the
-   `/parent` block (the handoff's parent part stays). On live from week 5 if it ships with the theme-a-week release
-   by Saturday 21 Nov; otherwise from week 6.
+   section, the card check, the Saturday brief's counts, and the `/parent` block of today's problem. Cut list if it
+   runs long: the `/parent` block (the handoff's parent part stays). The card check is never cut. On live from week
+   5 if it ships with the theme-a-week release by Saturday 21 Nov; otherwise from week 6.
    - *Look:* **Where** the stop's report, with `npm run week:build -- --week <n> --plan` on test pasted whole; then
      June's iPad as Bug, against test.
    - **Do** read the week's puzzle slot; open day 1's Puzzle card; guess wrong twice on the first card, then right;
      go on to the third card.
    - **See** in the plan, the circle's first problems on the puzzle slot in the file's order (the theme's puzzle day
-     aside). On the iPad, the card's numbers as the file has them, hints that ask and never tell, the next card on a
-     right answer, and the parent's part in the first handoff.
+     aside). In the report, the card check's test holding back a card with one number changed, and how many of test's
+     circle cards it held back. On the iPad, the card's numbers as the file has them, hints that ask and never tell,
+     the next card on a right answer, and the parent's part in the first handoff.
    - **Pass** if no hint or handoff gives an answer and every number matches the file. **Fail** if a number differs
      from the file, or a hint says an answer.
 2. **The circle's next block** (an hour, then every three weeks). The returns of the first 18 ideas, in new costumes,
@@ -373,13 +387,13 @@ What changes from that version:
 - a `practice_answers` table and the child's step (*touches rule 7*);
 - word problems last, only if the parents ask.
 
-**Proposed, for your reply:**
+**Decided after fix round 1** (Brandon, 8 Nov 2026, 16:32: "go. All Proposed", with one addition to C3):
 
-| | Decision | Proposed |
+| | Decision | Decided |
 |---|---|---|
 | C1 | "Public-domain puzzle literature" (section 2) | Dudeney, Loyd and Carroll, and the older puzzle books they drew on (the Rhind papyrus, Alcuin, Archimedes, Fibonacci, Bachet, Euler), retold in Quark's words, never a modern translation's |
 | C2 | The file (section 2) | `plan/math-circle.yaml`, each problem whole, with its person, history, sources, four steps and answers, leader's questions and parent's part; checked by a validator |
-| C3 | Who writes the four steps (section 3) | the file, read by a parent before it ships; the Sunday build words them for each boy and changes no number |
+| C3 | Who writes the four steps (section 3) | the file, read by a parent before it ships; the Sunday build words them for each boy and changes no number. Added by Brandon: "a check in the build that every number and accepted answer in a circle card matches the file, not just the prompt asking for it; a card that differs is held back like a gate failure" |
 | C4 | The rhythm (section 3) | blocks of six weeks: three meeting ideas, three bringing each back three weeks later in a new costume |
 | C5 | Which boys (section 3) | both, pitched at the younger, with layers 3 and 4 reaching the older; no tie to the Saturday circle beyond an idea a parent names |
 | C6 | A theme's puzzle day (section 3) | at most one a week, written as a circle problem in the theme's costume; the file waits a day |

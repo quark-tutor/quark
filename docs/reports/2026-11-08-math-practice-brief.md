@@ -214,3 +214,60 @@ Reply go to take all of these.
   `phase-4-wonder-wall`.
 - CLAUDE.md *Where we are*: one line.
 - Before the merge into `phase-4-wonder-wall`, the main checkout's untracked copy of the brief is deleted.
+
+## Go (8 Nov 2026, 16:32 HST)
+
+Brandon:
+
+> go. All Proposed. One addition to C3: a check in the build that every number and accepted answer in a circle card
+> matches the file, not just the prompt asking for it; a card that differs is held back like a gate failure.
+
+**Done on go.**
+
+- `phase-4-wonder-wall` has not moved since the first go (`3c6b314`), so the pull had nothing to bring.
+- The proposal now records the decisions:
+  - a *Decided* paragraph quoting Brandon's go;
+  - the strand 1 line of *In short*;
+  - the decisions table, now *Decided after fix round 1*, with C3's addition in Brandon's words.
+
+  The options are kept as they were offered.
+- **C3's addition**, written into four sections:
+  - **Section 3:** every number in a circle card (text, question, hints, handoff, with number words read as
+    numbers) must appear in its problem in the file, and its accepted answers must be the file's. A card that differs
+    is `blocked`, with the reason in `cards.policy_notes`, so the parents see it on the week page before Looks good.
+  - **Section 5:** rule 5.
+  - **Section 6:** the card check runs before the gate, spends nothing, and has a test that changes a number and
+    sees the card held back.
+  - **Section 7:** in slice 1, never on its cut list; the look's *See* adds the test and the count of test's circle
+    cards it held back.
+
+## The last stop (8 Nov 2026, 16:40 HST)
+
+The brief's work is done: the proposal is decided and committed. There is nothing for Brandon's eyes but the
+proposal itself, so there is no *Your look*. Nothing is built, nothing on test or live is touched, and no API money
+was spent (the fact check read web pages only).
+
+Size: a job (4 hours); about 50 minutes in all:
+
+- 21 minutes to stop 1;
+- 3 from the first go;
+- about 15 in fix round 1;
+- about 8 from this go.
+
+**For the close** (the brief's *Records to update at the end*):
+
+- **docs/08**, a new section, "Math practice":
+  - the frame, in Brandon's words;
+  - June's four answers;
+  - the decisions of both rounds and this go, C3's addition among them.
+- **The board:** the inbox row clarified, and rows on Brandon's yes, in build order:
+  1. Math circle, slice 1: the puzzle slot becomes a math circle, with the card check (a job; `next`).
+  2. The circle's next block, every three weeks (a standing row, an hour; `later`, due before the circle's week 4).
+  3. The fluency floor, slice 2: whole numbers on a sixth tile (a job; `later`).
+  4. The floor's fractions, time and money, and word problems, only if the parents ask (`someday`).
+
+  The inbox row is only on `worktree-theme-a-week`, so the rows land cleanly once that branch is merged into
+  `phase-4-wonder-wall`. Otherwise the close names them for that merge.
+- **CLAUDE.md** *Where we are*: one line.
+- **The merge** into `phase-4-wonder-wall`: the main checkout's untracked copy of the brief is deleted first, or the
+  merge there refuses.
