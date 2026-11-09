@@ -46,7 +46,7 @@ const units: Unit[] = readdirSync(dir)
     if (errors.length) throw new Error(`plan/${f}:\n  ${errors.join("\n  ")}`);
     if (`${doc.stretch}.yaml` !== f) throw new Error(`plan/${f}: stretch must match the file name`);
     for (const w of planWarnings(doc)) console.warn(`plan/${f}: warning: ${w}`);
-    return { file: f, title: doc.title, prefix: `${doc.stretch}/`, rows: planRows(doc), count: `${doc.weeks.length} weeks`, sequence: doc.sequence };
+    return { file: f, title: doc.title, prefix: `${doc.stretch}/`, rows: planRows(doc), count: `${doc.weeks.length} ${doc.weeks.length === 1 ? "week" : "weeks"}`, sequence: doc.sequence };
   });
 
 // The stretches run 1, 2, 3 with no gap and no two alike (docs/04, "The long-term plan"): checked across
