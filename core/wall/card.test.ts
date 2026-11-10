@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { answerReply, cardReply, chainState, reachable, type AttemptRow, type ChainLayer } from "./card.ts";
+import { answerReply, cardReply, chainState, reachable, slotOrder, SLOTS, type AttemptRow, type ChainLayer } from "./card.ts";
 
 const layer = (n: number, hints = 2): ChainLayer => ({
   cardId: `card-${n}`,
@@ -114,5 +114,36 @@ describe("the answer's reply", () => {
   it("gives the handoff after an open question's answer", () => {
     const s = chainState(chain, [tried(1, true), tried(2, true), tried(3, true), tried(4, null)]);
     expect(answerReply("open", chain, s)).toEqual({ outcome: "open", handoff: "Ask a parent about 4." });
+  });
+});
+
+describe("the wall's order on a day (docs/tile-rotation-slice.md)", () => {
+  const addDays = (day: string, n: number) => new Date(Date.parse(`${day}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
+  const turned = (order: readonly string[]) => [...order.slice(1), order[0]];
+
+  it("starts on Monday 26 October 2026 in the order the boys knew", () => {
+    expect(slotOrder("2026-10-26")).toEqual([...SLOTS]);
+  });
+
+  it("gives seven days in a row seven orders, each the last turned by one, the front tile to the back", () => {
+    const days = Array.from({ length: 7 }, (_, i) => addDays("2026-10-29", i)); // across the end of October
+    const orders = days.map(slotOrder);
+    for (let i = 1; i < 7; i++) expect(orders[i]).toEqual(turned(orders[i - 1]));
+    expect(orders[5]).toEqual(orders[0]); // day 6 is day 1 again
+    expect(new Set(orders.slice(0, 5).map((o) => o[0])).size).toBe(5); // each tile first once in five days
+    expect(new Set(orders.slice(0, 5).map((o) => o[4])).size).toBe(5); // and last once
+    for (const o of orders) expect([...o].sort()).toEqual([...SLOTS].sort());
+  });
+
+  it("gives the orders named at stop 1", () => {
+    expect(slotOrder("2026-11-09")).toEqual(["puzzle", "look", "wonder", "listen", "then"]);
+    expect(slotOrder("2026-11-10")).toEqual(["look", "wonder", "listen", "then", "puzzle"]);
+    expect(slotOrder("2026-11-11")).toEqual(["wonder", "listen", "then", "puzzle", "look"]);
+    expect(slotOrder("2026-11-16")).toEqual(["wonder", "listen", "then", "puzzle", "look"]);
+  });
+
+  it("turns the same way before the first day, and keeps the order for a day it cannot read", () => {
+    expect(slotOrder("2026-10-25")).toEqual(["puzzle", "look", "wonder", "listen", "then"]);
+    expect(slotOrder("not a day")).toEqual([...SLOTS]);
   });
 });

@@ -6,9 +6,10 @@ import { getDevice } from "@/lib/device";
 import { loadWall } from "@/lib/wall";
 import styles from "./kid.module.css";
 
-// The Wonder Wall: today's five first cards from the family's live week, passed cards only, in slot order
-// (docs/wonder-wall-1-slice.md, decision 1). A tile is the slot and the card's title: no picture, no count,
-// no star. Every read goes through lib/wall.ts.
+// The Wonder Wall: today's five first cards from the family's live week, passed cards only (docs/wonder-wall-1-slice.md,
+// decision 1), in today's order: the slots turned by one each day (slotOrder() in core/wall/card.ts;
+// docs/tile-rotation-slice.md). A tile is the slot and the card's title: no picture, no count, no star, no mark on the
+// first tile. Every read goes through lib/wall.ts.
 export default function WonderWallPage() {
   return (
     <main className={styles.wall}>

@@ -12,6 +12,7 @@ import {
   chainState,
   isDone,
   reachable,
+  slotOrder,
   SLOTS,
   wallReply,
   type AnswerReply,
@@ -148,11 +149,12 @@ export async function visit(store: WallStore, scope: Scope, now: Date): Promise<
   return store.startSession({ family_id: scope.familyId, child_id: scope.childId, device: scope.deviceId, started_at: at });
 }
 
-// The wall: today's five first cards in slot order, each done or not.
+// The wall: today's five first cards in today's order (slotOrder(), turned by one each day), each done or not. A slot
+// with no first card on the wall is left out, and the others keep their turned order.
 export async function wallFor(store: WallStore, scope: Scope, nickname: string, now: Date): Promise<WallReply> {
   const day = await today(store, scope, now);
   const rows = await store.cards({ familyId: scope.familyId, childId: scope.childId, day });
-  const chains = SLOTS.map((slot) => chainOf(rows, scope, day, slot).chain).filter((c) => c.length > 0);
+  const chains = slotOrder(day).map((slot) => chainOf(rows, scope, day, slot).chain).filter((c) => c.length > 0);
   const attempts = chains.length ? await store.attempts(scope.childId, chains.flat().map((l) => l.questionId)) : [];
   await visit(store, scope, now);
   return wallReply(

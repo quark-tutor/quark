@@ -9,6 +9,20 @@ import type { Verdict } from "./judge.ts";
 export const SLOTS = ["look", "wonder", "listen", "then", "puzzle"] as const;
 export type Slot = (typeof SLOTS)[number];
 
+// The wall's order on a day (docs/tile-rotation-slice.md): SLOTS turned by one for each day since Monday 26 October
+// 2026, the boys' first day, so that day's order is the one they knew. The front tile goes to the back, so tomorrow's
+// first is the one after today's first, and in five days each tile is first once and last once. No randomness: a
+// parent can say tomorrow's order. day is the family's own (todayIn()), never the server's, and every child of the
+// family gets the same order. Only the wall reads it; the Sunday build, the nightly lines and the week page keep SLOTS.
+export const TURNS_FROM = "2026-10-26";
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+export function slotOrder(day: string): Slot[] {
+  const days = Math.round((Date.parse(`${day}T00:00:00Z`) - Date.parse(`${TURNS_FROM}T00:00:00Z`)) / DAY_MS);
+  const turn = Number.isFinite(days) ? ((days % SLOTS.length) + SLOTS.length) % SLOTS.length : 0;
+  return [...SLOTS.slice(turn), ...SLOTS.slice(0, turn)];
+}
+
 // One layer the wall may show: its card passed, today, in a live week, its item still approved.
 export type ChainLayer = {
   cardId: string;

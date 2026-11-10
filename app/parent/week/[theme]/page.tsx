@@ -177,7 +177,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
         <h1>{theme.data.title}</h1>
         <p className={styles.lede}>
           The week starting {weekday(theme.data.week_start)}. Each card is shown with its four layers: what the child sees first, then each tap
-          deeper.
+          deeper. On the Wonder Wall the tiles change order each day.
         </p>
       </div>
 

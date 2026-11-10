@@ -292,6 +292,49 @@ describe("answering", () => {
   });
 });
 
+describe("the wall's order (docs/tile-rotation-slice.md)", () => {
+  const FIVE = ["look", "wonder", "listen", "then", "puzzle"];
+  const dayOf = (day: string, child_id = PIP) => FIVE.map((slot) => card(`${child_id}-${day}-${slot}`, { day, slot, child_id }));
+  const slots = async (store: WallStore, now: Date, s: Scope = scope) => (await wallFor(store, s, "Pip", now)).tiles.map((t) => t.slot);
+  // 8 am in Hawaii on Wednesday 28 October 2026, two days on from the first day.
+  const WEDNESDAY = new Date("2026-10-28T18:00:00Z");
+
+  it("shows the first day's tiles in the order the boys knew, and two days on, turned twice", async () => {
+    const { store } = fake([...dayOf("2026-10-26"), ...dayOf("2026-10-28")]);
+    expect(await slots(store, MONDAY)).toEqual(FIVE);
+    expect(await slots(store, WEDNESDAY)).toEqual(["listen", "then", "puzzle", "look", "wonder"]);
+  });
+
+  it("keeps the others in their turned order when a slot has no first card", async () => {
+    const day = dayOf("2026-10-28").filter((c) => c.slot !== "then");
+    const { store } = fake([...day, card("held", { day: "2026-10-28", slot: "then", policy: "blocked" })]);
+    expect(await slots(store, WEDNESDAY)).toEqual(["listen", "puzzle", "look", "wonder"]);
+  });
+
+  it("changes the order at the family's midnight, not the server's", async () => {
+    const { store } = fake([...dayOf("2026-10-26"), ...dayOf("2026-10-27")]);
+    // 11:30 pm in Hawaii on Monday is 09:30 UTC on Tuesday: still Monday's order.
+    expect(await slots(store, new Date("2026-10-27T09:30:00Z"))).toEqual(FIVE);
+    // 12:30 am in Hawaii on Tuesday: turned by one.
+    expect(await slots(store, new Date("2026-10-27T10:30:00Z"))).toEqual(["wonder", "listen", "then", "puzzle", "look"]);
+  });
+
+  it("gives both children the same order on the same day", async () => {
+    const { store } = fake([...dayOf("2026-10-28"), ...dayOf("2026-10-28", WREN)]);
+    const wren: Scope = { familyId: FAMILY, childId: WREN, deviceId: "device-2" };
+    expect(await slots(store, WEDNESDAY, wren)).toEqual(await slots(store, WEDNESDAY));
+  });
+
+  it("keeps a done tile in its place", async () => {
+    const { store } = fake(dayOf("2026-10-28"));
+    const first = (await wallFor(store, scope, "Pip", WEDNESDAY)).tiles.find((t) => t.slot === "puzzle")!;
+    for (const g of ["x1", "x2", "x3"]) await ask(store, first.cardId, g, WEDNESDAY);
+    const wall = (await wallFor(store, scope, "Pip", WEDNESDAY)).tiles;
+    expect(wall.map((t) => t.slot)).toEqual(["listen", "then", "puzzle", "look", "wonder"]);
+    expect(wall.map((t) => t.done)).toEqual([false, false, true, false, false]);
+  });
+});
+
 describe("sessions", () => {
   it("keeps a visit while something happens within 30 minutes, and starts a new one after", async () => {
     const { store, sessions } = fake([card("l1")]);
