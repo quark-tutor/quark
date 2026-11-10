@@ -292,6 +292,28 @@ Brief: `docs/theme-a-week-slice.md` (*Week 2 builds itself*), in a worktree bran
 - **Decided (9 Nov 2026, 14:34, taken with go): a refusal before spending reads as one.** At M3, `week:build` printed its expected refusal as a crash with a stack trace. It now prints "Stopped: …" and "Nothing was spent." and exits 1 (`scripts/week-build.mts`; a wiring test holds it), because a Saturday job meets that line by design.
 - **Decided (9 Nov 2026, 14:41): the job closed and released.** Brandon typed `/wwc:release` at the last stop (stop 3, the release, recommended now), with no other words; the brief's look was taken at stop 2.
 
+## The tiles rotate daily: decided in the brief and the job (9 Nov 2026)
+
+Brief: `docs/tile-rotation-slice.md` (*Wonder Wall*), on `phase-4-wonder-wall`; report `docs/reports/2026-11-09-tile-rotation.md`. As built: docs/04, *How the Wonder Wall is built*, "The pages", and docs/03. No migration, nothing on live before the release, nothing spent.
+
+- **Decided (9 Nov 2026, 16:48, in the chat): the tiles rotate daily, and Math takes the Puzzle slot.** Brandon: "swap puzzle with math, and rotate tiles daily." The reason is the boys' own use on live, 26 October to 9 November (days each first card was answered, of 16 offered, and minutes spent):
+
+  | | Look | Wonder | Listen | Then | Puzzle |
+  |---|---|---|---|---|---|
+  | The older boy: days | 11 | 11 | 8 | 7 | 7 |
+  | The older boy: minutes | 71 | 71 | 42 | 32 | 29 |
+  | The younger boy: days | 11 | 11 | 11 | 10 | 10 |
+  | The younger boy: minutes | 45 | 53 | 42 | 27 | 32 |
+
+  Use falls with a tile's place on the wall: the older boy lingers on the first two and often never reaches the last two, and Math, about to take the Puzzle slot, must not sit last every day. Math in the Puzzle slot is the next job (`docs/math-tile-slice.md`). *Replaces* the wall in one fixed slot order (*Wonder Wall, slice 1*, decision 1, 20 Oct 2026).
+- **Decided (9 Nov 2026, in the brief):** the order changes every day and is the same for both boys on the same day; each tile takes its turn at the front, moving along by one each day, with no randomness, so a parent can say which tile is first tomorrow; nothing else about the wall changes (the tile's words, a done tile staying where it is, one card at a time); no count, star or "new" mark on the first tile (*touches rule 4*); the Sunday build, the nightly lines and the week page keep the slot order.
+- **Decided (9 Nov 2026, 17:40, go at stop 1): the rule as Code named it, and the chat's two math files in the first commit.** Brandon: "go. Yes to the one question: both math files go in the first commit." So `docs/math-tile-slice.md` and `docs/math-tutor-proposal.md`, which the board's Math tile rows name, are in the repository from this job. Taken with go:
+  - the front tile goes to the back, so tomorrow's first tile is the one after today's first in Look, Wonder, Listen, Then, Puzzle (the other turn would walk the first tile backwards through that order);
+  - the turn counts from Monday 26 Oct 2026, the boys' first day, so that day's order is the one they knew; Tuesday 10 Nov falls on it again, so the first change the boys see is Wednesday 11 Nov;
+  - the week page says it in one sentence at the end of its opening paragraph, "On the Wonder Wall the tiles change order each day.", and keeps showing each day in slot order;
+  - the look's second check plays a card to its end, since a tile is marked done only at the handoff, not after one answer.
+- **Decided (9 Nov 2026, 18:01, `/wwc:release` at *Your look*): the look passed.** On June's iPad as Bug, on test, with test's 8 Nov cards moved to Monday 9 Nov: the five tiles in Monday's order (Puzzle, Look, Wonder, Listen, Then), and a card played to its handoff left its tile in its place, grey, "Done for today". Brandon typed `/wwc:release`, with no other words: every check passed.
+
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
 Brandon's review of the 14 Oct day 1 cards: a lot of words, one picture, and lines no human tutor would write. The worst was "Wren, you love art" on the listen card: it tells a child what he is instead of letting him see it for himself. Not a rule against definitional statements, which would bite later (calling a child a helper can be the right thing at the right moment). The question is the tutor's voice. Proposed as step 4d, after 2b, since a card that starts from a picture needs the picture.
