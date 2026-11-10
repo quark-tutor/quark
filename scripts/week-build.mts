@@ -66,7 +66,15 @@ const models = { ideas: modelFor("curate"), cards: modelFor("write"), gate: mode
 const meter = makeMeter();
 const complete = meteredComplete(meter);
 
-const p = await prepareWeek(db, { week, start: args.start, child: args.child });
+// prepareWeek() only reads, so a refusal from it ("Not enough short lessons…", "No theme for week…") is a stop
+// before spending, printed as one, not as a crash with a stack trace.
+let p: Awaited<ReturnType<typeof prepareWeek>>;
+try {
+  p = await prepareWeek(db, { week, start: args.start, child: args.child });
+} catch (e) {
+  console.error(`\nStopped: ${e instanceof Error ? e.message : String(e)}\nNothing was spent.`);
+  process.exit(1);
+}
 const { plan, children, only } = p;
 
 const first = day ?? 1; // the first day built

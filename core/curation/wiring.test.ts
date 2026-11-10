@@ -40,4 +40,11 @@ describe("the week-build wiring", () => {
   it("calls runGate() only from its definition and gate-run.ts", () => {
     expect(callers("runGate")).toEqual(["core/curation/gate-run.ts", "core/curation/gate.ts"]);
   });
+
+  // A Saturday job meets "Not enough short lessons…" at the plan on live by design (docs/saturday-pick-slice.md).
+  it("prints a refusal from prepareWeek() in week:build as a stop before spending, not a crash", () => {
+    const script = code("scripts/week-build.mts");
+    expect(script).toMatch(/try\s*\{\s*p\s*=\s*await prepareWeek\(/);
+    expect(script).toMatch(/Stopped: \$\{[^}]*\}\\nNothing was spent\./);
+  });
 });
