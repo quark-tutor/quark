@@ -76,3 +76,47 @@ Reply go to take all of these.
 **Go (17:40 HST).** Brandon: "go. Yes to the one question: both math files go in the first commit." So the
 first commit holds the board (this row at *building*), the brief, `docs/math-tile-slice.md`,
 `docs/math-tutor-proposal.md` and this report.
+
+## Stop 2, *Your look* (9 Nov 2026, 17:45 HST)
+
+**Built and pushed** (`3159d89` on `phase-4-wonder-wall`; nothing on live, no migration, so the migrations workflow
+did not run; nothing spent):
+
+- **`slotOrder(day)`** in `core/wall/card.ts`, beside `SLOTS`: the five slots turned by the days since Monday 26
+  Oct 2026 (`TURNS_FROM`), the front tile to the back. A day it cannot read keeps the usual order.
+- **`wallFor()`** in `core/wall/flow.ts` orders the tiles by it, from the family's day (`today()`, `todayIn()`).
+  Nothing else changed: `onWall()`, the Sunday build, the nightly lines and the week page keep `SLOTS`.
+- **The week page** (`/parent/week/<theme>`): its opening paragraph ends "On the Wonder Wall the tiles change order
+  each day." The comment at the top of `app/kid/page.tsx` says the new order.
+- **Tests,** 9 new, all passing: in `core/wall/card.test.ts`, 26 Oct is the old order; seven days in a row (across
+  the end of October) are seven orders, each the last turned by one, day 6 equal to day 1, each tile first once and
+  last once in five days; the orders named at stop 1; a day before the start, and a day it cannot read. In
+  `core/wall/flow.test.ts`, through `wallFor()`: the first day and two days on; a slot whose first card is held back
+  leaves the others in their turned order; the order changes at 12:30 am Hawaii, not at midnight UTC; both children
+  get the same order; a done tile stays in its place.
+- `npm test`: 451 passed, 34 files. `npm run typecheck`: clean. `npm run build`: clean.
+
+**For the look, on test:** `fixture -- today 2026-11-08` moved test's 8 Nov day (40 cards, all passed; both
+invented children have all five first cards) to today, 9 Nov, and set its week live. `npm run dev:ipad` is running:
+https://192.168.50.67:3000/kid.
+
+**Your look, on June's iPad as Bug, on test, tonight (Monday 9 Nov, before midnight HST):**
+
+- **Where:** the wall, `/kid`, opened from the Home Screen.
+- **Do:** 1. Read the five tiles from the top. 2. Open one that is not grey and play it to its end: a wrong guess
+  each time until "This one is for a person:", then "Back to the wall".
+- **See:** the tiles in Monday's order: Puzzle, Look, Wonder, Listen, Then. The tile you finished is still in its
+  place, grey, "Done for today".
+- Pass □ Fail □ — if fail, what you saw.
+
+If the look slips past midnight, Tuesday's order is the old one (Look, Wonder, Listen, Then, Puzzle), so the look
+cannot tell a turn from none; say so, and Code moves the cards to Wednesday's date instead on Wednesday.
+
+**Then stop 3, the release.** `/wwc:release` closes first (docs/03 and docs/04's wall, docs/08's *Decided* with
+your words and the table, `CLAUDE.md`'s *Where we are*, the README status, this row to *live*), then puts
+`phase-4-wonder-wall` on `main` as a fast-forward, by your go at its stop. What it changes: **the boys' walls on
+live**, from the deploy on, in Monday's order tonight, then the table at stop 1. No migration and no live command.
+It is undone by putting `main` back and redeploying, or by a release of a change that returns `SLOTS` to `wallFor()`.
+
+At the last stop, type `/wwc:close` to close and hold, or `/wwc:release` to close and release; either, typed
+clean, is your go for the look; name a failure without it.
