@@ -128,9 +128,10 @@ export function checkMath(p: MathProblem, ctx: MathContext): string[] {
       out.push(`${at}: the last step's answer is ${steps[steps.length - 1]?.answer}, not the part's answer, ${value}`);
     }
 
-    // Nothing says the answer before he does.
+    // Nothing says the answer before he does. An answer of 1 is looked for as the digit only: "one each" and "one at a
+    // time" are everywhere and say nothing (found on test's day 5, 9 Nov 2026).
     if (value !== null && !leavesOf[i].includes(value)) {
-      const says = (s: string | undefined) => numbersOf(s ?? "").includes(value!);
+      const says = (s: string | undefined) => (value === 1 ? /(?<![\d,.])1(?![\d,.])/.test(s ?? "") : numbersOf(s ?? "").includes(value!));
       if (says(p.setting)) out.push(`${at}: the setting says its answer, ${value}`);
       if (says(part.question)) out.push(`${at}: its question says its answer, ${value}`);
       wordings.forEach((w, k) => says(w) && out.push(`${at}: its ${ordinal[k]} other wording says its answer, ${value}`));

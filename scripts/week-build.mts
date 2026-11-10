@@ -112,7 +112,7 @@ if (p.math) {
   for (const c of only ? [only] : children) {
     const mc = p.math.children.get(c.id);
     const days = mc ? planMath(p.math.ladder, mc) : [];
-    console.log(`  ${c.nickname}'s math: ${days.length ? days.map((d) => `day ${d.day} ${d.teaches}${d.isNew ? " (new)" : ""}`).join(", ") : "none (no math style, or no rung he is working on)"}.`);
+    console.log(`  ${c.nickname}'s math: ${days.length ? days.map((d) => `day ${d.day} ${d.teaches}${d.isNew ? " (new)" : ""}${d.setting ? ` in ${d.setting}` : ""}`).join(", ") : "none (no math style, or no rung he is working on)"}.`);
   }
 }
 if (args.plan) {

@@ -59,6 +59,11 @@ describe("checkMath", () => {
     expect(older(edit(MARKET, (q) => (q.parts[2].tie = "It's like 16 points in a game.")))).toContain("part 3: its tie says its answer, 16");
     expect(older(edit(MARKET, (q) => (q.setting += " The stand has 4 kinds of fruit.")))).toContain("part 4: the setting says its answer, 4");
     expect(older(edit(MARKET, (q) => (q.parts[3].steps[0].question = "Count up from $16 to $20: is it 4?")))).toContain("part 4, step 1: says the part's answer, 4");
+    // An answer of 1 is not "said" by "one each": only the digit counts.
+    const one = edit(MARKET, (q) => {
+      q.parts[3] = { ...q.parts[3], question: "You pay with a $17 bill. Hand over one bill at a time. How much change?", answer: 1, expression: "17 - 16", wordings: ["The total is $16 and you hand over $17. How much comes back?", "What do you add to $16 to make $17?"], steps: [{ question: "What is $16 and $1 more?", answer: 17, expression: "16 + 1" }, { question: "So how many dollars from $16 to $17?", answer: 1, expression: "17 - 16" }], working: ["$17 − $16 = $1.", "You get $1 back."] };
+    });
+    expect(older(one).filter((p) => /says (its|the part.s) answer/.test(p))).toEqual(["part 4, step 1: says the part's answer, 1"]);
   });
 
   it("keeps every sum on his rungs: the 3s and 4s are the younger's, not the older's yet", () => {

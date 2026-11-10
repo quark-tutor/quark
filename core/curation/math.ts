@@ -229,10 +229,15 @@ export function problemOf(raw: RawMath, isNew: boolean): MathProblem {
 
 export type WrittenMath = { problem: MathProblem; asked: number; problems: string[] }; // problems: still wrong after the second try
 
+// The writer thinks before it writes, and a problem with a worked example makes it think hardest: 7,130, 11,090 and
+// 6,518 thinking tokens on test's day 5 (9 Nov 2026), before about 1,500 of problem. At 16,000 a long think cut the
+// reply off twice. 21,000 is the most a call may ask for without streaming, and a call pays only for what it uses.
+export const MATH_MAX_TOKENS = 21000;
+
 export async function writeMath(ctx: MathContext, deps: { complete: Complete; system: string; label: string }): Promise<WrittenMath> {
   const prompt = mathPrompt(ctx);
   const ask = (extra: string) =>
-    deps.complete<RawMath>({ system: deps.system, prompt: prompt + extra, maxTokens: 16000, use: "write", json: MATH_SCHEMA, label: `${deps.label}${extra ? "-again" : ""}` });
+    deps.complete<RawMath>({ system: deps.system, prompt: prompt + extra, maxTokens: MATH_MAX_TOKENS, use: "write", json: MATH_SCHEMA, label: `${deps.label}${extra ? "-again" : ""}` });
   const check = (p: MathProblem) => checkMath(p, { day: ctx.day, ladder: ctx.ladder, places: ctx.child.places });
   let problem = problemOf(await ask(""), ctx.day.isNew);
   let problems = check(problem);
