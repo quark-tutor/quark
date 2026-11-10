@@ -437,6 +437,18 @@ describe("the gate on a math card", () => {
       expect(p).toContain(line);
     }
     expect(MODEL_RULES).toContain("not_here");
-    expect(readFileSync("core/prompts/gate.md", "utf8")).toMatch(/\*\*not_here\*\*: on a math card only/);
+    expect(readFileSync("core/prompts/gate.md", "utf8")).toMatch(/\*\*not_here\*\*: on a math card only, its setting is something these children have not seen or done/);
+  });
+
+  it("reads a math card's setting against the family's own places and things and this child's interests, and a card that is not math against neither (fix round 3)", async () => {
+    const { mathCards } = await import("./math");
+    const { MARKET } = await import("../math/samples");
+    const [first] = mathCards(MARKET, { day: 3, teaches: "money", everyday: true, isNew: true, style: "short" });
+    const child = { age: 9, carefulAbout: null, interests: ["trains", "drawing"] };
+    const math = gatePrompt({ rulebook: "The rulebook.", lines: [], perspective: null, child, card: first, familiar: ["the coast", "the mountains"] });
+    expect(math).toContain("Places and things this family knows: the coast, the mountains.");
+    expect(math).toContain("This child is into: trains, drawing.");
+    const plain = gatePrompt({ rulebook: "The rulebook.", lines: [], perspective: null, child, card: { ...first, math: undefined }, familiar: ["the coast"] });
+    expect(plain).not.toMatch(/the coast|trains|This child is into/);
   });
 });

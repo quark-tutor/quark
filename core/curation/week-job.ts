@@ -280,6 +280,9 @@ async function loadMath(db: SupabaseClient, familyId: string, children: WeekChil
   const ids = children.map((c) => c.id);
 
   const styles = must(await db.from("children").select("id, math_style").in("id", ids), "children") as { id: string; math_style: MathStyle | null }[];
+  // The family's places and things (fix round 3), for the settings: an empty list if the column is not there yet.
+  const fam = await db.from("families").select("familiar").eq("id", familyId).maybeSingle();
+  const familiar = fam.error ? [] : (((fam.data as { familiar?: string[] } | null)?.familiar ?? []) as string[]);
   const places = must(await db.from("mastery").select("child_id, skill_id, place").in("child_id", ids).not("place", "is", null), "mastery") as { child_id: string; skill_id: string; place: Place }[];
   const answered = must(
     await db.from("attempts").select("child_id, questions!inner(skill_id)").in("child_id", ids).not("questions.skill_id", "is", null),
@@ -298,8 +301,10 @@ async function loadMath(db: SupabaseClient, familyId: string, children: WeekChil
   ) as unknown as { child_id: string; day: string; teaches: string | null }[];
 
   const mathChildren = new Map<string, MathChild>();
-  for (const c of children) {
+  for (const [turn, c] of children.entries()) {
     mathChildren.set(c.id, {
+      familiar,
+      turn,
       id: c.id,
       age: c.age,
       reading: c.reading,

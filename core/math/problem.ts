@@ -54,6 +54,7 @@ export type MathDay = {
   everyday: boolean;
   isNew: boolean; // he has not met it: the worked example comes first
   style: MathStyle;
+  setting?: string | null; // where today's problem is set: one of the family's places and things, or one of his interests
 };
 
 // What each part's card carries in its body, beside title, text (the setting), question and handoff.

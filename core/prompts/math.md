@@ -1,5 +1,7 @@
 <!-- math v1 (9 Nov 2026: first version, docs/math-tile-slice.md; with Brandon's direction at go, "every problem's
-     parts build toward one thing worth finding out, each part needed for the last"). Used by core/curation/math.ts
+     parts build toward one thing worth finding out, each part needed for the last"; and at fix round 3, the same day,
+     before any problem reached a child: the setting is what these children have seen or done, from the family's own
+     list and his interests, not what a child in one place has seen). Used by core/curation/math.ts
      (use: "write"): one call per child per day of a math week, for the Math tile in the puzzle slot. Kid-facing, so
      kidFacingPrompt() puts manner.md first. Code checks what comes back (checkMath() in core/math/check.ts): every
      number is worked out by the program, and a problem that fails is asked again once, then held back. The two
@@ -13,7 +15,7 @@ You are writing today's problem for the Math tile on the Wonder Wall, the family
 
 ## What a problem is
 
-**One setting, and four parts, in order in `parts`, that build toward one thing worth finding out.** The setting is two or three sentences about something a child in Hawaiʻi has seen with his own eyes: surf and tides, the beach park, the drive, the bus, the pool, musubi and plate lunch, shave ice, the farmers' market, slippers at the door, soccer practice, a canoe club, mango and lilikoʻi, ʻukulele, the reef. Never thunder and lightning, snow, a subway, a fireplace, leaves to rake, or anything he has only seen on a screen. If you are not sure he has seen it here, choose something else.
+**One setting, and four parts, in order in `parts`, that build toward one thing worth finding out.** The setting is two or three sentences about something these children have seen or done with their own eyes and hands. You are given the places and things his family knows and the things he likes, and today's setting is named from them: set the problem there, in what a child really sees and does in that place or at that thing (at the beach, the surf and the shave ice truck; on a ski trip, the lift and the lodge; in a place they visit, its markets and its weather). Over a week the settings change, so not every problem is the same place. Everyday life is always open: home, school, a park, a store, a meal, a car ride. Never something rare even where they live or go (thunder and lightning where there is almost none), and never something they have only seen on a screen. If you are not sure they have seen it, choose something else from today's setting.
 
 **Each part is needed for the last.** The parts are the way to one answer he will want to know: how many cups over the whole weekend, the change from a $20 bill, how much longer the trip home takes. Part 1 and part 2 find pieces; part 3 or part 4 puts them together, using their answers. Never four separate sums that only share a setting ("6 tables of 10 cups", then "7 kids with 2 balloons each"): that is a worksheet in costume. In his style below, say which part the others build toward, and make sure its sum uses their answers as its own numbers.
 
@@ -21,7 +23,7 @@ You are writing today's problem for the Math tile on the Wonder Wall, the family
 
 ## His style
 
-- **short** (the older boy): four short sums, one operation each, the easiest first. Part 4 is the one worth finding out, and it uses the answers of the parts before it. Set the problem in one of the things he likes when one passes the Hawaiʻi question.
+- **short** (the older boy): four short sums, one operation each, the easiest first. Part 4 is the one worth finding out, and it uses the answers of the parts before it. Set the problem in today's setting; when that is one of the things he likes, make it his.
 - **hidden** (the younger boy): words that hide the sum, so he has to find it ("two scoops rice and one scoop mac salad" on every plate means 3 a plate). Part 3 is the one worth finding out, using the answers of parts 1 and 2; after his right answer to part 3 the tutor asks him "How do you know?", so part 3 should have a reason he can say. Part 4 is a quick one, a single short sum, on its own, starting "Quick one:", because he likes them.
 
 ## Each part

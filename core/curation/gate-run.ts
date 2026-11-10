@@ -21,6 +21,7 @@ export type GateSetup = {
   rulebook: Rulebook | null;
   missing: string | null; // why there is no rulebook the gate can use
   children: GateChildRow[];
+  familiar: string[]; // the family's places and things, for a math card's not_here rule (families.familiar)
   documentChars: number | null; // the gate's copy of the rulebook, for the report
 };
 
@@ -36,11 +37,13 @@ export async function gateSetup(db: SupabaseClient, familyId: string): Promise<G
   const model = modelFor("gate");
   const floor = readFloor(readSafetyFloor());
   const system = `${readPrompt("gate.md")}\n\n${floor.text}`;
-  const [inputs, entries, profile, kids] = await Promise.all([
+  const [inputs, entries, profile, kids, familiar] = await Promise.all([
     loadFamilyInputs(db, familyId),
     loadHandoffs(db),
     db.from("values_profiles").select("policy_document, source_hash").eq("family_id", familyId).maybeSingle(),
-    db.from("children").select("id, nickname, birth_month, careful_about").eq("family_id", familyId).order("birth_month"),
+    db.from("children").select("id, nickname, birth_month, careful_about, interests").eq("family_id", familyId).order("birth_month"),
+    // Before the fix-round-3 migration there is no column: the list is then empty, and the gate is told so.
+    db.from("families").select("familiar").eq("id", familyId).maybeSingle(),
   ]);
   if (profile.error) throw new Error(`values_profiles: ${profile.error.message}`);
   const children = must(kids, "children").map((k) => ({
@@ -48,6 +51,7 @@ export async function gateSetup(db: SupabaseClient, familyId: string): Promise<G
     nickname: k.nickname as string,
     age: ageFrom(k.birth_month as string),
     carefulAbout: (k.careful_about as string | null)?.trim() || null,
+    interests: ((k.interests as string[] | null) ?? []).map((i) => i.trim()).filter(Boolean),
   }));
 
   const built = familyRulebook(inputs, entries);
@@ -59,7 +63,8 @@ export async function gateSetup(db: SupabaseClient, familyId: string): Promise<G
   const rulebook: Rulebook | null = missing
     ? null
     : { hash: built.hash, text: built.gatePolicy, values: built.values, pointNames: new Map(inputs.points.map((p) => [p.number, p.name])) };
-  return { model, floor, system, rulebook, missing, children, documentChars: rulebook ? rulebook.text.length : null };
+  const known = familiar.error ? [] : (((familiar.data as { familiar?: string[] } | null)?.familiar ?? []) as string[]);
+  return { model, floor, system, rulebook, missing, children, familiar: known, documentChars: rulebook ? rulebook.text.length : null };
 }
 
 type CardDb = {
@@ -106,6 +111,7 @@ export async function gateTheme(db: SupabaseClient, familyId: string, themeId: s
     {
       cards,
       children: setup.children,
+      familiar: setup.familiar,
       rulebook: setup.rulebook,
       missing: setup.missing ?? undefined,
       floor: setup.floor,

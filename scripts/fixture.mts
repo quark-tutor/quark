@@ -22,6 +22,8 @@
 //   npm run fixture -- forget <device id>   forget that device, as "Forget this iPad" does
 //   npm run fixture -- devices              the paired devices: id, child n, when paired and last seen, forgotten or not
 //   npm run fixture -- clear <date>         delete every answer to that day's cards, so a look can start the day over
+//   npm run fixture -- familiar <a> <b> ... the family's places and things (families.familiar), from the command line,
+//                                           so no family's own list is ever written into the repository
 //   npm run fixture -- judge [model]        the judge of a child's answer over slice 1's invented answers and the answers
 //                                           to a hint, the word rule beside it (scripts/judge-table.mts); reads no database
 //   npm run fixture -- today <date>         move that day's cards to today where the family lives and set their week
@@ -480,6 +482,11 @@ if (command === "show") {
     });
     must(await db.from("mastery").insert(rows).select("child_id"), "mastery");
   }
+  console.log("Done.");
+} else if (command === "familiar") {
+  const list = process.argv.slice(3).map((s) => s.trim()).filter(Boolean);
+  console.log(`About to set test's family's places and things to: ${list.length ? list.join(", ") : "(none)"}.`);
+  must(await db.from("families").update({ familiar: list }).eq("id", familyId).select("id"), "families");
   console.log("Done.");
 } else if (command === "clear") {
   // For a look on test (docs/math-tile-slice.md, stop 2): every attempt on the questions of that day's cards goes, for

@@ -39,7 +39,23 @@ export type MathChild = {
   places: Map<string, Place>;
   met: Set<string>; // the rungs and areas he has answered a part on
   history: MathHistory;
+  familiar?: string[]; // the family's places and things (families.familiar)
+  turn?: number; // which child of the family, from 0, so brothers start the settings at different places
 };
+
+// Where each day's problem is set (Brandon, 9 Nov 2026, fix round 3: "It doesn't always have to be mangoes and
+// beaches"): the family's places and things and his own interests, taken in turn, one a day, each brother starting at
+// a different one. Nothing to take from: no setting is named, and the prompt's rule alone holds.
+export function settingsFor(child: Pick<MathChild, "familiar" | "interests" | "turn">, days: number): (string | null)[] {
+  const familiar = (child.familiar ?? []).map((f) => f.trim()).filter(Boolean);
+  const interests = child.interests.map((i) => i.trim()).filter(Boolean);
+  const mixed: string[] = [];
+  for (let i = 0; i < Math.max(familiar.length, interests.length); i++) {
+    for (const s of [familiar[i], interests[i]]) if (s && !mixed.some((m) => m.toLowerCase() === s.toLowerCase())) mixed.push(s);
+  }
+  if (!mixed.length) return Array.from({ length: days }, () => null);
+  return Array.from({ length: days }, (_, d) => mixed[(d + (child.turn ?? 0)) % mixed.length]);
+}
 
 // His seven days: the everyday days take the areas in the file's order, one he has never had first, then the one he
 // had longest ago; the other days take his working rungs (and what starts alongside them) the same way. An area that
@@ -60,11 +76,12 @@ export function planMath(ladder: Pick<Ladder, "rungs" | "everyday">, child: Math
     return next;
   };
   const out: MathDay[] = [];
+  const settings = settingsFor(child, days);
   for (let day = 1; day <= days; day++) {
     const everyday = EVERYDAY_DAYS.includes(day) && areas.length > 0;
     const teaches = everyday ? pick(areas) : pick(rungs);
     if (!teaches) continue;
-    out.push({ day, teaches, everyday, isNew: !knows(teaches), style: child.style });
+    out.push({ day, teaches, everyday, isNew: !knows(teaches), style: child.style, setting: settings[day - 1] });
   }
   return out;
 }
@@ -107,7 +124,9 @@ export function mathPrompt(ctx: MathContext): string {
   return [
     `The boy: age ${child.age}; he ${READING[child.reading]}.`,
     `His style: ${day.style}. The part the others build toward is part ${goalOf(day.style)}.${quickOf(day.style) ? ` Part ${quickOf(day.style)} is the quick one.` : ""}`,
-    child.interests.length ? `Things he likes, for the setting where one passes the Hawaiʻi question: ${child.interests.join(", ")}.` : "",
+    `Places and things his family knows: ${child.familiar?.length ? child.familiar.join(", ") : "(none listed)"}.`,
+    `Things he likes: ${child.interests.length ? child.interests.join(", ") : "(none listed)"}.`,
+    day.setting ? `Set today's problem in: ${day.setting}.` : "Set today's problem in everyday life he knows.",
     "",
     "Rungs he has done (use them freely):",
     ...done.map(line),

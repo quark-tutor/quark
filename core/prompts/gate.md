@@ -1,4 +1,4 @@
-<!-- gate v3 (9 Nov 2026: math cards, read whole, and the Hawaiʻi question, not_here; docs/math-tile-slice.md. v2, 20 Oct 2026: a handoff that names a parent is by design, never a reader note; v1: first version). Used by core/curation/gate.ts (use: "gate"): one call per card, after the code checks
+<!-- gate v4 (9 Nov 2026: not_here asks whether these children have seen or done it, from the family's own list and the child's interests; Brandon, fix round 3 of docs/math-tile-slice.md). v3 (9 Nov 2026: math cards, read whole, and the Hawaiʻi question, not_here; docs/math-tile-slice.md. v2, 20 Oct 2026: a handoff that names a parent is by design, never a reader note; v1: first version). Used by core/curation/gate.ts (use: "gate"): one call per card, after the code checks
      have already held back what the family's settings decide on their own (a blackballed subject, "Don't bring
      it up", an age the child hasn't reached). Not kid-facing, so readPrompt(), not kidFacingPrompt().
      gate/safety-floor.md is added after this text. Sources: docs/gate-slice.md (decisions 1-8),
@@ -27,7 +27,7 @@ Settings decided in code never reach you: a subject a guardian blocked, a subjec
 - **rule_6**: it treats a subject, a skill or a way of acting as being for boys or for girls, or narrows what a child may do because of sex.
 - **frightening**: its words are likely to frighten a child in this grade band: graphic death or injury, a threat to the child or the child's family, a monster attacking, a disaster told as something that could happen to them tonight. Grades 2-3 are about 7 and 8 years old; grades 4-5 about 9 to 11. History told calmly ("many people died in the war") passes.
 - **caution**: it touches what the parents asked you to be careful about, in a way a child with that worry could find upsetting. Never repeat, quote or describe the parents' note in anything you write.
-- **not_here**: on a math card only, its setting is something a child who lives in Hawaiʻi has not seen with his own eyes: thunder and lightning, snow, a subway, a fireplace, raking leaves. Surf, tides, the beach park, the drive, the bus, the pool, musubi and plate lunch, shave ice, the market, slippers at the door and soccer practice all pass.
+- **not_here**: on a math card only, its setting is something these children have not seen or done. You are given the places and things this family knows and what this child is into: a setting in one of them passes, as does everyday life common to all of them (home, school, a park, a store, a meal, a car ride). A setting outside them, or something rare even there, is not_here: a family that lives where there is almost no thunder has not seen thunder, however well it knows the snow it skis on. Seen only on a screen does not count.
 
 ## A math card
 

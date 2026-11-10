@@ -117,6 +117,17 @@ describe("checkMath", () => {
   });
 });
 
+describe("where each day's problem is set (fix round 3)", () => {
+  it("takes the family's places and things and his interests in turn, a day each, each brother from a different one", async () => {
+    const { settingsFor } = await import("../curation/math");
+    const familiar = ["the coast", "the mountains", "skating"];
+    expect(settingsFor({ familiar, interests: ["trains", "drawing"], turn: 0 }, 7)).toEqual(["the coast", "trains", "the mountains", "drawing", "skating", "the coast", "trains"]);
+    expect(settingsFor({ familiar, interests: ["trains", "drawing"], turn: 1 }, 3)).toEqual(["trains", "the mountains", "drawing"]);
+    expect(settingsFor({ familiar: [], interests: [], turn: 0 }, 2)).toEqual([null, null]);
+    expect(settingsFor({ familiar: ["Trains"], interests: ["trains"], turn: 0 }, 2)).toEqual(["Trains", "Trains"]);
+  });
+});
+
 describe("core/prompts/math.md", () => {
   it("shows the model the same two problems the tests hold, word for word", () => {
     const md = readFileSync(join(__dirname, "..", "prompts", "math.md"), "utf8").replace(/\r\n/g, "\n");

@@ -68,7 +68,8 @@ export function readFloor(file: string): Floor {
 export const ageBand = (age: number): GradeBand => (age <= 8 ? "2-3" : "4-5");
 
 // The exact age is used here, in code, for "Not yet"; it is never sent.
-export type GateChild = { id: string; age: number; carefulAbout: string | null };
+// interests go to the gate for a math card only, for its not_here rule (Brandon, 9 Nov 2026, fix round 3).
+export type GateChild = { id: string; age: number; carefulAbout: string | null; interests?: string[] };
 
 export type GateCard = {
   id: string;
@@ -155,8 +156,9 @@ export function gatePrompt(input: {
   rulebook: string;
   lines: SubjectLine[];
   perspective: Perspective | null;
-  child: { age: number; carefulAbout: string | null };
+  child: { age: number; carefulAbout: string | null; interests?: string[] };
   card: CardBody;
+  familiar?: string[]; // the family's places and things (families.familiar), for a math card's not_here rule
 }): string {
   const { card } = input;
   const note = input.child.carefulAbout?.trim();
@@ -178,6 +180,15 @@ export function gatePrompt(input: {
     `The child is in grades ${ageBand(input.child.age)}.`,
     ...(note ? [`The parents asked for care about: ${note}`] : []),
     "",
+    // A math card's setting is held to what these children have seen or done (not_here): the family's own list and
+    // this child's interests. A card that is not math is sent nothing of the kind.
+    ...(card.math
+      ? [
+          `Places and things this family knows: ${input.familiar?.length ? input.familiar.join(", ") : "(none listed)"}.`,
+          `This child is into: ${input.child.interests?.length ? input.child.interests.join(", ") : "(none listed)"}.`,
+          "",
+        ]
+      : []),
     card.math ? "A math card, as the child would see it, with every line the tutor may say about it:" : "The card, as the child would see it:",
     ...shown,
   ].join("\n");
@@ -297,6 +308,7 @@ export type GateOptions = {
   // it is (counted in staleLeft), which is what the Sunday build wants: it must not re-judge, or spend
   // on, cards an earlier firing already settled.
   pendingOnly?: boolean;
+  familiar?: string[]; // the family's places and things, for a math card (families.familiar)
 };
 
 // Cards checked at once. Forty cards a day, four at a time, is an estimated minute of a day that took 195
@@ -403,7 +415,7 @@ export async function runGate(opts: GateOptions, deps: GateDeps): Promise<GateRe
       try {
         raw = await deps.complete<unknown>({
           system: opts.system,
-          prompt: gatePrompt({ rulebook: rulebook.text, lines, perspective: c.perspective, child, card: c.body }),
+          prompt: gatePrompt({ rulebook: rulebook.text, lines, perspective: c.perspective, child, card: c.body, familiar: opts.familiar }),
           maxTokens: 16000,
           use: "gate",
           json: GATE_SCHEMA,
