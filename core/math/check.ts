@@ -17,6 +17,11 @@ import { goalOf, PARTS, PICTURE_KINDS, quickOf, type MathDay, type MathProblem, 
 //   - no question, wording, step, tie or the setting says a part's answer, unless it is one of the sum's own numbers;
 //   - none of them shows a sign (×, ÷, +, −, =, brackets): a sum is said in words until he has answered, and only the
 //     working and the worked example show one (found on test's first math day, 9 Nov 2026: "What is 6 × (2 + 1)?");
+//   - every number a part's sum is written with is on screen for him by then: in the setting (or its graph), in that
+//     part's own question, or as an earlier part's answer (Brandon, 9 Nov 2026, fix round 2: "Trucks at the beach
+//     park" asked for the trucks' and trikes' wheels together on a page that showed neither count). A number he
+//     knows but is not shown (a square's 4 corners) is said in the setting or the question, and a hidden sum is
+//     written out from the numbers on screen: "two scoops rice and one scoop mac salad" is 7 × (2 + 1), not 7 × 3;
 //   - every sum is on one of his rungs: done, working, or alongside one he is working on; two operations in one sum
 //     only when one is a quick sum to 20; on a rung's day, at least two parts are on that rung;
 //   - the shape: four parts, two other wordings, two to four steps, a tie, two lines of working, a handoff, and the
@@ -85,6 +90,15 @@ export function checkMath(p: MathProblem, ctx: MathContext): string[] {
       if (!Number.isInteger(sum.value) || sum.value < 0 || sum.value > MAX_ANSWER) out.push(`${at}: the answer ${sum.value} is not a whole number from 0 to ${MAX_ANSWER}`);
       offRungs(operations(sum.expr), at);
       if (!day.everyday && operations(sum.expr).some((o) => rungsOf(o, ctx.ladder, tables).includes(day.teaches))) onDaysRung++;
+    }
+    // On screen by then: the setting and its graph, this part's question, and the earlier parts' answers, which
+    // the page shows above the question ("So far:").
+    if ("expr" in sum) {
+      const shown = new Set([...numbersOf(p.setting ?? ""), ...(p.graph?.numbers ?? []), ...numbersOf(part?.question ?? ""), ...answers.filter((a): a is number => a !== null)]);
+      const missing = [...new Set(leaves(sum.expr).filter((x) => !shown.has(x)))];
+      if (missing.length) {
+        out.push(`${at}: its sum needs ${missing.join(" and ")}, which ${missing.length === 1 ? "is" : "are"} not on screen by then: say ${missing.length === 1 ? "it" : "them"} in the setting or this part's question, or write the sum from the numbers there and the earlier answers`);
+      }
     }
     answers.push(value);
     leavesOf.push("expr" in sum ? leaves(sum.expr) : []);

@@ -458,6 +458,10 @@ function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (theme
       }
       return ids;
     },
+    async deleteMathDay(themeId, day) {
+      const r = await db.from("ideas").delete().eq("theme_id", themeId).eq("day", day).is("topic_id", null).eq("slot", MATH_SLOT);
+      if (r.error) throw new Error(`Could not delete day ${day}'s math (has it been answered? npm run fixture -- clear <date> on test): ${r.error.message}`);
+    },
     async loadMathIdeas(themeId) {
       const rows = must(await db.from("ideas").select("id, day, layer").eq("theme_id", themeId).is("topic_id", null).eq("slot", MATH_SLOT).order("day").order("layer"), "ideas");
       const out = new Map<number, string[]>();
@@ -486,6 +490,7 @@ export type BuildOptions = {
   meter: Meter; // the run's own tally, priced into the model_runs row
   gate: GateSetup; // gateSetup() before anything is spent
   rebuild?: boolean;
+  mathOnly?: boolean; // with a one-day run: that day's math again, nothing else (week:build --math-only)
   pendingOnly?: boolean; // gate only the cards still pending (the Sunday build)
   onTheme?: (themeId: string) => Promise<void>; // told the moment a theme is made
 };
@@ -547,6 +552,7 @@ export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions):
         rebuild: !!opts.rebuild,
         onlyChild: p.only?.id,
         math: p.math,
+        mathOnly: !!opts.mathOnly,
       },
       deps,
     );

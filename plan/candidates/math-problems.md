@@ -465,7 +465,8 @@ bowl."
 *Times tables, 3s and 4s, with a shape hiding the number. Not new to him.*
 
 At soccer practice, the coach sets out cones for drills. Every drill is a shape on the grass with a cone on each
-corner, and no two shapes share a cone.
+corner, and no two shapes share a cone. A square has 4 corners and a triangle has 3. *(The corners added at fix round
+2, 9 Nov 2026: every number a part's sum needs is on screen.)*
 
 1. The coach makes 6 squares. *How many cones does that take?* **24 cones** (6 × 4)
    - Another way: A square has 4 corners, and each corner gets a cone. How many cones for 6 squares?

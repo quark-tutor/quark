@@ -71,3 +71,39 @@ describe("a math part's moves", () => {
     expect(mathLineSeen(m, runPart(m, [said("q1", true)]), { kind: "working" })).toBe(true);
   });
 });
+
+// A reply with no number, read by the judge first (Brandon, 9 Nov 2026, fix round 2).
+const flagged = (q: string, verdict: "questioned" | "no_number"): AttemptRow => ({ question_id: q, correct: null, verdict, created_at: new Date(Date.UTC(2026, 10, 10, 0, 0, clock++)).toISOString() });
+
+describe("a math reply with no number", () => {
+  const market = chainOf(MARKET, "short");
+  const m = market[0].body.math!;
+
+  it("he questioned the problem: \"Good catch.\" and the other wording, at no cost; questioned again, a person", () => {
+    const once = mathView(market, mathState(market, [flagged("q1", "questioned")]));
+    expect(once.lines).toEqual([
+      { say: "goodCatch", text: null, line: null },
+      { say: "anotherWay", text: m.wordings[0], line: "c1.wording.1" },
+    ]);
+    expect(once).toMatchObject({ asking: "number", prompt: { text: m.wordings[0] } });
+    // Right on the other wording: the part is done, with no "How did you get that?" on the way.
+    expect(mathState(market, [flagged("q1", "questioned"), said("q1", true)]).at).toBe(1);
+    const twice = mathState(market, [flagged("q1", "questioned"), flagged("q1", "questioned")]);
+    expect(twice.kind).toBe("handed_off");
+    expect(mathView(market, twice)).toMatchObject({ handedOff: true, handoff: MARKET.handoff });
+  });
+
+  it("anything else: \"What number do you get?\", then another wording, and a person when none is left: never looped", () => {
+    expect(mathView(market, mathState(market, [flagged("q1", "no_number")]))).toMatchObject({
+      lines: [{ say: "whatNumber", text: null, line: null }],
+      asking: "number",
+      prompt: { text: MARKET.parts[0].question },
+    });
+    const two = mathView(market, mathState(market, [flagged("q1", "no_number"), flagged("q1", "no_number")]));
+    expect(two.lines.slice(-1)).toEqual([{ say: "anotherWay", text: m.wordings[0], line: "c1.wording.1" }]);
+    const four = [1, 2, 3, 4].map(() => flagged("q1", "no_number"));
+    const after4 = mathState(market, four);
+    expect(after4.run.wording2).toBe(true);
+    expect(mathState(market, [...four, ...[1, 2].map(() => flagged("q1", "no_number"))]).kind).toBe("handed_off");
+  });
+});

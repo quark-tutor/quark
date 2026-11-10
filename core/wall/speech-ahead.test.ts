@@ -168,7 +168,7 @@ describe("a night's firing", () => {
     const { store } = fake(fullDay(PIP, 0));
     await fire(deps(store).d);
     const again = deps(store);
-    expect(await fire(again.d)).toMatchObject({ outcome: "nothing", made: 0, already: 118, reason: `every line of ${DAY} is stored already` });
+    expect(await fire(again.d)).toMatchObject({ outcome: "nothing", made: 0, already: 119, reason: `every line of ${DAY} is stored already` });
     expect(again.said).toEqual([]);
   });
 

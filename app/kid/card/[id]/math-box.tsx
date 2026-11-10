@@ -42,7 +42,7 @@ export function MathBox({ id, question, page }: Props) {
   const [example, setExample] = useState(!!page.example);
   const [said, setSaid] = useState<string | null>(null);
   const [guess, setGuess] = useState("");
-  const [notice, setNotice] = useState<"guessFirst" | "sayNumber" | "didntSend" | null>(null);
+  const [notice, setNotice] = useState<"guessFirst" | "didntSend" | null>(null);
   const [sending, setSending] = useState(false);
   const since = useRef(0);
   const box = useRef<HTMLInputElement>(null);
@@ -95,7 +95,6 @@ export function MathBox({ id, question, page }: Props) {
     const r = res?.ok ? ((await res.json().catch(() => null)) as AnswerReply | null) : null;
     if (!r) return setNotice("didntSend");
     if (r.outcome === "guess_first") return setNotice("guessFirst");
-    if (r.outcome === "say_number") return setNotice("sayNumber");
     if (r.outcome !== "math" || !r.math) return setNotice("didntSend");
     since.current = performance.now();
     setSaid(guess.trim());
@@ -106,6 +105,16 @@ export function MathBox({ id, question, page }: Props) {
   const done = view.asking === null;
   return (
     <div className={styles.ask}>
+      {page.before.length ? (
+        <div className={styles.soFar}>
+          <p className={styles.reply}>{SAY.soFar}</p>
+          {page.before.map((b, i) => (
+            <p key={i} className={styles.soFarLine}>
+              {b.question} <strong>{b.answer}</strong>
+            </p>
+          ))}
+        </div>
+      ) : null}
       <p className={styles.question}>{question}</p>
       {view.lines.map((l, i) => (
         <Line key={i} l={l} />
@@ -117,7 +126,7 @@ export function MathBox({ id, question, page }: Props) {
             {said ? <p className={styles.said}>{said}</p> : null}
             {view.handedOff ? null : (
               <>
-                <p className={styles.reply}>{SAY.right}</p>
+                {view.rightSaid ? null : <p className={styles.reply}>{SAY.right}</p>}
                 <p className={styles.reply}>{SAY.wholeThing}</p>
                 {(view.working ?? []).map((w, i) => (
                   <div key={i} className={styles.workingRow}>
@@ -180,7 +189,7 @@ export function MathBox({ id, question, page }: Props) {
               ) : null}
               <Talk disabled={sending} onHeard={(words) => setGuess((g) => (g.trim() ? `${g.trim()} ${words}` : words).slice(0, 200))} />
               {notice ? (
-                <p className={`${styles.reply} ${styles.notice}`}>{notice === "guessFirst" ? SAY.guessFirst : notice === "sayNumber" ? SAY.sayNumber : SAY.didntSend}</p>
+                <p className={`${styles.reply} ${styles.notice}`}>{notice === "guessFirst" ? SAY.guessFirst : SAY.didntSend}</p>
               ) : null}
             </form>
           </>

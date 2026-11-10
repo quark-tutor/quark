@@ -29,6 +29,9 @@
 //   npm run fixture -- places               the Math tile's starting places on test (docs/math-tile-slice.md): child 1
 //                                           at the older boy's rungs, style short; child 2 at the younger's, style hidden
 //   npm run fixture -- live <week>          set the week live on test, as the Looks-good tap would, so the wall shows it
+//   npm run fixture -- math-check <week>    every math problem of the week through today's checkMath(), with each boy's own
+//                                           places: what it would hold back now, per day and child; with --hold, holds
+//                                           back each one it catches, as the build would, the reason on its cards
 //   npm run fixture -- math <week>          every math problem of the week, per day and child: its parts, answers,
 //                                           wordings, steps and tie, and why one was held back
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
@@ -504,6 +507,61 @@ if (command === "show") {
   must(await db.from("themes").update({ status: "live" }).eq("family_id", familyId).eq("id", t.id).select("id"), "themes");
   must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.live", target: { theme: t.id } }).select("id"), "audit_log");
   console.log("Done.");
+} else if (command === "math-check") {
+  // The problems as stored, put back together from their cards, through the check as it stands (docs/math-tile-slice.md,
+  // fix round 2). Reads only.
+  const { checkMath } = await import("../core/math/check.ts");
+  const { parseLadder } = await import("../lib/ladder.ts");
+  const { readFileSync } = await import("node:fs");
+  const ladder = parseLadder(readFileSync(new URL("../plan/math-ladder.yaml", import.meta.url), "utf8"));
+  const t = await theme(Number(arg));
+  const kids = (must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[]).map((k) => k.id);
+  const placed = must(await db.from("mastery").select("child_id, place, skills(key)").in("child_id", kids).not("place", "is", null), "mastery") as unknown as {
+    child_id: string;
+    place: "done" | "working";
+    skills: { key: string } | null;
+  }[];
+  const hold = process.argv[4] === "--hold";
+  const cards = must(await db.from("cards").select("id, child_id, day, layer, policy, body").eq("theme_id", t.id).eq("slot", "puzzle").order("day").order("layer"), "cards") as {
+    id: string;
+    child_id: string;
+    day: string;
+    layer: number;
+    policy: string;
+    body: { title: string; text: string; question: string; handoff: string; math?: any };
+  }[];
+  const problems = new Map<string, typeof cards>();
+  for (const c of cards) problems.set(`${c.day} ${c.child_id}`, [...(problems.get(`${c.day} ${c.child_id}`) ?? []), c]);
+  let caught = 0;
+  let checked = 0;
+  for (const [key, parts] of problems) {
+    const [day, childId] = key.split(" ");
+    const who = `${day}, child ${kids.indexOf(childId) + 1}`;
+    const m0 = parts[0].body.math;
+    if (!m0) {
+      console.log(`${who}: no problem (held back when written: ${parts[0].policy})`);
+      continue;
+    }
+    checked++;
+    const problem = {
+      title: parts[0].body.title,
+      setting: parts[0].body.text,
+      graph: m0.graph,
+      parts: parts.map((c) => ({ ...c.body.math, question: c.body.question })),
+      example: m0.example ?? null,
+      handoff: parts[0].body.handoff,
+    };
+    const places = new Map(placed.filter((p) => p.child_id === childId && p.skills).map((p) => [p.skills!.key, p.place]));
+    const found = checkMath(problem as never, { day: { day: 0, teaches: m0.teaches, everyday: m0.everyday, isNew: !!m0.example, style: m0.goal === 3 ? "hidden" : "short" }, ladder, places });
+    if (found.length) caught++;
+    console.log(`${who}: "${problem.title}" (${m0.teaches}, ${parts[0].policy}): ${found.length ? found.join("; ") : "passes"}`);
+    if (hold && found.length && parts.some((c) => c.policy !== "blocked")) {
+      must(await db.from("cards").update({ policy: "blocked", policy_notes: { validation: found } }).in("id", parts.map((c) => c.id)).select("id"), "cards");
+      must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.math-hold", target: { theme: t.id, day, cards: parts.length } }).select("id"), "audit_log");
+      console.log(`  Held back its ${parts.length} cards, with the reason.`);
+    }
+  }
+  console.log(`${caught} of ${checked} problems would be held back now.`);
 } else if (command === "math") {
   const t = await theme(Number(arg));
   const kids = (must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[]).map((k) => k.id);

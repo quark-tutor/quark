@@ -69,7 +69,7 @@ describe("checkMath", () => {
     expect(younger(edit(CONES, (q) => ((q.parts[0].expression = "6 × 4 + 3 × 4"), (q.parts[0].answer = 36))))).toContain(
       "part 1: two operations in one sum, and neither is a quick sum to 20 (two-step problems are not his yet)",
     );
-    expect(younger(edit(CONES, (q) => (q.parts[0].expression = "6 × (3 + 1)")))).toEqual([]);
+    expect(younger(edit(CONES, (q) => ((q.setting += " Each square is 3 cones and 1 more."), (q.parts[0].expression = "6 × (3 + 1)"))))).toEqual([]);
   });
 
   it("holds each boy's style: one short sum a part for the older, a single sum for the younger's quick one", () => {
@@ -81,6 +81,24 @@ describe("checkMath", () => {
     expect(older(edit(MARKET, (q) => (q.example = null)))).toContain("no worked example, and money is new to him");
     expect(older(edit(MARKET, (q) => (q.example!.picture = { kind: "groups", numbers: [3, 4], labels: ["", ""] })))).toContain("the worked example's picture: 3 groups of 4 is not in its sum");
     expect(older(edit(MARKET, (q) => (q.example!.expression = "3 × 2")))).toContain("the worked example uses part 1's own numbers: it is on other numbers");
+  });
+
+  it("wants every number a part's sum needs on screen by then: the setting, its own question, or an earlier answer (Brandon, 9 Nov 2026)", () => {
+    // Test's Tuesday problem as written: the trucks' wheels are "two in front and two in back", and the sum says 4.
+    const trucks = edit(CONES, (q) => {
+      q.setting = "At the beach park, a row of trucks is parked by the sand. Every truck has two wheels in front and two in back.";
+      q.parts[0].question = "6 trucks are parked in a row. How many wheels do they have?";
+      q.parts[0].wordings = ["Every truck has 4 wheels. How many wheels do 6 trucks have?", "How many is 6 fours?"];
+    });
+    expect(younger(trucks)).toContain(
+      "part 1: its sum needs 4, which is not on screen by then: say it in the setting or this part's question, or write the sum from the numbers there and the earlier answers",
+    );
+    // Written out from what is on screen, it passes.
+    expect(younger(edit(trucks, (q) => (q.parts[0].expression = "6 × (2 + 2)")))).not.toEqual(expect.arrayContaining([expect.stringMatching(/^part 1: its sum needs/)]));
+    // A number from an earlier part's question is not on screen on a later part's page; its answer is.
+    expect(older(edit(MARKET, (q) => ((q.parts[3].question = "How much change do you get back?"), (q.parts[3].wordings = ["How many dollars come back to you?", "What do you add to $16 to make $20?"]))))).toContain(
+      "part 4: its sum needs 20, which is not on screen by then: say it in the setting or this part's question, or write the sum from the numbers there and the earlier answers",
+    );
   });
 
   it("keeps signs out of everything he reads before he answers: a sum is said in words", () => {

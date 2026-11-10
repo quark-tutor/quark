@@ -1,4 +1,4 @@
-import { rungsFor, tablesOf, type Ladder, type Place } from "../../lib/ladder.ts";
+import { rungsFor, tablesOf, type Ladder, type Place, type Rule } from "../../lib/ladder.ts";
 import { checkMath } from "../math/check.ts";
 import {
   goalOf,
@@ -80,12 +80,28 @@ export type MathContext = {
   earlier: string[]; // titles of his math problems on earlier days this week
 };
 
+// A rung's rule in words, as checkMath() holds it, so the model can put a sum on the rung (found rewriting test's
+// Wednesday, 9 Nov 2026: "groups of" was written as 6 × 10, which is not on it).
+export function ruleWords(rule: Rule, tables: number[] = []): string {
+  const max = rule.max ? `, every number ${rule.max.toLocaleString("en-US")} or less` : "";
+  if (rule.steps) return "two different sums, one after the other";
+  if (rule.op === "+") return `adding${max}`;
+  if (rule.op === "-") return `taking away${max}`;
+  if (rule.op === "+-") return `adding or taking away${max}`;
+  if (rule.op === "x" && rule.by) return `a times sum with one number ${rule.by.join(", ").replace(/, (\d+)$/, " or $1")}${rule.each ? ` and the other ${rule.each} or less` : ""}${rule.max ? `, the answer ${rule.max.toLocaleString("en-US")} or less` : ""}`;
+  if (rule.op === "x") return `a times sum with both numbers ${rule.each} or less (equal groups added up count too)`;
+  if (rule.op === "/" && rule.share) return `sharing fairly, where the number of shares or the share is ${tables.length ? tables.join(", ").replace(/, (\d+)$/, " or $1") : "a times table he has"}`;
+  if (rule.op === "/") return `sharing, with both the number of shares and the share ${rule.each} or less`;
+  return `what is left over, sharing by ${rule.each} or less`;
+}
+
 // The data for one call; the instructions are in core/prompts/math.md.
 export function mathPrompt(ctx: MathContext): string {
   const { child, day, ladder } = ctx;
   const { done, working, alongside } = rungsFor(ladder, child.places);
   const rung = (k: string) => ladder.rungs.find((r) => r.key === k)!;
-  const line = (k: string) => `- ${rung(k).name}: ${rung(k).asks}. For example, ${rung(k).example}.`;
+  const tablesFor = tablesOf(ladder, child.places);
+  const line = (k: string) => `- ${rung(k).name}: ${rung(k).asks}. For example, ${rung(k).example}. A sum is on it when it is ${ruleWords(rung(k).rule, tablesFor)}.`;
   const focus = day.everyday ? ladder.everyday.find((a) => a.key === day.teaches)! : rung(day.teaches);
   const tables = tablesOf(ladder, child.places);
   return [
@@ -102,7 +118,7 @@ export function mathPrompt(ctx: MathContext): string {
     "",
     day.everyday
       ? `Today is an everyday day: ${focus.name}. ${focus.asks}. For example, ${focus.example}. Its sums stay on his rungs.`
-      : `Today's rung: ${focus.name}. ${focus.asks}. At least two parts are on it.`,
+      : `Today's rung: ${focus.name}. ${focus.asks}. At least two parts are on it: each of those parts' sums is ${ruleWords(rung(day.teaches).rule, tables)}.`,
     day.isNew ? "It is new to him: write the worked example." : "It is not new to him: no worked example.",
     day.teaches === "bar-graph" ? "Draw the setting's numbers as a bar graph." : "",
     ctx.earlier.length ? `His problems on earlier days this week (a different setting today): ${ctx.earlier.join("; ")}.` : "",

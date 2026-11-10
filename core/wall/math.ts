@@ -9,59 +9,123 @@ import type { AttemptRow, ChainLayer, CardState } from "./card.ts";
 //   step's answer being the part's → a wrong step → "Think of it like this:" the tie, and the second other wording →
 //   wrong → "This one is for a person:".
 // A right answer anywhere: "That's it.", and on the younger boy's why part "How do you know?" first, then "Here's the
-// whole thing:" with the working, and the next part. Every word is the problem's own, written on Sunday and passed
-// by the gate, or one of the wall's own sentences in words.ts; the tutor never says the answer (rule 3). Pure.
+// whole thing:" with the working, and the next part.
+// A reply with no number is read by the judge first (core/wall/no-number.ts; Brandon, 9 Nov 2026, fix round 2):
+//   he questioned the problem → "Good catch. Thank you for telling me." and "Here it is another way:" with the next
+//     wording; questioned again → "This one is for a person:". Neither costs him anything;
+//   anything else → "What number do you get?"; a second one on the same move → "Here it is another way:" with the
+//     next wording, and a person when none is left. He is never looped.
+// Every word is the problem's own, written on Sunday and passed by the gate, or one of the wall's own sentences in
+// words.ts; the tutor never says the answer (rule 3). Pure.
 
 export type Move = "question" | "how" | "wording_1" | "step_1" | "step_2" | "step_3" | "step_4" | "wording_2" | "why";
 export const NUMBER_MOVES: readonly Move[] = ["question", "wording_1", "step_1", "step_2", "step_3", "step_4", "wording_2"];
 const step = (k: number) => `step_${k}` as Move;
 export const stepOf = (m: Move) => (m.startsWith("step_") ? Number(m.slice(5)) : 0);
 
-// Where a boy is in one part. stepsShown counts the steps the page has put in front of him; tie is the tie and the
-// second wording; ended is right (the part done) or handed_off (the problem ends at a person).
-export type PartRun = { move: Move | "right" | "handed_off"; howAsked: boolean; wording1: boolean; stepsShown: number; tie: boolean; whyAsked: boolean };
-const FRESH: PartRun = { move: "question", howAsked: false, wording1: false, stepsShown: 0, tie: false, whyAsked: false };
+// The wall's own sentences a math part says (core/wall/words.ts).
+export type MathSay = "howGotThat" | "anotherWay" | "oneStep" | "thinkOfIt" | "right" | "howDoYouKnow" | "wholeThing" | "goodCatch" | "whatNumber";
+
+// One thing the page has put in front of him, in order: a sentence of the wall's, a piece of the problem, or both.
+export type MathEvent = { say: MathSay | null; piece: { wording: 1 | 2 } | { step: number } | "tie" | null };
+
+// Where a boy is in one part: the move the box answers now, or right (the part done) or handed_off (the problem ends
+// at a person), and everything shown so far. stepsShown counts the steps put in front of him; wording1 and wording2
+// the other wordings; tie the tie; questioned how often he said the problem was wrong; noNumber his replies with no
+// number on the move he is at.
+export type PartRun = {
+  move: Move | "right" | "handed_off";
+  events: MathEvent[];
+  wording1: boolean;
+  wording2: boolean;
+  stepsShown: number;
+  tie: boolean;
+  whyAsked: boolean;
+  questioned: number;
+  noNumber: number;
+};
+const fresh = (): PartRun => ({ move: "question", events: [], wording1: false, wording2: false, stepsShown: 0, tie: false, whyAsked: false, questioned: 0, noNumber: 0 });
 
 // One part's attempts, oldest first, replayed through the moves. An attempt past the end is ignored.
 export function runPart(m: MathCard, attempts: AttemptRow[]): PartRun {
-  const run: PartRun = { ...FRESH };
-  const after = (right: boolean) => {
-    if (!right) return;
-    run.move = m.why ? "why" : "right";
-    if (m.why) run.whyAsked = true;
+  const run = fresh();
+  const show = (say: MathSay | null, piece: MathEvent["piece"] = null) => run.events.push({ say, piece });
+  const go = (move: PartRun["move"]) => {
+    if (move !== run.move) run.noNumber = 0;
+    run.move = move;
+  };
+  const right = () => {
+    if (m.why) {
+      show("right");
+      run.whyAsked = true;
+      go("why");
+    } else go("right");
+  };
+  // The next other wording he has not seen, or a person when both are shown.
+  const nextWording = () => {
+    if (!run.wording1) {
+      run.wording1 = true;
+      show("anotherWay", { wording: 1 });
+      go("wording_1");
+    } else if (!run.wording2) {
+      run.wording2 = true;
+      show("anotherWay", { wording: 2 });
+      go("wording_2");
+    } else go("handed_off");
   };
   for (const a of attempts) {
     const move = run.move;
     if (move === "right" || move === "handed_off") break;
+    if (a.verdict === "questioned") {
+      run.questioned += 1;
+      show("goodCatch");
+      if (run.questioned >= 2) go("handed_off");
+      else nextWording();
+      continue;
+    }
+    if (a.verdict === "no_number") {
+      run.noNumber += 1;
+      if (run.noNumber === 1) show("whatNumber");
+      else nextWording();
+      continue;
+    }
     if (move === "question") {
-      if (a.correct) after(true);
-      else {
-        run.move = "how";
-        run.howAsked = true;
-      }
+      if (a.correct) right();
+      else go("how");
     } else if (move === "how") {
-      run.move = "wording_1";
+      show("howGotThat");
       run.wording1 = true;
+      show("anotherWay", { wording: 1 });
+      go("wording_1");
     } else if (move === "wording_1") {
-      if (a.correct) after(true);
+      if (a.correct) right();
       else {
-        run.move = step(1);
         run.stepsShown = 1;
+        show("oneStep", { step: 1 });
+        go(step(1));
       }
     } else if (move.startsWith("step_")) {
       const k = stepOf(move);
       if (a.correct && k < m.steps.length) {
-        run.move = step(k + 1);
         run.stepsShown = k + 1;
-      } else if (a.correct) after(true);
+        show("right");
+        show(null, { step: k + 1 });
+        go(step(k + 1));
+      } else if (a.correct) right();
       else {
-        run.move = "wording_2";
         run.tie = true;
+        run.wording2 = true;
+        show("thinkOfIt", "tie");
+        show("anotherWay", { wording: 2 });
+        go("wording_2");
       }
     } else if (move === "wording_2") {
-      if (a.correct) after(true);
-      else run.move = "handed_off";
-    } else if (move === "why") run.move = "right";
+      if (a.correct) right();
+      else go("handed_off");
+    } else if (move === "why") {
+      show("howDoYouKnow");
+      go("right");
+    }
   }
   return run;
 }
@@ -88,14 +152,13 @@ export function mathState(chain: ChainLayer[], attempts: AttemptRow[]): MathStat
     if (run.move !== "right") return { kind: "answering", at, hintsSeen: 0, run };
     if (at === chain.length - 1) return { kind: "answered", at, hintsSeen: 0, run };
   }
-  return { kind: "answering", at: 0, hintsSeen: 0, run: { ...FRESH } };
+  return { kind: "answering", at: 0, hintsSeen: 0, run: fresh() };
 }
 
 // --- What the page shows (rule 7: these fields and nothing else) ---
 
 // A line of the conversation under the question: one of the wall's sentences (say), the problem's own words (text),
 // or both; line names it for "Read it to me".
-export type MathSay = "howGotThat" | "anotherWay" | "oneStep" | "thinkOfIt" | "right" | "howDoYouKnow" | "wholeThing";
 export type MathLine = { say: MathSay | null; text: string | null; line: string | null };
 
 export type MathView = {
@@ -103,6 +166,7 @@ export type MathView = {
   asking: "number" | "words" | null; // what the box takes now; null when the part is finished
   prompt: MathLine | null; // what the box answers now, shown just above it
   working: string[] | null; // after a right answer, with "Here's the whole thing:"
+  rightSaid: boolean; // "That's it." is already in the lines (the why part), so the ending does not say it again
   next: string | null; // the next part's card id, once earned
   handoff: string | null; // once the problem is done or at a person
   handedOff: boolean;
@@ -110,38 +174,31 @@ export type MathView = {
 
 export const mathLineId = (cardId: string, part: "wording" | "step", n: number) => `${cardId}.${part}.${n}`;
 
+// The words and the line name of a piece of the problem.
+function pieceOf(cardId: string, m: MathCard, piece: MathEvent["piece"]): { text: string; line: string } | null {
+  if (piece === null) return null;
+  if (piece === "tie") return { text: m.tie, line: `${cardId}.tie` };
+  if ("wording" in piece) return { text: m.wordings[piece.wording - 1], line: mathLineId(cardId, "wording", piece.wording) };
+  return { text: m.steps[piece.step - 1].question, line: mathLineId(cardId, "step", piece.step) };
+}
+
 // The page for the part the chain state is at.
 export function mathView(chain: ChainLayer[], state: MathState): MathView {
   const { cardId, body } = chain[state.at];
   const m = body.math!;
   const run = state.run;
-  const lines: MathLine[] = [];
-  const say = (s: MathSay, text: string | null = null, line: string | null = null) => lines.push({ say: s, text, line });
-  if (run.howAsked && run.move !== "how") say("howGotThat");
-  if (run.wording1) say("anotherWay", m.wordings[0], mathLineId(cardId, "wording", 1));
-  for (let k = 1; k <= run.stepsShown; k++) {
-    if (k === 1) say("oneStep", m.steps[0].question, mathLineId(cardId, "step", 1));
-    else {
-      say("right");
-      lines.push({ say: null, text: m.steps[k - 1].question, line: mathLineId(cardId, "step", k) });
-    }
-  }
-  if (run.tie) {
-    say("thinkOfIt", m.tie, `${cardId}.tie`);
-    say("anotherWay", m.wordings[1], mathLineId(cardId, "wording", 2));
-  }
-  const view: MathView = { lines, asking: null, prompt: null, working: null, next: null, handoff: null, handedOff: false };
+  const lines: MathLine[] = run.events.map((e) => {
+    const p = pieceOf(cardId, m, e.piece);
+    return { say: e.say, text: p?.text ?? null, line: p?.line ?? null };
+  });
+  const view: MathView = { lines, asking: null, prompt: null, working: null, rightSaid: false, next: null, handoff: null, handedOff: false };
   const move = run.move;
   if (move === "handed_off") return { ...view, handoff: body.handoff, handedOff: true };
   if (move === "right") {
     const last = state.at === chain.length - 1;
-    if (run.whyAsked) say("howDoYouKnow");
-    return { ...view, working: m.working, next: last ? null : chain[state.at + 1].cardId, handoff: last ? body.handoff : null };
+    return { ...view, working: m.working, rightSaid: run.whyAsked, next: last ? null : chain[state.at + 1].cardId, handoff: last ? body.handoff : null };
   }
-  if (move === "why") {
-    say("right");
-    return { ...view, asking: "words", prompt: { say: "howDoYouKnow", text: null, line: "wall.howDoYouKnow" } };
-  }
+  if (move === "why") return { ...view, asking: "words", prompt: { say: "howDoYouKnow", text: null, line: "wall.howDoYouKnow" } };
   if (move === "how") return { ...view, asking: "words", prompt: { say: "howGotThat", text: null, line: "wall.howGotThat" } };
   const k = stepOf(move);
   const prompt: MathLine =
@@ -160,7 +217,7 @@ export function mathView(chain: ChainLayer[], state: MathState): MathView {
 export type MathPartLine = { kind: "wording" | "step"; n: number } | { kind: "tie" | "working" | "example" };
 export function mathLineSeen(m: MathCard, run: PartRun, part: MathPartLine): boolean {
   if (part.kind === "example") return !!m.example;
-  if (part.kind === "wording") return part.n === 1 ? run.wording1 : run.tie;
+  if (part.kind === "wording") return part.n === 1 ? run.wording1 : run.wording2;
   if (part.kind === "step") return part.n <= run.stepsShown;
   if (part.kind === "tie") return run.tie;
   return run.move === "right";

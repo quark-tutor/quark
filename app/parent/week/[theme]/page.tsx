@@ -82,7 +82,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
 
   // Row-level security keeps all of this to the guardian's own family.
   const supabase = await createClient();
-  const [theme, kids, cards, rulebook, family, said, nowHash, skills] = await Promise.all([
+  const [theme, kids, cards, rulebook, family, said, nowHash, skills, questioned] = await Promise.all([
     supabase.from("themes").select("id, title, week_start, status").eq("id", themeId).maybeSingle(),
     supabase.from("children").select("id, nickname").order("birth_month"),
     supabase
@@ -107,7 +107,16 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
     currentRulebookHash(createAdminClient(), guardian.familyId),
     // The math ladder's names, for a math problem's rung (docs/math-tile-slice.md). Any guardian may read skills.
     supabase.from("skills").select("key, name").not("key", "is", null),
+    // What a boy said when he questioned a math problem (fix round 2), shown with that day's problem.
+    supabase
+      .from("attempts")
+      .select("answer, reasoning, created_at, questions!inner(card_id)")
+      .eq("verdict", "questioned")
+      .order("created_at")
+      .returns<{ answer: string; reasoning: string | null; created_at: string; questions: { card_id: string } }[]>(),
   ]);
+  const questionedOn = new Map<string, { answer: string; reasoning: string | null }[]>();
+  for (const q of questioned.data ?? []) questionedOn.set(q.questions.card_id, [...(questionedOn.get(q.questions.card_id) ?? []), q]);
   const rungName = new Map((skills.data ?? []).map((s) => [s.key as string, s.name as string]));
   for (const r of [theme, kids, cards, rulebook, family, said]) if (r.error) throw new Error(r.error.message);
   if (!theme.data) return <p>No such week.</p>;
@@ -263,7 +272,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
                   {SLOTS.map((slot) => {
                     const layers = mine.filter((c) => c.day === day && c.slot === slot).sort((a, b) => a.layer - b.layer);
                     if (layers.length === 0) return null;
-                    if (layers[0].body.math) return <MathProblem key={slot} parts={layers} rungName={rungName} currentHash={currentHash} />;
+                    if (layers[0].body.math) return <MathProblem key={slot} parts={layers} rungName={rungName} currentHash={currentHash} questionedOn={questionedOn} />;
                     return (
                       <article key={slot} className={styles.card}>
                         <div className={styles.cardHead}>
@@ -352,13 +361,24 @@ function Layer({ card, media, topicHasMedia, currentHash }: { card: Card; media?
 // setting, the worked example when the rung is new to him, and every part whole: its question and answer with the
 // sum the program worked out, the two other wordings, the steps with their answers, the tie and the working, so a
 // parent can read all the tutor may say before the tap. A part held back says why.
-function MathProblem({ parts, rungName, currentHash }: { parts: Card[]; rungName: Map<string, string>; currentHash: string | null }) {
+function MathProblem({
+  parts,
+  rungName,
+  currentHash,
+  questionedOn,
+}: {
+  parts: Card[];
+  rungName: Map<string, string>;
+  currentHash: string | null;
+  questionedOn: Map<string, { answer: string; reasoning: string | null }[]>;
+}) {
   const first = parts[0].body;
   const m = first.math!;
   return (
     <article className={styles.card}>
       <div className={styles.cardHead}>
         <strong>Math</strong>
+        {parts.some((c) => questionedOn.has(c.id)) ? <span className={styles.flag}>He questioned this problem</span> : null}
         <span className={styles.meta}>
           {m.everyday ? "everyday: " : ""}
           {rungName.get(m.teaches) ?? m.teaches}
@@ -395,6 +415,11 @@ function MathProblem({ parts, rungName, currentHash }: { parts: Card[]; rungName
             </ol>
             <p className={styles.meta}>Think of it like this: {p.tie}</p>
             <p className={styles.meta}>After a right answer: {p.working.join(" ")}</p>
+            {(questionedOn.get(c.id) ?? []).map((q, i) => (
+              <p key={i} className={styles.flag}>
+                He questioned this problem: &ldquo;{q.answer}&rdquo;{q.reasoning ? <span className={styles.meta}> ({q.reasoning})</span> : null}
+              </p>
+            ))}
             {c.policy_notes?.validation?.length ? <p className={styles.flag}>Held back by the code check: {c.policy_notes.validation.join("; ")}</p> : null}
             {gate && c.policy === "blocked" ? (
               <p className={styles.flag}>

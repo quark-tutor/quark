@@ -8,6 +8,8 @@ import type { MatchRule } from "@/core/wall/answer";
 import type { AttemptRow } from "@/core/wall/card";
 import { answer, cardFor, wallFor, type CardRow, type HowSaid, type Judge, type Scope } from "@/core/wall/flow";
 import { LABEL_MAX_TOKENS, LABEL_SCHEMA, labelPrompt, readLabel } from "@/core/wall/label";
+import { NO_NUMBER_SCHEMA, readReply } from "@/core/wall/no-number";
+import type { ReadNoNumber } from "@/core/wall/flow";
 import { JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_SCHEMA, JUDGE_THINKING, judgeAnswer } from "@/core/wall/judge";
 import { CLIP_RATE, heardText, parseLine, spokenUrl, type SpeechStore } from "@/core/wall/speech";
 import { hear, HEAR_MODEL, say, TUTOR_VOICE } from "@/core/speech";
@@ -229,6 +231,43 @@ function judgeFor(device: Device): Judge {
   };
 }
 
+let noNumberSystem: string | undefined;
+
+// The judge of a math reply with no number (core/wall/no-number.ts; fix round 2): Haiku, as the judge, within the
+// judge's 3 seconds, before the tile answers; "other" when it gives no verdict in time. One model_runs row a reply,
+// kind judge, after the reply has gone.
+function noNumberFor(device: Device): ReadNoNumber {
+  return async (input) => {
+    noNumberSystem ??= readPrompt("no-number.md");
+    const spent = { input: 0, output: 0, calls: 0 };
+    const startedAt = new Date();
+    const r = await readReply(input, ({ prompt, timeoutMs }) =>
+      complete({
+        system: noNumberSystem!,
+        prompt,
+        maxTokens: JUDGE_MAX_TOKENS,
+        use: "judge",
+        model: JUDGE_MODEL,
+        thinking: JUDGE_THINKING,
+        json: NO_NUMBER_SCHEMA,
+        timeoutMs,
+        onUsage: (u) => {
+          spent.input += u.input;
+          spent.output += u.output;
+          spent.calls += 1;
+        },
+      }),
+    );
+    if (r.by === "rule") console.error("no number: read as other instead:", r.fault);
+    after(async () => {
+      const row = runRow("judge", [{ use: "judge", model: JUDGE_MODEL, ...spent }], { ok: r.by === "model", startedAt });
+      const { error } = await createAdminClient().from("model_runs").insert({ family_id: device.familyId, ...row });
+      if (error) console.error("no number: could not record the run:", error.message);
+    });
+    return r;
+  };
+}
+
 let labelSystem: string | undefined;
 
 // The label on what he said to "How did you get that?" on the Math tile (core/wall/label.ts), made after the reply has
@@ -274,4 +313,4 @@ function labelLater(device: Device) {
 // A guess, judged by the model, or by the word rule when the model gives no verdict in time; on the Math tile, a
 // number read in code, and his words to "How did you get that?" labelled afterwards.
 export const sendAnswer = async (device: Device, input: { cardId: string; guess: string; seconds: number | null }, now?: Date) =>
-  answer(wallStore(), scopeOf(device), input, now ?? (await wallNow()), WALL_RULE, judgeFor(device), labelLater(device));
+  answer(wallStore(), scopeOf(device), input, now ?? (await wallNow()), WALL_RULE, judgeFor(device), labelLater(device), noNumberFor(device));

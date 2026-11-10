@@ -45,10 +45,13 @@ export const SAY = {
   thinkOfIt: "Think of it like this:",
   wholeThing: "Here's the whole thing:",
   howDoYouKnow: "How do you know?", // the younger boy's part 3, after his right answer
-  sayNumber: "Say it as a number.",
+  // A reply with no number, read by the judge first (Brandon, 9 Nov 2026: "Say it as a number." was "demeaning").
+  whatNumber: "What number do you get?", // anything else with no number; a second one moves him on to another wording
+  goodCatch: "Good catch. Thank you for telling me.", // he said something is missing or wrong with the problem
   workedOut: "Here's one worked out:",
   nowYours: "Now yours",
   nextPart: "Next part",
+  soFar: "So far:", // above a later part's question: each earlier part's question and the answer he found
   tellHow: "Say or type how you did it",
   deleteDigit: "Delete",
   // Talk (docs/tutor-voice-slice.md): hold to talk, let go to send the words to the box.

@@ -37,6 +37,10 @@ You are writing today's problem for the Math tile on the Wonder Wall, the family
 
 Nothing anywhere says a part's answer before he gives it: not the setting, the question, a wording, a step or the tie. Only a number the sum is made of may appear.
 
+**Every count is said as a number**, people included: "4 of you sit at the table", never only "you and 3 friends", and "4 kids" rather than "a few". A number left for him to work out from "you" or "a few" is not on screen.
+
+**Every number a part's sum needs is on screen when he gets to it**: in the setting, in that part's own question, or as an earlier part's answer (the page shows the earlier answers above the question). A later part's page does not show an earlier part's question, so a count said only there ("6 trucks") is not on screen for part 3; part 3 uses part 1's answer instead. A number he knows but is not shown, such as the 4 corners of a square, is said in the setting or the question. A hidden sum is written out from the numbers on screen: "two scoops rice and one scoop mac salad" on 7 plates is `7 × (2 + 1)`, never `7 × 3`. The program checks each sum's numbers against the screen and holds back a problem that needs a number the child cannot see.
+
 **Sums are said in words until he has answered.** The setting, the questions, the wordings, the steps and the tie never show a sign: no ×, ÷, +, −, = or brackets, which is what makes a page look like a worksheet. Say "3 groups of 4", "18 and 24 together", "24 shared by 3", "how many more is 24 than 15". Signs appear only in the working, after his right answer, and in the worked example.
 
 **Every part asks something different.** Not the same sum twice with new things in it: if part 1 counts scoops on 6 plates, part 2 does not count pieces on the same 6 plates the same way. And the unit is a real thing he can picture, never "things" or "items".
@@ -88,12 +92,12 @@ The farmers' market, for a boy whose style is short, on a day when money is new 
 }
 ```
 
-Cones at soccer practice, for a boy whose style is hidden, on the 3s and 4s, which are not new to him (part 3 builds on parts 1 and 2; part 4 is the quick one):
+Cones at soccer practice, for a boy whose style is hidden, on the 3s and 4s, which are not new to him (part 3 builds on parts 1 and 2; part 4 is the quick one; the corners are said in the setting, so every number is on screen):
 
 ```json
 {
   "title": "Cones at soccer practice",
-  "setting": "At soccer practice, the coach sets out cones for drills. Every drill is a shape on the grass with a cone on each corner, and no two shapes share a cone.",
+  "setting": "At soccer practice, the coach sets out cones for drills. Every drill is a shape on the grass with a cone on each corner, and no two shapes share a cone. A square has 4 corners and a triangle has 3.",
   "graph": {"kind":"none","numbers":[],"labels":[]},
   "parts": [
     {"question":"The coach makes 6 squares. How many cones does that take?","answer":24,"unit":"cones","expression":"6 × 4","wordings":["A square has 4 corners, and each corner gets a cone. How many cones for 6 squares?","How many is 6 fours?"],"steps":[{"question":"How many corners does one square have?","answer":4,"expression":"4"},{"question":"How many cones for 3 squares?","answer":12,"expression":"3 × 4"},{"question":"How many for 6 squares?","answer":24,"expression":"6 × 4"}],"tie":"It's like a picnic blanket on a windy day: a rock on each of its 4 corners.","working":["6 × 4 = 24.","6 squares take 24 cones."]},

@@ -40,7 +40,8 @@ export const SPOKEN_REPLIES = [
   "thinkOfIt",
   "wholeThing",
   "howDoYouKnow",
-  "sayNumber",
+  "whatNumber",
+  "goodCatch",
   "workedOut",
 ] as const;
 export type SpokenReply = (typeof SPOKEN_REPLIES)[number];

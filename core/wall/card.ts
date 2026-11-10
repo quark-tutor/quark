@@ -120,12 +120,14 @@ export type CardReply = {
 
 // A math part's page (docs/math-tile-slice.md): where he is in its moves, the graph, and the worked example on the
 // first part while the rung is new to him.
-export type MathPage = { view: MathView; graph: Picture | null; example: WorkedExample | null };
+// before: the parts he has already found, in order, so every number a later part needs is on its page (Brandon, 9 Nov
+// 2026, fix round 2: part 3 asked for the trucks' and trikes' wheels together on a page that showed neither).
+export type MathPage = { view: MathView; graph: Picture | null; example: WorkedExample | null; before: { question: string; answer: string }[] };
 
 // to_question: the guess answered the hint, so the page asks the question again and no hint is spent.
-// math: a math part's page after the answer; say_number: the reply held no number, and nothing was written.
+// math: a math part's page after the answer.
 export type AnswerReply = {
-  outcome: "guess_first" | "not_yet" | "close" | "to_question" | "right" | "handoff" | "open" | "math" | "say_number";
+  outcome: "guess_first" | "not_yet" | "close" | "to_question" | "right" | "handoff" | "open" | "math";
   math?: MathView;
   hint?: string;
   handoff?: string;

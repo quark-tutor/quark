@@ -60,6 +60,7 @@ export type WeekDeps = {
   loadMathIdeas?: (themeId: string) => Promise<Map<number, string[]>>;
   writeMath?: (ctx: MathContext) => Promise<WrittenMath>;
   mathTitles?: (themeId: string, childId: string, beforeDay: number) => Promise<string[]>; // his earlier problems this week
+  deleteMathDay?: (themeId: string, day: number) => Promise<void>; // a day's math rows; cascades to its math cards
 };
 
 // A math week's own: the ladder, each child's places and history, and the skills' ids by key.
@@ -84,6 +85,9 @@ export type WeekOptions = {
   onlyChild?: string; // a child id
   concurrency?: number; // card calls in flight for each child (default CARD_CALLS_PER_CHILD)
   math?: WeekMath | null; // given when the week has the Math tile (plan.schedule's days say math)
+  // With day: write that day's math again and nothing else, the other tiles and the week's status left as they are
+  // (week:build --day N --math-only; docs/math-tile-slice.md, fix round 2).
+  mathOnly?: boolean;
 };
 
 export type ChildReport = {
@@ -340,6 +344,20 @@ async function writeChildCards(
   return Promise.all(kids.map(forChild));
 }
 
+// One day's math written again, and nothing else: its math rows and cards go (refused while he has answered them,
+// since answers keep their questions), each child's problem is written and checked afresh, and the week keeps its
+// status. The gate reads the new cards after, as after any build.
+async function mathOnlyDay(opts: WeekOptions, deps: WeekDeps, days: number, kids: WeekChild[], day: number): Promise<WeekReport> {
+  const existing = await deps.findTheme();
+  if (!existing) throw new Error(`Week ${opts.plan.week} has no theme: build the week first.`);
+  if (!opts.plan.schedule.find((d) => d.day === day)?.math) throw new Error(`Day ${day} of week ${opts.plan.week} has no Math tile.`);
+  if (!deps.deleteMathDay) throw new Error("This build cannot write a day's math again.");
+  await deps.deleteMathDay(existing.id, day);
+  const mathIds = await saveMathDays(opts.plan, deps, existing.id, [day]);
+  const reports = await writeChildCards(opts, deps, existing.id, [], kids, days, mathIds);
+  return { themeId: existing.id, ideas: 0, textOnly: [], firstWithoutPicture: [], ideasReasked: 0, children: reports };
+}
+
 // One day of the week into its theme: the Sunday build, a day a firing (docs/looks-good-slice.md). Day 1
 // makes the theme; a day that already has ideas, built or half built, is refused unless `rebuild`, which
 // clears that one day first, because nothing in the database stops a day being written twice. The ideas
@@ -349,6 +367,7 @@ async function buildOneDay(opts: WeekOptions, deps: WeekDeps, days: number, kids
   const day = opts.day!;
   if (!Number.isInteger(day) || day < 1 || day > days) throw new Error(`Day ${day} is outside this week's ${days} days`);
   if (opts.onlyChild) throw new Error("A day is built for every child, so a one-day build can't be limited to one child.");
+  if (opts.mathOnly) return mathOnlyDay(opts, deps, days, kids, day);
 
   const existing = await deps.findTheme();
   let themeId: string;

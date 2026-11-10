@@ -39,6 +39,7 @@ const { values: args } = parseArgs({
     debug: { type: "boolean", default: false },
     plan: { type: "boolean", default: false }, // print the week and what the settings decide, then stop: nothing spent or written
     math: { type: "boolean", default: false }, // the puzzle slot as the Math tile before week 6, a theme's puzzle day left out: test only
+    "math-only": { type: "boolean", default: false }, // with --day: that day's math written again, nothing else
   },
 });
 const week = Number(args.week);
@@ -49,6 +50,7 @@ if (!Number.isInteger(days) || days < 1 || days > 7) throw new Error("--days mus
 if (day !== undefined && (!Number.isInteger(day) || day < 1 || day > 7)) throw new Error("--day must be 1 to 7");
 if (day !== undefined && args.days !== undefined) throw new Error("Use --day for one day or --days for the first few, not both.");
 if (day !== undefined && args.child) throw new Error("--day builds a day for every child; it can't be combined with --child.");
+if (args["math-only"] && day === undefined) throw new Error("--math-only writes one day's math again: give it --day.");
 if (args.start && !/^\d{4}-\d{2}-\d{2}$/.test(args.start)) throw new Error("--start must be YYYY-MM-DD");
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -121,7 +123,7 @@ if (args.plan) {
 const started = Date.now();
 let result;
 try {
-  result = await buildDays(p, day !== undefined ? { day } : { days }, { complete, meter, gate, rebuild: args.rebuild });
+  result = await buildDays(p, day !== undefined ? { day } : { days }, { complete, meter, gate, rebuild: args.rebuild, mathOnly: args["math-only"] });
 } catch (e) {
   const message = e instanceof Error ? e.message : String(e);
   console.error(`\nStopped: ${message}`);

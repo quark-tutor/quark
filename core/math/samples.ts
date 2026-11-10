@@ -74,7 +74,7 @@ export const MARKET: MathProblem = {
 
 export const CONES: MathProblem = {
   title: "Cones at soccer practice",
-  setting: "At soccer practice, the coach sets out cones for drills. Every drill is a shape on the grass with a cone on each corner, and no two shapes share a cone.",
+  setting: "At soccer practice, the coach sets out cones for drills. Every drill is a shape on the grass with a cone on each corner, and no two shapes share a cone. A square has 4 corners and a triangle has 3.",
   graph: { kind: "none", numbers: [], labels: [] },
   parts: [
     {

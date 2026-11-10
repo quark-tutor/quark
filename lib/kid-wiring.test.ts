@@ -47,6 +47,8 @@ describe("the kid view", () => {
     expect(code("lib/wall.ts").match(/\bconsole\.[^;]*;/g)).toEqual([
       `console.error("judge: the word rule judged instead:", r.fault);`,
       `console.error("judge: could not record the run:", error.message);`,
+      `console.error("no number: read as other instead:", r.fault);`,
+      `console.error("no number: could not record the run:", error.message);`,
       `console.error("label: no label:", (e instanceof Error ? e.message : String(e)).split("\\n")[0].replace(/"[^"]*"/g, '"…"').slice(0, 160));`,
       `console.error("label: could not record it:", error.message);`,
       `console.error("label: could not record the run:", error.message);`,
