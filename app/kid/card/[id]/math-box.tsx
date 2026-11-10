@@ -22,13 +22,21 @@ type Props = { id: string; question: string; page: MathPage };
 
 const PAD = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
+// A sum written out by the program, from the start (fix round 4): "120 + 250 = ?".
+function Sum({ sum }: { sum: string | null | undefined }) {
+  return sum ? <p className={styles.sumLine}>{sum}</p> : null;
+}
+
 function Line({ l }: { l: MathLine }) {
   return (
     <>
       {l.say ? <p className={styles.reply}>{SAY[l.say]}</p> : null}
       {l.text ? (
         <div className={styles.hint}>
-          <p>{l.text}</p>
+          <div className={styles.hintWords}>
+            <p>{l.text}</p>
+            <Sum sum={l.sum} />
+          </div>
           {l.line ? <ReadAloud line={l.line} small /> : null}
         </div>
       ) : null}
@@ -116,6 +124,7 @@ export function MathBox({ id, question, page }: Props) {
         </div>
       ) : null}
       <p className={styles.question}>{question}</p>
+      <Sum sum={view.partSum} />
       {view.lines.map((l, i) => (
         <Line key={i} l={l} />
       ))}
@@ -157,7 +166,10 @@ export function MathBox({ id, question, page }: Props) {
               view.prompt.say ? (
                 <p className={styles.reply}>{SAY[view.prompt.say]}</p>
               ) : view.lines.length ? (
-                <p className={styles.again}>{view.prompt.text}</p>
+                <>
+                  <p className={styles.again}>{view.prompt.text}</p>
+                  <Sum sum={view.prompt.sum} />
+                </>
               ) : null
             ) : null}
             <form className={styles.answer} onSubmit={send}>

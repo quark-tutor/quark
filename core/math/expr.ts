@@ -142,3 +142,47 @@ export function workOut(src: string): { value: number; expr: Expr } | { problem:
     return { problem: e instanceof Error ? e.message : String(e) };
   }
 }
+
+// --- The sum line (Brandon, 9 Nov 2026, fix round 4: "this is still math. The written format should be there from the
+// start to accompany the words.") Made here from the part's own expression, never written by the model, so it cannot
+// disagree with the answer: ×, ÷, + and − as the boys see them at school, brackets only where the sum needs them.
+
+const SIGN: Record<Op, string> = { "+": "+", "-": "−", x: "×", "/": "÷", "%": "÷" };
+const WORD: Record<Op, string> = { "+": "plus", "-": "minus", x: "times", "/": "divided by", "%": "divided by" };
+const level = (op: Op) => (op === "+" || op === "-" ? 1 : 2);
+
+// Does this side of an operation need brackets? A lower-level sum inside a higher one does ("7 × (2 + 1)"), and so
+// does a same-level sum on the right of − or ÷ ("10 − (4 + 4)").
+function needsBrackets(child: Expr, parent: Op, right: boolean): boolean {
+  if (child.kind === "num") return false;
+  if (level(child.op) < level(parent)) return true;
+  return right && level(child.op) === level(parent) && (parent === "-" || parent === "/" || parent === "%");
+}
+
+function render(e: Expr, sign: (op: Op) => string, wrap: (s: string) => string): string {
+  if (e.kind === "num") return e.value.toLocaleString("en-US");
+  const side = (c: Expr, right: boolean) => (needsBrackets(c, e.op, right) ? wrap(render(c, sign, wrap)) : render(c, sign, wrap));
+  return `${side(e.left, false)} ${sign(e.op)} ${side(e.right, true)}`;
+}
+
+// "120 + 250 = ?", or null when there is no sum to show (a bare number would be the answer itself) or it cannot be read.
+export function sumLine(src: string): string | null {
+  try {
+    const e = parseExpr(src);
+    if (e.kind === "num") return null;
+    return `${render(e, (op) => SIGN[op], (s) => `(${s})`)} = ?${e.op === "%" ? " left over" : ""}`;
+  } catch {
+    return null;
+  }
+}
+
+// The sum line as "Read it to me" says it: "120 plus 250 equals what?"; a bracketed sum is said with "together".
+export function sumSpoken(src: string): string | null {
+  try {
+    const e = parseExpr(src);
+    if (e.kind === "num") return null;
+    return `${render(e, (op) => WORD[op], (s) => `, ${s} together,`)} equals what?`.replace(/\s+,/g, ",").replace(/,\s*,/g, ",").replace(/, equals/, " equals");
+  } catch {
+    return null;
+  }
+}

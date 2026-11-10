@@ -1,4 +1,5 @@
 import type { MathCard } from "../math/problem.ts";
+import { sumLine } from "../math/expr.ts";
 import type { AttemptRow, ChainLayer, CardState } from "./card.ts";
 
 // The Math tile on the wall (docs/math-tile-slice.md, What is built 6 and 7): where a boy is in a problem, worked out
@@ -159,9 +160,11 @@ export function mathState(chain: ChainLayer[], attempts: AttemptRow[]): MathStat
 
 // A line of the conversation under the question: one of the wall's sentences (say), the problem's own words (text),
 // or both; line names it for "Read it to me".
-export type MathLine = { say: MathSay | null; text: string | null; line: string | null };
+// sum: a step's sum, written out by the program from its expression ("300 + 70 = ?"; fix round 4).
+export type MathLine = { say: MathSay | null; text: string | null; line: string | null; sum?: string | null };
 
 export type MathView = {
+  partSum: string | null; // the part's sum, under its question from the start: "120 + 250 = ?" (fix round 4)
   lines: MathLine[]; // the moves so far, in order
   asking: "number" | "words" | null; // what the box takes now; null when the part is finished
   prompt: MathLine | null; // what the box answers now, shown just above it
@@ -174,12 +177,13 @@ export type MathView = {
 
 export const mathLineId = (cardId: string, part: "wording" | "step", n: number) => `${cardId}.${part}.${n}`;
 
-// The words and the line name of a piece of the problem.
-function pieceOf(cardId: string, m: MathCard, piece: MathEvent["piece"]): { text: string; line: string } | null {
+// The words, the line name, and for a step its sum, of a piece of the problem.
+function pieceOf(cardId: string, m: MathCard, piece: MathEvent["piece"]): { text: string; line: string; sum: string | null } | null {
   if (piece === null) return null;
-  if (piece === "tie") return { text: m.tie, line: `${cardId}.tie` };
-  if ("wording" in piece) return { text: m.wordings[piece.wording - 1], line: mathLineId(cardId, "wording", piece.wording) };
-  return { text: m.steps[piece.step - 1].question, line: mathLineId(cardId, "step", piece.step) };
+  if (piece === "tie") return { text: m.tie, line: `${cardId}.tie`, sum: null };
+  if ("wording" in piece) return { text: m.wordings[piece.wording - 1], line: mathLineId(cardId, "wording", piece.wording), sum: null };
+  const s = m.steps[piece.step - 1];
+  return { text: s.question, line: mathLineId(cardId, "step", piece.step), sum: sumLine(s.expression) };
 }
 
 // The page for the part the chain state is at.
@@ -189,9 +193,9 @@ export function mathView(chain: ChainLayer[], state: MathState): MathView {
   const run = state.run;
   const lines: MathLine[] = run.events.map((e) => {
     const p = pieceOf(cardId, m, e.piece);
-    return { say: e.say, text: p?.text ?? null, line: p?.line ?? null };
+    return { say: e.say, text: p?.text ?? null, line: p?.line ?? null, ...(p?.sum ? { sum: p.sum } : {}) };
   });
-  const view: MathView = { lines, asking: null, prompt: null, working: null, rightSaid: false, next: null, handoff: null, handedOff: false };
+  const view: MathView = { partSum: sumLine(m.expression), lines, asking: null, prompt: null, working: null, rightSaid: false, next: null, handoff: null, handedOff: false };
   const move = run.move;
   if (move === "handed_off") return { ...view, handoff: body.handoff, handedOff: true };
   if (move === "right") {
@@ -208,7 +212,7 @@ export function mathView(chain: ChainLayer[], state: MathState): MathView {
         ? { say: null, text: m.wordings[0], line: mathLineId(cardId, "wording", 1) }
         : move === "wording_2"
           ? { say: null, text: m.wordings[1], line: mathLineId(cardId, "wording", 2) }
-          : { say: null, text: m.steps[k - 1].question, line: mathLineId(cardId, "step", k) };
+          : { say: null, text: m.steps[k - 1].question, line: mathLineId(cardId, "step", k), sum: sumLine(m.steps[k - 1].expression) };
   return { ...view, asking: "number", prompt };
 }
 

@@ -4,6 +4,7 @@ import { chainState, isDone, spendsHint, type AttemptRow, type Slot } from "./ca
 import { ANSWER_MAX, chainOf, onWall, today, type Scope, type WallStore } from "./flow.ts";
 import { isMath, mathLineSeen, mathState, runPart } from "./math.ts";
 import type { MathCard } from "../math/problem.ts";
+import { sumSpoken } from "../math/expr.ts";
 import { SAY } from "./words.ts";
 
 // What the tutor says aloud and what it hears (docs/tutor-voice-slice.md), against a store, as flow.ts is.
@@ -124,12 +125,17 @@ export type CardPart =
 export function partWords(body: { text: string; question: string; hints: string[]; handoff: string; math?: MathCard }, line: CardPart): string | null {
   if (line.part === "hint") return body.hints[line.hint] ?? null;
   if (line.part === "handoff") return body.handoff;
-  if (line.part === "read") return readLine(body);
-  if (line.part === "question") return body.question;
+  // A math part's question and each step are read with their sum, in words (fix round 4): "120 plus 250 equals what?"
+  const withSum = (words: string, expression: string | undefined) => {
+    const spoken = expression ? sumSpoken(expression) : null;
+    return spoken ? `${words.trim()} ${spoken}` : words;
+  };
+  if (line.part === "read") return withSum(readLine(body), body.math?.expression);
+  if (line.part === "question") return withSum(body.question, body.math?.expression);
   const m = body.math;
   if (!m) return null;
   if (line.part === "wording") return m.wordings[line.n - 1] ?? null;
-  if (line.part === "step") return m.steps[line.n - 1]?.question ?? null;
+  if (line.part === "step") return m.steps[line.n - 1] ? withSum(m.steps[line.n - 1].question, m.steps[line.n - 1].expression) : null;
   if (line.part === "tie") return m.tie;
   if (line.part === "working") return m.working[m.working.length - 1] ?? null; // said in words; the sum is read on screen
   return m.example ? m.example.text : null;

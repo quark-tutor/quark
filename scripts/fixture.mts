@@ -44,7 +44,7 @@ import { givesAway } from "../core/curation/cards.ts";
 import { todayIn } from "../core/curation/week.ts";
 import { sayCost } from "../core/prices.ts";
 import type { CardRow } from "../core/wall/flow.ts";
-import { forVoice, readLine, speechPath } from "../core/wall/speech.ts";
+import { forVoice, partWords, readLine, speechPath } from "../core/wall/speech.ts";
 import { dayLines, nightLines, wallLines } from "../core/wall/speech-ahead.ts";
 import { createHash, randomBytes, randomInt } from "node:crypto";
 import { announceTarget } from "./target.ts";
@@ -293,14 +293,14 @@ if (command === "show") {
     day: string;
     slot: string;
     layer: number;
-    body: { title: string; text: string; read_aloud?: string; question: string };
+    body: { title: string; text: string; read_aloud?: string; question: string; math?: import("../core/math/problem.ts").MathCard };
   };
   const stored = async (text: string) => ((await db.storage.from("content").createSignedUrl(speechPath(TUTOR_VOICE, text.trim()), 60)).data ? "stored" : "not stored");
   console.log(`${row.day} ${row.slot} layer ${row.layer}: ${row.body.title}`);
   const parts: [string, string][] = [
     ["text, shown", row.body.text],
     ["question, shown", row.body.question],
-    ["Read it to me sends to the voice", forVoice(readLine(row.body))],
+    ["Read it to me sends to the voice", forVoice(partWords({ hints: [], handoff: "", ...row.body }, { part: "read" }) ?? readLine(row.body))],
     ...(row.body.read_aloud ? [["read_aloud, never said", row.body.read_aloud] as [string, string]] : []),
   ];
   for (const [name, text] of parts) console.log(`\n${name}, ${await stored(text)}:\n  ${text}`);

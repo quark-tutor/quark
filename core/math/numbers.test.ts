@@ -62,3 +62,29 @@ describe("readNumber", () => {
     expect(readNumber("I don't know")).toEqual({ none: "no_number" });
   });
 });
+
+describe("the sum line (fix round 4)", async () => {
+  const { sumLine, sumSpoken } = await import("./expr");
+  it("writes the sum from the expression with the school's signs, brackets only where the sum needs them", () => {
+    expect(sumLine("120 + 250")).toBe("120 + 250 = ?");
+    expect(sumLine("7 * 3")).toBe("7 × 3 = ?");
+    expect(sumLine("24 / 3")).toBe("24 ÷ 3 = ?");
+    expect(sumLine("20 - 16")).toBe("20 − 16 = ?");
+    expect(sumLine("7 × (2 + 1)")).toBe("7 × (2 + 1) = ?");
+    expect(sumLine("(6 × 4)")).toBe("6 × 4 = ?");
+    expect(sumLine("10 - (4 + 4)")).toBe("10 − (4 + 4) = ?");
+    expect(sumLine("8 + 4 + 5 + 3")).toBe("8 + 4 + 5 + 3 = ?");
+    expect(sumLine("1000 - 246")).toBe("1,000 − 246 = ?");
+  });
+
+  it("shows nothing for a bare number, which would be the answer itself", () => {
+    expect(sumLine("4")).toBeNull();
+    expect(sumLine("not a sum")).toBeNull();
+  });
+
+  it("says it in words for Read it to me", () => {
+    expect(sumSpoken("120 + 250")).toBe("120 plus 250 equals what?");
+    expect(sumSpoken("24 / 3")).toBe("24 divided by 3 equals what?");
+    expect(sumSpoken("7 × (2 + 1)")).toBe("7 times, 2 plus 1 together equals what?");
+  });
+});

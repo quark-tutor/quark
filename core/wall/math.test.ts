@@ -16,6 +16,13 @@ describe("a math part's moves", () => {
   const market = chainOf(MARKET, "short");
   const m = market[0].body.math!;
 
+  it("shows the part's sum, and each step's, written out by the program from the start (fix round 4)", () => {
+    expect(mathView(market, mathState(market, [])).partSum).toBe("3 × 2 = ?");
+    const steps = mathView(market, mathState(market, [said("q1", false), said("q1", null), said("q1", false)]));
+    expect(steps.prompt).toMatchObject({ text: m.steps[0].question, sum: "2 × 2 = ?" });
+    expect(steps.lines.at(-1)).toMatchObject({ say: "oneStep", sum: "2 × 2 = ?" });
+  });
+
   it("check 1: a right first answer gives the working and the next part", () => {
     const v = mathView(market, { ...mathState(market, []), run: runPart(m, [said("q1", true)]) });
     expect(v).toMatchObject({ asking: null, working: ["3 × $2 = $6.", "The bananas cost $6."], next: "c2", handoff: null });
@@ -36,7 +43,7 @@ describe("a math part's moves", () => {
     expect(mathView(market, mathState(market, base))).toMatchObject({ asking: "number", prompt: { text: m.steps[0].question } });
     expect(expected(m, "step_1")).toBe(4);
     const v = mathView(market, mathState(market, [...base, said("q1", true)]));
-    expect(v.lines.slice(-2)).toEqual([{ say: "right", text: null, line: null }, { say: null, text: m.steps[1].question, line: "c1.step.2" }]);
+    expect(v.lines.slice(-2)).toEqual([{ say: "right", text: null, line: null }, { say: null, text: m.steps[1].question, line: "c1.step.2", sum: "4 + 2 = ?" }]);
     // The last step's answer is the part's: right there, and the part is done.
     expect(mathState(market, [...base, said("q1", true), said("q1", true)]).at).toBe(1);
   });

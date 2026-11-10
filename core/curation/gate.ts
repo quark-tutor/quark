@@ -1,3 +1,4 @@
+import { sumLine } from "../math/expr.ts";
 import type { FamilyPoint, FamilyValues } from "../../lib/family-values.ts";
 import type { GradeBand } from "../../lib/plan.ts";
 import type { Perspective } from "../../lib/values.ts";
@@ -204,10 +205,11 @@ function mathLines(card: CardBody): string[] {
     ...(m.graph.kind === "graph" ? [`A bar graph: ${m.graph.labels.map((l, i) => `${l} ${m.graph.numbers[i]}`).join(", ")}`] : []),
     ...(m.example ? [`A worked example, shown first: ${m.example.text} ${m.example.working.join(" ")}`] : []),
     `Part ${m.part} of ${m.of}: ${card.question}`,
+    ...(sumLine(m.expression) ? [`Under it, the sum the program writes: ${sumLine(m.expression)}`] : []),
     "Said another way, after a wrong answer:",
     ...m.wordings.map((w, i) => `${i + 1}. ${w}`),
     "One step at a time:",
-    ...m.steps.map((s, i) => `${i + 1}. ${s.question}`),
+    ...m.steps.map((s, i) => `${i + 1}. ${s.question}${sumLine(s.expression) ? ` ${sumLine(s.expression)}` : ""}`),
     `Something the child knows: ${m.tie}`,
     `After a right answer: ${m.working.join(" ")}`,
     `Handoff: ${card.handoff}`,

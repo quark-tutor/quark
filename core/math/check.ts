@@ -15,8 +15,9 @@ import { goalOf, PARTS, PICTURE_KINDS, quickOf, type MathDay, type MathProblem, 
 //     boy's quick one at the end stands alone;
 //   - an other wording brings in no number the problem does not already have;
 //   - no question, wording, step, tie or the setting says a part's answer, unless it is one of the sum's own numbers;
-//   - none of them shows a sign (×, ÷, +, −, =, brackets): a sum is said in words until he has answered, and only the
-//     working and the worked example show one (found on test's first math day, 9 Nov 2026: "What is 6 × (2 + 1)?");
+//   - none of them shows a sign (×, ÷, +, −, =, brackets): the model's words say a sum in words (found on test's first
+//     math day, 9 Nov 2026: "What is 6 × (2 + 1)?"). The sum itself is shown under each question and step from the
+//     start, written by the program from the expression (Brandon, fix round 4), never by the model;
 //   - every number a part's sum is written with is on screen for him by then: in the setting (or its graph), in that
 //     part's own question, or as an earlier part's answer (Brandon, 9 Nov 2026, fix round 2: "Trucks at the beach
 //     park" asked for the trucks' and trikes' wheels together on a page that showed neither count). A number he

@@ -8,6 +8,7 @@ import { readFloor, type PolicyNotes } from "@/core/curation/gate";
 import { backToReviewProblem, childSummary, daysBuilt, floorLine, liveProblems, longDay, plural, rulebookLine, statusWords, whenWords } from "@/core/curation/live";
 import { todayIn } from "@/core/curation/week";
 import type { MathCard } from "@/core/math/problem";
+import { sumLine } from "@/core/math/expr";
 import { readSafetyFloor } from "@/core/prompts";
 import { currentRulebookHash } from "@/lib/family-rulebook";
 import { requireGuardian } from "@/lib/guardian";
@@ -400,7 +401,7 @@ function MathProblem({
         return (
           <details key={c.id} className={own.layer} open={c.layer === 1}>
             <summary>
-              {p.part}. {c.body.question} <strong>{p.answer} {p.unit}</strong> <span className={styles.meta}>({p.expression})</span>
+              {p.part}. {c.body.question} <span className={styles.meta}>{sumLine(p.expression) ?? p.expression}</span> <strong>{p.answer} {p.unit}</strong>
               {p.why ? <span className={styles.meta}>, then &ldquo;How do you know?&rdquo;</span> : null}
               {p.quick ? <span className={styles.meta}>, the quick one</span> : null}
               {c.policy === "blocked" ? <span className={styles.flag}> held back</span> : c.policy === "passed" ? <span className={styles.meta}> passed</span> : <span className={styles.meta}> not checked yet</span>}
@@ -409,7 +410,7 @@ function MathProblem({
             <ol className={own.hints}>
               {p.steps.map((s, i) => (
                 <li key={i}>
-                  {s.question} <strong>{s.answer}</strong>
+                  {s.question} {sumLine(s.expression) ? <span className={styles.meta}>{sumLine(s.expression)}</span> : null} <strong>{s.answer}</strong>
                 </li>
               ))}
             </ol>
