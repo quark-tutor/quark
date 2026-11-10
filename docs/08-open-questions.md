@@ -290,6 +290,7 @@ Brief: `docs/theme-a-week-slice.md` (*Week 2 builds itself*), in a worktree bran
 - **Decided (9 Nov 2026, 14:34): the math inbox row stays.** Brandon: "No to striking the math inbox row: keep it, the math proposal is being reworked in the chat." The row "Math tutored in a recognizable way" came back onto the board with the rebase. It stays at *not fully formed* beside the math practice rows. *Replaces* Code's recommendation to strike it.
 - **Decided (9 Nov 2026, 14:34, taken with go): the Saturday row.** "Saturday 21 Nov: week 6's theme and week 5's 28 short lessons" goes on the board at *next*, second, after week 4's 32, in *Week 2 builds itself*. Brandon's go took Code's recommendation, as the stop said it would; he did not name the row himself.
 - **Decided (9 Nov 2026, 14:34, taken with go): a refusal before spending reads as one.** At M3, `week:build` printed its expected refusal as a crash with a stack trace. It now prints "Stopped: …" and "Nothing was spent." and exits 1 (`scripts/week-build.mts`; a wiring test holds it), because a Saturday job meets that line by design.
+- **Decided (9 Nov 2026, 14:41): the job closed and released.** Brandon typed `/wwc:release` at the last stop (stop 3, the release, recommended now), with no other words; the brief's look was taken at stop 2.
 
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
