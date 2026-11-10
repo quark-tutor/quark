@@ -26,7 +26,7 @@ import { pool } from "./week.ts";
 export type Policy = "pending" | "passed" | "rewritten" | "blocked";
 
 export type CodeRule = "blackball" | "never" | "too_young";
-export const MODEL_RULES = ["parent_led", "perspective", "blocked_topic", "rule_1", "rule_6", "frightening", "caution"] as const;
+export const MODEL_RULES = ["parent_led", "perspective", "blocked_topic", "rule_1", "rule_6", "frightening", "caution", "not_here"] as const;
 export type ModelRule = (typeof MODEL_RULES)[number];
 
 export type GateReason = { rule: CodeRule | ModelRule; subject?: number; note: string };
@@ -167,6 +167,7 @@ export function gatePrompt(input: {
       ]
     : ["This card's topic is marked as touching none of the 24 subjects."];
   const hints = (card.hints ?? []).map((h, i) => `${i + 1}. ${h}`);
+  const shown = card.math ? mathLines(card) : [`Title: ${card.title}`, `Text: ${card.text}`, ...(card.image_alt?.trim() ? [`Picture: ${card.image_alt}`] : []), `Question: ${card.question}`, "Hints, in order:", ...hints, `Handoff: ${card.handoff}`];
   return [
     "The family's rulebook:",
     "",
@@ -177,15 +178,29 @@ export function gatePrompt(input: {
     `The child is in grades ${ageBand(input.child.age)}.`,
     ...(note ? [`The parents asked for care about: ${note}`] : []),
     "",
-    "The card, as the child would see it:",
-    `Title: ${card.title}`,
-    `Text: ${card.text}`,
-    ...(card.image_alt?.trim() ? [`Picture: ${card.image_alt}`] : []),
-    `Question: ${card.question}`,
-    "Hints, in order:",
-    ...hints,
-    `Handoff: ${card.handoff}`,
+    card.math ? "A math card, as the child would see it, with every line the tutor may say about it:" : "The card, as the child would see it:",
+    ...shown,
   ].join("\n");
+}
+
+// A part of a math problem (docs/math-tile-slice.md): every word the child may read or hear on it, in the order the
+// tutor's moves would bring them, so the gate reads all of it, the Hawaiʻi question included (gate.md v3).
+function mathLines(card: CardBody): string[] {
+  const m = card.math!;
+  return [
+    `Title: ${card.title}`,
+    `The setting: ${card.text}`,
+    ...(m.graph.kind === "graph" ? [`A bar graph: ${m.graph.labels.map((l, i) => `${l} ${m.graph.numbers[i]}`).join(", ")}`] : []),
+    ...(m.example ? [`A worked example, shown first: ${m.example.text} ${m.example.working.join(" ")}`] : []),
+    `Part ${m.part} of ${m.of}: ${card.question}`,
+    "Said another way, after a wrong answer:",
+    ...m.wordings.map((w, i) => `${i + 1}. ${w}`),
+    "One step at a time:",
+    ...m.steps.map((s, i) => `${i + 1}. ${s.question}`),
+    `Something the child knows: ${m.tie}`,
+    `After a right answer: ${m.working.join(" ")}`,
+    `Handoff: ${card.handoff}`,
+  ];
 }
 
 export const GATE_SCHEMA = {

@@ -18,6 +18,7 @@
 import { parseArgs } from "node:util";
 import { createClient } from "@supabase/supabase-js";
 import { levelOf } from "../core/curation/cards.ts";
+import { planMath } from "../core/curation/math.ts";
 import { gateFailed, gateSetup } from "../core/curation/gate-run.ts";
 import { BuildStopped, buildDays, prepareWeek, settingsWatch } from "../core/curation/week-job.ts";
 import { debugTo, meteredComplete, modelFor } from "../core/model.ts";
@@ -37,7 +38,7 @@ const { values: args } = parseArgs({
     rebuild: { type: "boolean", default: false },
     debug: { type: "boolean", default: false },
     plan: { type: "boolean", default: false }, // print the week and what the settings decide, then stop: nothing spent or written
-    math: { type: "boolean", default: false }, // the puzzle slot as the Math tile before week 6: test only (docs/math-tile-slice.md)
+    math: { type: "boolean", default: false }, // the puzzle slot as the Math tile before week 6, a theme's puzzle day left out: test only
   },
 });
 const week = Number(args.week);
@@ -104,6 +105,14 @@ if (!gate.rulebook) {
 console.log(`Ideas on ${models.ideas}; cards on ${models.cards}; the gate on ${models.gate}. ${only ? `Only ${only.nickname}.` : `${children.length} children.`}`);
 // What each child's cards are written for, from the children's rows (levelOf(), as the week page shows it).
 for (const c of only ? [only] : children) console.log(`  ${c.nickname}: written for ${levelOf(c)}.`);
+// The Math tile: each child's days, planned before anything is spent.
+if (p.math) {
+  for (const c of only ? [only] : children) {
+    const mc = p.math.children.get(c.id);
+    const days = mc ? planMath(p.math.ladder, mc) : [];
+    console.log(`  ${c.nickname}'s math: ${days.length ? days.map((d) => `day ${d.day} ${d.teaches}${d.isNew ? " (new)" : ""}`).join(", ") : "none (no math style, or no rung he is working on)"}.`);
+  }
+}
 if (args.plan) {
   console.log(`\n--plan: stopped before spending anything; nothing was written.${gate.documentChars !== null ? ` The gate's copy of the rulebook is ${gate.documentChars.toLocaleString()} characters.` : ""}`);
   process.exit(0);
@@ -132,6 +141,7 @@ for (const c of report.children) {
   const lenses = Object.entries(c.lenses).sort((a, b) => b[1] - a[1]).map(([l, n]) => `${l} ${n}`).join(", ");
   console.log(`\n${c.nickname}: ${c.cards} cards. Lenses (per day-slot): ${lenses}.`);
   console.log(`  Interests opened ${c.doors} first cards. ${c.withoutPicture} cards without a picture or recording. ${c.reasked} day-slots asked twice.`);
+  if (c.math) console.log(`  Math: ${c.math.written} problems, ${c.math.reasked} asked twice. ${c.math.days.join("; ")}.`);
   if (c.heldBack.length) {
     console.log(`  Held back as blocked (still failing the checks after a second try):`);
     for (const h of c.heldBack) console.log(`    ${h}`);

@@ -2,6 +2,7 @@ import { LENS_QUESTIONS, type Lens } from "../../lib/lenses.ts";
 import { learnsSentence } from "../../lib/policy.ts";
 import type { LearnsToAct, Perspective } from "../../lib/values.ts";
 import { cleanEnds, hasBrace } from "./clean.ts";
+import type { MathCard } from "../math/problem.ts";
 import type { AnswerKey, IdeaChain } from "./types.ts";
 
 // Cards: one model call per child per day-slot (use: "write", kidFacingPrompt("card.md")) renders
@@ -27,6 +28,7 @@ export type CardBody = {
   question: string;
   hints: string[];
   handoff: string;
+  math?: MathCard; // a part of a math problem (docs/math-tile-slice.md): its moves replace the hints
 };
 
 export type CardContext = {

@@ -1,7 +1,11 @@
 import { pickLenses, SLOT_ORDER, type DaySlot, type Lens, type LensHistory } from "../../lib/lenses.ts";
+import type { Ladder } from "../../lib/ladder.ts";
+import type { MathDay } from "../math/problem.ts";
 import type { LearnsToAct } from "../../lib/values.ts";
 import { levelOf, planDoors, type CardBody, type CardChild, type CardContext, type WrittenCards } from "./cards.ts";
 import { firstLayerProblem } from "./ideas.ts";
+import { mathAnswerKey, mathCards, planMath, type MathChild, type MathContext, type WrittenMath } from "./math.ts";
+import { MATH_SLOT } from "./schedule.ts";
 import type { IdeaChain, WeekPlan } from "./types.ts";
 
 // One week of the plan into a theme, its shared ideas, and every child's cards and questions
@@ -18,7 +22,7 @@ export type CardRow = {
   child_id: string;
   day: string; // the date
   slot: DaySlot;
-  lens: Lens;
+  lens: Lens | null; // null on a math card
   layer: number;
   parent_card_id: string | null;
   body: CardBody;
@@ -34,6 +38,7 @@ export type QuestionRow = {
   prompt: string;
   answer_key: { accept: string[]; rubric: string };
   hints: string[];
+  skill_id?: string | null; // a math part: the rung or area it teaches (skills.id)
 };
 
 export type WeekDeps = {
@@ -49,7 +54,16 @@ export type WeekDeps = {
   saveQuestion: (row: QuestionRow) => Promise<void>;
   writeIdeaChain: (slot: DaySlot, day: number, earlier: IdeaChain[]) => Promise<IdeaChain>;
   writeCards: (ctx: CardContext) => Promise<WrittenCards>;
+  // The Math tile (docs/math-tile-slice.md): a math day's shared idea rows, one per part, written in code; and each
+  // child's own problem.
+  saveMathIdeas?: (themeId: string, day: number) => Promise<string[]>;
+  loadMathIdeas?: (themeId: string) => Promise<Map<number, string[]>>;
+  writeMath?: (ctx: MathContext) => Promise<WrittenMath>;
+  mathTitles?: (themeId: string, childId: string, beforeDay: number) => Promise<string[]>; // his earlier problems this week
 };
+
+// A math week's own: the ladder, each child's places and history, and the skills' ids by key.
+export type WeekMath = { ladder: Pick<Ladder, "rungs" | "everyday">; children: Map<string, MathChild>; skillIds: Map<string, string> };
 
 export type WeekOptions = {
   plan: WeekPlan;
@@ -69,6 +83,7 @@ export type WeekOptions = {
   rebuild: boolean;
   onlyChild?: string; // a child id
   concurrency?: number; // card calls in flight for each child (default CARD_CALLS_PER_CHILD)
+  math?: WeekMath | null; // given when the week has the Math tile (plan.schedule's days say math)
 };
 
 export type ChildReport = {
@@ -79,6 +94,7 @@ export type ChildReport = {
   withoutPicture: number;
   reasked: number;
   heldBack: string[]; // cards still failing the checks after a second try: saved as blocked
+  math?: { written: number; reasked: number; days: string[] }; // days: "day 3 money (new)"
 };
 
 export type WeekReport = {
@@ -121,6 +137,18 @@ export async function pool<T, R>(items: T[], n: number, fn: (item: T) => Promise
   return out;
 }
 
+// The slots that get idea chains: all five, or four in a week with the Math tile.
+const mathWeek = (plan: WeekPlan) => plan.schedule.some((d) => d.math);
+export const ideaSlots = (plan: WeekPlan): DaySlot[] => SLOT_ORDER.filter((s) => !(mathWeek(plan) && s === MATH_SLOT));
+
+// A math day's shared idea rows, one per part, written in code: the day's problem is each child's own.
+async function saveMathDays(plan: WeekPlan, deps: WeekDeps, themeId: string, days: number[]): Promise<Map<number, string[]>> {
+  const out = new Map<number, string[]>();
+  if (!mathWeek(plan) || !deps.saveMathIdeas) return out;
+  for (const day of days) if (plan.schedule.find((d) => d.day === day)?.math) out.set(day, await deps.saveMathIdeas(themeId, day));
+  return out;
+}
+
 export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<WeekReport> {
   const { plan, children } = opts;
   const days = Math.min(7, Math.max(1, opts.days));
@@ -149,9 +177,10 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
   }
 
   // 2. Ideas, shared by every child: slots side by side, days in order within a slot so each day's
-  //    first layer can be new.
+  //    first layer can be new. A math week's puzzle slot has none: each child gets his own problem (step 3).
+  let mathIds = new Map<number, string[]>();
   if (chains.length === 0) {
-    const bySlot = await pool([...SLOT_ORDER], SLOT_ORDER.length, async (slot) => {
+    const bySlot = await pool(ideaSlots(plan), SLOT_ORDER.length, async (slot) => {
       const written: IdeaChain[] = [];
       for (let day = 1; day <= days; day++) {
         const chain = await deps.writeIdeaChain(slot, day, written);
@@ -161,6 +190,9 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
       return written;
     });
     chains = bySlot.flat();
+    mathIds = await saveMathDays(plan, deps, themeId, Array.from({ length: days }, (_, i) => i + 1));
+  } else if (deps.loadMathIdeas) {
+    mathIds = await deps.loadMathIdeas(themeId);
   }
   chains = chains.filter((c) => c.day <= days).sort((a, b) => a.day - b.day || SLOT_ORDER.indexOf(a.slot) - SLOT_ORDER.indexOf(b.slot));
   const textOnly = chains.filter((c) => c.topic.items.length === 0).map((c) => `day ${c.day} ${c.slot}`);
@@ -169,8 +201,8 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
     .map((c) => `day ${c.day} ${c.slot} (${c.topic.title})`);
   const ideasReasked = chains.filter((c) => (c.asked ?? 1) > 1).length;
 
-  // 3. Each child's cards.
-  const reports = await writeChildCards(opts, deps, themeId, chains, kids, days);
+  // 3. Each child's cards, and his math.
+  const reports = await writeChildCards(opts, deps, themeId, chains, kids, days, mathIds);
 
   await deps.setStatus(themeId, "review");
   return { themeId, ideas: chains.length * 4, textOnly, firstWithoutPicture, ideasReasked, children: reports };
@@ -186,7 +218,15 @@ export const CARD_CALLS_PER_CHILD = 5;
 // Lenses and doors are planned over all `days` of the week and the chains take their own, which is why
 // a day built alone gets the lens and door it would have had in a week built whole. The children are
 // written side by side; each one's own cards, lenses and doors are the same whatever the order.
-async function writeChildCards(opts: WeekOptions, deps: WeekDeps, themeId: string, chains: IdeaChain[], kids: WeekChild[], days: number): Promise<ChildReport[]> {
+async function writeChildCards(
+  opts: WeekOptions,
+  deps: WeekDeps,
+  themeId: string,
+  chains: IdeaChain[],
+  kids: WeekChild[],
+  days: number,
+  mathIds: Map<number, string[]>,
+): Promise<ChildReport[]> {
   const { plan } = opts;
   const concurrency = opts.concurrency ?? CARD_CALLS_PER_CHILD;
   const forChild = async (child: WeekChild): Promise<ChildReport> => {
@@ -196,7 +236,7 @@ async function writeChildCards(opts: WeekOptions, deps: WeekDeps, themeId: strin
     const opened = chains.filter((c) => doors.has(`${c.day}:${c.slot}`)).length;
     const report: ChildReport = { nickname: child.nickname, cards: 0, lenses: {}, doors: opened, withoutPicture: 0, reasked: 0, heldBack: [] };
 
-    await pool(chains, concurrency, async (chain) => {
+    const cardJob = async (chain: IdeaChain) => {
       const key = `${chain.day}:${chain.slot}`;
       const lens = lensOf.get(key)!;
       const door = doors.get(key) ?? null;
@@ -238,7 +278,56 @@ async function writeChildCards(opts: WeekOptions, deps: WeekDeps, themeId: strin
         if (!layer.content_item_id) report.withoutPicture += 1;
         if (problems.length) report.heldBack.push(`day ${chain.day} ${chain.slot} layer ${layer.layer}: ${problems.join("; ")}`);
       }
-    });
+    };
+
+    // His math: the week planned in code over all its days, each day's problem written beside the cards.
+    const math = opts.math;
+    const mathChild = math?.children.get(child.id);
+    const mathPlan = math && mathChild && deps.writeMath ? planMath(math.ladder, mathChild, days).filter((d) => mathIds.has(d.day)) : [];
+    if (mathPlan.length) report.math = { written: 0, reasked: 0, days: [] };
+    const mathJob = async (day: MathDay) => {
+      const ids = mathIds.get(day.day)!;
+      const earlier = deps.mathTitles ? await deps.mathTitles(themeId, child.id, day.day) : [];
+      const written = await deps.writeMath!({ child: mathChild!, day, ladder: math!.ladder, earlier });
+      const bodies = mathCards(written.problem, day);
+      const notes = written.problems.length ? written.problems : bodies.length !== ids.length ? ["the problem came back without its four parts"] : [];
+      let parent: string | null = null;
+      for (const [i, body] of bodies.entries()) {
+        const cardId: string = await deps.saveCard({
+          theme_id: themeId,
+          idea_id: ids[i],
+          child_id: child.id,
+          day: addDays(opts.weekStart, day.day - 1),
+          slot: MATH_SLOT,
+          lens: null,
+          layer: i + 1,
+          parent_card_id: parent,
+          body,
+          level: levelOf(child),
+          door: null,
+          policy: notes.length ? "blocked" : "pending",
+          policy_notes: notes.length ? { validation: notes } : null,
+        });
+        await deps.saveQuestion({
+          card_id: cardId,
+          idea_id: ids[i],
+          prompt: body.question,
+          answer_key: body.math ? mathAnswerKey(body.math) : { accept: [], rubric: "" },
+          hints: [],
+          skill_id: math!.skillIds.get(day.teaches) ?? null,
+        });
+        parent = cardId;
+        report.cards += 1;
+      }
+      report.math!.written += 1;
+      if (written.asked > 1) report.math!.reasked += 1;
+      report.math!.days.push(`day ${day.day} ${day.teaches}${day.isNew ? " (new)" : ""}${notes.length ? `, held back: ${notes.join("; ")}` : ""}`);
+      if (notes.length) report.heldBack.push(`day ${day.day} math: ${notes.join("; ")}`);
+    };
+
+    const jobs = [...chains.map((c) => () => cardJob(c)), ...mathPlan.map((d) => () => mathJob(d))];
+    await pool(jobs, concurrency, (job) => job());
+    if (report.math) report.math.days.sort((a, b) => Number(a.split(" ")[1]) - Number(b.split(" ")[1]));
     return report;
   };
   return Promise.all(kids.map(forChild));
@@ -277,19 +366,21 @@ async function buildOneDay(opts: WeekOptions, deps: WeekDeps, days: number, kids
   }
   const earlier = saved.filter((c) => c.day < day);
 
-  // Ideas, shared by every child: slots side by side, each carrying on from its earlier days.
-  const chains = await pool([...SLOT_ORDER], SLOT_ORDER.length, async (slot) => {
+  // Ideas, shared by every child: slots side by side, each carrying on from its earlier days; a math day's puzzle
+  // slot has its shared rows written in code instead.
+  const chains = await pool(ideaSlots(plan), SLOT_ORDER.length, async (slot) => {
     const chain = await deps.writeIdeaChain(slot, day, earlier.filter((c) => c.slot === slot));
     chain.ids = await deps.saveIdeas(themeId, chain);
     return chain;
   });
+  const mathIds = await saveMathDays(plan, deps, themeId, [day]);
   const textOnly = chains.filter((c) => c.topic.items.length === 0).map((c) => `day ${c.day} ${c.slot}`);
   const firstWithoutPicture = chains
     .filter((c) => firstLayerProblem(c.layers, c.topic.items))
     .map((c) => `day ${c.day} ${c.slot} (${c.topic.title})`);
   const ideasReasked = chains.filter((c) => (c.asked ?? 1) > 1).length;
 
-  const reports = await writeChildCards(opts, deps, themeId, chains, kids, days);
+  const reports = await writeChildCards(opts, deps, themeId, chains, kids, days, mathIds);
 
   const built = new Set([...saved.map((c) => c.day), day]);
   if (Array.from({ length: days }, (_, i) => i + 1).every((d) => built.has(d))) await deps.setStatus(themeId, "review");

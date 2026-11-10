@@ -24,6 +24,10 @@
 //                                           to a hint, the word rule beside it (scripts/judge-table.mts); reads no database
 //   npm run fixture -- today <date>         move that day's cards to today where the family lives and set their week
 //                                           live, for a look on June's iPad when test's week has no card today
+//   npm run fixture -- places               the Math tile's starting places on test (docs/math-tile-slice.md): child 1
+//                                           at the older boy's rungs, style short; child 2 at the younger's, style hidden
+//   npm run fixture -- math <week>          every math problem of the week, per day and child: its parts, answers,
+//                                           wordings, steps and tie, and why one was held back
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
 // moves a date and sets a week live, as a guardian's Looks-good tap would, and writes an audit row naming itself.
 
@@ -445,6 +449,58 @@ if (command === "show") {
   must(await db.from("themes").update({ status: "live" }).eq("family_id", familyId).eq("id", themes[0]).select("id"), "themes");
   must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.today", target: { from: arg, to, theme: themes[0] } }).select("id"), "audit_log");
   console.log(`Done. ${to} has the cards of ${arg}, and the week is live on test.`);
+} else if (command === "places") {
+  // The brief's starting places (docs/math-tile-slice.md, The ladder), on test's two invented children, oldest first.
+  const PLACES: Record<1 | 2, { style: "short" | "hidden"; done: string[]; working: string[] }> = {
+    1: { style: "short", done: ["add-20", "add-100", "place-value"], working: ["add-1000", "groups-of", "times-2-5-10"] },
+    2: { style: "hidden", done: ["add-20", "add-100", "place-value", "groups-of", "times-2-5-10"], working: ["times-3-4"] },
+  };
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  if (kids.length !== 2) throw new Error(`Expected two children on test, found ${kids.length}.`);
+  const skills = new Map((must(await db.from("skills").select("id, key").not("key", "is", null), "skills") as { id: string; key: string }[]).map((s) => [s.key, s.id]));
+  if (!skills.size) throw new Error("skills holds no ladder: run npm run ladder:import.");
+  for (const n of [1, 2] as const) {
+    const kid = kids[n - 1];
+    const p = PLACES[n];
+    console.log(`About to set child ${n}: style ${p.style}; done ${p.done.join(", ")}; working ${p.working.join(", ")}. Any other place of child ${n} is cleared.`);
+    must(await db.from("children").update({ math_style: p.style }).eq("id", kid.id).select("id"), "children");
+    must(await db.from("mastery").delete().eq("child_id", kid.id).select("child_id"), "mastery");
+    const rows = [...p.done.map((k) => ({ key: k, place: "done" })), ...p.working.map((k) => ({ key: k, place: "working" }))].map((r) => {
+      const id = skills.get(r.key);
+      if (!id) throw new Error(`No rung "${r.key}" in skills.`);
+      return { child_id: kid.id, skill_id: id, place: r.place };
+    });
+    must(await db.from("mastery").insert(rows).select("child_id"), "mastery");
+  }
+  console.log("Done.");
+} else if (command === "math") {
+  const t = await theme(Number(arg));
+  const kids = (must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[]).map((k) => k.id);
+  const cards = must(
+    await db.from("cards").select("child_id, day, layer, policy, policy_notes, body").eq("theme_id", t.id).eq("slot", "puzzle").order("day").order("child_id").order("layer"),
+    "cards",
+  ) as { child_id: string; day: string; layer: number; policy: string; policy_notes: { validation?: string[]; gate?: { reasons: { note: string }[]; reader?: string[] } } | null; body: { title: string; text: string; question: string; handoff: string; math?: Record<string, any> } }[];
+  console.log(`Week ${t.plan_week}: "${t.title}". ${cards.length} math cards.`);
+  for (const c of cards) {
+    const m = c.body.math;
+    if (c.layer === 1) {
+      console.log(`\n== ${c.day}, child ${kids.indexOf(c.child_id) + 1}: ${c.body.title}${m ? ` (${m.teaches}${m.example ? ", new: worked example" : ""})` : ""}`);
+      console.log(`   ${c.body.text}`);
+      if (m?.graph?.kind === "graph") console.log(`   Graph: ${m.graph.labels.map((l: string, i: number) => `${l} ${m.graph.numbers[i]}`).join(", ")}`);
+      if (m?.example) console.log(`   Worked example (${m.example.picture.kind} ${m.example.picture.numbers.join(", ")}): ${m.example.text} | ${m.example.working.join(" | ")}`);
+    }
+    const held = c.policy === "passed" ? "" : ` [${c.policy}${c.policy_notes?.validation?.length ? `: ${c.policy_notes.validation.join("; ")}` : ""}${c.policy_notes?.gate?.reasons?.length ? `: ${c.policy_notes.gate.reasons.map((r) => r.note).join("; ")}` : ""}]`;
+    if (!m) {
+      console.log(`   (no math on this card)${held}`);
+      continue;
+    }
+    console.log(`   ${m.part}. ${c.body.question} -> ${m.answer} ${m.unit} (${m.expression})${m.why ? ", then How do you know?" : ""}${m.quick ? ", the quick one" : ""}${held}`);
+    console.log(`      Another way: ${m.wordings.join(" / ")}`);
+    console.log(`      Steps: ${m.steps.map((s: { question: string; answer: number }) => `${s.question} (${s.answer})`).join(" · ")}`);
+    console.log(`      Like: ${m.tie}`);
+    console.log(`      Working: ${m.working.join(" / ")}`);
+    if (c.policy_notes?.gate?.reader?.length) console.log(`      Reader: ${c.policy_notes.gate.reader.join(" ")}`);
+  }
 } else if (command === "judge") {
   await (await import("./judge-table.mts")).runJudgeTable(arg);
 } else {

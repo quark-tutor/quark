@@ -40,6 +40,9 @@ export type ScheduleInput = {
   used: Set<string>; // lessons earlier weeks used
   own?: Set<string>; // lessons this week already has
   math?: boolean; // the puzzle slot is the Math tile; default isMathWeek(week)
+  // Test only (week:build --math): a thread topic on the puzzle slot is left out of the week instead of refused, so a
+  // math week can be built on test from a theme written before the Math tile.
+  dropOnMath?: boolean;
 };
 
 export const DAYS_IN_WEEK = 7;
@@ -73,9 +76,12 @@ export function stretchForWeek(spans: StretchSpan[], week: number): { stretch: s
 // The thread topics of one of a stretch's weeks, from its day 1.
 export const weekThread = <T>(topics: T[], weekInStretch: number): T[] => topics.slice((weekInStretch - 1) * DAYS_IN_WEEK, weekInStretch * DAYS_IN_WEEK);
 
-export function weekSchedule({ week, thread, lessons, used, own = new Set(), math = isMathWeek(week) }: ScheduleInput): DayPlan[] {
-  const threadToday = (day: number) => thread[day - 1] ?? null;
-  const onMath = thread.find((t) => math && t.slot === MATH_SLOT);
+export function weekSchedule({ week, thread, lessons, used, own = new Set(), math = isMathWeek(week), dropOnMath = false }: ScheduleInput): DayPlan[] {
+  const threadToday = (day: number) => {
+    const t = thread[day - 1] ?? null;
+    return t && dropOnMath && math && t.slot === MATH_SLOT ? null : t;
+  };
+  const onMath = dropOnMath ? undefined : thread.find((t) => math && t.slot === MATH_SLOT);
   if (onMath) {
     throw new Error(`Week ${week} has the Math tile, but its theme puts "${onMath.title}" on the puzzle slot. A theme from week ${MATH_FROM_WEEK} on puts its topics on look, wonder, listen and then: fix its file under plan/ and run npm run plan:import.`);
   }
