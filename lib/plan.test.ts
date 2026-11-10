@@ -123,6 +123,18 @@ describe("validatePlan", () => {
     plan.weeks.push({ ...plan.weeks[0], week: 2 });
     expect(validatePlan(plan)).toEqual(["a theme after the first stretch is one week: one chapter of 7 topics (this has 2 chapters and 14 topics)"]);
   });
+
+  it("wants a theme from sequence 3 on Look, Wonder, Listen and Then: the puzzle slot is the Math tile (9 Nov 2026)", () => {
+    const plan = { ...smallPlan(), sequence: 3 };
+    plan.weeks[0].topics.push(topic("history", "look") as Plan["weeks"][0]["topics"][0]);
+    expect(validatePlan(plan)).toEqual([
+      "week 1: a theme from sequence 3 on puts its topics on look, wonder, listen, then: the puzzle slot is the Math tile",
+    ]);
+    plan.weeks[0].topics[5] = topic("math", "wonder") as Plan["weeks"][0]["topics"][0];
+    expect(validatePlan(plan)).toEqual([]);
+    // The Moon (sequence 2) keeps its puzzle day.
+    expect(validatePlan({ ...plan, sequence: 2, weeks: [{ ...plan.weeks[0], topics: smallPlan().weeks[0].topics.concat(topic("history", "look") as Plan["weeks"][0]["topics"][0]) }] })).toEqual([]);
+  });
 });
 
 describe("sequenceProblems", () => {

@@ -13,6 +13,9 @@ import { sequenceProblems } from "../../lib/plan.ts";
 // - On a day after the stretch's last topic (Egypt's week 4, days 4 to 7), all five slots take short
 //   lessons: "the thread has ended". A week no stretch holds is refused by stretchForWeek.
 // - When a slot runs out of lessons, nothing is built: the error says which slots need more.
+// - From MATH_FROM_WEEK the puzzle slot is the Math tile (docs/math-tile-slice.md): it takes no short lesson and no
+//   thread topic, so a week with a theme takes 21 short lessons, not 28. Its topic is null; the build writes each
+//   child's own math problem there instead.
 // The whole week is scheduled even when fewer days are built, so a later rebuild matches.
 
 export type Scheduled = { id: string; slot: DaySlot; title: string };
@@ -20,8 +23,15 @@ export type Scheduled = { id: string; slot: DaySlot; title: string };
 export type DayPlan = {
   day: number;
   thread: DaySlot | null; // the slot the thread takes today, or null after the stretch's last topic
-  topics: Record<DaySlot, string>; // a topic id per slot
+  topics: Record<DaySlot, string | null>; // a topic id per slot; null on the puzzle slot of a math week
+  math: boolean; // the puzzle slot is the Math tile
 };
+
+// The family's first week with the Math tile: week 6, Monday 30 November 2026 (docs/math-tile-slice.md). Weeks 4 and 5
+// keep the puzzle slot. lib/plan.ts's MATH_FROM_SEQUENCE is the same line for a theme's file.
+export const MATH_FROM_WEEK = 6;
+export const MATH_SLOT: DaySlot = "puzzle";
+export const isMathWeek = (week: number) => week >= MATH_FROM_WEEK;
 
 export type ScheduleInput = {
   week: number; // the family's week in the plan, from 1
@@ -29,6 +39,7 @@ export type ScheduleInput = {
   lessons: Scheduled[]; // the library in order
   used: Set<string>; // lessons earlier weeks used
   own?: Set<string>; // lessons this week already has
+  math?: boolean; // the puzzle slot is the Math tile; default isMathWeek(week)
 };
 
 export const DAYS_IN_WEEK = 7;
@@ -62,8 +73,13 @@ export function stretchForWeek(spans: StretchSpan[], week: number): { stretch: s
 // The thread topics of one of a stretch's weeks, from its day 1.
 export const weekThread = <T>(topics: T[], weekInStretch: number): T[] => topics.slice((weekInStretch - 1) * DAYS_IN_WEEK, weekInStretch * DAYS_IN_WEEK);
 
-export function weekSchedule({ week, thread, lessons, used, own = new Set() }: ScheduleInput): DayPlan[] {
+export function weekSchedule({ week, thread, lessons, used, own = new Set(), math = isMathWeek(week) }: ScheduleInput): DayPlan[] {
   const threadToday = (day: number) => thread[day - 1] ?? null;
+  const onMath = thread.find((t) => math && t.slot === MATH_SLOT);
+  if (onMath) {
+    throw new Error(`Week ${week} has the Math tile, but its theme puts "${onMath.title}" on the puzzle slot. A theme from week ${MATH_FROM_WEEK} on puts its topics on look, wonder, listen and then: fix its file under plan/ and run npm run plan:import.`);
+  }
+  const slots = SLOT_ORDER.filter((s) => !(math && s === MATH_SLOT));
 
   // Each slot's queue: this week's own lessons first, then the unused ones, in library order.
   const queue = new Map<DaySlot, Scheduled[]>(
@@ -73,11 +89,11 @@ export function weekSchedule({ week, thread, lessons, used, own = new Set() }: S
     }),
   );
 
-  const needed = new Map<DaySlot, number>(SLOT_ORDER.map((s) => [s, 0]));
+  const needed = new Map<DaySlot, number>(slots.map((s) => [s, 0]));
   for (let day = 1; day <= DAYS_IN_WEEK; day++) {
-    for (const slot of SLOT_ORDER) if (threadToday(day)?.slot !== slot) needed.set(slot, needed.get(slot)! + 1);
+    for (const slot of slots) if (threadToday(day)?.slot !== slot) needed.set(slot, needed.get(slot)! + 1);
   }
-  const short = SLOT_ORDER.filter((s) => queue.get(s)!.length < needed.get(s)!);
+  const short = slots.filter((s) => queue.get(s)!.length < needed.get(s)!);
   if (short.length) {
     const what = short.map((s) => `the ${s} card needs ${needed.get(s)} and ${queue.get(s)!.length} ${queue.get(s)!.length === 1 ? "is" : "are"} left`);
     throw new Error(`Not enough short lessons for week ${week}: ${what.join("; ")}. Add lessons to plan/short-lessons.yaml and run npm run plan:import.`);
@@ -86,9 +102,9 @@ export function weekSchedule({ week, thread, lessons, used, own = new Set() }: S
   const days: DayPlan[] = [];
   for (let day = 1; day <= DAYS_IN_WEEK; day++) {
     const t = threadToday(day);
-    const topics = {} as Record<DaySlot, string>;
-    for (const slot of SLOT_ORDER) topics[slot] = t?.slot === slot ? t.id : queue.get(slot)!.shift()!.id;
-    days.push({ day, thread: t?.slot ?? null, topics });
+    const topics = {} as Record<DaySlot, string | null>;
+    for (const slot of SLOT_ORDER) topics[slot] = math && slot === MATH_SLOT ? null : t?.slot === slot ? t.id : queue.get(slot)!.shift()!.id;
+    days.push({ day, thread: t?.slot ?? null, topics, math });
   }
   return days;
 }

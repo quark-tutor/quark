@@ -37,6 +37,7 @@ const { values: args } = parseArgs({
     rebuild: { type: "boolean", default: false },
     debug: { type: "boolean", default: false },
     plan: { type: "boolean", default: false }, // print the week and what the settings decide, then stop: nothing spent or written
+    math: { type: "boolean", default: false }, // the puzzle slot as the Math tile before week 6: test only (docs/math-tile-slice.md)
   },
 });
 const week = Number(args.week);
@@ -70,7 +71,7 @@ const complete = meteredComplete(meter);
 // before spending, printed as one, not as a crash with a stack trace.
 let p: Awaited<ReturnType<typeof prepareWeek>>;
 try {
-  p = await prepareWeek(db, { week, start: args.start, child: args.child });
+  p = await prepareWeek(db, { week, start: args.start, child: args.child, math: args.math || undefined });
 } catch (e) {
   console.error(`\nStopped: ${e instanceof Error ? e.message : String(e)}\nNothing was spent.`);
   process.exit(1);
@@ -82,8 +83,10 @@ const last = day ?? days; // the last
 console.log(`${plan.title}: starting ${p.start}, ${day !== undefined ? `day ${day} only` : `${days} day${days === 1 ? "" : "s"}`}.`);
 const titleOf = new Map(plan.topics.map((t) => [t.id, t]));
 for (const d of plan.schedule.filter((d) => d.day >= first && d.day <= last)) {
-  const lessons = SLOT_ORDER.filter((s) => s !== d.thread).map((s) => `${s} ${titleOf.get(d.topics[s])?.keys[0].split("/")[1]}`);
-  console.log(`  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread])?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}.`);
+  const lessons = SLOT_ORDER.filter((s) => s !== d.thread && d.topics[s]).map((s) => `${s} ${titleOf.get(d.topics[s]!)?.keys[0].split("/")[1]}`);
+  console.log(
+    `  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread]!)?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}${d.math ? "; math: each child's own problem" : ""}.`,
+  );
 }
 // Before spending: the gate's rulebook and floor, and what the family's settings already decide for
 // this week's topics, so a guardian sees the blocks before the money (docs/gate-slice.md, To settle).

@@ -86,6 +86,12 @@ const KEY = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 
 // A theme is one week: seven topics, one a day (decided 8 Nov 2026).
 export const THEME_TOPICS = 7;
+// From the family's week 6 (30 Nov 2026) the puzzle slot is the Math tile (docs/math-tile-slice.md): Egypt (sequence 1)
+// holds weeks 1 to 4 and the Moon (sequence 2) week 5, so a theme from sequence 3 on is a math week's theme, and its
+// seven topics go on Look, Wonder, Listen and Then. MATH_FROM_WEEK in core/curation/schedule.ts is the same line,
+// counted in weeks; a test holds the two together against the plan files.
+export const MATH_FROM_SEQUENCE = 3;
+export const THEME_SLOTS = SLOTS.filter((s) => s !== "puzzle");
 
 // What is wrong with the order of the stretches, in plain words: two with one sequence, or a gap.
 // Each is named as the caller knows it (plan/<file> for the import, the key prefix for the database).
@@ -186,8 +192,12 @@ export function validatePlan(plan: Plan): string[] {
 
     for (const t of topics) checkTopic(t, `${where} ${t?.subject ?? "?"}`, sourceIds, errors);
     const slots = new Set(topics.map((t) => t?.slot));
-    for (const slot of SLOTS) {
+    const mathWeek = Number.isInteger(plan.sequence) && plan.sequence >= MATH_FROM_SEQUENCE;
+    for (const slot of mathWeek ? THEME_SLOTS : SLOTS) {
       if (!slots.has(slot)) errors.push(`${where}: no topic feeds the ${slot} card`);
+    }
+    if (mathWeek && slots.has("puzzle")) {
+      errors.push(`${where}: a theme from sequence ${MATH_FROM_SEQUENCE} on puts its topics on ${THEME_SLOTS.join(", ")}: the puzzle slot is the Math tile`);
     }
   });
   return errors;

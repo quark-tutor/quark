@@ -8,6 +8,14 @@ the top of Next, put there at the previous Saturday's stop 1; the first is "Satu
 5's 28 short lessons", proposed at the theme-a-week release. Project: *Week 2 builds itself*. **Status: standing,
 ready from 21 Nov.**
 
+**From week 6 (Mon 30 Nov 2026) the puzzle slot is the Math tile** (`docs/math-tile-slice.md`, 9 Nov 2026): it takes
+no short lesson and no theme topic, because each boy gets his own math problem there. So from week 6 a theme's seven
+topics go on Look, Wonder, Listen and Then, and a week takes **21 short lessons, not 28** (four slots for seven
+days, less the theme's seven), from **30 candidates, not 40**. Below, "the 28" and "the 40" read "the 21" and "the
+30" for week 6 on; the first Saturday it changes is 28 Nov (week 6's lessons). The theme picked on 21 Nov, week 6's,
+is the first on four slots: `validatePlan` refuses a theme from sequence 3 with a puzzle topic, and `weekSchedule()`
+refuses a math week whose theme has one, before anything is spent.
+
 **Size:** a slice, launched Friday evening or early Saturday: stop 1 by Saturday morning, the parents' reply over
 breakfast, and M1 to M3 on live by 10 pm Saturday, ahead of Sunday's 6 am firing.
 
@@ -19,7 +27,8 @@ choose, by design (Brandon, 8 Nov 2026: "simple, one week at a time, themes sugg
 built on Sunday for approval."):
 
 - **the theme:** seven topics, one a day, each on the slot it is written for;
-- **the 28 short lessons** on the other four slots of each day.
+- **the 28 short lessons** on the other four slots of each day (from week 6, the 21 on the other three: the puzzle
+  slot is the Math tile).
 
 A week takes only lessons no earlier week used (`weekSchedule()`), and a week no theme holds is refused ("No theme
 for week N"), so both have to be on live before the Sunday they are built.
@@ -50,7 +59,8 @@ later, and week 5 started on 23 November.
    - **The themes.** Code writes four themes for week N+1 into `plan/candidates/themes.md`, a short page each, as
      the 8 Nov pages are:
      - why this one;
-     - the seven topics, one a day, each with its slot and the idea named in its title, one line each;
+     - the seven topics, one a day, each with its slot (from week 6, Look, Wonder, Listen or Then, never Puzzle) and
+       the idea named in its title, one line each;
      - the pictures and recordings found in open sources, each fetched through the adapters;
      - which of the 24 values points it touches;
      - what is close to earlier weeks.
@@ -67,7 +77,7 @@ later, and week 5 started on 23 November.
      - the day table at the head, with week N's theme on its slots (from its file) and the day each candidate
        lands on;
      - the counts, from the theme's slots: 7 a slot, less the theme's days on that slot. The Moon's week takes
-       **look 5, wonder 6, listen 6, then 5, puzzle 6**.
+       **look 5, wonder 6, listen 6, then 5, puzzle 6**. From week 6 there is no puzzle count: four slots, 21 in all.
    - **The stop prints:**
      - the four themes, one line each;
      - the 40 as a numbered list, with the 28 marked ★ and their days;
@@ -109,8 +119,8 @@ later, and week 5 started on 23 November.
    - **M1: `npm run plan:import:live`.**
      - **What it does:** writes the 28 into the live library (56 rows, kind `short`) and week N+1's theme (16
        rows). It writes every earlier file again, unchanged.
-     - **What it touches:** LIVE, `plan_topics`. The import must print the library at last week's count plus 28,
-       so no lesson is lost.
+     - **What it touches:** LIVE, `plan_topics`. The import must print the library at last week's count plus 28
+       (plus 21 from week 6), so no lesson is lost.
      - **How it is undone:** delete the new rows by key.
      - **Checked on test:** at step 3.
    - **M2: `npm run content:fetch:live`.**

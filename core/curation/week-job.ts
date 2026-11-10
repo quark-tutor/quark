@@ -39,6 +39,7 @@ export type PrepareOptions = {
   week: number; // the family's week N of the plan; its thread is the stretch that holds it (stretchForWeek)
   start?: string; // YYYY-MM-DD, day 1. Default: the week's own, else counted on from week 1's, else next Monday
   child?: string; // build for one child only: an id or a nickname
+  math?: boolean; // the puzzle slot is the Math tile; default from the week (isMathWeek). --math on test
 };
 
 export type Prepared = {
@@ -142,7 +143,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   const lessonIds = new Set(lessonRows.map((r) => r.id));
   const used = new Set(themes.filter((t) => t.plan_week !== null && t.plan_week < week).flatMap((t) => t.topic_ids as string[]).filter((id) => lessonIds.has(id)));
   const own = new Set(((existing?.topic_ids ?? []) as string[]).filter((id) => lessonIds.has(id)));
-  const schedule = weekSchedule({ week, thread: weekThread(threadRows, weekInStretch).map(scheduled), lessons: lessonRows.map(scheduled), used, own });
+  const schedule = weekSchedule({ week, thread: weekThread(threadRows, weekInStretch).map(scheduled), lessons: lessonRows.map(scheduled), used, own, math: opts.math });
 
   const items = must(
     await db
@@ -193,7 +194,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
     };
   }
 
-  const scheduledIds = new Set(schedule.flatMap((d) => Object.values(d.topics)));
+  const scheduledIds = new Set(schedule.flatMap((d) => Object.values(d.topics)).filter((id): id is string => id !== null));
   const weekRows = [...threadRows, ...lessonRows].filter((r) => scheduledIds.has(r.id));
   const topics = weekRows.map(weekTopic);
   // themes.topic_ids: every row the week uses, both bands, and the thread's chapter rows.
@@ -249,7 +250,8 @@ export function settingsWatch(p: Prepared, gate: GateSetup, upTo: number, from =
     const age = gate.children.find((c) => c.id === kid.id)?.age ?? kid.age;
     for (const d of p.plan.schedule.filter((d) => d.day >= from && d.day <= upTo)) {
       for (const slot of SLOT_ORDER) {
-        const t = p.topicById.get(d.topics[slot]);
+        const id = d.topics[slot];
+        const t = id ? p.topicById.get(id) : undefined; // a math slot has no topic
         if (!t?.valuesPoints.length) continue;
         const notes = subjectWatch(t.valuesPoints, gate.rulebook.values, { id: kid.id, age }, gate.rulebook.pointNames);
         if (notes.length) watch.push(`  ${kid.nickname}: day ${d.day} ${slot} (${t.title}): ${notes.join(" ")}`);
