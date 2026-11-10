@@ -13,7 +13,9 @@ import type { LearnsToAct, Perspective } from "../../lib/values.ts";
 import { sourceRef } from "../content/sources.ts";
 import type { complete } from "../model.ts";
 import { kidFacingPrompt, readPrompt } from "../prompts.ts";
-import { runRow, type Meter } from "../runs.ts";
+import { makeMeter, runRow, type Meter } from "../runs.ts";
+import type { Usage } from "../model.ts";
+import type { Complete } from "./cards.ts";
 import { writeCards } from "./cards.ts";
 import type { Area, Ladder, Place, Rule, Rung } from "../../lib/ladder.ts";
 import type { MathStyle } from "../math/problem.ts";
@@ -333,7 +335,7 @@ export function settingsWatch(p: Prepared, gate: GateSetup, upTo: number, from =
 
 // --- The database and the model, for buildWeek ---
 
-function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (themeId: string) => Promise<void> }): WeekDeps {
+function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (themeId: string) => Promise<void>; mathMeter?: Meter }): WeekDeps {
   const { db, family, plan, start, week, existing, topicById } = p;
   const ideaSystem = readPrompt("ideas.md");
   const cardSystem = kidFacingPrompt("card.md");
@@ -462,7 +464,11 @@ function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (theme
       for (const r of rows) out.set(r.day, [...(out.get(r.day) ?? []), r.id]);
       return out;
     },
-    writeMath: (ctx) => writeMath(ctx, { complete: ai.complete, system: mathSystem, label: `math-day${ctx.day.day}-${ctx.day.teaches}` }),
+    // The math writer's spend is tallied on its own too, so a build can say what math adds to a week.
+    writeMath: (ctx) => {
+      const counted = ((o: Parameters<Complete>[0]) => ai.complete({ ...o, onUsage: (u: { use: Usage["use"]; model: string; input: number; output: number }) => ai.mathMeter?.add(u.use, u) } as never)) as Complete;
+      return writeMath(ctx, { complete: counted, system: mathSystem, label: `math-day${ctx.day.day}-${ctx.day.teaches}` });
+    },
     async mathTitles(themeId, childId, beforeDay) {
       const rows = must(
         await db.from("cards").select("title:body->>title").eq("theme_id", themeId).eq("child_id", childId).eq("slot", MATH_SLOT).eq("layer", 1).lt("day", addDays(start, beforeDay - 1)),
@@ -490,6 +496,7 @@ export type BuildResult = {
   gateError: string | null;
   buildSeconds: number; // the build alone
   recordError: string | null; // why the model_runs row couldn't be written
+  mathUsage: Usage[]; // the math writer's calls alone (inside the run's own tally too)
 };
 
 // A build that stopped: the original error, and whether the run could still be recorded.
@@ -522,7 +529,8 @@ export type BuildRun = { days: number } | { day: number };
 // and rethrown as a BuildStopped.
 export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions): Promise<BuildResult> {
   const started = new Date();
-  const deps = weekDeps(p, { complete: opts.complete, onTheme: opts.onTheme });
+  const mathMeter = makeMeter();
+  const deps = weekDeps(p, { complete: opts.complete, onTheme: opts.onTheme, mathMeter });
   const built = "day" in run ? 1 : run.days; // days of money spent, for model_runs
   let report: WeekReport;
   try {
@@ -555,5 +563,5 @@ export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions):
     gateError = e instanceof Error ? e.message : String(e);
   }
   const recordError = await recordRun(p, opts.meter, started, true, report.themeId, built);
-  return { report, gate: gated, gateError, buildSeconds, recordError };
+  return { report, gate: gated, gateError, buildSeconds, recordError, mathUsage: mathMeter.usage() };
 }

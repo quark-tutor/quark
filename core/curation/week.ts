@@ -288,7 +288,14 @@ async function writeChildCards(
     const mathJob = async (day: MathDay) => {
       const ids = mathIds.get(day.day)!;
       const earlier = deps.mathTitles ? await deps.mathTitles(themeId, child.id, day.day) : [];
-      const written = await deps.writeMath!({ child: mathChild!, day, ladder: math!.ladder, earlier });
+      // A writer that fails (a reply cut off, a timeout) holds back this one problem, not the whole day.
+      let written: WrittenMath;
+      try {
+        written = await deps.writeMath!({ child: mathChild!, day, ladder: math!.ladder, earlier });
+      } catch (e) {
+        const why = (e instanceof Error ? e.message : String(e)).split("\n")[0].slice(0, 200);
+        written = { problem: { title: "Math", setting: "", graph: { kind: "none", numbers: [], labels: [] }, parts: [], example: null, handoff: "" }, asked: 1, problems: [`the writer failed: ${why}`] };
+      }
       const bodies = mathCards(written.problem, day);
       const notes = written.problems.length ? written.problems : bodies.length !== ids.length ? ["the problem came back without its four parts"] : [];
       let parent: string | null = null;

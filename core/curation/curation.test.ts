@@ -754,3 +754,54 @@ describe("stray braces", () => {
     expect(out.cards[0].handoff).toBe("Ask Dad what the farmers planted.");
   });
 });
+
+// --- The Math tile (docs/math-tile-slice.md) ---
+
+describe("buildWeek in a week with the Math tile", () => {
+  it("writes no idea chain on the puzzle slot, and each child's own problem as four cards with its rung", async () => {
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const { parseLadder } = await import("../../lib/ladder");
+    const { CONES, MARKET } = await import("../math/samples");
+    const ladder = parseLadder(readFileSync(join(__dirname, "..", "..", "plan", "math-ladder.yaml"), "utf8"));
+    const mathPlan: WeekPlan = { ...plan, schedule: weekSchedule({ week: 1, thread, lessons, used: new Set(), math: true, dropOnMath: true }) };
+    const { db, deps } = fakeDb();
+    const placed = (done: string[], working: string[]) => new Map([...done.map((k) => [k, "done"] as const), ...working.map((k) => [k, "working"] as const)]);
+    const children = new Map([
+      ["c1", { id: "c1", age: 7, reading: "reads_alone" as const, interests: [], style: "hidden" as const, places: placed(["add-20", "add-100", "groups-of", "times-2-5-10"], ["times-3-4"]), met: new Set<string>(), history: [] }],
+      ["c2", { id: "c2", age: 9, reading: "chapter_books" as const, interests: [], style: "short" as const, places: placed(["add-20", "add-100"], ["add-1000", "groups-of", "times-2-5-10"]), met: new Set<string>(), history: [] }],
+    ]);
+    let ideaN = 0;
+    deps.saveMathIdeas = vi.fn(async () => [1, 2, 3, 4].map(() => `math-idea-${++ideaN}`));
+    deps.writeMath = vi.fn(async (ctx) => {
+      if (ctx.child.id === "c1" && ctx.day.day === 5) throw new Error("The reply hit maxTokens (16000) and was cut off.");
+      return { problem: ctx.day.style === "hidden" ? CONES : MARKET, asked: 1, problems: ctx.child.id === "c2" && ctx.day.day === 2 ? ["part 4 uses no earlier part's answer"] : [] };
+    });
+    const skillIds = new Map(ladder.rungs.concat(ladder.everyday as never).map((r, i) => [r.key, `skill-${i}`]));
+    const report = await buildWeek({ ...options, plan: mathPlan, math: { ladder, children, skillIds } }, deps);
+
+    expect(vi.mocked(deps.writeIdeaChain).mock.calls.every(([slot]) => slot !== "puzzle")).toBe(true);
+    expect(deps.writeIdeaChain).toHaveBeenCalledTimes(28);
+    expect(deps.saveMathIdeas).toHaveBeenCalledTimes(7);
+    expect(deps.writeMath).toHaveBeenCalledTimes(14);
+    const math = db.cards.filter((c) => c.slot === "puzzle");
+    expect(math).toHaveLength(53); // the problem whose writer failed is one card, held back
+    expect(math.filter((c) => c.policy !== "blocked").every((c) => c.lens === null && c.body.math && c.idea_id.startsWith("math-idea-"))).toBe(true);
+    const day1 = math.filter((c) => c.child_id === "c1" && c.day === "2026-10-19").sort((a, b) => a.layer - b.layer);
+    expect(day1.map((c) => c.body.math!.part)).toEqual([1, 2, 3, 4]);
+    expect(day1[1].parent_card_id).toBe(day1[0].id);
+    expect(day1.map((c) => [c.body.math!.why, c.body.math!.quick])).toEqual([[false, false], [false, false], [true, false], [false, true]]);
+    // The question's answer key is the number; its rung is the day's.
+    const q = (db.questions as QuestionRow[]).find((x) => x.card_id === day1[0].id)!;
+    expect(q.answer_key.accept).toEqual(["24"]);
+    expect(q.skill_id).toBe(skillIds.get("times-3-4"));
+    // A problem still failing the code check is held back, every part, with the reason.
+    const held = math.filter((c) => c.child_id === "c2" && c.day === "2026-10-20");
+    expect(held.every((c) => c.policy === "blocked" && c.policy_notes?.validation?.[0] === "part 4 uses no earlier part's answer")).toBe(true);
+    expect(report.children.find((c) => c.nickname === "Ash")!.math).toMatchObject({ written: 7, reasked: 0 });
+    // A writer that fails holds back that one problem, with why, and the day goes on.
+    const failed = math.filter((c) => c.child_id === "c1" && c.day === "2026-10-23");
+    expect(failed).toHaveLength(1);
+    expect(failed[0]).toMatchObject({ policy: "blocked", policy_notes: { validation: ["the writer failed: The reply hit maxTokens (16000) and was cut off."] } });
+  });
+});

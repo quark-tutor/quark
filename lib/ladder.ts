@@ -110,8 +110,11 @@ export function onRule(o: Operation, rule: Rule, tables: number[] = []): boolean
 }
 
 // The rungs an operation is on, in ladder order.
+// Equal groups added up ("6 + 6 + 6") are groups of, as the ladder says the rung is counted, as well as adding.
 export function rungsOf(o: Operation, l: Pick<Ladder, "rungs">, tables: number[] = []): string[] {
-  return l.rungs.filter((r) => r.rule.steps === undefined && onRule(o, r.rule, tables)).map((r) => r.key);
+  const groups: Operation | null =
+    o.op === "+" && o.operands.length >= 2 && o.operands.every((n) => n === o.operands[0]) ? { op: "x", operands: [o.operands.length, o.operands[0]], result: o.result } : null;
+  return l.rungs.filter((r) => r.rule.steps === undefined && (onRule(o, r.rule, tables) || (!!groups && onRule(groups, r.rule, tables)))).map((r) => r.key);
 }
 
 // A boy's rungs: those placed done or working, and a rung that starts alongside one he is working on.

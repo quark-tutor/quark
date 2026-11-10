@@ -7,6 +7,7 @@ import { credit } from "@/core/content/credit";
 import { readFloor, type PolicyNotes } from "@/core/curation/gate";
 import { backToReviewProblem, childSummary, daysBuilt, floorLine, liveProblems, longDay, plural, rulebookLine, statusWords, whenWords } from "@/core/curation/live";
 import { todayIn } from "@/core/curation/week";
+import type { MathCard } from "@/core/math/problem";
 import { readSafetyFloor } from "@/core/prompts";
 import { currentRulebookHash } from "@/lib/family-rulebook";
 import { requireGuardian } from "@/lib/guardian";
@@ -40,7 +41,7 @@ const SLOTS = ["look", "wonder", "listen", "then", "puzzle"] as const;
 const SLOT_NAMES: Record<string, string> = { look: "Look", wonder: "Wonder", listen: "Listen", then: "Then", puzzle: "Puzzle" };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-type Body = { title: string; text: string; image_alt: string; question: string; hints: string[]; handoff: string };
+type Body = { title: string; text: string; image_alt: string; question: string; hints: string[]; handoff: string; math?: MathCard };
 type Card = {
   id: string;
   child_id: string;
@@ -81,7 +82,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
 
   // Row-level security keeps all of this to the guardian's own family.
   const supabase = await createClient();
-  const [theme, kids, cards, rulebook, family, said, nowHash] = await Promise.all([
+  const [theme, kids, cards, rulebook, family, said, nowHash, skills] = await Promise.all([
     supabase.from("themes").select("id, title, week_start, status").eq("id", themeId).maybeSingle(),
     supabase.from("children").select("id, nickname").order("birth_month"),
     supabase
@@ -104,7 +105,10 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
       .returns<{ action: string; created_at: string; guardians: { display_name: string } | null }[]>(),
     // The hash of the guardians' answers now: a verdict counts only against it.
     currentRulebookHash(createAdminClient(), guardian.familyId),
+    // The math ladder's names, for a math problem's rung (docs/math-tile-slice.md). Any guardian may read skills.
+    supabase.from("skills").select("key, name").not("key", "is", null),
   ]);
+  const rungName = new Map((skills.data ?? []).map((s) => [s.key as string, s.name as string]));
   for (const r of [theme, kids, cards, rulebook, family, said]) if (r.error) throw new Error(r.error.message);
   if (!theme.data) return <p>No such week.</p>;
 
@@ -159,6 +163,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
   const weekday = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long", month: "short", day: "numeric" });
   const all = cards.data ?? [];
   const currentHash = nowHash;
+  const mathWeek = (cards.data ?? []).some((c) => !!c.body.math); // the puzzle slot is the Math tile
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const floor = readFloor(readSafetyFloor());
   const childIds = (kids.data ?? []).map((k) => k.id);
@@ -228,7 +233,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
               </p>
               {s.missingFirst.map((m) => (
                 <p key={`${m.day}${m.slot}`} className={styles.flag}>
-                  No {SLOT_NAMES[m.slot] ?? m.slot} card on {dayName(m.day)} for {kid.nickname}.
+                  No {m.slot === "puzzle" && mathWeek ? "Math" : (SLOT_NAMES[m.slot] ?? m.slot)} card on {dayName(m.day)} for {kid.nickname}.
                 </p>
               ))}
               {s.deeperHeldBack ? (
@@ -258,6 +263,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
                   {SLOTS.map((slot) => {
                     const layers = mine.filter((c) => c.day === day && c.slot === slot).sort((a, b) => a.layer - b.layer);
                     if (layers.length === 0) return null;
+                    if (layers[0].body.math) return <MathProblem key={slot} parts={layers} rungName={rungName} currentHash={currentHash} />;
                     return (
                       <article key={slot} className={styles.card}>
                         <div className={styles.cardHead}>
@@ -339,6 +345,70 @@ function Layer({ card, media, topicHasMedia, currentHash }: { card: Card; media?
       {gate?.reader?.length ? <p className={styles.meta}>A teacher&rsquo;s eye: {gate.reader.join(" ")}</p> : null}
       {gate && gate.rulebook !== currentHash ? <p className={styles.meta}>Checked against an older rulebook.</p> : null}
     </details>
+  );
+}
+
+// A day's math problem for one child (docs/math-tile-slice.md, stop 3): the rung or everyday area it is on, the
+// setting, the worked example when the rung is new to him, and every part whole: its question and answer with the
+// sum the program worked out, the two other wordings, the steps with their answers, the tie and the working, so a
+// parent can read all the tutor may say before the tap. A part held back says why.
+function MathProblem({ parts, rungName, currentHash }: { parts: Card[]; rungName: Map<string, string>; currentHash: string | null }) {
+  const first = parts[0].body;
+  const m = first.math!;
+  return (
+    <article className={styles.card}>
+      <div className={styles.cardHead}>
+        <strong>Math</strong>
+        <span className={styles.meta}>
+          {m.everyday ? "everyday: " : ""}
+          {rungName.get(m.teaches) ?? m.teaches}
+          {m.example ? ", new to him: a worked example first" : ""}
+        </span>
+      </div>
+      <p>
+        <strong>{first.title}.</strong> {first.text}
+      </p>
+      {m.graph.kind === "graph" ? <p className={styles.meta}>A bar graph, drawn: {m.graph.labels.map((l, i) => `${l} ${m.graph.numbers[i]}`).join(", ")}.</p> : null}
+      {m.example ? (
+        <p className={styles.meta}>
+          Worked example ({m.example.picture.kind === "none" ? "no picture" : `a drawn ${m.example.picture.kind} picture`}): {m.example.text} {m.example.working.join(" ")}
+        </p>
+      ) : null}
+      {parts.map((c) => {
+        const p = c.body.math!;
+        const gate = c.policy_notes?.gate;
+        return (
+          <details key={c.id} className={own.layer} open={c.layer === 1}>
+            <summary>
+              {p.part}. {c.body.question} <strong>{p.answer} {p.unit}</strong> <span className={styles.meta}>({p.expression})</span>
+              {p.why ? <span className={styles.meta}>, then &ldquo;How do you know?&rdquo;</span> : null}
+              {p.quick ? <span className={styles.meta}>, the quick one</span> : null}
+              {c.policy === "blocked" ? <span className={styles.flag}> held back</span> : c.policy === "passed" ? <span className={styles.meta}> passed</span> : <span className={styles.meta}> not checked yet</span>}
+            </summary>
+            <p className={styles.meta}>Another way: {p.wordings.join(" / ")}</p>
+            <ol className={own.hints}>
+              {p.steps.map((s, i) => (
+                <li key={i}>
+                  {s.question} <strong>{s.answer}</strong>
+                </li>
+              ))}
+            </ol>
+            <p className={styles.meta}>Think of it like this: {p.tie}</p>
+            <p className={styles.meta}>After a right answer: {p.working.join(" ")}</p>
+            {c.policy_notes?.validation?.length ? <p className={styles.flag}>Held back by the code check: {c.policy_notes.validation.join("; ")}</p> : null}
+            {gate && c.policy === "blocked" ? (
+              <p className={styles.flag}>
+                {gate.by === "code" ? "Held back by your rulebook, before any checker read it: " : "Held back by the checker: "}
+                {gate.reasons.map((r) => r.note).join(" ")}
+              </p>
+            ) : null}
+            {gate?.reader?.length ? <p className={styles.meta}>A teacher&rsquo;s eye: {gate.reader.join(" ")}</p> : null}
+            {gate && gate.rulebook !== currentHash ? <p className={styles.meta}>Checked against an older rulebook.</p> : null}
+          </details>
+        );
+      })}
+      <p className={styles.meta}>Then: {first.handoff}</p>
+    </article>
   );
 }
 

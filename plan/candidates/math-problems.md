@@ -4,6 +4,12 @@ For Brandon and June to read at stop 1 of `docs/math-tile-slice.md` (9 November 
 boy at his working rungs on the ladder (the brief's table), each whole. On Sundays the model writes one like these
 for each boy for each day; the program then works out every number and holds back any problem that does not check.
 
+**At go (Brandon, 9 Nov 2026):** every problem's parts build toward one thing worth finding out, each part needed for
+the last, "like problems 1, 5, 6 and 12. Not four separate sums in one setting, like 2, 3 and 8." So problems 2, 3
+and 8 below are rewritten to that rule, and problem 1's part 4 now uses part 3's answer; the younger boy's quick one at
+the end still stands alone. The rule is in `core/prompts/math.md`, and `checkMath()` holds what code can: no part
+before the last stands alone.
+
 How to read a part:
 
 - The question, then **the answer** (the sum the program works out) and the rung it is on.
@@ -26,7 +32,7 @@ he is wrong.
 
 ### 1. The shave ice truck
 
-*Add up to 1,000. Not new to him: no worked example.*
+*Add up to 1,000. Not new to him: no worked example. Part 4 rewritten at go (9 Nov 2026), so it uses part 3.*
 
 A shave ice truck parks at the beach park every weekend. The people who run it keep count of the cups they sell.
 
@@ -54,87 +60,81 @@ A shave ice truck parks at the beach park every weekend. The people who run it k
    - Think of it like this: It's like counting the cars in the beach park lot one row at a time, then adding the
      rows.
    - After a right answer: 370 + 384 = 754. / They sold 754 cups over the weekend.
-4. The cups come in stacks of 100. The truck started the weekend with 8 stacks. *How many cups was that?*
-   **800 cups** (8 × 100)
-   - Another way: 8 stacks, and each stack is 100 cups. How many cups?
-   - Another way: How many is 8 hundreds?
-   - One step at a time: How many cups are in 2 stacks? (200) · How many in 4 stacks? (400) · And in 8 stacks?
-     (800)
-   - Think of it like this: It's like counting by hundreds: 100, 200, 300, and on.
-   - After a right answer: 8 × 100 = 800. / The truck started with 800 cups.
+4. Next weekend they want to sell 100 more cups than this weekend. *How many cups is that?* **854 cups** (754 + 100)
+   - Another way: This weekend was 754 cups. Next weekend is 100 cups more. How many cups?
+   - Another way: What is 754 and 100 more?
+   - One step at a time: How many hundreds are in 754? (7) · 7 hundreds and 1 more hundred make how many hundreds? (8) · So
+     754 and 100 more is how many? (854)
+   - Think of it like this: It's like jumping ahead one hundred on a number line.
+   - After a right answer: 754 + 100 = 854. / Next weekend they hope to sell 854 cups.
 
 For a person: "Ask Mom or Dad to add up the weekend with you, one step at a time."
 
-### 2. Packing the cooler
+### 2. Oranges after the relay
 
-*Groups of. Not new to him.*
+*Groups of. Not new to him. Rewritten at go (9 Nov 2026): each part needed for the last.*
 
-The soccer team is going to the beach after its last game. The coach packs the cooler.
+The soccer team goes to the beach after its last game. The coach brings oranges to share after the relay race.
 
-1. Musubi come 4 to a box, and the coach packs 3 boxes. *How many musubi?* **12 musubi** (3 × 4)
-   - Another way: There are 3 boxes. Each box has 4 musubi. How many musubi in all?
+1. The team runs the relay in 3 groups, with 4 kids in each group. *How many kids are running?* **12 kids** (3 × 4)
+   - Another way: There are 3 groups and 4 kids in each group. How many kids?
    - Another way: How many is 3 groups of 4?
-   - One step at a time: How many musubi are in 1 box? (4) · How many in 2 boxes? (8) · And in 3 boxes? (12)
-   - Think of it like this: It's like counting chair legs: every chair has 4.
-   - After a right answer: 4 + 4 + 4 = 12, so 3 × 4 = 12. / The coach packed 12 musubi.
-2. Water comes in packs of 6 bottles. The coach brings 3 packs. *How many bottles?* **18 bottles** (3 × 6)
-   - Another way: 3 packs, 6 bottles in each pack. How many bottles altogether?
-   - Another way: How many is 3 groups of 6?
-   - One step at a time: How many bottles in 2 packs? (12) · Add one more pack of 6: how many now? (18)
-   - Think of it like this: It's like counting on by 6s: 6, then 6 more, then 6 more.
-   - After a right answer: 6 + 6 + 6 = 18, so 3 × 6 = 18. / The coach brought 18 bottles.
-3. At the beach the team runs a relay in 4 groups of 5. *How many kids are running?* **20 kids** (4 × 5)
-   - Another way: There are 4 relay groups. Each group has 5 kids. How many kids?
-   - Another way: How many is 4 groups of 5?
-   - One step at a time: How many kids are in 2 groups? (10) · 4 groups is 2 groups and 2 more: how many kids?
-     (20)
-   - Think of it like this: It's like counting fingers: 5 on every hand.
-   - After a right answer: 5 + 5 + 5 + 5 = 20, so 4 × 5 = 20. / 20 kids ran the relay.
-4. After the relay, each kid gets 2 orange slices. *How many slices for one group of 5?* **10 slices** (5 × 2)
-   - Another way: 5 kids, 2 slices each. How many slices?
-   - Another way: How many is 5 groups of 2?
-   - One step at a time: How many slices for 2 kids? (4) · For 4 kids? (8) · And one more kid? (10)
-   - Think of it like this: It's like counting eyes: 2 for every person.
-   - After a right answer: 2 + 2 + 2 + 2 + 2 = 10, so 5 × 2 = 10. / One group needs 10 slices.
+   - One step at a time: How many kids are in 1 group? (4) · In 2 groups? (8) · In 3 groups? (12)
+   - Think of it like this: It's like counting chair legs: 4 on every chair.
+   - After a right answer: 4 + 4 + 4 = 12, so 3 × 4 = 12. / 12 kids are running.
+2. After the relay, every kid gets 2 orange slices. *How many slices do all the kids need?* **24 slices** (12 × 2)
+   - Another way: 12 kids, 2 slices each. How many slices?
+   - Another way: How many is 12 twos?
+   - One step at a time: How many slices for 10 kids? (20) · How many for the other 2 kids? (4) · Together? (24)
+   - Think of it like this: It's like counting slippers by the door: 2 for every kid.
+   - After a right answer: 12 × 2 = 24. / The kids need 24 slices.
+3. The coach cuts 6 oranges, and each orange makes 6 slices. *How many slices is that?* **36 slices** (6 × 6)
+   - Another way: 6 oranges, 6 slices from each. How many slices?
+   - Another way: How many is 6 groups of 6?
+   - One step at a time: How many slices from 3 oranges? (18) · And from the other 3? (18) · Together? (36)
+   - Think of it like this: It's like counting the legs on 6 ants: 6 on every ant.
+   - After a right answer: 6 × 6 = 36. / The coach has 36 slices.
+4. *After every kid has 2 slices, how many slices are left for the grown-ups?* **12 slices** (36 − 24)
+   - Another way: The coach has 36 slices and the kids eat 24. How many are left?
+   - Another way: What do you add to 24 to make 36?
+   - One step at a time: From 24 up to 30 is how many? (6) · From 30 up to 36 is how many? (6) · So from 24 to 36 is how many? (12)
+   - Think of it like this: It's like counting up from the price to the bill, the way change is given.
+   - After a right answer: 36 − 24 = 12. / 12 slices are left for the grown-ups.
 
-For a person: "Ask Mom or Dad to pack a pretend cooler with you and count it in groups."
+For a person: "Ask Mom or Dad to cut an orange with you and count the slices."
 
-### 3. Slippers at the door
+### 3. Party bags
 
-*Times tables, 2s, 5s and 10s. Not new to him.*
+*Times tables, 2s, 5s and 10s. Not new to him. Rewritten at go (9 Nov 2026): each part needed for the last.*
 
-It's a birthday party at a friend's house. Everyone leaves their slippers at the door, the way people do in Hawaiʻi.
+It's a birthday party at a friend's house, slippers piled at the door. The host is filling party bags with li hing mango, 5 pieces in every bag.
 
-1. 9 kids came, and each one left 2 slippers at the door. *How many slippers are by the door?* **18 slippers**
-   (9 × 2)
-   - Another way: There are 9 kids, and every kid has 2 slippers. How many slippers in the pile?
-   - Another way: How many is 9 groups of 2?
-   - One step at a time: How many slippers do 5 kids leave? (10) · How many do the other 4 kids leave? (8) · Put
-     them together: how many slippers? (18)
-   - Think of it like this: It's like counting eyes around the table: 2 for every kid.
-   - After a right answer: 9 × 2 = 18. / There are 18 slippers by the door.
-2. Each party bag has 5 pieces of li hing mango, and there are 9 bags. *How many pieces?* **45 pieces** (9 × 5)
-   - Another way: 9 bags, 5 pieces in each bag. How many pieces of li hing mango in all?
+1. There are 9 kids at the party, and each gets a bag. *How many pieces of li hing mango go in their bags?* **45 pieces** (9 × 5)
+   - Another way: 9 bags, 5 pieces in each bag. How many pieces?
    - Another way: How many is 9 fives?
-   - One step at a time: How many pieces are in 2 bags? (10) · How many in 8 bags? (40) · And one more bag? (45)
+   - One step at a time: How many pieces in 2 bags? (10) · How many in 8 bags? (40) · And one more bag? (45)
    - Think of it like this: It's like counting nickels: each one is 5 cents.
-   - After a right answer: 9 × 5 = 45. / The bags hold 45 pieces of li hing mango.
-3. There are 6 tables, with 10 cups on each table. *How many cups?* **60 cups** (6 × 10)
-   - Another way: 6 tables, 10 cups on every table. How many cups?
-   - Another way: How many is 6 tens?
-   - One step at a time: How many cups on 2 tables? (20) · On 3 tables? (30) · 6 tables is 3 tables and 3 more:
-     how many cups? (60)
-   - Think of it like this: It's like counting by tens on your fingers: 10, 20, 30, and on.
-   - After a right answer: 6 × 10 = 60. / There are 60 cups on the tables.
-4. 7 kids each blow up 2 balloons. *How many balloons?* **14 balloons** (7 × 2)
-   - Another way: There are 7 kids and each blows up 2 balloons. How many balloons?
-   - Another way: How many is 7 twos?
-   - One step at a time: How many balloons do 5 kids blow up? (10) · How many do the other 2 kids blow up? (4) ·
-     Together? (14)
-   - Think of it like this: It's like a pair of slippers: every kid comes with 2.
-   - After a right answer: 7 × 2 = 14. / The kids blew up 14 balloons.
+   - After a right answer: 9 × 5 = 45. / The kids' bags hold 45 pieces.
+2. The host makes 3 more bags for little brothers and sisters. *How many pieces go in those?* **15 pieces** (3 × 5)
+   - Another way: 3 more bags, 5 pieces in each. How many pieces?
+   - Another way: How many is 3 fives?
+   - One step at a time: How many pieces in 1 bag? (5) · In 2 bags? (10) · In 3 bags? (15)
+   - Think of it like this: It's like counting the fingers on 3 hands.
+   - After a right answer: 3 × 5 = 15. / The extra bags hold 15 pieces.
+3. *How many pieces of li hing mango are in all the bags?* **60 pieces** (45 + 15)
+   - Another way: 45 pieces in the kids' bags and 15 in the extra bags. How many in all?
+   - Another way: What do 45 and 15 make?
+   - One step at a time: 45 and 5 more make how many? (50) · 50 and the other 10? (60)
+   - Think of it like this: It's like filling a jar to the top: first to the next ten, then the rest.
+   - After a right answer: 45 + 15 = 60. / The bags hold 60 pieces.
+4. The host opened jars with 70 pieces in all. *How many pieces are left after filling the bags?* **10 pieces** (70 − 60)
+   - Another way: There were 70 pieces and 60 went in the bags. How many are left?
+   - Another way: What do you add to 60 to make 70?
+   - One step at a time: How many tens are in 70? (7) · How many tens are in 60? (6) · So how many pieces are left? (10)
+   - Think of it like this: It's like the last few crackers left in the box after everyone takes theirs.
+   - After a right answer: 70 − 60 = 10. / 10 pieces are left.
 
-For a person: "Ask Mom or Dad to count the slippers at your own door by 2s with you."
+For a person: "Ask Mom or Dad to count out a snack with you in groups of 5."
 
 ### 4. The mango tree
 
@@ -305,34 +305,30 @@ Every plate lunch from the wagon comes the same way: two scoops rice and one sco
 
 For a person: "Ask Mom or Dad to order a plate lunch with you and count the scoops."
 
-### 8. The ʻukulele class
+### 8. The ʻukulele concert
 
-*Times tables, 3s and 4s. Not new to him.*
+*Times tables, 3s and 4s. Not new to him. Rewritten at go (9 Nov 2026): parts 1 and 2 needed for part 3.*
 
-The ʻukulele class is getting ready for its winter concert. An ʻukulele has four strings.
+The ʻukulele class is getting ready for its winter concert, and the families are coming to listen.
 
-1. 8 ʻukulele need new strings. *How many strings is that?* **32 strings** (8 × 4)
-   - Another way: Every ʻukulele has 4 strings. How many strings on 8 ʻukulele?
-   - Another way: How many is 8 fours?
-   - One step at a time: How many strings on 2 ʻukulele? (8) · On 4? (16) · And on 8? (32)
-   - Think of it like this: It's like the 4 legs of a table, counted for 8 tables.
-   - After a right answer: 8 × 4 = 32. / The class needs 32 strings.
-2. At the concert each player plays 3 songs on their own, and 9 players play. *How many songs are played?*
-   **27 songs** (9 × 3)
-   - Another way: 9 players each play 3 songs alone. How many songs in all?
-   - Another way: How many is 9 threes?
-   - One step at a time: How many songs do 3 players play? (9) · How many do 6 players play? (18) · And 9 players?
-     (27)
-   - Think of it like this: It's like the 3 wheels on each of 9 tricycles.
-   - After a right answer: 9 × 3 = 27. / 27 songs are played.
-3. The chairs are set out in 9 rows, with 4 chairs in every row. *How many chairs?* **36 chairs** (9 × 4), then
-   "How do you know?"
-   - Another way: 9 rows, 4 chairs in each row. How many chairs?
-   - Another way: How many is 9 fours?
-   - One step at a time: How many chairs would 10 rows have? (40) · Take away one row of 4: how many chairs now?
-     (36)
-   - Think of it like this: It's like the 4 tires on a car, counted for 9 cars.
-   - After a right answer: 9 × 4 = 36. / There are 36 chairs.
+1. The class sets out 7 rows of chairs, with as many chairs in each row as an ʻukulele has strings. *How many chairs is that?* **28 chairs** (7 × 4)
+   - Another way: An ʻukulele has 4 strings, so each row has 4 chairs. How many chairs in 7 rows?
+   - Another way: How many is 7 fours?
+   - One step at a time: How many strings does an ʻukulele have? (4) · How many chairs in 5 rows? (20) · And in 7 rows? (28)
+   - Think of it like this: It's like counting the legs on 7 dogs.
+   - After a right answer: 7 × 4 = 28. / The class sets out 28 chairs.
+2. Then 3 more rows go in at the back for the grandparents, with 3 chairs in each. *How many chairs is that?* **9 chairs** (3 × 3)
+   - Another way: 3 rows at the back, 3 chairs in each row. How many chairs?
+   - Another way: How many is 3 threes?
+   - One step at a time: How many chairs in 1 back row? (3) · In 2 back rows? (6) · In 3? (9)
+   - Think of it like this: It's like counting the corners on 3 triangles.
+   - After a right answer: 3 × 3 = 9. / The back rows have 9 chairs.
+3. *How many chairs are set out in all?* **37 chairs** (28 + 9), then "How do you know?"
+   - Another way: 28 chairs in the front rows and 9 in the back. How many in all?
+   - Another way: What do 28 and 9 make?
+   - One step at a time: 28 and 2 more make how many? (30) · 30 and the other 7? (37)
+   - Think of it like this: It's like adding the kids who come late to the line at recess.
+   - After a right answer: 28 + 9 = 37. / There are 37 chairs.
 4. Quick one: 6 friends each bring 3 picks. *How many picks?* **18 picks** (6 × 3)
    - Another way: 6 friends, 3 picks each. How many picks?
    - Another way: How many is 6 threes?
@@ -340,7 +336,7 @@ The ʻukulele class is getting ready for its winter concert. An ʻukulele has fo
    - Think of it like this: It's like counting the corners of triangles: 3 on every one.
    - After a right answer: 6 × 3 = 18. / The friends bring 18 picks.
 
-For a person: "Ask Mom or Dad to count strings or chairs with you the next time you see a band play."
+For a person: "Ask Mom or Dad to count the chairs with you the next time you are somewhere with rows of them."
 
 ### 9. Shells at the beach
 

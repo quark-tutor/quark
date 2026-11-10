@@ -98,3 +98,13 @@ describe("checkMath", () => {
     expect(older(edit(MARKET, (q) => (q.title = "For smart kids")))).toContain('uses a brilliance word ("smart"); use effort words');
   });
 });
+
+describe("core/prompts/math.md", () => {
+  it("shows the model the same two problems the tests hold, word for word", () => {
+    const md = readFileSync(join(__dirname, "..", "prompts", "math.md"), "utf8").replace(/\r\n/g, "\n");
+    const blocks = (md.match(/```json\n[\s\S]*?\n```/g) ?? []).map((b) => JSON.parse(b.slice(8, -4)));
+    expect(blocks).toHaveLength(2);
+    expect(blocks[0]).toEqual({ ...MARKET });
+    expect(blocks[1]).toEqual({ ...CONES, example: { text: "", working: [], expression: "", picture: { kind: "none", numbers: [], labels: [] } } });
+  });
+});

@@ -167,6 +167,11 @@ if (result.gate) {
   console.error(`\nThe gate stopped: ${result.gateError}. Cards it hadn't reached are left as they were; run npm run gate -- --week ${week}.`);
 }
 printUsage();
+if (result.mathUsage.length) {
+  const math = runRow("week:build", result.mathUsage, { ok: true, startedAt: new Date(started) });
+  const parts = report.children.reduce((n, c) => n + (c.math?.written ?? 0) * 4, 0);
+  console.log(`  Of which the math writer: ${math.models.map((m) => `${m.calls} calls, $${(m.cost ?? 0).toFixed(2)}`).join("; ")} for ${parts} math cards (the gate's share for them is in its line above).`);
+}
 if (result.recordError) console.error(result.recordError);
 console.log(`\nPreview it at /parent/week/${report.themeId}.`);
 if (!gateOk) process.exit(1);

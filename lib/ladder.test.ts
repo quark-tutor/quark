@@ -42,6 +42,8 @@ describe("which rungs a sum is on", () => {
     expect(rungsOf(op("x", [3, 4], 12), ladder)).toEqual(["groups-of", "times-3-4", "bigger-times"]);
     expect(rungsOf(op("x", [8, 100], 800), ladder)).toEqual(["place-value", "bigger-times"]);
     expect(rungsOf(op("x", [9, 2], 18), ladder)).toContain("times-2-5-10");
+    // Equal groups added up are groups of too, as the rung is counted (found on test, 9 Nov 2026: "6 + 6 + 6").
+    expect(rungsOf(op("+", [6, 6, 6], 18), ladder)).toEqual(["add-20", "add-100", "add-1000", "groups-of", "times-3-4", "times-6-9", "bigger-times"]);
   });
 
   it("puts a share on the sharing rung only on the facts of a times table the boy has", () => {
