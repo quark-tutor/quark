@@ -19,6 +19,7 @@ import {
   validatePlan,
   type PlanRow,
 } from "../lib/plan.ts";
+import { LADDER_FILE } from "../lib/ladder.ts";
 import { announceTarget } from "./target.ts";
 
 announceTarget();
@@ -31,8 +32,9 @@ const db = createClient(url, key, { auth: { persistSession: false, autoRefreshTo
 type Unit = { file: string; title: string; prefix: string; rows: PlanRow[]; count: string; sequence?: number };
 
 const dir = join(import.meta.dirname, "..", "plan");
+// The math ladder is not the plan: npm run ladder:import writes it, into skills.
 const units: Unit[] = readdirSync(dir)
-  .filter((f) => f.endsWith(".yaml"))
+  .filter((f) => f.endsWith(".yaml") && f !== LADDER_FILE)
   .map((f) => {
     const doc = parsePlan(readFileSync(join(dir, f), "utf8"));
     if (isLibrary(doc)) {

@@ -16,9 +16,10 @@ import {
   type Library,
   type Plan,
 } from "./plan";
+import { LADDER_FILE } from "./ladder";
 
 const dir = join(__dirname, "..", "plan");
-const files = readdirSync(dir).filter((f) => f.endsWith(".yaml"));
+const files = readdirSync(dir).filter((f) => f.endsWith(".yaml") && f !== LADDER_FILE);
 
 describe.each(files)("plan/%s", (file) => {
   const doc = parsePlan(readFileSync(join(dir, file), "utf8"));

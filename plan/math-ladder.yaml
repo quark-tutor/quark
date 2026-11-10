@@ -1,0 +1,123 @@
+# The math ladder: what the boys learn in the Math tile, and in what order (docs/math-tile-slice.md, The ladder).
+# It is the parents', read and corrected by Brandon on 9 November 2026; no published curriculum, no grade codes, no
+# named method. A boy never sees it, a rung's name, a grade or a level. Where each boy stands on it is kept in the
+# database only (mastery.place: done or working), never here: this repository is public.
+#
+# Each rung: a key that is never reused, its name, one line of what a problem on it asks, one example, and its rule:
+# which sums count as being on the rung, so the program can check that a problem stays on a boy's rungs.
+#   op      +, -, +- (either), x, / or % (what is left over)
+#   max     the largest number in the sum, its answer included
+#   by      for x: one of the two numbers is one of these (a times table)
+#   each    for x: the other number is at most this; with no "by", both are
+#   share   for /: sharing out, on a fact of a times table the boy has
+#   steps   two operations of their own (a two-step problem)
+# A rung with "alongside" starts beside those rungs: a boy working on any of them meets it too, on their facts
+# (decided 9 Nov 2026: division as sharing starts alongside the first times tables).
+#
+# Everyday math runs alongside, about two days in seven ("assume no experience", Brandon, 9 Nov 2026). An area has
+# no rule of its own: its sums stay on the boy's rungs. "needs" holds an area back until he has met that rung.
+#
+# npm run ladder:import writes it into skills (ladder:import:live for live, at a stop by Brandon's hand).
+
+ladder: math
+title: The math ladder
+
+rungs:
+  - key: add-20
+    name: Add and subtract up to 20, quickly
+    asks: a quick sum inside a small story, the answer at a glance
+    example: 8 shells and 7 more is 15 shells
+    rule: { op: "+-", max: 20 }
+  - key: add-100
+    name: Add and subtract up to 100
+    asks: two numbers up to 100 put together or taken apart, often by tens first
+    example: 45 minutes and 45 minutes is 90 minutes
+    rule: { op: "+-", max: 100 }
+  - key: place-value
+    name: Hundreds, tens and ones
+    asks: how many hundreds, tens or ones a number is made of, or so many hundreds counted up
+    example: 8 stacks of 100 cups is 800 cups
+    rule: { op: x, by: [10, 100], max: 1000 }
+  - key: add-1000
+    name: Add up to 1,000
+    asks: two numbers up to 1,000 put together, hundreds, tens and ones in turn
+    example: 236 cups and 148 cups is 384 cups
+    rule: { op: "+", max: 1000 }
+  - key: subtract-1000
+    name: Subtract up to 1,000
+    asks: how many are left, or how many more, with numbers up to 1,000
+    example: 800 cups less 754 sold leaves 46
+    rule: { op: "-", max: 1000 }
+  - key: groups-of
+    name: Multiplying as "groups of"
+    asks: so many groups with the same number in each, counted by adding the groups
+    example: 3 boxes of 4 musubi is 4 + 4 + 4 = 12 musubi
+    rule: { op: x, each: 6 }
+  - key: times-2-5-10
+    name: "Times tables: 2s, 5s, 10s"
+    asks: a times fact on the 2s, 5s or 10s inside a story
+    example: 9 kids with 2 slippers each is 18 slippers
+    rule: { op: x, by: [2, 5, 10], each: 12 }
+  - key: times-3-4
+    name: "Times tables: 3s and 4s"
+    asks: a times fact on the 3s or 4s inside a story
+    example: 8 ʻukulele with 4 strings each is 32 strings
+    rule: { op: x, by: [3, 4], each: 12 }
+  - key: times-6-9
+    name: "Times tables: 6s to 9s"
+    asks: a times fact on the 6s, 7s, 8s or 9s inside a story
+    example: 4 canoes with 6 paddlers each is 24 paddlers
+    rule: { op: x, by: [6, 7, 8, 9], each: 12 }
+  - key: sharing
+    name: Division as sharing
+    asks: so many things shared fairly, one each in turn, on the facts of the times tables he is working on
+    example: 24 shells shared by 3 kids is 8 shells each
+    rule: { op: /, share: true }
+    alongside: [times-2-5-10, times-3-4, times-6-9]
+  - key: division
+    name: Division as the times tables backwards
+    asks: how many groups of a size make a number, read from a times fact
+    example: how many 4s make 28? 7, because 7 × 4 = 28
+    rule: { op: /, each: 10 }
+  - key: leftovers
+    name: Leftovers (remainders)
+    asks: sharing that does not come out even, and what is left over
+    example: 14 mangoes in bags of 4 is 3 bags and 2 left over
+    rule: { op: "%", each: 10 }
+  - key: two-step
+    name: Two-step problems
+    asks: two different sums, one after the other, the first one's answer feeding the second
+    example: 3 bunches at $2 and a $5 pineapple is $6 and $5, so $11
+    rule: { steps: 2 }
+  - key: bigger-times
+    name: Multiply bigger numbers (3 × 40, then 3 × 42)
+    asks: a small number times a bigger one, tens first, then ones
+    example: 3 rows of 42 chairs is 3 × 40 and 3 × 2, so 126 chairs
+    rule: { op: x, by: [2, 3, 4, 5, 6, 7, 8, 9], each: 100 }
+
+everyday:
+  - key: time
+    name: Telling time, and how long something takes
+    asks: how many minutes or hours something takes, how long until, an hour as 60 minutes
+    example: a 20-minute lunch and a 15-minute recess are 35 minutes, and 25 of the hour are left
+  - key: money
+    name: Money
+    asks: what things cost, what they cost together, and the change from a bill, in whole dollars
+    example: two shave ice at $4 are $8, and a $10 bill gives $2 back
+  - key: measuring
+    name: Measuring length, weight and how much a container holds
+    asks: how long, how heavy or how much, compared or put together, in feet and inches, pounds, cups
+    example: a 7-inch pencil and a 3-inch crayon end to end are 10 inches
+  - key: bar-graph
+    name: Reading a bar graph
+    asks: what a bar says, how many more, how many in all, from a graph drawn of real things
+    example: strawberry 6 and lilikoʻi 4, so strawberry sold 2 more
+  - key: fractions
+    name: Halves, quarters and thirds of real things
+    asks: half, a quarter or a third of a number of real things, shared out fairly
+    example: half of 8 musubi is 4 musubi
+    needs: sharing
+  - key: shapes
+    name: Shapes
+    asks: sides and corners of shapes on real things, counted and put together
+    example: 6 squares of cones, a cone on each corner, is 24 cones

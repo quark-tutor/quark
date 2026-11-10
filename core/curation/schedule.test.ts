@@ -88,7 +88,7 @@ describe("weekSchedule", () => {
     const { parsePlan, MATH_FROM_SEQUENCE } = await import("../../lib/plan");
     const dir = join(__dirname, "..", "..", "plan");
     const spans = readdirSync(dir)
-      .filter((f) => f.endsWith(".yaml") && f !== "short-lessons.yaml")
+      .filter((f) => f.endsWith(".yaml") && f !== "short-lessons.yaml" && f !== "math-ladder.yaml")
       .map((f) => parsePlan(readFileSync(join(dir, f), "utf8")))
       .map((p) => ({ stretch: p.stretch, sequence: p.sequence, topics: p.weeks.reduce((n, w) => n + w.topics.length, 0) }));
     const next = [...spans, { stretch: "next-theme", sequence: spans.length + 1, topics: 7 }];
