@@ -505,3 +505,89 @@ go to take all of these.
 **Size:** unchanged, about an hour of the job's 8. The clock stopped at 12:47, and the time since was the stop's.
 
 Reply go to take all of these.
+
+### Go (9 Nov, 14:34 HST)
+
+Brandon: "All four lines are in and passed. No to striking the math inbox row: keep it, the math proposal is being
+reworked in the chat. Go on to the records and stop 3."
+
+- **The math inbox row stays** at *not fully formed*. *Replaces* my recommendation to strike it. `CLAUDE.md` no
+  longer says it is deleted at this merge.
+- **The Saturday row is taken with go.** Brandon's reply did not name it; the stop said go takes all of these, and
+  this was the one question his reply left open.
+- **The plain refusal is taken with go.**
+
+## Stop 3 (9 Nov, 14:39 HST): the release
+
+### Where the job stands
+
+Every step of the brief is done.
+
+- **The plain refusal** (`db9f25a`). `week:build` catches a refusal from `prepareWeek()` and prints it as a stop,
+  then exits 1:
+
+  ```
+  Target: test (mnftudfnnfvxilnmwvvo.supabase.co)
+
+  Stopped: No theme for week 6: the plan's stretches reach week 5. Write plan/<theme>.yaml with sequence: 3 (one week: seven topics), then run npm run plan:import.
+  Nothing was spent.
+  ```
+
+  - That is `npm run week:build -- --week 6 --start 2026-11-30 --plan` on test, which has no sequence 3. It spent
+    and wrote nothing.
+  - A wiring test in `core/curation/wiring.test.ts` holds it.
+  - **Tests:** 442 pass, and the typecheck is clean.
+- **The records** (`8cf564d`):
+  - **docs/04, "The long-term plan":** a theme a week, the Saturday pick, how a week's stretch is found, and the
+    Hawaiʻi standard.
+  - **docs/04, the rest:** "How a week is mixed" says "the thread has ended" only after a stretch's last topic, and
+    that a week from week 5 needs 28 by its theme's slots. "How the Sunday build is built" lists the new refusals.
+  - **docs/08:**
+    - *When the thread runs out* (16 Oct) is closed.
+    - *A theme a week* has every decision of the job, quoting Brandon: the brief, go at stops 1 and 2, the Moon on
+      live, the math row kept, the Saturday row and the plain refusal.
+  - **The board:** "Saturday 21 Nov: week 6's theme and week 5's 28 short lessons" is at *next*, second, after
+    week 4's 32. It depends on *A theme a week*. This row is still at *building*; the release moves it to *live*.
+  - **`CLAUDE.md`, *Where we are*:** a bullet for this job, and the Next list.
+  - **The README status:** a sentence on the theme a week.
+- **The money:** $0.30 in all. $0.15 on test (`content:fetch`, 8 Nov) and $0.15 on live (`content:fetch:live`,
+  9 Nov), both on content flags. No week was built, and no card was written.
+- **On live:** the plan and the Moon's 11 items, by Brandon's hand. On Vercel: nothing yet.
+
+### The release: what it does
+
+`/wwc:release` closes this job, then moves `main` up to `phase-4-wonder-wall`.
+
+- **What the command does.** `main` (`3af36b8`) is an ancestor of the phase branch, so the release is a fast-forward,
+  and Vercel deploys `main` to production. It carries this job's commits and `92030b7`, the last release's own
+  records.
+- **What it touches: LIVE, the production site the boys use.**
+  - **The Sunday build's code:** `prepareWeek()` finds the week's stretch from every stretch's sequence. Nothing a
+    child sees changes; the wall, the voice and the judge are untouched.
+  - **No migration,** so the migrations workflow does not run.
+  - **Sunday 15 Nov:** if the release is before then, the new code builds week 4. The schedule test holds weeks 1
+    to 4 exactly as before: Egypt's last three topics on days 1 to 3, then five short lessons a day.
+- **How it is undone.** In Vercel, promote the previous production deployment (`3af36b8`) again, or revert the
+  commits on `main` and push. Nothing in the database depends on the code: the Moon's rows on live are read only by
+  the new code.
+- **What was checked on test:** 442 tests, the typecheck, week 5's plan (the Moon's seven days), week 6's refusal,
+  and stop 2's look.
+- **The deadline** is before Sunday 22 Nov's 6 am firing, which builds week 5. Without the release, the old code
+  takes Egypt as the only thread, so week 5 has no theme and needs 35 short lessons. With the 28 picked on 21 Nov,
+  the firing refuses and no week 5 is built.
+  - **My recommendation: release now.** That leaves Saturday 14 and Saturday 21 with the same code on the branch as
+    on Vercel, and a week of room if anything is wrong.
+
+### After the release (Brandon's hands, none needed now)
+
+- Saturday 14 Nov: the week 4 job, the top of Next.
+- Saturday 21 Nov: the first Saturday pick, `/wwc:job docs/saturday-pick-slice.md`.
+- Two branches can go:
+  - the local branch `worktree-theme-a-week`;
+  - this worktree, once the session ends.
+  The remote branch is already deleted.
+
+**Size:** a slice, 8 hours. About an hour and 10 minutes in all: 36 minutes to stop 1, 08:47 to 09:00, 10:48 to
+10:53, 12:43 to 12:47, and 14:34 to 14:39.
+
+At the last stop, type `/wwc:close` to close and hold, or `/wwc:release` to close and release.
