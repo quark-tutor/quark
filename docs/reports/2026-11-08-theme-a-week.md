@@ -465,3 +465,43 @@ and 12:43 to 12:47 today: about an hour in all.
 
 **At this stop:** run line 0, then M1, M2 and M3, in order, and say yes or no to striking the math inbox row. Reply
 go to take all of these.
+
+### Line 0, M1, M2 and M3, by Brandon's hand (9 Nov, read here at 14:34 HST): all four passed
+
+- **Line 0:** the main checkout fast-forwarded `92030b7..04a448b`. The two untracked briefs are deleted.
+- **M1, `plan:import:live`:** `Target: LIVE`; Ancient Egypt 56 rows (4 weeks), short lessons 168 rows (84 lessons),
+  the Moon 16 rows (1 week), 3 files. The library on live is unchanged, and the Moon is in live's plan.
+- **M2, `content:fetch:live`:** `Target: LIVE`; the checks cost **$0.15**.
+  - **Fetched:** 11 of 207 items, the Moon's 11, each approved with no flags.
+  - **Live's library now:** 206 approved, 0 pending, 0 to check by hand, 1 rejected.
+  - **The one rejected:** Egypt's old Musopen Handel. Its `rejected_at` was set earlier at live's `/parent/content`;
+    this run only reads it.
+- **M3, the plan on live:** `Target: LIVE`, then exactly the expected line: "Not enough short lessons for week 5:
+  the look card needs 5 and 0 are left; the wonder card needs 6 …; the listen card needs 6 …; the then card needs
+  5 …; the puzzle card needs 6 and 0 are left." So live reads week 5 as the Moon's. Nothing spent and nothing
+  written.
+- **Found at M3:** the refusal came out as a crash, with a Node stack trace under it, not a plain line.
+  - **The cause:** `scripts/week-build.mts` catches errors from the build, but not from `prepareWeek()`, which is
+    where both refusals come from, "Not enough short lessons" and this job's "No theme for week N".
+  - **Next:** a Saturday job meets this line by design, so it should read as a refusal. This is the same mechanism
+    as the brief's, so I fix it in this job: `Stopped:` and the message, "Nothing was spent.", and exit 1, as a build
+    failure already prints. A test holds it.
+
+### What I still need from you
+
+1. **The math inbox row** (above): strike it. **Recommended: yes.** On yes, I delete it with the records.
+2. **The Saturday row the brief names for the close:** "Saturday 21 Nov: week 6's theme and week 5's 28 short
+   lessons", in project *Week 2 builds itself*, at *next*, with `docs/saturday-pick-slice.md` in Where. The brief
+   adds it only on your yes.
+   - **Recommended: yes, second in Next, straight after week 4's 32.** Its date comes before the others.
+   - On yes, it goes in with the records.
+
+**On go:**
+1. The plain refusal, with its test. Then `npm test` and `npm run typecheck`.
+2. The records, as the brief's step 5 lists them: docs/04, docs/08, `CLAUDE.md` *Where we are*, the README status
+   and the board. This row stays at *building*; `/wwc:release` moves it to *live*.
+3. Push, then the last stop, stop 3, written here.
+
+**Size:** unchanged, about an hour of the job's 8. The clock stopped at 12:47, and the time since was the stop's.
+
+Reply go to take all of these.
