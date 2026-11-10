@@ -49,7 +49,7 @@ Every sum, in every part and step, stays on the rungs you are given: what he has
 
 When you are told today's rung or area is new to him, write **example**: one worked example, before his problem, on other numbers in another setting, so he sees how it goes before he tries. Its **text** says it through in two or three sentences ("Put one musubi on each plate, then another, then another, until they're gone. Each plate gets 3."); its **working** is one to three lines of the sum; its **expression** is its sum; its **picture** is drawn by the program from numbers you give:
 
-- `groups`: numbers `[how many groups, how many in each]`, labels `[what a group is, what is in it]`: for groups of, times tables, sharing, money.
+- `groups`: numbers `[how many groups, how many in each]`, labels `[the groups, what is in each]`, both plural ("kids", "mangoes"): for groups of, times tables, sharing, money.
 - `blocks`: numbers `[the numbers added]`: for adding with hundreds, tens and ones.
 - `clock`: numbers `[minutes shaded, up to 60]`: for how long something takes.
 - `graph`: numbers and labels, one per bar: for a bar graph, and for lengths side by side.

@@ -7,7 +7,15 @@ import styles from "./kid.module.css";
 //   clock:  the minutes of an hour, shaded              graph: a bar for each number, with its name
 // Plain SVG in the page's own colours; no picture moves or makes a sound (rule 4).
 
-const W = 640;
+// The caption's names, plural when there is more than one: the model may write "kid" for "5 kids" (found opening
+// test's Wednesday card, 9 Nov 2026).
+export function plural(word: string, n: number): string {
+  const w = word.trim();
+  if (n === 1 || !w || /s$/i.test(w)) return w;
+  if (/(x|z|ch|sh)$/i.test(w)) return `${w}es`;
+  if (/[^aeiou]y$/i.test(w)) return `${w.slice(0, -1)}ies`;
+  return `${w}s`;
+}
 
 export function MathPicture({ picture }: { picture: Picture }) {
   if (picture.kind === "groups") return <Groups n={picture.numbers[0]} each={picture.numbers[1]} labels={picture.labels} />;
@@ -35,7 +43,7 @@ function Groups({ n, each, labels }: { n: number; each: number; labels: string[]
       return <circle key={i} cx={cx + (c - (cols - 1) / 2) * step} cy={cy + (l - (lines - 1) / 2) * step} r={dot} className={styles.drawDot} />;
     });
   };
-  const label = `${n} ${labels[0] || "groups"}, ${each} ${labels[1] || ""} in each`.replace(/\s+/g, " ").trim();
+  const label = `${n} ${plural(labels[0] || "group", n)}, ${each} ${plural(labels[1] || "", each)} in each`.replace(/\s+/g, " ").trim();
   return (
     <svg className={styles.drawing} viewBox={`0 0 ${Math.max(width, 200)} ${height}`} role="img" aria-label={label}>
       {Array.from({ length: n }, (_, i) => {
