@@ -20,12 +20,15 @@
 //                                           the kid view can be asked with curl, as a paired iPad asks it
 //   npm run fixture -- code <n>             a six-digit pairing code for child n, as /parent makes one, to type at /kid/pair
 //   npm run fixture -- forget <device id>   forget that device, as "Forget this iPad" does
+//   npm run fixture -- devices              the paired devices: id, child n, when paired and last seen, forgotten or not
+//   npm run fixture -- clear <date>         delete every answer to that day's cards, so a look can start the day over
 //   npm run fixture -- judge [model]        the judge of a child's answer over slice 1's invented answers and the answers
 //                                           to a hint, the word rule beside it (scripts/judge-table.mts); reads no database
 //   npm run fixture -- today <date>         move that day's cards to today where the family lives and set their week
 //                                           live, for a look on June's iPad when test's week has no card today
 //   npm run fixture -- places               the Math tile's starting places on test (docs/math-tile-slice.md): child 1
 //                                           at the older boy's rungs, style short; child 2 at the younger's, style hidden
+//   npm run fixture -- live <week>          set the week live on test, as the Looks-good tap would, so the wall shows it
 //   npm run fixture -- math <week>          every math problem of the week, per day and child: its parts, answers,
 //                                           wordings, steps and tie, and why one was held back
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
@@ -161,7 +164,7 @@ if (command === "show") {
   const rows = must(
     await db
       .from("attempts")
-      .select("created_at, child_id, session_id, answer, correct, verdict, judged_by, reasoning, hints_used, seconds, mode, questions(cards(day, slot, layer))")
+      .select("created_at, child_id, session_id, answer, correct, verdict, judged_by, reasoning, hints_used, seconds, mode, move, label, questions(cards(day, slot, layer))")
       .eq("family_id", familyId)
       .order("created_at", { ascending: false })
       .limit(n),
@@ -178,13 +181,15 @@ if (command === "show") {
     hints_used: number;
     seconds: number | null;
     mode: string;
+    move: string | null; // a math part's move
+    label: string | null; // the label on his "How did you get that?"
     questions: { cards: { day: string; slot: string; layer: number } | null } | null;
   }[];
   for (const r of rows.reverse()) {
     const c = r.questions?.cards;
     const verdict = r.verdict ? `${r.verdict} (${r.judged_by})` : r.correct === null ? "open" : r.correct ? "right" : "not right";
     console.log(
-      `${r.created_at.slice(0, 19)}  ${who(r.child_id)}  ${c ? `${c.day} ${c.slot} layer ${c.layer}` : "?"}  ${verdict}  hints ${r.hints_used}  ${r.seconds ?? "-"}s  session ${r.session_id.slice(0, 8)}  "${r.answer}"${r.reasoning ? `  judge: ${r.reasoning}` : ""}`,
+      `${r.created_at.slice(0, 19)}  ${who(r.child_id)}  ${c ? `${c.day} ${c.slot} layer ${c.layer}` : "?"}  ${verdict}  hints ${r.hints_used}  ${r.seconds ?? "-"}s  session ${r.session_id.slice(0, 8)}  ${r.move ? `${r.move}  ` : ""}"${r.answer}"${r.label ? `  label: ${r.label}` : ""}${r.reasoning ? `  judge: ${r.reasoning}` : ""}`,
     );
   }
   const sessions = must(
@@ -472,6 +477,32 @@ if (command === "show") {
     });
     must(await db.from("mastery").insert(rows).select("child_id"), "mastery");
   }
+  console.log("Done.");
+} else if (command === "clear") {
+  // For a look on test (docs/math-tile-slice.md, stop 2): every attempt on the questions of that day's cards goes, for
+  // both children, so the wall shows the day fresh. Test only, as everything here; it writes an audit row.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(arg ?? "")) throw new Error("Say which day: npm run fixture -- clear 2026-11-11");
+  const cards = must(await db.from("cards").select("id").eq("family_id", familyId).eq("day", arg), "cards") as { id: string }[];
+  const questions = cards.length ? (must(await db.from("questions").select("id").in("card_id", cards.map((c) => c.id)), "questions") as { id: string }[]) : [];
+  const gone = questions.length ? (must(await db.from("attempts").delete().in("question_id", questions.map((q) => q.id)).select("id"), "attempts") as unknown[]) : [];
+  must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.clear", target: { day: arg, attempts: gone.length } }).select("id"), "audit_log");
+  console.log(`Deleted ${gone.length} answers to the cards of ${arg}.`);
+} else if (command === "devices") {
+  const kids = (must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[]).map((k) => k.id);
+  const rows = must(await db.from("devices").select("id, child_id, created_at, last_seen, revoked_at").eq("family_id", familyId).order("created_at"), "devices") as {
+    id: string;
+    child_id: string;
+    created_at: string;
+    last_seen: string | null;
+    revoked_at: string | null;
+  }[];
+  for (const d of rows) console.log(`${d.id}  child ${kids.indexOf(d.child_id) + 1}  paired ${d.created_at.slice(0, 16)}  seen ${d.last_seen?.slice(0, 16) ?? "never"}${d.revoked_at ? "  forgotten" : ""}`);
+} else if (command === "live") {
+  // For a look on June's iPad with the test view (docs/math-tile-slice.md, stop 2): the wall shows a live week only.
+  const t = await theme(Number(arg));
+  console.log(`About to set week ${t.plan_week} ("${t.title}", starting ${t.week_start}, status ${t.status}) live on test.`);
+  must(await db.from("themes").update({ status: "live" }).eq("family_id", familyId).eq("id", t.id).select("id"), "themes");
+  must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.live", target: { theme: t.id } }).select("id"), "audit_log");
   console.log("Done.");
 } else if (command === "math") {
   const t = await theme(Number(arg));

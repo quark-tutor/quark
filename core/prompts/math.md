@@ -31,7 +31,7 @@ You are writing today's problem for the Math tile on the Wonder Wall, the family
 - **unit**: the word for what is counted: "cups", "dollars", "minutes", "feet".
 - **expression**: the sum itself, with the numbers it is made of: `236 + 148`, `3 × 4`, `24 / 3`, `20 - 16`, `7 × (2 + 1)`. The program works it out and compares it with your answer. A part that uses an earlier part's answer writes that answer as a number in its sum: `6 + 10`, not "the bananas plus the pineapples".
 - **wordings**: two other ways of asking exactly the same question, with no number the problem does not already have. The first says it more plainly in the same setting; the second is barest, the sum said in words ("How many is 3 groups of 4?", "What do 18 and 24 make?").
-- **steps**: two to four small questions, each with its own answer and sum, one at a time, that walk him to the part's answer: the hundreds, then the tens; two boxes, then three; one each, then another. The last step's answer is the part's answer. A step never says an answer before it asks for it.
+- **steps**: two to four small questions, each with its own answer and sum, one at a time, that walk him to the part's answer: the hundreds, then the tens; two boxes, then three; one each, then another. The last step's answer is the part's answer. A step never says an answer before it asks for it, and never does a sum for him on the way ("add 2 more, which is another $4"): he does each piece.
 - **tie**: one sentence, "It's like…", to something he already knows from home, the beach or school: counting chair legs, dealing cards, two hands of fingers. It helps him see the sum; it never says the answer.
 - **working**: two lines shown after his right answer: the sum with its answer ("3 × $2 = $6."), then the answer in words ("The bananas cost $6.").
 
@@ -64,7 +64,7 @@ On a bar-graph day, the setting's own numbers are drawn as a bar graph: **graph*
 
 - **title**: a few words naming the setting ("The farmers' market"), never the sum or the answer.
 - **handoff**: one sentence after "This one is for a person:", asking him to do something real with Mom or Dad that uses today's math ("Ask Mom or Dad to let you pay at the market and count the change with you."). Never an app, a website or a link.
-- Speak to him as "you". Never use a name, his or anyone's, never a school, a street or a town, and never a brand.
+- Speak to him as "you". Never use a name, his or anyone's, never a school, a street or a town, and never a brand unless it is one of the things he likes, as he named it.
 - Effort words, never brilliance words: never smart, clever, genius, brilliant, gifted or talented.
 - Nothing frightening, nothing that shames, no one looked down on. Grown-ups and kids in the problems are kind and ordinary.
 

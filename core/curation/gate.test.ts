@@ -8,6 +8,7 @@ import {
   CAUTION_NOTE,
   codeCheck,
   gatePrompt,
+  MODEL_RULES,
   quotesNote,
   readFloor,
   readVerdict,
@@ -420,5 +421,22 @@ describe("running the gate", () => {
     expect(f.prompts[0]).toContain("- Subject 24, Subject name 24. The family's setting: Answer it: answer it from what the family believes.");
     expect(f.prompts[0]).toContain("The child is in grades 4-5.");
     expect(f.prompts[0]).toContain("The parents asked for care about: Big ocean waves");
+  });
+});
+
+// The Math tile (docs/math-tile-slice.md, What is built 5): the gate reads every word of a math part, the Hawaiʻi
+// question included.
+describe("the gate on a math card", () => {
+  it("is given every line the tutor may say on the part, and can block a setting no child here has seen", async () => {
+    const { mathCards } = await import("./math");
+    const { MARKET } = await import("../math/samples");
+    const [first] = mathCards(MARKET, { day: 3, teaches: "money", everyday: true, isNew: true, style: "short" });
+    const p = gatePrompt({ rulebook: "The rulebook.", lines: [], perspective: null, child: { age: 9, carefulAbout: null }, card: first });
+    expect(p).toContain("A math card, as the child would see it, with every line the tutor may say about it:");
+    for (const line of [MARKET.setting, MARKET.parts[0].question, ...MARKET.parts[0].wordings, ...MARKET.parts[0].steps.map((s) => s.question), MARKET.parts[0].tie, MARKET.example!.text]) {
+      expect(p).toContain(line);
+    }
+    expect(MODEL_RULES).toContain("not_here");
+    expect(readFileSync("core/prompts/gate.md", "utf8")).toMatch(/\*\*not_here\*\*: on a math card only/);
   });
 });
