@@ -63,10 +63,18 @@ describe("weekSchedule", () => {
     expect(SLOT_ORDER.map((s) => short.filter((id) => id.startsWith(`${s}-`)).length)).toEqual([5, 6, 6, 5, 6]);
   });
 
-  it("from week 6 gives the puzzle slot to the Math tile: no lesson and no topic there, and 21 short lessons beside a theme", () => {
-    expect(MATH_FROM_WEEK).toBe(6);
+  it("starts the Math tile in no week by itself: week 6 and on keep Puzzle and 28 short lessons (Brandon, 10 Nov 2026)", () => {
+    expect(MATH_FROM_WEEK).toBeNull();
+    for (const w of [6, 7, 52]) {
+      const week = weekSchedule({ week: w, thread: theme("reef"), lessons: lessonsFor(10), used: new Set() });
+      expect(week.every((d) => !d.math && d.topics.puzzle)).toBe(true);
+      expect(week.flatMap((d) => SLOT_ORDER.filter((s) => s !== d.thread).map((s) => d.topics[s]!))).toHaveLength(28);
+    }
+  });
+
+  it("in a math week gives the puzzle slot to the Math tile: no lesson and no topic there, and 21 short lessons beside a theme", () => {
     const four = theme("reef").map((t) => (t.slot === "puzzle" ? { ...t, slot: "wonder" as DaySlot } : t));
-    const week = weekSchedule({ week: 6, thread: four, lessons: lessonsFor(10), used: new Set() });
+    const week = weekSchedule({ week: 6, thread: four, lessons: lessonsFor(10), used: new Set(), math: true });
     expect(week.every((d) => d.math && d.topics.puzzle === null)).toBe(true);
     const short = week.flatMap((d) => SLOT_ORDER.filter((s) => s !== d.thread && s !== "puzzle").map((s) => d.topics[s]!));
     expect(short).toHaveLength(21);
@@ -77,12 +85,12 @@ describe("weekSchedule", () => {
   });
 
   it("refuses a math week whose theme still has a puzzle day, before anything is spent", () => {
-    expect(() => weekSchedule({ week: 6, thread: theme("reef"), lessons: lessonsFor(10), used: new Set() })).toThrow(
-      'Week 6 has the Math tile, but its theme puts "reef 7" on the puzzle slot. A theme from week 6 on puts its topics on look, wonder, listen and then: fix its file under plan/ and run npm run plan:import.',
+    expect(() => weekSchedule({ week: 6, thread: theme("reef"), lessons: lessonsFor(10), used: new Set(), math: true })).toThrow(
+      'Week 6 has the Math tile, but its theme puts "reef 7" on the puzzle slot. A math week\'s theme puts its topics on look, wonder, listen and then: fix its file under plan/ and run npm run plan:import.',
     );
   });
 
-  it("starts math on the first theme of sequence 3, as lib/plan.ts says, given the plan's own files", async () => {
+  it("starts math on the same week as lib/plan.ts's first math theme, given the plan's own files, or both are off", async () => {
     const { readFileSync, readdirSync } = await import("node:fs");
     const { join } = await import("node:path");
     const { parsePlan, MATH_FROM_SEQUENCE } = await import("../../lib/plan");
@@ -91,6 +99,10 @@ describe("weekSchedule", () => {
       .filter((f) => f.endsWith(".yaml") && f !== "short-lessons.yaml" && f !== "math-ladder.yaml")
       .map((f) => parsePlan(readFileSync(join(dir, f), "utf8")))
       .map((p) => ({ stretch: p.stretch, sequence: p.sequence, topics: p.weeks.reduce((n, w) => n + w.topics.length, 0) }));
+    if (MATH_FROM_WEEK === null || MATH_FROM_SEQUENCE === null) {
+      expect([MATH_FROM_WEEK, MATH_FROM_SEQUENCE]).toEqual([null, null]);
+      return;
+    }
     const next = [...spans, { stretch: "next-theme", sequence: spans.length + 1, topics: 7 }];
     for (let s = spans.length + 2; s <= MATH_FROM_SEQUENCE; s++) next.push({ stretch: `theme-${s}`, sequence: s, topics: 7 });
     const first = next.find((s) => s.sequence === MATH_FROM_SEQUENCE)!;

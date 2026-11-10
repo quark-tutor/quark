@@ -9,8 +9,8 @@ import type { Slot } from "./card.ts";
 // and an answer to the clue is thinking on the way, so the question is asked again.
 
 export const SLOT_NAMES: Record<Slot, string> = { look: "Look", wonder: "Wonder", listen: "Listen", then: "Then", puzzle: "Puzzle" };
-// The Math tile takes the Puzzle slot from week 6 (docs/math-tile-slice.md): a tile is named from its card, so a week
-// still on puzzle cards keeps "Puzzle".
+// The Math tile takes the Puzzle slot in a math week (docs/math-tile-slice.md; none starts by itself, 10 Nov 2026): a
+// tile is named from its card, so a week on puzzle cards keeps "Puzzle".
 export const MATH_NAME = "Math";
 export const tileName = (slot: Slot, math: boolean) => (math ? MATH_NAME : SLOT_NAMES[slot]);
 

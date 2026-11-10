@@ -27,7 +27,7 @@ import { SLOT_ORDER } from "../lib/lenses.ts";
 import { printGate } from "./gate-run.ts";
 import { announceTarget } from "./target.ts";
 
-announceTarget();
+const target = announceTarget();
 const { values: args } = parseArgs({
   options: {
     week: { type: "string" },
@@ -38,7 +38,7 @@ const { values: args } = parseArgs({
     rebuild: { type: "boolean", default: false },
     debug: { type: "boolean", default: false },
     plan: { type: "boolean", default: false }, // print the week and what the settings decide, then stop: nothing spent or written
-    math: { type: "boolean", default: false }, // the puzzle slot as the Math tile before week 6, a theme's puzzle day left out: test only
+    math: { type: "boolean", default: false }, // the puzzle slot as the Math tile in any week, a theme's puzzle day left out: test only
     "math-only": { type: "boolean", default: false }, // with --day: that day's math written again, nothing else
   },
 });
@@ -50,6 +50,8 @@ if (!Number.isInteger(days) || days < 1 || days > 7) throw new Error("--days mus
 if (day !== undefined && (!Number.isInteger(day) || day < 1 || day > 7)) throw new Error("--day must be 1 to 7");
 if (day !== undefined && args.days !== undefined) throw new Error("Use --day for one day or --days for the first few, not both.");
 if (day !== undefined && args.child) throw new Error("--day builds a day for every child; it can't be combined with --child.");
+// Math starts on live only when a later job turns it on (MATH_FROM_WEEK; Brandon, 10 Nov 2026), never by a flag.
+if ((args.math || args["math-only"]) && target === "live") throw new Error("--math and --math-only are for test only: the Math tile is off on live.");
 if (args["math-only"] && day === undefined) throw new Error("--math-only writes one day's math again: give it --day.");
 if (args.start && !/^\d{4}-\d{2}-\d{2}$/.test(args.start)) throw new Error("--start must be YYYY-MM-DD");
 

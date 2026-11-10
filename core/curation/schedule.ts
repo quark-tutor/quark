@@ -13,9 +13,10 @@ import { sequenceProblems } from "../../lib/plan.ts";
 // - On a day after the stretch's last topic (Egypt's week 4, days 4 to 7), all five slots take short
 //   lessons: "the thread has ended". A week no stretch holds is refused by stretchForWeek.
 // - When a slot runs out of lessons, nothing is built: the error says which slots need more.
-// - From MATH_FROM_WEEK the puzzle slot is the Math tile (docs/math-tile-slice.md): it takes no short lesson and no
+// - In a math week the puzzle slot is the Math tile (docs/math-tile-slice.md): it takes no short lesson and no
 //   thread topic, so a week with a theme takes 21 short lessons, not 28. Its topic is null; the build writes each
-//   child's own math problem there instead.
+//   child's own math problem there instead. No week is a math week by itself until MATH_FROM_WEEK is set (it is off:
+//   10 Nov 2026, below); on test, week:build --math makes one by hand.
 // The whole week is scheduled even when fewer days are built, so a later rebuild matches.
 
 export type Scheduled = { id: string; slot: DaySlot; title: string };
@@ -27,11 +28,14 @@ export type DayPlan = {
   math: boolean; // the puzzle slot is the Math tile
 };
 
-// The family's first week with the Math tile: week 6, Monday 30 November 2026 (docs/math-tile-slice.md). Weeks 4 and 5
-// keep the puzzle slot. lib/plan.ts's MATH_FROM_SEQUENCE is the same line for a theme's file.
-export const MATH_FROM_WEEK = 6;
+// The family's first week with the Math tile, or null: no week has it by itself, every week keeps Puzzle and its 28
+// short lessons, and a release changes nothing a child sees. Off since 10 Nov 2026 (Brandon, at the close of
+// docs/math-tile-slice.md: "math must not start by itself"; the look did not pass and the design went back to the
+// chat). It was week 6, Monday 30 Nov 2026. A later job sets it, with lib/plan.ts's MATH_FROM_SEQUENCE, the same line
+// for a theme's file; a test holds the two together.
+export const MATH_FROM_WEEK: number | null = null;
 export const MATH_SLOT: DaySlot = "puzzle";
-export const isMathWeek = (week: number) => week >= MATH_FROM_WEEK;
+export const isMathWeek = (week: number) => MATH_FROM_WEEK !== null && week >= MATH_FROM_WEEK;
 
 export type ScheduleInput = {
   week: number; // the family's week in the plan, from 1
@@ -83,7 +87,7 @@ export function weekSchedule({ week, thread, lessons, used, own = new Set(), mat
   };
   const onMath = dropOnMath ? undefined : thread.find((t) => math && t.slot === MATH_SLOT);
   if (onMath) {
-    throw new Error(`Week ${week} has the Math tile, but its theme puts "${onMath.title}" on the puzzle slot. A theme from week ${MATH_FROM_WEEK} on puts its topics on look, wonder, listen and then: fix its file under plan/ and run npm run plan:import.`);
+    throw new Error(`Week ${week} has the Math tile, but its theme puts "${onMath.title}" on the puzzle slot. A math week's theme puts its topics on look, wonder, listen and then: fix its file under plan/ and run npm run plan:import.`);
   }
   const slots = SLOT_ORDER.filter((s) => !(math && s === MATH_SLOT));
 

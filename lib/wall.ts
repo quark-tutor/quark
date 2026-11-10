@@ -128,7 +128,9 @@ export function wallStore(): SpeechStore {
     async attempts(childId, questionIds) {
       if (!questionIds.length) return [];
       return must(
-        await db.from("attempts").select("question_id, correct, verdict, move, answer, created_at").eq("child_id", childId).in("question_id", questionIds).returns<AttemptRow[]>(),
+        // Not attempts.move: nothing reads it back, and live has no such column until the math migrations reach it, so
+        // the wall reads only what live has (10 Nov 2026, at the close of docs/math-tile-slice.md).
+        await db.from("attempts").select("question_id, correct, verdict, answer, created_at").eq("child_id", childId).in("question_id", questionIds).returns<AttemptRow[]>(),
         "attempts",
       );
     },

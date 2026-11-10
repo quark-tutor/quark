@@ -1,5 +1,7 @@
 # Math practice: the proposal
 
+> Replaced by `docs/math-tutor-proposal.md`, 9 November 2026.
+
 For Brandon and June. Written 8 November 2026 by Claude Code from the brief `docs/math-practice-brief-slice.md`,
 and rewritten the same afternoon in fix round 1, after Brandon and June talked it through. It is an exploration:
 nothing is built, nothing on test or live is changed, and no API money was spent. Each open choice had its options
