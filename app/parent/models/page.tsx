@@ -77,8 +77,9 @@ async function Models() {
   const when = (iso: string) => new Date(iso).toLocaleString("en-US", { timeZone, dateStyle: "medium", timeStyle: "short" });
   const checked = new Date(`${PRICES_CHECKED}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", dateStyle: "long" });
   const children = kids.count ?? 0;
-  const judged = (runs.data ?? []).filter((r) => r.kind === "judge");
-  const all = (runs.data ?? []).filter((r) => r.kind !== "judge");
+  // The label on a math answer's "How did you get that?" is Haiku per answer too, so it is counted with the judge.
+  const judged = (runs.data ?? []).filter((r) => r.kind === "judge" || r.kind === "label");
+  const all = (runs.data ?? []).filter((r) => r.kind !== "judge" && r.kind !== "label");
   const inMonth = (iso: string) => new Date(iso).toLocaleDateString("en-CA", { timeZone }).startsWith(monthStartOf(timeZone));
   const judgedAll = judgeTally(judged);
   const judgedMonth = judgeTally(judged.filter((r) => inMonth(r.finished_at)));

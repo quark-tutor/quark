@@ -43,9 +43,13 @@ describe("the kid view", () => {
     expect(code("app/api/kid/say/route.ts").match(/\bconsole\.[^;]*;/g)).toEqual([`console.error("say: Read it to me failed", fault(error));`]);
     expect(code("app/api/kid/say/route.ts")).toContain(`.split("\\n")[0].replace(/"[^"]*"/g, '"…"')`);
     // The judge's fault is the error's first line (core/wall/judge.ts), and a failed record is the database's message.
+    // The Math tile's label (docs/math-tile-slice.md) the same: the error's first line with anything quoted taken out.
     expect(code("lib/wall.ts").match(/\bconsole\.[^;]*;/g)).toEqual([
       `console.error("judge: the word rule judged instead:", r.fault);`,
       `console.error("judge: could not record the run:", error.message);`,
+      `console.error("label: no label:", (e instanceof Error ? e.message : String(e)).split("\\n")[0].replace(/"[^"]*"/g, '"…"').slice(0, 160));`,
+      `console.error("label: could not record it:", error.message);`,
+      `console.error("label: could not record the run:", error.message);`,
     ]);
   });
 

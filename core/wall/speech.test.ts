@@ -48,6 +48,7 @@ function fake(cards: CardRow[]) {
     touchSession: async () => {},
     addAttempt: async (row) => {
       attempts.push({ ...row, created_at: new Date(Date.UTC(2026, 9, 26, 18, 0, clock++)).toISOString() });
+      return `attempt-${attempts.length}`;
     },
     sign: async (path) => `https://signed.example/${path}`,
     speechUrl: async (path) => (files.has(path) ? `https://signed.example/${path}` : null),

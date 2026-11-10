@@ -135,15 +135,15 @@ const PART_SCHEMA = {
   required: ["question", "answer", "unit", "expression", "wordings", "steps", "tie", "working"],
   additionalProperties: false,
 };
-export const PART_KEYS = ["part_1", "part_2", "part_3", "part_4"] as const;
-// Four named, required parts rather than an array, as the cards are: an array let the model stop early.
+// The parts are an array, not four named keys as the cards are: four copies of the part made a grammar the API
+// refused as too large (9 Nov 2026). checkMath() refuses anything but four, and the second ask says so.
 export const MATH_SCHEMA = {
   type: "object",
   properties: {
     title: { type: "string" },
     setting: { type: "string" },
     graph: PICTURE_SCHEMA,
-    ...Object.fromEntries(PART_KEYS.map((k) => [k, PART_SCHEMA])),
+    parts: { type: "array", items: PART_SCHEMA },
     example: {
       type: "object",
       properties: { text: { type: "string" }, working: { type: "array", items: { type: "string" } }, expression: { type: "string" }, picture: PICTURE_SCHEMA },
@@ -152,11 +152,12 @@ export const MATH_SCHEMA = {
     },
     handoff: { type: "string" },
   },
-  required: ["title", "setting", "graph", ...PART_KEYS, "example", "handoff"],
+  required: ["title", "setting", "graph", "parts", "example", "handoff"],
   additionalProperties: false,
 };
 
-export type RawMath = Partial<Record<(typeof PART_KEYS)[number], MathPart>> & {
+export type RawMath = {
+  parts?: MathPart[];
   title?: string;
   setting?: string;
   graph?: Picture;
@@ -170,7 +171,7 @@ const tidyPicture = (p: Picture | undefined): Picture =>
 
 // The reply as a problem, every string's ends tidied; an example only when it is new to him and written.
 export function problemOf(raw: RawMath, isNew: boolean): MathProblem {
-  const parts = PART_KEYS.map((k) => raw?.[k]).filter((p): p is MathPart => !!p && typeof p === "object");
+  const parts = (Array.isArray(raw?.parts) ? raw.parts : []).filter((p): p is MathPart => !!p && typeof p === "object");
   const ex = raw?.example;
   return {
     title: tidy(raw?.title),

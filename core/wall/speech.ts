@@ -2,6 +2,8 @@ import { createHash } from "node:crypto";
 import { hearCost, sayCost } from "../prices.ts";
 import { chainState, isDone, spendsHint, type AttemptRow, type Slot } from "./card.ts";
 import { ANSWER_MAX, chainOf, onWall, today, type Scope, type WallStore } from "./flow.ts";
+import { isMath, mathLineSeen, mathState, runPart } from "./math.ts";
+import type { MathCard } from "../math/problem.ts";
 import { SAY } from "./words.ts";
 
 // What the tutor says aloud and what it hears (docs/tutor-voice-slice.md), against a store, as flow.ts is.
@@ -20,12 +22,34 @@ export type SpeechStore = WallStore & {
 };
 
 // The wall's own sentences the tutor may say, from core/wall/words.ts.
-export const SPOKEN_REPLIES = ["nothingToday", "everythingDone", "guessFirst", "clue", "close", "toQuestion", "right", "toTalkAbout", "forAPerson", "didntSend"] as const;
+export const SPOKEN_REPLIES = [
+  "nothingToday",
+  "everythingDone",
+  "guessFirst",
+  "clue",
+  "close",
+  "toQuestion",
+  "right",
+  "toTalkAbout",
+  "forAPerson",
+  "didntSend",
+  // The Math tile's moves (docs/math-tile-slice.md).
+  "howGotThat",
+  "anotherWay",
+  "oneStep",
+  "thinkOfIt",
+  "wholeThing",
+  "howDoYouKnow",
+  "sayNumber",
+  "workedOut",
+] as const;
 export type SpokenReply = (typeof SPOKEN_REPLIES)[number];
 
 export type Line =
   | { cardId: string; part: "read" | "question" | "handoff" }
   | { cardId: string; part: "hint"; hint: number }
+  | { cardId: string; part: "wording" | "step"; n: number } // a math part's other wording (1, 2) or step (1 to 4)
+  | { cardId: string; part: "tie" | "working" | "example" }
   | { wall: SpokenReply };
 
 const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
@@ -34,10 +58,12 @@ const UUID = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 export function parseLine(line: string): Line | null {
   const wall = /^wall\.(\w+)$/.exec(line);
   if (wall) return (SPOKEN_REPLIES as readonly string[]).includes(wall[1]) ? { wall: wall[1] as SpokenReply } : null;
-  const card = new RegExp(`^(${UUID})\\.(read|question|handoff|hint\\.([0-9]))$`, "i").exec(line);
+  const card = new RegExp(`^(${UUID})\\.(read|question|handoff|tie|working|example|hint\\.([0-9])|wording\\.([12])|step\\.([1-4]))$`, "i").exec(line);
   if (!card) return null;
   if (card[3] !== undefined) return { cardId: card[1], part: "hint", hint: Number(card[3]) };
-  return { cardId: card[1], part: card[2] as "read" | "question" | "handoff" };
+  if (card[4] !== undefined) return { cardId: card[1], part: "wording", n: Number(card[4]) };
+  if (card[5] !== undefined) return { cardId: card[1], part: "step", n: Number(card[5]) };
+  return { cardId: card[1], part: card[2] as "read" | "question" | "handoff" | "tie" | "working" | "example" };
 }
 
 // The hints a layer the child has finished showed: one per wrong guess before the right one, and none for an
@@ -62,6 +88,17 @@ export async function lineText(store: WallStore, scope: Scope, line: Line, now: 
   const at = chain.findIndex((l) => l.cardId === line.cardId);
   if (at < 0) return null;
   const attempts = await store.attempts(scope.childId, chain.map((l) => l.questionId));
+  if (isMath(chain)) {
+    // A math part: a move's words once the moves have shown them, the working once he has it right (rule 3).
+    const state = mathState(chain, attempts);
+    if (at > state.at) return null;
+    const { body, questionId } = chain[at];
+    const run = at === state.at ? state.run : runPart(body.math!, attempts.filter((a) => a.question_id === questionId).sort((a, b) => a.created_at.localeCompare(b.created_at)));
+    if (line.part === "handoff") return at === state.at && isDone(state) ? partWords(body, line) : null;
+    if (line.part === "hint") return null;
+    if (line.part === "read" || line.part === "question") return partWords(body, line);
+    return mathLineSeen(body.math!, run, line.part === "wording" || line.part === "step" ? { kind: line.part, n: line.n } : { kind: line.part }) ? partWords(body, line) : null;
+  }
   const state = chainState(chain, attempts);
   if (at > state.at) return null;
   const { body, questionId } = chain[at];
@@ -70,18 +107,31 @@ export async function lineText(store: WallStore, scope: Scope, line: Line, now: 
     return line.hint < seen ? partWords(body, line) : null;
   }
   if (line.part === "handoff") return at === state.at && isDone(state) ? partWords(body, line) : null;
+  if (line.part !== "read" && line.part !== "question") return null; // a math line on a card that is not math
   return partWords(body, line);
 }
 
-export type CardPart = { part: "read" | "question" | "handoff" } | { part: "hint"; hint: number };
+export type CardPart =
+  | { part: "read" | "question" | "handoff" }
+  | { part: "hint"; hint: number }
+  | { part: "wording" | "step"; n: number }
+  | { part: "tie" | "working" | "example" };
 
 // The words of one part of a card, whoever may hear them: lineText() gives them only once the child can see the
 // part, and the night's firing (speech-ahead.ts) makes every part ahead from the same words, so a line made ahead
 // is the very file a tap plays.
-export function partWords(body: { text: string; question: string; hints: string[]; handoff: string }, line: CardPart): string | null {
+export function partWords(body: { text: string; question: string; hints: string[]; handoff: string; math?: MathCard }, line: CardPart): string | null {
   if (line.part === "hint") return body.hints[line.hint] ?? null;
   if (line.part === "handoff") return body.handoff;
-  return line.part === "read" ? readLine(body) : body.question;
+  if (line.part === "read") return readLine(body);
+  if (line.part === "question") return body.question;
+  const m = body.math;
+  if (!m) return null;
+  if (line.part === "wording") return m.wordings[line.n - 1] ?? null;
+  if (line.part === "step") return m.steps[line.n - 1]?.question ?? null;
+  if (line.part === "tie") return m.tie;
+  if (line.part === "working") return m.working[m.working.length - 1] ?? null; // said in words; the sum is read on screen
+  return m.example ? m.example.text : null;
 }
 
 // What "Read it to me" says on a card: the card as the page shows it, its words then its question (Brandon at

@@ -32,6 +32,16 @@ const PARTS = (body: ChainLayer["body"]): CardPart[] => [
   { part: "read" },
   { part: "question" },
   ...body.hints.map((_, hint) => ({ part: "hint" as const, hint })),
+  // A math part's moves (docs/math-tile-slice.md): its wordings, steps, tie and working, and the worked example.
+  ...(body.math
+    ? [
+        ...body.math.wordings.map((_, i) => ({ part: "wording" as const, n: i + 1 })),
+        ...body.math.steps.map((_, i) => ({ part: "step" as const, n: i + 1 })),
+        { part: "tie" as const },
+        { part: "working" as const },
+        ...(body.math.example ? [{ part: "example" as const }] : []),
+      ]
+    : []),
   { part: "handoff" },
 ];
 

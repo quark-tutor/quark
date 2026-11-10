@@ -63,6 +63,7 @@ function fake(cards: CardRow[], timezone = "Pacific/Honolulu") {
     },
     addAttempt: async (row) => {
       attempts.push({ ...row, created_at: new Date(Date.UTC(2026, 9, 26, 18, 0, clock++)).toISOString() });
+      return `attempt-${attempts.length}`;
     },
     sign: async (path) => `https://signed.example/${path}`,
   };
@@ -354,7 +355,7 @@ describe("what reaches the browser", () => {
     const { store } = fake([card("l1", { slot: "look" }), card("l2", { slot: "look", layer: 2 })]);
     const wall = await wallFor(store, scope, "Pip", MONDAY);
     expect(Object.keys(wall).sort()).toEqual(["nickname", "tiles"]);
-    expect(Object.keys(wall.tiles[0]).sort()).toEqual(["cardId", "done", "slot", "title"]);
+    expect(Object.keys(wall.tiles[0]).sort()).toEqual(["cardId", "done", "math", "slot", "title"]);
 
     const shown = await cardFor(store, scope, "l1", MONDAY);
     const c = shown && "card" in shown ? shown.card : null;

@@ -83,6 +83,14 @@ describe("checkMath", () => {
     expect(older(edit(MARKET, (q) => (q.example!.expression = "3 × 2")))).toContain("the worked example uses part 1's own numbers: it is on other numbers");
   });
 
+  it("keeps signs out of everything he reads before he answers: a sum is said in words", () => {
+    expect(younger(edit(CONES, (q) => (q.parts[0].wordings[1] = "What is 6 × 4?")))).toContain('part 1: its second other wording shows a sign, "What is 6 × 4?": say the sum in words');
+    expect(younger(edit(CONES, (q) => (q.parts[2].steps[0].question = "What is 20 - 15?")))).toContain('part 3: step 1 shows a sign, "What is 20 - 15?": say the sum in words');
+    expect(older(edit(MARKET, (q) => (q.parts[0].question = "You buy 3 bunches at $2 (the small ones). How many dollars?")))).toContain(
+      'part 1: its question shows a sign, "You buy 3 bunches at $2 (the small ones). How many dollars?": say the sum in words',
+    );
+  });
+
   it("wants two parts on the day's rung, and the shape whole", () => {
     expect(younger(CONES, { ...threesFours, teaches: "sharing" })).toContain("only 0 parts are on today's rung, sharing: at least two");
     expect(older(edit(MARKET, (q) => q.parts.pop()))).toEqual(["needs 4 parts, has 3"]);

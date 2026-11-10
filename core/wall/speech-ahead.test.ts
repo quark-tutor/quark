@@ -57,6 +57,7 @@ function fake(cards: CardRow[]) {
     touchSession: async () => {},
     addAttempt: async (row) => {
       attempts.push({ ...row, created_at: new Date(Date.UTC(2026, 9, 26, 18, 0, clock++)).toISOString() });
+      return `attempt-${attempts.length}`;
     },
     sign: async (path) => `https://signed.example/${path}`,
     speechUrl: async (path) => (files.has(path) ? `https://signed.example/${path}` : null),
@@ -167,7 +168,7 @@ describe("a night's firing", () => {
     const { store } = fake(fullDay(PIP, 0));
     await fire(deps(store).d);
     const again = deps(store);
-    expect(await fire(again.d)).toMatchObject({ outcome: "nothing", made: 0, already: 110, reason: `every line of ${DAY} is stored already` });
+    expect(await fire(again.d)).toMatchObject({ outcome: "nothing", made: 0, already: 118, reason: `every line of ${DAY} is stored already` });
     expect(again.said).toEqual([]);
   });
 

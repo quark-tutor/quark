@@ -15,6 +15,8 @@ import { goalOf, PARTS, PICTURE_KINDS, quickOf, type MathDay, type MathProblem, 
 //     boy's quick one at the end stands alone;
 //   - an other wording brings in no number the problem does not already have;
 //   - no question, wording, step, tie or the setting says a part's answer, unless it is one of the sum's own numbers;
+//   - none of them shows a sign (×, ÷, +, −, =, brackets): a sum is said in words until he has answered, and only the
+//     working and the worked example show one (found on test's first math day, 9 Nov 2026: "What is 6 × (2 + 1)?");
 //   - every sum is on one of his rungs: done, working, or alongside one he is working on; two operations in one sum
 //     only when one is a quick sum to 20; on a rung's day, at least two parts are on that rung;
 //   - the shape: four parts, two other wordings, two to four steps, a tie, two lines of working, a handoff, and the
@@ -169,6 +171,19 @@ export function checkMath(p: MathProblem, ctx: MathContext): string[] {
       }
     }
   }
+
+  // Signs only in the working and the worked example.
+  const signed = (s: string | undefined) => !!s && (/[×÷=()*]|[−–]/.test(s) || /\d\s*[+\-/]\s*\$?\d/.test(s));
+  if (signed(p.setting)) out.push("the setting shows a sign: say the sum in words");
+  parts.forEach((pt, i) => {
+    const where = [
+      ["its question", pt?.question],
+      ...(pt?.wordings ?? []).map((w, k) => [`its ${ordinal[k]} other wording`, w]),
+      ...(pt?.steps ?? []).map((s, k) => [`step ${k + 1}`, s?.question]),
+      ["its tie", pt?.tie],
+    ] as [string, string | undefined][];
+    for (const [what, s] of where) if (signed(s)) out.push(`part ${i + 1}: ${what} shows a sign, "${s}": say the sum in words`);
+  });
 
   const words = [p.title, p.setting, p.handoff, p.example?.text, ...(p.example?.working ?? []), ...parts.flatMap((pt) => [pt?.question, ...(pt?.wordings ?? []), pt?.tie, ...(pt?.working ?? []), ...(pt?.steps ?? []).map((s) => s?.question)])]
     .filter(has)

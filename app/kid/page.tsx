@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SAY, SLOT_NAMES } from "@/core/wall/words";
+import { SAY, tileName } from "@/core/wall/words";
 import { getDevice } from "@/lib/device";
 import { loadWall } from "@/lib/wall";
+import { DevBar } from "./dev-bar";
 import styles from "./kid.module.css";
 
 // The Wonder Wall: today's five first cards from the family's live week, passed cards only (docs/wonder-wall-1-slice.md,
@@ -38,13 +39,14 @@ async function WonderWall() {
           {tiles.map((t) => (
             // prefetch off: opening a card is a visit, so it happens only on a tap.
             <Link key={t.cardId} href={`/kid/card/${t.cardId}`} prefetch={false} className={t.done ? `${styles.tile} ${styles.tileDone}` : styles.tile}>
-              <span className={styles.tileSlot}>{SLOT_NAMES[t.slot]}</span>
+              <span className={styles.tileSlot}>{tileName(t.slot, t.math)}</span>
               <span className={styles.tileTitle}>{t.title}</span>
               {t.done ? <span className={styles.tileSlot}>{SAY.doneToday}</span> : null}
             </Link>
           ))}
         </nav>
       )}
+      <DevBar device={device} />
     </>
   );
 }

@@ -463,3 +463,104 @@
   font-weight: 700;
   background: var(--accent-soft);
 }
+
+/* The Math tile (docs/math-tile-slice.md). The working after a right answer: the sum, then the answer in words,
+   each on its own line, as big as a reply. */
+.working {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.35;
+  font-variant-numeric: tabular-nums;
+}
+
+.workingRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* The number pad under the box: ten digits and Delete, the keys of the pairing page, a row of the box's width. */
+.numberPad {
+  flex-basis: 100%;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(64px, 1fr));
+  gap: 10px;
+}
+
+/* A picture drawn from its numbers: plates and dots, blocks, a clock, a bar graph. In the page's colours. */
+.drawing {
+  width: 100%;
+  max-width: 640px;
+  height: auto;
+  max-height: 46vh;
+}
+.drawPlate {
+  fill: var(--surface);
+  stroke: var(--line);
+  stroke-width: 4;
+}
+.drawDot,
+.drawBar,
+.drawTen,
+.drawOne {
+  fill: var(--accent);
+}
+.drawHundred {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 2;
+}
+.drawShade {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 3;
+}
+.drawTick {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+.drawText {
+  fill: var(--ink);
+  font-size: 28px;
+  font-weight: 700;
+}
+.drawLabel {
+  fill: var(--ink);
+  font-size: 18px;
+}
+
+/* The test view's bar (lib/dev-view.ts): on the dev server against test only, at the foot of the wall. */
+.devBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  font-size: 1.1rem;
+}
+.devLabel {
+  color: var(--muted);
+  font-weight: 600;
+}
+.devLink {
+  min-height: 48px;
+  min-width: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 700;
+}
+.devOn {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}

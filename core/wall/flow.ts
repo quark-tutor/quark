@@ -5,6 +5,8 @@ import type { AnswerKey } from "../curation/types.ts";
 import { ageBand } from "../curation/gate.ts";
 import { todayIn } from "../curation/week.ts";
 import { isGuess, judgeGuess, type MatchRule } from "./answer.ts";
+import { readNumber } from "../math/numbers.ts";
+import { expected, isMath, mathState, mathView, runPart, type Move } from "./math.ts";
 import type { Judgement, JudgeInput, Verdict } from "./judge.ts";
 import {
   answerReply,
@@ -75,7 +77,12 @@ export type AttemptInsert = {
   reasoning: string | null; // the judge's line, for the parents; never sent to the iPad
   hints_used: number;
   seconds: number | null;
+  move?: Move | null; // a math part's move; absent on every other card
 };
+
+// What he said to "How did you get that?", for the label (lib/wall.ts labels it after the reply has gone; it is
+// recorded for the parents and does not choose the next move in this slice).
+export type HowSaid = { attemptId: string; said: string; question: string; answer: number; unit: string; expression: string; wrong: string | null; band: string | null };
 
 // The judge of a guess (core/wall/judge.ts, given by lib/wall.ts): a verdict, or null when the model gave none in
 // time, and the word rule judges instead.
@@ -90,7 +97,8 @@ export type WallStore = {
   startSession(row: { family_id: string; child_id: string; device: string; started_at: string }): Promise<string>;
   endSession(id: string, reason: "child_left"): Promise<void>;
   touchSession(id: string, at: string): Promise<void>;
-  addAttempt(row: AttemptInsert): Promise<void>;
+  addAttempt(row: AttemptInsert): Promise<string>; // the attempt's id
+  answeredSkill?(childId: string, skillKey: string, except: string[]): Promise<boolean>; // has he answered a part on this rung or area?
   sign(storagePath: string): Promise<string | null>;
 };
 
@@ -159,7 +167,13 @@ export async function wallFor(store: WallStore, scope: Scope, nickname: string, 
   await visit(store, scope, now);
   return wallReply(
     nickname,
-    chains.map((chain) => ({ slot: chain[0].slot, title: chain[0].body.title, cardId: chain[0].cardId, done: isDone(chainState(chain, attempts)) })),
+    chains.map((chain) => ({
+      slot: chain[0].slot,
+      title: chain[0].body.title,
+      cardId: chain[0].cardId,
+      done: isDone(isMath(chain) ? mathState(chain, attempts) : chainState(chain, attempts)),
+      math: isMath(chain),
+    })),
   );
 }
 
@@ -193,10 +207,82 @@ export async function cardFor(
   if (!row || !onWall(row, scope, day)) return null;
   const { chain, rows } = chainOf(await store.cards({ familyId: scope.familyId, childId: scope.childId, day, slot: row.slot as Slot }), scope, day, row.slot);
   if (!chain.some((l) => l.cardId === cardId)) return null;
-  const state = chainState(chain, await store.attempts(scope.childId, chain.map((l) => l.questionId)));
+  const attempts = await store.attempts(scope.childId, chain.map((l) => l.questionId));
+  if (isMath(chain)) {
+    const state = mathState(chain, attempts);
+    await visit(store, scope, now);
+    if (chain[state.at].cardId !== cardId) return { goTo: chain[state.at].cardId };
+    const m = chain[state.at].body.math!;
+    // The worked example comes first while the rung is new to him: on part 1, before he has answered it, and only
+    // if he has answered no part on that rung elsewhere (an example is written for each problem on a rung new at
+    // Sunday's build).
+    const fresh = state.at === 0 && !!m.example && !attempts.some((a) => a.question_id === chain[0].questionId);
+    const example = fresh && !(await store.answeredSkill?.(scope.childId, m.teaches, chain.map((l) => l.questionId))) ? m.example! : null;
+    const page = { view: mathView(chain, state), graph: m.graph.kind === "graph" ? m.graph : null, example };
+    return { card: { ...cardReply(chain, state, null), math: page } };
+  }
+  const state = chainState(chain, attempts);
   await visit(store, scope, now);
   if (chain[state.at].cardId !== cardId) return { goTo: chain[state.at].cardId };
   return { card: cardReply(chain, state, await mediaOf(store, rows[state.at])) };
+}
+
+// An answer on a math part (docs/math-tile-slice.md): a number read in code, never the model's call, against the
+// number the move asks for; his own words to "How did you get that?" and "How do you know?" are taken as they are and
+// kept. "I don't know" writes nothing and gets "Have a guess first."; a reply with no number gets "Say it as a
+// number." The reply is the part's page after it, so the page shows the next move, or the working and the next part.
+async function mathAnswer(
+  store: WallStore,
+  scope: Scope,
+  chain: ChainLayer[],
+  attempts: AttemptRow[],
+  input: { cardId: string; guess: string; seconds: number | null },
+  row: CardRow,
+  now: Date,
+  onHow?: (said: HowSaid) => void,
+): Promise<AnswerReply | null> {
+  const state = mathState(chain, attempts);
+  if (isDone(state) || chain[state.at].cardId !== input.cardId) return null;
+  const here = chain[state.at];
+  const m = here.body.math!;
+  const move = state.run.move as Move;
+  const text = input.guess.trim().slice(0, ANSWER_MAX);
+  const want = expected(m, move);
+  let correct: boolean | null = null;
+  if (want === null) {
+    if (!/[a-z0-9]/i.test(text)) return { outcome: "guess_first" };
+  } else {
+    if (!isGuess(text)) return { outcome: "guess_first" };
+    const read = readNumber(text);
+    if ("none" in read && read.none === "no_number") return { outcome: "say_number" };
+    correct = "value" in read && read.value === want;
+  }
+  const session = await visit(store, scope, now);
+  const seconds = input.seconds === null || !Number.isFinite(input.seconds) ? null : Math.min(SECONDS_MAX, Math.max(0, Math.round(input.seconds)));
+  const attemptId = await store.addAttempt({
+    family_id: scope.familyId,
+    session_id: session,
+    child_id: scope.childId,
+    question_id: here.questionId,
+    mode: "teach",
+    answer: text,
+    correct,
+    verdict: correct === null ? null : correct ? "right" : "not_yet",
+    judged_by: correct === null ? null : "rule",
+    reasoning: null,
+    hints_used: 0,
+    seconds,
+    move,
+  });
+  if (move === "how" && onHow) {
+    const before = attempts.filter((a) => a.question_id === here.questionId && a.correct === false).sort((a, b) => a.created_at.localeCompare(b.created_at));
+    onHow({ attemptId, said: text, question: here.body.question, answer: m.answer, unit: m.unit, expression: m.expression, wrong: before.at(-1)?.answer ?? null, band: bandOf(row.level) });
+  }
+  const mine = [...attempts.filter((a) => a.question_id === here.questionId), { question_id: here.questionId, correct, move, created_at: now.toISOString() }].sort((a, b) =>
+    a.created_at.localeCompare(b.created_at),
+  );
+  const run = runPart(m, mine);
+  return { outcome: "math", math: mathView(chain, { kind: "answering", at: state.at, hintsSeen: 0, run }) };
 }
 
 // The grade band from what the card was written for ("chapter_books, age 9"), as the gate sends it; null when the
@@ -217,12 +303,14 @@ export async function answer(
   now: Date,
   rule: MatchRule,
   judge?: Judge,
+  onHow?: (said: HowSaid) => void,
 ): Promise<AnswerReply | null> {
   const day = await today(store, scope, now);
   const row = await store.cardById({ familyId: scope.familyId, childId: scope.childId, id: input.cardId });
   if (!row || !onWall(row, scope, day)) return null;
   const { chain } = chainOf(await store.cards({ familyId: scope.familyId, childId: scope.childId, day, slot: row.slot as Slot }), scope, day, row.slot);
   const attempts = await store.attempts(scope.childId, chain.map((l) => l.questionId));
+  if (isMath(chain)) return mathAnswer(store, scope, chain, attempts, input, row, now, onHow);
   const before = chainState(chain, attempts);
   if (!chain.length || isDone(before) || chain[before.at].cardId !== input.cardId) return null;
 

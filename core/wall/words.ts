@@ -9,6 +9,10 @@ import type { Slot } from "./card.ts";
 // and an answer to the clue is thinking on the way, so the question is asked again.
 
 export const SLOT_NAMES: Record<Slot, string> = { look: "Look", wonder: "Wonder", listen: "Listen", then: "Then", puzzle: "Puzzle" };
+// The Math tile takes the Puzzle slot from week 6 (docs/math-tile-slice.md): a tile is named from its card, so a week
+// still on puzzle cards keeps "Puzzle".
+export const MATH_NAME = "Math";
+export const tileName = (slot: Slot, math: boolean) => (math ? MATH_NAME : SLOT_NAMES[slot]);
 
 export const SAY = {
   hello: (nickname: string) => `Hi, ${nickname}.`,
@@ -32,6 +36,21 @@ export const SAY = {
   toTalkAbout: "That's one to talk about.",
   forAPerson: "This one is for a person:",
   didntSend: "That didn't send. Try again.",
+  // The Math tile (docs/math-tile-slice.md, What is built 6): a wrong answer earns no clue. The moves, in order: how he
+  // got it, the same question another way, one small step at a time, something he knows, a person. "That's it." and
+  // "This one is for a person:" are the cards' own, above.
+  howGotThat: "How did you get that?",
+  anotherWay: "Here it is another way:",
+  oneStep: "One step at a time:",
+  thinkOfIt: "Think of it like this:",
+  wholeThing: "Here's the whole thing:",
+  howDoYouKnow: "How do you know?", // the younger boy's part 3, after his right answer
+  sayNumber: "Say it as a number.",
+  workedOut: "Here's one worked out:",
+  nowYours: "Now yours",
+  nextPart: "Next part",
+  tellHow: "Say or type how you did it",
+  deleteDigit: "Delete",
   // Talk (docs/tutor-voice-slice.md): hold to talk, let go to send the words to the box.
   talk: "Hold to talk",
   listening: "Listening… let go when you're done",
