@@ -5,6 +5,12 @@ proposal: titles, lines and sources only, with no summaries; nothing imported, n
 32; the week 4 job writes those into `plan/short-lessons.yaml` (summaries, sources, values points) and checks each
 fact as it is written, as weeks 2 and 3 did.
 
+**Picked 16 Nov 2026** (`docs/week-4-slice.md`), two days late, so Sunday 15 Nov's build refused and the week was built
+by hand on Monday: the ★ 32, with two changes. Clair de lune (26) had gone to the Moon on 8 Nov, so William Tell (32)
+takes its Friday; and Brandon struck pāhoehoe and ʻaʻā (15) at the pick ("strike the pāhoehoe and ʻaʻā lesson and
+take the next wonder candidate in its place"), so seed dispersal (19) takes its Thursday. All 32 are in
+`plan/short-lessons.yaml`, in the order below.
+
 **Week 4 needs 32, not 28.** Egypt has three topics left, and they take days 1 to 3; days 4 to 7 have no thread,
 so all five slots take a short lesson: **look 7, wonder 7, listen 6, then 6, puzzle 6** (the schedule test holds
 this, `core/curation/schedule.test.ts`). Forty new candidates are below, with the eleven week 3 did not take; Taps
@@ -139,7 +145,7 @@ on 7 Nov. It comes back when the setting allows it.
     ONLINE 20221013.png*, https://commons.wikimedia.org/wiki/File:USGS_WaterCycle_English_ONLINE_20221013.png, public
     domain (USGS). Very large, so its preview is stored. None. ("Billions of years" is point 5's ground; the summary
     will say "again and again" instead.)
-15. ★ Thu. **pahoehoe-aa: Pāhoehoe and ʻaʻā, two Hawaiian words the whole world uses** (science; Hawaiʻi). Smooth,
+15. ~~★ Thu.~~ Struck at the pick (16 Nov). **pahoehoe-aa: Pāhoehoe and ʻaʻā, two Hawaiian words the whole world uses** (science; Hawaiʻi). Smooth,
     ropy lava is pāhoehoe and rough, broken lava is ʻaʻā, and geologists everywhere use the Hawaiian words; the same
     lava can start as pāhoehoe and turn into ʻaʻā as it cools and thickens. `commons-usgs-pahoehoe-skylight`: *Molten
     Lava in Pahoehoe Skylight.jpg*, https://commons.wikimedia.org/wiki/File:Molten_Lava_in_Pahoehoe_Skylight.jpg,
@@ -161,7 +167,7 @@ on 7 Nov. It comes back when the setting allows it.
     corona; the island of Hawaiʻi had a total eclipse on 11 July 1991. `commons-nasa-eclipse-2017`: *2017 Total Solar
     Eclipse (AFRC2017-0233-008).jpg*, https://commons.wikimedia.org/wiki/File:2017_Total_Solar_Eclipse_(AFRC2017-0233-008).jpg,
     public domain (NASA). None.
-19. (h) **seeds-to-hawaii: Seed dispersal** (Hawaiʻi). Week 3's 15. None.
+19. ★ Thu (taken 16 Nov, in 15's place). (h) **seeds-to-hawaii: Seed dispersal** (Hawaiʻi). Week 3's 15. None.
 20. **tides: Tides, and the Bay of Fundy** (science). The Moon's pull lifts the ocean into a bulge, and as the Earth
     turns most coasts get two high tides and two low tides a day; in Canada's Bay of Fundy the water can rise more
     than 50 feet. `commons-nasa-fundy-tides`: *Fundy High & Low tide.jpg*,
@@ -196,7 +202,7 @@ on 7 Nov. It comes back when the setting allows it.
     https://commons.wikimedia.org/wiki/File:Mozart_-_String_Quartet_No._19_in_C_major,_K465_%27Dissonance%27_-_III._Allegretto_(Musopen_String_Quartet).flac,
     public domain (Musopen, 2012). `met-stradivari-gould-violin`: The Met 503045, *"Gould" Violin*, Antonio
     Stradivari, 1693, https://www.metmuseum.org/art/collection/search/503045, CC0. None.
-26. ★ Fri. **clair-de-lune: The sustain pedal, and Debussy's moonlight** (music). Debussy's Clair de lune ("moonlight")
+26. ~~★ Fri.~~ In the Moon since 8 Nov (`plan/the-moon.yaml`). **clair-de-lune: The sustain pedal, and Debussy's moonlight** (music). Debussy's Clair de lune ("moonlight")
     sounds blurred and soft because the pianist holds the right pedal, which lifts the dampers off the strings so the
     notes ring on into each other. `commons-goedhart-clair-de-lune`: *Clair de lune (Claude Debussy) Suite
     bergamasque.ogg*, https://commons.wikimedia.org/wiki/File:Clair_de_lune_(Claude_Debussy)_Suite_bergamasque.ogg,
@@ -231,7 +237,7 @@ on 7 Nov. It comes back when the setting allows it.
     https://commons.wikimedia.org/wiki/File:Ah_je_vous_dirai_maman_theme.wav,
     https://commons.wikimedia.org/wiki/File:Ah_je_vous_dirai_maman_Var_1.wav, public domain (made on a computer).
     None. (Week 2's carillon used the same tune.)
-32. (h) **william-tell: The overture**. Week 3's 24. None.
+32. ★ Fri (taken 16 Nov, in 26's place). (h) **william-tell: The overture**. Week 3's 24. None.
 
 ## then (6 needed)
 

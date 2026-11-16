@@ -4,7 +4,8 @@
 # Drafted by Claude Code, picked by Brandon and June; the candidates and why each picture was
 # picked are in plan/candidates/short-lessons.md (week 1's 28, 16 Oct 2026) and
 # plan/candidates/short-lessons-2.md (week 2's 28, picked 1 Nov 2026, added after week 1's) and
-# plan/candidates/short-lessons-3.md (week 3's 28, picked 7 Nov 2026, added after week 2's).
+# plan/candidates/short-lessons-3.md (week 3's 28, picked 7 Nov 2026, added after week 2's) and
+# plan/candidates/short-lessons-4.md (week 4's 32, picked 16 Nov 2026, added after week 3's).
 #
 # Format: lib/plan.ts (ShortLesson). Import with npm run plan:import. Summaries are for the tutor,
 # not the child: plain facts, the mechanism named. Every lesson says which values points it
@@ -752,6 +753,217 @@ sources:
     publisher: The Metropolitan Museum of Art, 17.190.1499a, b
     url: https://www.metmuseum.org/art/collection/search/194091
     license: CC0
+  # --- week 4 (picked 16 Nov 2026; plan/candidates/short-lessons-4.md) ---
+  # look
+  - id: commons-tavernier-kilauea-1885
+    title: Kilauea Caldera, Jules Tavernier, 1885
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Jules_Tavernier_-_%27Kilauea_Caldera%27,_oil_on_canvas,_1885.jpg
+    license: public domain
+  - id: commons-hitchcock-river-of-fire
+    title: River of Fire, Kilauea Crater, D. Howard Hitchcock, about 1890s
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:River_of_Fire,_Kilauea_Crater_by_D._Howard_Hitchcock,_c_1890s.jpg
+    license: public domain
+  - id: met-bonheur-horse-fair
+    title: The Horse Fair, Rosa Bonheur, 1852-55
+    publisher: The Metropolitan Museum of Art, 87.25
+    url: https://www.metmuseum.org/art/collection/search/435702
+    license: CC0
+  - id: met-bonheur-horse-fair-studies
+    title: Sheet of Studies for "The Horse Fair", Rosa Bonheur
+    publisher: The Metropolitan Museum of Art, 1991.463
+    url: https://www.metmuseum.org/art/collection/search/334494
+    license: CC0
+  - id: commons-rabbit-duck-1892
+    title: Kaninchen und Ente (Rabbit and Duck), Fliegende Blätter, 23 October 1892
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Kaninchen_und_Ente.png
+    license: public domain
+  - id: commons-fliegende-blatter-1892
+    title: The page of Fliegende Blätter with the rabbit and duck, 1892
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Flegende-Blatter-1892.png
+    license: public domain
+  - id: met-roman-mosaic-spring
+    title: Mosaic floor panel with the head of Spring, Roman, 2nd century CE
+    publisher: The Metropolitan Museum of Art, 38.11.12
+    url: https://www.metmuseum.org/art/collection/search/253565
+    license: CC0
+  - id: met-degas-little-dancer
+    title: The Little Fourteen-Year-Old Dancer, Edgar Degas, modeled 1881, cast 1922
+    publisher: The Metropolitan Museum of Art, 29.100.370
+    url: https://www.metmuseum.org/art/collection/search/196439
+    license: CC0
+  - id: commons-monet-impression-sunrise
+    title: Impression, Sunrise, Claude Monet, 1872
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Monet_-_Impression,_Sunrise.jpg
+    license: public domain
+  - id: commons-copley-paul-revere
+    title: Paul Revere, John Singleton Copley, about 1768 (Museum of Fine Arts, Boston)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:J_S_Copley_-_Paul_Revere.jpg
+    license: public domain
+  # wonder
+  - id: commons-cassini-saturn-equinox
+    title: Saturn and its rings in natural color, from the Cassini spacecraft, 2008 (NASA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Saturn_during_Equinox.jpg
+    license: public domain (NASA)
+  - id: commons-usfws-nene-2014
+    title: A nēnē, the Hawaiian goose, 2014 (US Fish and Wildlife Service)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:N%C4%93n%C4%93,_Branta_sandvicensis,_an_endangered_endemic_bird_in_Hawai%60i_(38848451080).jpg
+    license: public domain (US Fish and Wildlife Service)
+  - id: commons-usgs-water-cycle-2022
+    title: The water cycle, a diagram by the US Geological Survey, 2022
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:USGS_WaterCycle_English_ONLINE_20221013.png
+    license: public domain (US Geological Survey)
+  - id: commons-nps-sprouted-coconut-kaimu
+    title: Planting a sprouted coconut at Kaimū, Hawaiʻi, about 2009
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Visitor_Planting_Sprouted_Coconut,_Kaimu,_Hawaii.jpg
+    license: public domain
+  - id: commons-loc-segovia-aqueduct-1900
+    title: The Roman aqueduct at Segovia, Spain, a photochrom, about 1900 (Library of Congress)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Segovia-El_Puente_LCCN90708233.jpg
+    license: public domain
+  - id: commons-noaa-hee-octopus
+    title: A heʻe, the day octopus, at Gardner Pinnacles, Papahānaumokuākea, 2011 (Greg McFall, NOAA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:PMNM_-_He%27e_Octopus_(27551309582).jpg
+    license: public domain (NOAA)
+  - id: commons-nasa-eclipse-2017
+    title: The total solar eclipse of 21 August 2017, from a NASA aircraft (Carla Thomas, NASA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:2017_Total_Solar_Eclipse_(AFRC2017-0233-008).jpg
+    license: public domain (NASA)
+  # listen
+  - id: commons-ukulele-c-major-scale
+    title: A C major scale played on a ukulele (recording), 2022
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:C_Major_Scale_Ukulele.ogg
+    license: CC0
+  - id: met-ukulele-hawaii-1880
+    title: Ukulele, Hawaiʻi, about 1880
+    publisher: The Metropolitan Museum of Art, 89.4.727
+    url: https://www.metmuseum.org/art/collection/search/501343
+    license: CC0
+  - id: met-rajao-madeira
+    title: Rajão, Augusto Merciano da Costa, Funchal, Madeira, late 19th century
+    publisher: The Metropolitan Museum of Art, 89.4.2234
+    url: https://www.metmuseum.org/art/collection/search/503738
+    license: CC0
+  - id: commons-whiteman-rhapsody-1924
+    title: Rhapsody in Blue, part 1, Paul Whiteman's orchestra with George Gershwin at the piano (recording), 10 June 1924
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Paul_Whiteman_Concert_Orchestra_-_Rhapsody_in_Blue_Part_01.mp3
+    license: public domain
+  - id: commons-musopen-mozart-k465
+    title: Mozart, String Quartet No. 19 in C major, K. 465, a movement, Musopen String Quartet (recording), 2012
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Mozart_-_String_Quartet_No._19_in_C_major,_K465_%27Dissonance%27_-_III._Allegretto_(Musopen_String_Quartet).flac
+    license: public domain
+  - id: met-stradivari-gould-violin
+    title: The "Gould" violin, Antonio Stradivari, 1693
+    publisher: The Metropolitan Museum of Art, 55.86a-c
+    url: https://www.metmuseum.org/art/collection/search/503045
+    license: CC0
+  - id: commons-usmb-william-tell-2000
+    title: Rossini, William Tell Overture, arranged for band, United States Marine Band (recording), about 2000
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Gioachino_Rossini,_William_Tell_Overture_(military_band_version,_2000).ogg
+    license: public domain (United States Marine Band)
+  - id: commons-handy-edison-phonograph
+    title: Thomas Edison with his phonograph, probably 1878 (Levin C. Handy; Library of Congress)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Edison_and_phonograph_edit2.jpg
+    license: public domain
+  - id: commons-victor-herbert-1910
+    title: The Flatterer, Victor Herbert Orchestra (recording), 1910
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Victor_Herbert_Orchestra_-_14_-_1910_-_The_Flatterer.ogg
+    license: CC0
+  - id: commons-musopen-morning-mood
+    title: Morning Mood, from Peer Gynt, Edvard Grieg, Musopen Symphony Orchestra (recording), 2012
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Musopen_-_Morning.ogg
+    license: public domain
+  # then
+  - id: commons-eyton-walker-iolani-palace
+    title: ʻIolani Palace, photograph by Frederick George Eyton-Walker, about 1890
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Iolani_Palace,_photograph_by_Frederick_George_Eyton-Walker,_c._1890.jpg
+    license: public domain
+  - id: commons-cogswell-kalakaua
+    title: King Kalākaua, painted by William Cogswell (Bishop Museum)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:King_Kalakaua_painted_by_William_Cogswell,_Bishop_Museum.jpg
+    license: public domain
+  - id: commons-admiralty-time-zone-chart-1942
+    title: Time Zone Chart of the World, UK Hydrographic Office, 1942 edition
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:World_Time_Zone_Chart_1942.jpg
+    license: public domain
+  - id: commons-shepherd-gate-clock
+    title: The Shepherd Gate Clock, a 24-hour clock at the Royal Observatory, Greenwich, 2011
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Shepherd_Gate_clock_2011_1.jpg
+    license: CC0
+  - id: met-hokusai-basho
+    title: Portrait of the poet Matsuo Bashō (?), Katsushika Hokusai (The Metropolitan Museum of Art, 56.121.11)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:MET_56_121_11_162301.jpg
+    license: CC0
+  - id: commons-urania-orion-1825
+    title: Orion, a card from Urania's Mirror, Sidney Hall, London, about 1825
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Sidney_Hall_-_Urania%27s_Mirror_-_Orion_(best_currently_available_version_-_2014).jpg
+    license: public domain
+  - id: commons-rackham-fox-and-grapes
+    title: The Fox and the Grapes, Arthur Rackham, from Aesop's Fables, 1912
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Aesops_Fables-Rackham-039-2.jpg
+    license: public domain
+  - id: commons-banneker-woodcut-1795
+    title: Benjamin Banneker, a woodcut from his almanac, 1795
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Benjamin_Banneker_woodcut,_age_64.jpg
+    license: public domain
+  # puzzle
+  - id: commons-konigsberg-bridges-merian
+    title: Königsberg and its bridges, after an engraving by Merian's heirs, colored
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Konigsberg_Bridge.png
+    license: public domain
+  - id: commons-noaa-hawaii-island-landsat
+    title: The island of Hawaiʻi from the Landsat 7 satellite, 1999-2001 (NOAA)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Island_of_Hawai%27i_-_Landsat_mosaic.jpg
+    license: public domain (NOAA)
+  - id: met-fordham-bracket-clock
+    title: Bracket clock, John Fordham, Coggeshall, England, 1755
+    publisher: The Metropolitan Museum of Art, 64.101.869
+    url: https://www.metmuseum.org/art/collection/search/203677
+    license: CC0
+  - id: met-chessboard-201546
+    title: Chessboard, 19th century
+    publisher: The Metropolitan Museum of Art, 53.71.176
+    url: https://www.metmuseum.org/art/collection/search/201546
+    license: CC0
+  - id: met-wall-thermometer-1760
+    title: Wall thermometer, about 1760-70
+    publisher: The Metropolitan Museum of Art, 2012.205.1a
+    url: https://www.metmuseum.org/art/collection/search/238980
+    license: CC0
+  - id: commons-pennyfarthing-1886
+    title: Two riders on penny-farthing bicycles, Santa Ana, California, 1886
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Pennyfarthing-1886.jpg
+    license: public domain
 
 lessons:
   # --- look ---
@@ -2491,3 +2703,662 @@ lessons:
         called Plimpton 322, about 3,800 years old, is covered with them in rows and columns. We still
         use sixties for the degrees around a circle: 360, which is six sixties. The pair-case watch
         was made in the Netherlands by Jacob Hasius about 1695.
+
+  # ===== week 4 picked 16 Nov 2026 (plan/candidates/short-lessons-4.md) =====
+  # Week 4's thread is Egypt's last three topics (22-24), on listen, then and puzzle on days 1 to 3; days 4 to 7 give
+  # every slot to a short lesson, so the week needs look 7, wonder 7, listen 6, then 6, puzzle 6, in this order within
+  # each slot. Saturday 14 Nov's pick was missed, so Sunday's build refused and the week was built by hand on Monday
+  # 16 Nov. Three lessons land on their days: ʻIolani's lights on Monday 16 Nov, King Kalākaua's birthday; time zones
+  # on Wednesday 18 Nov, the day of two noons in 1883; the phonograph on Saturday 21 Nov, the day Edison announced it
+  # in 1877. William Tell takes Clair de lune's place (it went to the Moon, 8 Nov), and seed dispersal takes the place
+  # of pāhoehoe and ʻaʻā (struck by Brandon at the pick).
+
+  # --- look ---
+  - key: volcano-school
+    subject: art
+    slot: look
+    title: Contrast, and the painters of Kīlauea's fire at night
+    sources: [commons-tavernier-kilauea-1885, commons-hitchcock-river-of-fire]
+    values_points: []
+    summary:
+      "2-3": >-
+        Contrast is putting very different things side by side, like bright next to dark. Painters
+        who went to Kīlauea in the 1880s and 1890s painted the lava glowing at night. Around the
+        glowing lava they painted the night sky and the rocks almost black, and against that dark the
+        orange and yellow seem to shine like real fire, brighter than paint can really be.
+      "4-5": >-
+        Paint cannot give off light, so a painter makes something look bright by what is put around
+        it: the darker the dark, the brighter the light seems. Jules Tavernier, born in France, came
+        to Hawaiʻi in 1884 and painted Kīlauea's caldera in 1885 with its lava lake burning in the
+        dark. D. Howard Hitchcock, born in Hilo in 1861, painted rivers of lava at night in the 1890s.
+        Painters like them who painted Kīlauea are called the Volcano School. Photographs of the time
+        were black and white, so for most people far away, paintings like these were the only way to
+        see the colors of the fire.
+
+  - key: bonheur-horse-fair
+    subject: art
+    slot: look
+    title: Sketching from life, and Rosa Bonheur's horses
+    sources: [met-bonheur-horse-fair, met-bonheur-horse-fair-studies]
+    values_points: []
+    summary:
+      "2-3": >-
+        Sketching from life means drawing a real thing while you look at it, not from memory or from
+        another picture. Rosa Bonheur, a French painter, wanted her horses to look as if they really
+        moved, so she went to the horse market in Paris and drew the horses there over and over. Then
+        she painted The Horse Fair, a huge painting of horses being shown to buyers.
+      "4-5": >-
+        For a year and a half Rosa Bonheur went to the horse market in Paris twice a week and drew the
+        horses as they trotted, reared and were led about, filling sheets with quick studies in chalk
+        and pencil, like the sheet at the Met. Sketching from life teaches the eye how a body really
+        moves, which no photograph of the time could catch, since cameras then needed the subject to
+        keep still. From those studies she painted The Horse Fair between 1852 and 1855. It is about 8
+        feet tall and more than 16 feet wide, so the horses are close to life size, and it made her
+        famous.
+
+  - key: rabbit-duck
+    subject: art
+    slot: look
+    title: An ambiguous figure, the rabbit that is also a duck
+    sources: [commons-rabbit-duck-1892, commons-fliegende-blatter-1892]
+    values_points: []
+    summary:
+      "2-3": >-
+        This drawing can be a duck looking to the left, with its bill open, or a rabbit looking to the
+        right, with long ears. The duck's bill is the rabbit's ears. A picture that can be seen two
+        ways is called an ambiguous figure. Most people can see both, but only one at a time: the eye
+        flips from one to the other.
+      "4-5": >-
+        The drawing first appeared in a German funny magazine, Fliegende Blätter, on 23 October 1892,
+        under the question "Which animals are most like each other?" The lines on the page never
+        change: what changes is how the brain reads them, and it can hold only one reading at a time.
+        Scientists who study seeing later used it in experiments, and one found that people asked on
+        Easter Sunday were more likely to see the rabbit first, while in October more saw the duck.
+        What you expect can change what you see.
+
+  - key: roman-mosaic
+    subject: art
+    slot: look
+    title: A mosaic, a picture made of small stones
+    sources: [met-roman-mosaic-spring]
+    values_points: []
+    summary:
+      "2-3": >-
+        A mosaic is a picture made of many small pieces of stone, tile or glass, set side by side in
+        wet mortar that hardens and holds them. The Romans made mosaics for their floors, so people
+        walked on pictures. This one shows a face standing for Spring, one of the four seasons, made
+        of thousands of tiny pieces.
+      "4-5": >-
+        Roman mosaic makers cut stone, tile and glass into small cubes called tesserae, and pressed
+        them one by one into a bed of mortar, choosing each color to build up shading, so a face looks
+        round from a distance though it is made of flat squares up close. Floors were made this way
+        because stone does not wear out under feet the way paint does, and many have lasted nearly
+        two thousand years. This panel was part of a floor in the 2nd century CE, and it is about 7
+        feet by 8 feet.
+
+  - key: degas-dancer
+    subject: art
+    slot: look
+    title: Sculpture in the round, and Degas's Little Dancer
+    sources: [met-degas-little-dancer]
+    values_points: []
+    summary:
+      "2-3": >-
+        A sculpture you can walk all the way around, and see from every side, is called sculpture in
+        the round. Edgar Degas made one of a young ballet student, standing with her hands behind her
+        back and her chin up. He dressed her in a real cloth skirt, a tutu, and a real ribbon in her
+        hair, so she looks almost alive.
+      "4-5": >-
+        Degas modeled the Little Dancer in wax and showed her in Paris in 1881, with real hair, a real
+        cloth tutu and a silk ribbon, which surprised people who expected sculpture to be all stone or
+        metal. She was the only sculpture he ever showed in public. After he died, metal copies were
+        cast in bronze in 1922 from his wax figure, and each was given a cloth tutu and a ribbon; the
+        Met's is one of them, a little over 3 feet tall. A sculpture in the round has to work from
+        every side, unlike a relief, which is carved out of a flat surface and seen only from the
+        front.
+
+  - key: monet-impression
+    subject: art
+    slot: look
+    title: Impressionism, named after Monet's sunrise
+    sources: [commons-monet-impression-sunrise]
+    values_points: []
+    summary:
+      "2-3": >-
+        Claude Monet painted the harbor of Le Havre, in France, at sunrise in 1872, with quick, loose
+        strokes: the boats are dark smudges and the sun is an orange circle in a gray-blue mist. He
+        called it Impression, Sunrise. He wanted to paint how the moment looked at a glance, not every
+        detail.
+      "4-5": >-
+        When the painting was shown in Paris in 1874, a critic made fun of it, saying it was only an
+        impression, not a finished picture, and called the whole group of painters "Impressionists".
+        The painters kept the name. Impressionists often painted outdoors and fast, to catch light
+        that changes from minute to minute, and they put down separate strokes of color instead of
+        smoothing them together. Up close the sun's reflection in the water is only a few orange
+        dabs; from across the room it glitters.
+
+  - key: copley-paul-revere
+    subject: art
+    slot: look
+    title: Clues in a portrait, Paul Revere with his teapot
+    sources: [commons-copley-paul-revere]
+    values_points: []
+    summary:
+      "2-3": >-
+        A portrait can tell you who a person is by what is in it. John Singleton Copley painted Paul
+        Revere at his work table in his shirtsleeves, holding a shiny silver teapot, with the tools
+        for engraving it in front of him. Those things are clues: Paul Revere was a silversmith, a
+        maker of things out of silver.
+      "4-5": >-
+        Copley painted this portrait in Boston about 1768. Most people in portraits then wore fine
+        coats and were painted as gentlemen, but Revere is shown at work, with his engraving tools
+        on the table and a plain teapot in his hand, so the painting says he is proud of his craft.
+        The table is polished so smooth that his hand and the teapot are reflected in it, and Copley
+        painted the reflection too. A portrait is full of choices, what to wear, what to hold, what to
+        put in the background, and each one says something about the person.
+
+  # --- wonder ---
+  - key: saturn-rings
+    subject: science
+    slot: wonder
+    title: A planet's rings, and what Saturn's are made of
+    sources: [commons-cassini-saturn-equinox]
+    values_points: []
+    summary:
+      "2-3": >-
+        Saturn, the sixth planet from the Sun, has bright rings around it. They are not solid: they
+        are billions of pieces of ice and rock, some as small as specks of dust and some as big as a
+        house, all circling Saturn together. This picture was made from photographs taken by a
+        spacecraft called Cassini.
+      "4-5": >-
+        Each piece in Saturn's rings goes around the planet on its own path, like a tiny moon. The
+        main rings stretch about 170,000 miles from edge to edge, yet in most places they are only
+        about 30 feet thick, so seen exactly edge-on they almost disappear. In 1610 Galileo, looking
+        through one of the first telescopes, thought Saturn had two smaller bodies stuck to its sides;
+        in later years they looked to him like ears. In the 1650s Christiaan Huygens, with a better
+        telescope, worked out that they were a flat ring. The Cassini spacecraft circled Saturn from
+        2004 to 2017.
+
+  - key: nene
+    subject: science
+    slot: wonder
+    title: An endangered species, and the nēnē that came back
+    sources: [commons-usfws-nene-2014]
+    values_points: []
+    summary:
+      "2-3": >-
+        The nēnē is a goose that lives only in Hawaiʻi, and it is the state bird. Its feet have less
+        webbing than other geese, which helps it walk on rough lava. About 75 years ago only about 30
+        were left in the wild. A kind of animal in danger of dying out everywhere is called an
+        endangered species.
+      "4-5": >-
+        Hunting, the loss of the places nēnē lived, and animals people brought to the islands, such as
+        mongooses, cats and pigs that eat eggs and chicks, made the nēnē fewer and fewer, until only
+        about 30 were left in the wild by about 1950. In 1949 people began raising nēnē at Pōhakuloa,
+        on Hawaiʻi Island, and later set young birds free. The nēnē was listed as endangered in 1967,
+        and after many years of breeding and protecting it there were enough that in 2019 it was moved
+        to threatened, one step safer. It became Hawaiʻi's state bird in 1957.
+
+  - key: water-cycle
+    subject: science
+    slot: wonder
+    title: The water cycle, and where a puddle goes
+    sources: [commons-usgs-water-cycle-2022]
+    values_points: []
+    summary:
+      "2-3": >-
+        When a puddle dries up, its water has not gone away: the sun has turned it into an invisible
+        gas in the air, water vapor. High up, the vapor cools and turns back into tiny drops that make
+        clouds. When the drops get big and heavy they fall as rain, and the rain runs into streams and
+        back to the sea. That trip, over and over, is the water cycle.
+      "4-5": >-
+        Water turning from a liquid into a gas is evaporation, and the sun's heat drives most of it,
+        mostly from the oceans. As moist air rises it cools, and the vapor condenses into droplets on
+        tiny bits of dust, which is how clouds form. Rain, snow and hail are precipitation. Some of it
+        runs off over the ground into rivers, some soaks down into the ground, and some is taken up by
+        plants and breathed out of their leaves. The same water goes around again and again, so the
+        water in a glass today may once have been in a cloud, a river or the sea.
+
+  - key: seeds-to-hawaii
+    subject: science
+    slot: wonder
+    title: Seed dispersal, and how plants reached islands in the middle of the ocean
+    sources: [commons-nps-sprouted-coconut-kaimu]
+    values_points: []
+    summary:
+      "2-3": >-
+        Plants cannot walk, so their seeds have to travel. How seeds get carried to new places is
+        called seed dispersal. Hawaiʻi is far from any other land, and the first plants got there long
+        before people did: some seeds were carried by birds, some floated across the sea, and a few
+        tiny ones blew on the wind. Later the first voyagers brought plants in their canoes, like the
+        coconut.
+      "4-5": >-
+        Scientists sometimes say Hawaiʻi's plants came by wind, wings and waves. Birds brought most of
+        them, about three of every four: seeds stuck in mud on their feet or in their feathers, or
+        eaten and dropped later. About one in four floated, inside seeds with tough, waterproof
+        coats. Only a few came on the wind, which seldom carries seeds that far. Fewer than 300 kinds
+        of flowering plants arrived and took root this way, and over a very long time they became
+        about a thousand native kinds found nowhere else. The coconut in this picture is a canoe plant,
+        brought by the voyagers who settled the islands, as kalo and kukui were.
+
+  - key: roman-arch
+    subject: science
+    slot: wonder
+    title: An arch, and the aqueduct built with no mortar
+    sources: [commons-loc-segovia-aqueduct-1900]
+    values_points: []
+    summary:
+      "2-3": >-
+        An arch is a curved row of stones over an opening. Each stone presses against the ones next
+        to it, and the stone at the top, the keystone, locks them all in place. The Romans built an
+        aqueduct, a bridge that carries water, at Segovia in Spain out of granite blocks with no
+        mortar to glue them, and it still stands, nearly two thousand years later.
+      "4-5": >-
+        A flat stone beam over a gap can crack in the middle, because its bottom is stretched. In an
+        arch the weight above pushes each wedge-shaped stone tighter against its neighbors, turning
+        the load into a squeeze that runs around the curve and down into the pillars, and stone is
+        very strong when squeezed. While an arch is being built it needs a wooden frame to hold it up;
+        once the keystone goes in, the frame can be taken away. The aqueduct at Segovia carried water
+        to the city across a valley on more than 160 arches, over 90 feet high at the tallest, and
+        its blocks are held only by their own weight.
+
+  - key: hee-octopus
+    subject: science
+    slot: wonder
+    title: An invertebrate, and the heʻe
+    sources: [commons-noaa-hee-octopus]
+    values_points: []
+    summary:
+      "2-3": >-
+        An animal with no backbone is an invertebrate. The heʻe, the day octopus of Hawaiʻi's reefs,
+        has no bones at all, so it can squeeze through any gap bigger than its hard beak. It can
+        change the color of its skin in a moment to match the rocks and hide. It hunts in the day,
+        which is how it got its name.
+      "4-5": >-
+        Most animals on Earth are invertebrates: insects, worms, snails, crabs and octopuses. The
+        heʻe has three hearts, two that push blood through its gills and one for the rest of its body,
+        and its blood is blue, because it carries oxygen with copper instead of iron. Its skin holds
+        thousands of tiny sacs of color that it can open and close, and it can raise bumps to look
+        like rough rock. Its eight arms are lined with suckers that can taste what they touch. This
+        one was photographed at Gardner Pinnacles, in Papahānaumokuākea, northwest of the main
+        islands.
+
+  - key: solar-eclipse
+    subject: science
+    slot: wonder
+    title: A solar eclipse, when the Moon hides the Sun
+    sources: [commons-nasa-eclipse-2017]
+    values_points: []
+    summary:
+      "2-3": >-
+        Sometimes the Moon passes exactly between the Sun and the Earth and blocks the Sun's light.
+        That is a solar eclipse. Where the Moon's shadow falls, the day goes dark for a few minutes,
+        and a glow called the corona can be seen around the black Moon. The island of Hawaiʻi had a
+        total eclipse on 11 July 1991.
+      "4-5": >-
+        The Sun is about 400 times wider than the Moon and also about 400 times farther away, so from
+        Earth they look almost the same size, and the Moon can just cover the Sun. Its shadow makes a
+        narrow path across the Earth; only inside that path is the eclipse total, and the darkness
+        lasts a few minutes at most. Then the corona, the Sun's thin outer air, shines around the Moon
+        like a white crown. Looking at the Sun is never safe without special eclipse glasses, even
+        when part of it is covered. This photograph was taken from a NASA airplane during the eclipse
+        of 21 August 2017.
+
+  # --- listen ---
+  - key: ukulele
+    subject: music
+    slot: listen
+    title: The ʻukulele, and the four strings from Madeira
+    sources: [commons-ukulele-c-major-scale, met-ukulele-hawaii-1880, met-rajao-madeira]
+    values_points: []
+    summary:
+      "2-3": >-
+        In 1879 a ship brought workers from Madeira, an island of Portugal, to Hawaiʻi, and some
+        brought small guitars with them. Hawaiian players loved them and made them their own as the
+        ʻukulele. An ʻukulele has four strings, tuned to the notes G, C, E and A. The recording is a
+        scale played on one, eight notes going up.
+      "4-5": >-
+        The ship Ravenscrag reached Honolulu on 23 August 1879, and among the people from Madeira were
+        cabinetmakers who began making small guitars in Honolulu, like the Madeiran rajão at the Met.
+        King Kalākaua played and loved the new instrument, and it was played at his court. Its four
+        strings are G, C, E and A, but the G string is tuned higher than the C next to it, which gives
+        the ʻukulele its bright, bouncing sound. Why it is called ʻukulele, "jumping flea", is told in
+        different ways: some say for fingers jumping over the strings. The Met's ʻukulele was made in
+        Hawaiʻi about 1880.
+
+  - key: rhapsody-in-blue
+    subject: music
+    slot: listen
+    title: A glissando, and the clarinet that slides up
+    sources: [commons-whiteman-rhapsody-1924]
+    values_points: []
+    summary:
+      "2-3": >-
+        Rhapsody in Blue begins with a clarinet playing a low trill and then sliding smoothly up and up
+        to a high note, passing through every note on the way without stopping. A slide like that is
+        called a glissando. George Gershwin wrote the piece for piano and band in New York in 1924.
+      "4-5": >-
+        Gershwin wrote only a run of quick notes up the scale, but the story is that in rehearsal the
+        clarinetist, Ross Gorman, smeared them into one long slide as a joke, and Gershwin liked it so
+        much he kept it. Clarinetists have played it that way ever since. Gershwin mixed the sounds of
+        jazz with a concert piece for piano, and it was first played in New York on 12 February 1924.
+        This recording was made on 10 June 1924 by Paul Whiteman's orchestra, with Gershwin himself
+        at the piano, before microphones were used: the musicians played into a big horn.
+
+  - key: string-quartet
+    subject: music
+    slot: listen
+    title: A string quartet, four players with four parts
+    sources: [commons-musopen-mozart-k465, met-stradivari-gould-violin]
+    values_points: []
+    summary:
+      "2-3": >-
+        A string quartet is four players: two violins, a viola and a cello. Each plays its own part,
+        and together they make the music. Quart- means four, as in a quarter and a quart. The
+        recording is Mozart's music for string quartet. The violins play highest, and the cello, held
+        between the knees, plays lowest.
+      "4-5": >-
+        Joseph Haydn wrote so many string quartets, about 68, that he is called the father of the
+        string quartet. In a quartet there is no conductor: the four players watch and listen to each
+        other, and the tune passes from one instrument to another. Mozart learned from Haydn and wrote
+        six quartets for him in 1785, and this one, K. 465, is one of them; it is called the
+        Dissonance for its strange, clashing opening. The viola is a little bigger and lower than a
+        violin. The Met's violin was made by Antonio Stradivari in Italy in 1693.
+
+  - key: william-tell
+    subject: music
+    slot: listen
+    title: The overture, a whole story before the curtain opens
+    sources: [commons-usmb-william-tell-2000]
+    values_points: []
+    summary:
+      "2-3": >-
+        An overture is music played at the start of an opera or a show, before the curtain opens.
+        Gioachino Rossini's William Tell Overture, from 1829, tells a story in four parts: a calm
+        dawn, a storm, a peaceful morning in the mountains, and a fast gallop with a trumpet call.
+        This recording is by a band, the United States Marine Band.
+      "4-5": >-
+        Rossini wrote William Tell, an opera set in the mountains of Switzerland, for Paris in 1829,
+        and its overture is about 12 minutes long. Its four parts are like four scenes: a quiet dawn;
+        a storm that builds and passes; a shepherd's call to the cows, played by an English horn and
+        a flute; and a gallop that opens with a trumpet fanfare. In the orchestra the dawn is played
+        by cellos, and in this arrangement for band the cellos' tune is played by wind instruments
+        instead.
+
+  - key: phonograph
+    subject: music
+    slot: listen
+    title: The phonograph, sound cut into a groove
+    sources: [commons-handy-edison-phonograph, commons-victor-herbert-1910]
+    values_points: []
+    summary:
+      "2-3": >-
+        On 21 November 1877 Thomas Edison announced a machine that could record sound and play it
+        back: the phonograph. He spoke into it, and his voice shook a needle that pressed a groove
+        into tinfoil wrapped around a turning cylinder. Run back over the groove, the needle shook
+        again and the sound came out. His first words were "Mary had a little lamb".
+      "4-5": >-
+        Sound is a shaking of the air. In Edison's phonograph a thin disc picked up that shaking and
+        passed it to a needle, which pressed a groove of tiny hills and valleys into tinfoil as a
+        handle turned the cylinder. To play it back, the needle followed the groove and shook the disc
+        again, and a horn made the sound louder. Tinfoil wore out after a few plays, so later records
+        were made of wax and then of hard discs. The recording here was made in 1910 the same way,
+        with no microphone: an orchestra played into a horn that shook a needle as it cut the record.
+
+  - key: morning-mood
+    subject: music
+    slot: listen
+    title: Program music, and a sunrise in sound
+    sources: [commons-musopen-morning-mood]
+    values_points: []
+    summary:
+      "2-3": >-
+        Music that paints a picture or tells a story is called program music. Edvard Grieg wrote
+        Morning Mood about a sunrise. It starts softly, with a flute playing a tune, and an oboe
+        answering it; then more and more instruments join, and the music grows louder and fuller,
+        like the sun coming up.
+      "4-5": >-
+        Grieg, from Norway, wrote Morning Mood in 1875 for Peer Gynt, a play by Henrik Ibsen, and in
+        the play the sun is rising over the desert in Morocco, though it is often heard as a morning
+        in Norway's mountains. The same short tune passes back and forth between the flute and the
+        oboe, growing a little fuller each time, until the whole orchestra plays it loudly at the moment
+        the sun breaks through. Then the music grows calm again. Without any words, the music shows
+        the light coming up.
+
+  # --- then ---
+  - key: iolani-lights
+    subject: history
+    slot: then
+    title: Electric light at ʻIolani Palace, before the White House
+    sources: [commons-eyton-walker-iolani-palace, commons-cogswell-kalakaua]
+    values_points: []
+    summary:
+      "2-3": >-
+        King Kalākaua was born on 16 November 1836. In 1881, on a trip around the world, he met the
+        inventor Thomas Edison, who was making electric light bulbs. Back home he had electric lights
+        put in at ʻIolani Palace, his palace in Honolulu. The palace was lit by electricity a few years
+        before the White House was.
+      "4-5": >-
+        Before electric light, houses were lit by candles, oil lamps and gas lamps, which burn with an
+        open flame. Kalākaua met Edison in 1881 and wanted the new light for his kingdom. In 1886 the
+        palace grounds were lit by electric lamps, with the power made by a steam engine, and in 1887
+        the inside of the palace was lit with hundreds of bulbs. The White House did not get electric
+        light until 1891. By 1888 electric lights lit some of Honolulu's streets too.
+
+  - key: time-zones
+    subject: geography
+    slot: then
+    title: A time zone, and why it is already tomorrow in Japan
+    sources: [commons-admiralty-time-zone-chart-1942, commons-shepherd-gate-clock]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Earth turns once a day, so the Sun is highest in the sky, at noon, at different times in
+        different places. To keep clocks sensible, the world is split into time zones, about an hour
+        apart. When it is 3 o'clock on Sunday afternoon in Hawaiʻi, it is already 10 o'clock on Monday
+        morning in Japan.
+      "4-5": >-
+        Long ago every town set its clocks by its own noon, so a town a little east was a few minutes
+        ahead of its neighbor, which made train timetables a muddle. On 18 November 1883, American and
+        Canadian railroads set their clocks to time zones; many towns changed at midday, so they had
+        two noons that day. In 1884 countries agreed to count longitude, and so the zones, from
+        Greenwich in England, where the Shepherd Gate Clock shows all 24 hours on one dial. Japan is
+        19 hours ahead of Hawaiʻi.
+
+  - key: haiku
+    subject: literature
+    slot: then
+    title: A haiku, three lines and seventeen sounds
+    sources: [met-hokusai-basho]
+    values_points: []
+    summary:
+      "2-3": >-
+        A haiku is a very short poem from Japan, in three lines: five sounds, then seven, then five,
+        seventeen in all. The most famous was written by the poet Matsuo Bashō more than 300 years
+        ago, about a frog jumping into an old pond, and the sound of the water. A haiku often shows
+        one small moment in nature.
+      "4-5": >-
+        In Japanese the sounds counted are not quite syllables, so in English people usually count
+        syllables: five, seven, five. Bashō lived from 1644 to 1694 and walked across Japan writing
+        short poems; his frog poem, written in 1686, says in Japanese: an old pond; a frog jumps in;
+        the sound of water. A haiku often names a season, and it leaves the reader to feel the rest:
+        the quiet before the splash, and after. This drawing by the artist Hokusai may be a portrait
+        of Bashō.
+
+  - key: orion
+    subject: literature
+    slot: then
+    title: A constellation, and Orion the hunter
+    sources: [commons-urania-orion-1825]
+    values_points: []
+    summary:
+      "2-3": >-
+        A constellation is a group of stars that people long ago imagined as a picture in the sky.
+        The ancient Greeks saw a hunter called Orion, with three bright stars in a row for his belt.
+        On November evenings Orion rises in the east, and the three stars of his belt are easy to
+        find.
+      "4-5": >-
+        The Greeks told stories about Orion, a giant hunter, and other peoples saw other pictures in
+        the same stars. Two of Orion's brightest stars are different colors: Betelgeuse, at his
+        shoulder, glows reddish, and Rigel, at his foot, shines blue-white. Below the belt hangs his
+        sword, where a fuzzy patch is a huge cloud of gas in which new stars are forming. About 1825 a
+        set of star cards called Urania's Mirror was made in London, with a hole punched for each
+        star, so that held up to a lamp the stars shine through.
+
+  - key: sour-grapes
+    subject: literature
+    slot: then
+    title: An idiom, and The Fox and the Grapes
+    sources: [commons-rackham-fox-and-grapes]
+    values_points: []
+    summary:
+      "2-3": >-
+        In one of Aesop's fables, a fox sees grapes hanging high on a vine and jumps and jumps but
+        cannot reach them. At last he walks away saying they were probably sour anyway. That is where
+        "sour grapes" comes from: pretending you did not want something you could not get. Words that
+        mean more than they say are called an idiom.
+      "4-5": >-
+        Aesop's fables are short stories, many with animals, told in ancient Greece about 2,500 years
+        ago, each with a lesson about how people behave. An idiom cannot be understood from its words
+        alone: "sour grapes" is not about fruit, "a piece of cake" means easy, and "raining cats and
+        dogs" means raining hard. Many idioms come from old stories like this one. Arthur Rackham drew
+        this picture of the fox looking up at the grapes for a book of Aesop's fables in 1912.
+
+  - key: banneker-almanac
+    subject: history
+    slot: then
+    title: An almanac, and Benjamin Banneker's sky
+    sources: [commons-banneker-woodcut-1795]
+    values_points: []
+    summary:
+      "2-3": >-
+        An almanac is a book for the year ahead, with the times of sunrise and sunset, the phases of
+        the Moon and the weather to expect. Benjamin Banneker, an African American farmer in Maryland,
+        taught himself astronomy from borrowed books, and worked out the numbers for his own almanacs
+        himself. They were printed from 1792.
+      "4-5": >-
+        Banneker was born in Maryland in 1731. As a young man he carved a wooden clock by hand that
+        struck the hours. Later he borrowed books and a telescope from a neighbor and taught himself
+        to work out where the Sun, Moon and planets would be, and when eclipses would come, by long
+        careful sums. His almanacs, printed from 1792 to 1797, were read by farmers who needed to know
+        the seasons and the Moon. In 1791 he also helped measure out the boundary of the new capital,
+        Washington, D.C. This picture of him is a woodcut from the cover of his 1795 almanac.
+
+  # --- puzzle ---
+  - key: konigsberg-bridges
+    subject: math
+    slot: puzzle
+    title: A network, and Euler's seven bridges
+    sources: [commons-konigsberg-bridges-merian]
+    values_points: []
+    summary:
+      "2-3": >-
+        The city of Königsberg had a river with two islands, and seven bridges joining the islands and
+        the banks. People tried to take a walk that crossed every bridge exactly once, and nobody ever
+        could. In 1736 a mathematician, Leonhard Euler, showed that it cannot be done. Places joined
+        by paths are called a network.
+      "4-5": >-
+        Euler drew each piece of land as a dot and each bridge as a line between dots; the shape of
+        the land and the length of the bridges do not matter, only what is joined to what. On a walk
+        through a piece of land you go in on one bridge and out on another, so every land you pass
+        through needs an even number of bridges; only the start and the end may have an odd number.
+        In Königsberg all four pieces of land touched an odd number of bridges, so the walk is
+        impossible. Euler's idea began the study of networks, which today is used for maps, roads and
+        computers.
+
+  - key: hawaii-area
+    subject: math
+    slot: puzzle
+    title: Square miles, and the biggest island
+    sources: [commons-noaa-hawaii-island-landsat]
+    values_points: []
+    summary:
+      "2-3": >-
+        Area is how much flat space something covers. Big areas of land are measured in square miles:
+        a square mile is a square one mile long on each side. Hawaiʻi Island covers about 4,028 square
+        miles. All the other main islands put together cover about 2,400 square miles, so the Big
+        Island is bigger than all of them together.
+      "4-5": >-
+        The other seven main islands cover about 727 square miles (Maui), 597 (Oʻahu), 552 (Kauaʻi),
+        260 (Molokaʻi), 140 (Lānaʻi), 70 (Niʻihau) and 45 (Kahoʻolawe), which add up to about 2,391.
+        So Hawaiʻi Island is more than one and a half times as big as all of them together, and it
+        still grows a little when lava from Kīlauea reaches the sea. An island's area is not a perfect rectangle, so it is
+        worked out from maps and from pictures taken from space, like this one from the Landsat
+        satellite.
+
+  - key: quarter-past
+    subject: math
+    slot: puzzle
+    title: A quarter of an hour
+    sources: [met-fordham-bracket-clock]
+    values_points: []
+    summary:
+      "2-3": >-
+        An hour has 60 minutes, and a quarter is one of four equal parts, so a quarter of an hour is
+        15 minutes. At quarter past, the minute hand has gone a quarter of the way around the clock,
+        and points at the 3. At half past it has gone halfway, to the 6, and at quarter to, three
+        quarters of the way, to the 9.
+      "4-5": >-
+        Four quarters make a whole: 15, 30, 45 and 60 minutes. "Quarter past four" is 4:15, "half past
+        four" is 4:30, and "quarter to five" is 4:45, because a quarter of an hour is left before
+        five. On the clock face the quarters are at the 3, the 6, the 9 and the 12, a quarter turn
+        apart. This bracket clock, made to stand on a shelf, was made by John Fordham in England in
+        1755 and is about 10 inches tall.
+
+  - key: chess-coordinates
+    subject: math
+    slot: puzzle
+    title: Coordinates, and naming the squares of a chessboard
+    sources: [met-chessboard-201546]
+    values_points: []
+    summary:
+      "2-3": >-
+        A chessboard has 8 rows of 8 squares, 64 in all. Each square has a name made of a letter and a
+        number: the letter, a to h, says which column, and the number, 1 to 8, says which row. So e4
+        is one square, and only one. Two pieces of information that find a place on a grid are called
+        coordinates.
+      "4-5": >-
+        In chess the columns are called files and the rows ranks; a player writes down a game move by
+        move with these names, so it can be played again years later. The same idea finds places on
+        maps, where a grid of letters and numbers, or of latitude and longitude, names every spot, and
+        on graphs, where two numbers say how far across and how far up. Order matters: on a graph
+        (2, 5) is a different place from (5, 2), so the across number always comes first. This
+        chessboard was made in the 1800s of wood, gilded brass, tortoiseshell and ivory.
+
+  - key: fahrenheit
+    subject: math
+    slot: puzzle
+    title: Degrees, and Fahrenheit's thermometer
+    sources: [met-wall-thermometer-1760]
+    values_points: []
+    summary:
+      "2-3": >-
+        A thermometer measures how hot or cold something is, in degrees. Daniel Fahrenheit made a scale
+        in 1724 on which water freezes at 32 degrees and boils at 212 degrees. A thermometer standing
+        up is like a number line: the higher the liquid inside climbs, the bigger the number and the
+        hotter it is.
+      "4-5": >-
+        From freezing at 32 to boiling at 212 is 180 degrees on Fahrenheit's scale. Another scale,
+        Celsius, puts freezing at 0 and boiling at 100, so its degrees are bigger: 100 of them do the
+        work of 180. The United States still uses Fahrenheit for the weather, and most other countries
+        use Celsius. Inside a thermometer a liquid swells as it warms and climbs a thin tube, and the
+        marks beside the tube are read like a ruler. This wall thermometer was made about 1760 to 1770.
+
+  - key: wheel-circumference
+    subject: math
+    slot: puzzle
+    title: Circumference, and why a big wheel goes farther
+    sources: [commons-pennyfarthing-1886]
+    values_points: []
+    summary:
+      "2-3": >-
+        The distance all the way around a circle is its circumference. For every circle it is a little
+        more than 3 times the distance across. So each time a big wheel turns once, it rolls farther
+        than a small one. That is why old bicycles called penny-farthings had a huge front wheel.
+      "4-5": >-
+        The circumference of a circle is always about 3.14 times its diameter, the distance across
+        through the middle; that number is called pi. A penny-farthing's pedals were fixed straight to
+        its front wheel, with no chain, so one turn of the pedals turned the wheel once. A front wheel
+        50 inches across rolled about 157 inches, about 13 feet, for every turn of the pedals, so the
+        bigger the wheel, the faster the bicycle could go. Riders sat high up, and a fall was a long
+        way down. This photograph was taken in California in 1886.

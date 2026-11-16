@@ -117,7 +117,7 @@ describe("weekSchedule", () => {
     );
   });
 
-  it("fits the picked lessons into weeks 1, 2 and 3 exactly, with the vote on Election Day and Nellie Bly on her day", async () => {
+  it("fits the picked lessons into weeks 1 to 4 exactly, with the vote, Nellie Bly, time zones and the phonograph on their days", async () => {
     const { readFileSync } = await import("node:fs");
     const { join } = await import("node:path");
     const { parseLibrary } = await import("../../lib/plan");
@@ -148,11 +148,22 @@ describe("weekSchedule", () => {
     expect(week3[6].topics).toEqual({ look: "egypt-21", wonder: "autumn-leaves", listen: "st-louis-blues", then: "crow-and-pitcher", puzzle: "base-sixty" });
     expect(new Set(shortIn(week3))).toEqual(new Set(lessons.slice(56, 84).map((l) => l.id)));
 
-    // Week 4 has nothing left, so a Sunday firing for it refuses before spending. Egypt's last three topics take days 1-3,
-    // so days 4-7 take five short lessons each: look 7, wonder 7, listen 6, then 6, puzzle 6.
+    // Week 4 (picked 16 Nov 2026, built by hand that day) starts Monday 16 Nov, King Kalākaua's birthday: ʻIolani's
+    // lights on day 1, time zones on day 3 (18 Nov, the day of two noons), the phonograph on day 6 (21 Nov). Egypt's last
+    // three topics take days 1-3, so days 4-7 take five short lessons each: look 7, wonder 7, listen 6, then 6, puzzle 6.
     const three = new Set([...both, ...shortIn(week3)]);
-    expect(() => weekSchedule({ week: 4, thread: egypt(4), lessons, used: three })).toThrow(
-      "Not enough short lessons for week 4: the look card needs 7 and 0 are left; the wonder card needs 7 and 0 are left; the listen card needs 6 and 0 are left; the then card needs 6 and 0 are left; the puzzle card needs 6 and 0 are left.",
+    const week4 = weekSchedule({ week: 4, thread: egypt(4), lessons, used: three });
+    expect(week4[0].topics).toEqual({ look: "volcano-school", wonder: "saturn-rings", listen: "egypt-22", then: "iolani-lights", puzzle: "konigsberg-bridges" });
+    expect(week4[2].topics).toEqual({ look: "rabbit-duck", wonder: "water-cycle", listen: "rhapsody-in-blue", then: "time-zones", puzzle: "egypt-24" });
+    expect(week4[3].topics).toEqual({ look: "roman-mosaic", wonder: "seeds-to-hawaii", listen: "string-quartet", then: "haiku", puzzle: "quarter-past" });
+    expect(week4[5].topics).toEqual({ look: "monet-impression", wonder: "hee-octopus", listen: "phonograph", then: "sour-grapes", puzzle: "fahrenheit" });
+    expect(week4[6].topics).toEqual({ look: "copley-paul-revere", wonder: "solar-eclipse", listen: "morning-mood", then: "banneker-almanac", puzzle: "wheel-circumference" });
+    expect(new Set(shortIn(week4))).toEqual(new Set(lessons.slice(84, 116).map((l) => l.id)));
+
+    // Week 5 (the Moon, a theme of seven topics) has nothing left, so a Sunday firing for it refuses before spending.
+    const four = new Set([...three, ...shortIn(week4)]);
+    expect(() => weekSchedule({ week: 5, thread: theme("moon"), lessons, used: four })).toThrow(
+      "Not enough short lessons for week 5: the look card needs 5 and 0 are left; the wonder card needs 6 and 0 are left; the listen card needs 6 and 0 are left; the then card needs 5 and 0 are left; the puzzle card needs 6 and 0 are left.",
     );
   });
 });
