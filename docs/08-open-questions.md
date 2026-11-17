@@ -578,6 +578,13 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 
 ### Releases
 
+- **Released to `main`, 17 Nov 2026: the trading boat, slice 2, on the boys' iPads** (*Wonder Wall*), with the 16 Nov release's own records and slice 2's board row.
+  - **What moved:** `main` went from `5663851` to `2042ac1` at 08:05 HST, a fast-forward of 20 commits.
+  - **Who said so:** Brandon typed `/wwc:release` at the job's last stop (07:45, after stop 3, so the close ran first), and "go" at the release's stop; he gave no other words for it.
+  - **What the boys see:** the trading boat in Puzzle's place on both walls, from the deploy. The family's tables were set on live at stop 3 (M3). The gate is unchanged, `main`'s v2.
+  - **The migrations run on `main`:** 44144036163, green. Its live job ran the tests and the typecheck, found no `SUPABASE_DB_URL_LIVE` and skipped "Push to the live database"; the two new migrations were on live already, from M1.
+  - **Vercel:** "Vercel is deploying your app" at the first look after the push, then "Deployment has completed" at 08:06.
+  - The row goes to *live*.
 - **Released to `main`, 16 Nov 2026: the trading boat, slice 1, with the branch since 9 Nov** (the Math tile's held slice and its clean-up, week 4's content, the Next.js job's records).
   - **What moved:** `main` went from `e1046ac` to `5663851` at 21:15 HST, a fast-forward of 49 commits.
   - **Who said so:** Brandon typed `/wwc:release` at the trading boat's *Your look* (20:50), then "Go" at the release's stop. Before it, he decided to fix the look's faults before releasing: "No, since I got into this we're going to fix it."

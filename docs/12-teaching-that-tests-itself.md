@@ -193,7 +193,8 @@ overwhelming lead. fix the first 3 days of the simulation, then luck after that.
 next screen, and each child's game waits where he left it.
 
 **On live** (17 Nov 2026, by Brandon's hand): the six migrations (`20261109000000` to `20261117000000`, the switch's
-column added and dropped in the same push), the ladder's 20 rows, and the family's tables.
+column added and dropped in the same push), the ladder's 20 rows, and the family's tables. The code reached the boys'
+walls with the release to `main` at 08:05 (`2042ac1`).
 
 ## The session ends when the thinking stops (proposed)
 
