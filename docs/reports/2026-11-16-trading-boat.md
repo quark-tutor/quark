@@ -615,7 +615,7 @@ Then type **go**. On go I:
 - **Brandon's "go, and clear .next first".** I had already started a dev server on the old `.next`, so I stopped it
   (my own, started at 18:35), cleared `.next`, built and started it again.
 
-## Stop 2: Your look, on June's iPad, on test (16 Nov 2026, 18:50 HST)
+## Stop 2: Your look, on June's iPad, on test (16 Nov 2026, 18:47 HST)
 
 ### Where it stands
 
@@ -729,7 +729,7 @@ whether it was right at once or which help he needed, and each wrong answer with
   - a bug line for the `!` command's slashes;
   - the next job proposed from what the looks found.
 
-### Fix round 1 at stop 2: the four pictures in (16 Nov 2026, 18:55 HST)
+### Fix round 1 at stop 2: the four pictures in (16 Nov 2026, 18:53 HST)
 
 Brandon's word: "Put the four pictures in now. They are in C:\Users\BrandonReisen\Documents\quark-art, described in
 its README.txt. Copy them into the repository under public/ with short names (market-stilts, market-hillside,
@@ -751,7 +751,7 @@ landing on the landing. They are 3:2. Every other picture stays a placeholder. T
   placeholder. Typecheck and lint pass. Kiddo's game is reset again.
 - **The repository is public, so these four pictures are public now.**
 
-### Fix round 2 at stop 2: the trade screen's layout (16 Nov 2026, 19:20 HST)
+### Fix round 2 at stop 2: the trade screen's layout (16 Nov 2026, 19:21 HST)
 
 Brandon, with a photo of June's iPad on Kiddo's 10 × $2 trade at the village market: "This screen layout seems a
 little weird."
@@ -776,7 +776,7 @@ little weird."
 **Checked:** typecheck, lint and 494 tests. In Chrome (paired as Kiddo, so it opened Kiddo's same trade, which I only
 looked at), the parts measure as above.
 
-### At stop 2, 19:20: "Or maybe, boring?" (open)
+### At stop 2, about 19:22: "Or maybe, boring?"
 
 Brandon, of the trade screen: "Or maybe, boring?"
 
@@ -787,9 +787,9 @@ cheapest:
 2. **The trader asks, in character, with a strip of the place behind him:** a sentence change for June.
 3. **The Midjourney goods and trader** (the art list's next job).
 
-Recommended: 1 and 2 now, 3 with the pictures, and "boring" judged properly at stop 3. **Waiting on Brandon's word.**
+Recommended: 1 and 2 now, 3 with the pictures, and "boring" judged properly at stop 3. **Then:** 1 and 2 withdrawn after the calculator game (19:23, below).
 
-### Fix round 3 at stop 2: one question at a time during the count (16 Nov 2026, 19:30 HST)
+### Fix round 3 at stop 2: one question at a time during the count (16 Nov 2026, 19:25 HST)
 
 Brandon, with a photo of the count: "And again here, stuck on a double problem. Do I answer the top one or the
 bottom?"
@@ -808,7 +808,7 @@ trader? 10 × $2 = ?" and "1 crate: how much so far? 1 × $2 = ?"). Nothing said
 **Checked:** typecheck, lint and 495 tests. In Chrome, Kiddo's same trade (read only) shows one "= ?" and the first
 crate outlined.
 
-### At stop 2, 19:23: the calculator game, and a proposal (open)
+### At stop 2, 19:23: the calculator game, and a proposal
 
 Brandon, with a photo of the classic calculator trading game: "I mean, this was being run on a calculator and
 everyone understood it."
@@ -818,9 +818,9 @@ everyone understood it."
 **Proposed in their place: the trade as a row on the market screen**, not a page of its own. Tapping a good opens its
 row: how many, the crates drawn small, the sum with the box, and the count, all in that row. The prices, the rumor,
 the money and the boat never leave the screen. Selling works the same way, a row per buyer. About an hour.
-**Waiting on Brandon's yes.**
+**Then:** taken, after the release question ("we're going to fix it"); built as fix round 7.
 
-### Fix round 4 at stop 2: why a buyer stops at 3 (16 Nov 2026, 19:35 HST)
+### Fix round 4 at stop 2: why a buyer stops at 3 (16 Nov 2026, 19:32 HST)
 
 Brandon: "I fast forwarded a day and got to Kauai where I had 5 pineapples and they were selling for a lot. It only
 let me sell 3 for some reason."
@@ -836,7 +836,7 @@ screen never said so: + just stopped.
   - "Another buyer takes up to {k} crates of {good} at ${price} a crate." It is said for every buyer after the first.
 - **A test holds both,** and the word checks cover them: 496 tests, typecheck and lint pass.
 
-### Fix round 5 at stop 2: a buyer takes the whole load (16 Nov 2026, 19:45 HST)
+### Fix round 5 at stop 2: a buyer takes the whole load (16 Nov 2026, 19:34 HST)
 
 Brandon: "5 pineapples is not a lot of pineapples."
 
@@ -862,7 +862,7 @@ comes only for a load above 10, as on the bigger boats. This *replaces* the fix 
 - **Sums a day:** about one fewer (canoe 4, double canoe 8).
 - **Tests:** the simulation test still holds every check, and 496 tests, typecheck and lint pass.
 
-### Fix round 6 at stop 2: the count no longer drags (16 Nov 2026, 19:50 HST)
+### Fix round 6 at stop 2: the count no longer drags (16 Nov 2026, 19:35 HST)
 
 Brandon, with a photo of Kiddo's count at "1 more crate: how much so far? $12 + $2 = ?": "Yeah I'm currently stuck
 adding 2 at a time on the other kid. I started at 2 and am up to 12, so 6 steps".
@@ -877,7 +877,7 @@ ten steps of +$2.
 
 **Checked:** a test holds both, and 497 tests, typecheck and lint pass.
 
-### At stop 2, 19:55: release or hold
+### At stop 2, about 19:38: release or hold
 
 Brandon: "Trying to figure out how to fix these issues. I was just gonna release but chat said no." Then, of the chat:
 "He's not right in this case".
@@ -898,10 +898,10 @@ Brandon: "Trying to figure out how to fix these issues. I was just gonna release
 The brief says close and hold. A `/wwc:release` typed by Brandon at the last stop overrides it, and is his go for the
 look.
 
-**Open at this point:** the trade as a row on the market screen (proposed 19:23). If the job releases now, it becomes
-the next job's.
+**Then (19:46):** Brandon chose to fix it here, not release; the row is fix round 7.
 
-### Fix round 7 at stop 2: the trade is a row on the market screen (16 Nov 2026, 20:10 HST)
+
+### Fix round 7 at stop 2: the trade is a row on the market screen (16 Nov 2026, 19:46 HST)
 
 Brandon, after the release question: "No, since I got into this we're going to fix it." So the job does not release.
 He also said: "Chat is gone, and we're fully rogue." From here the fixes come from Brandon and Code, without a new
@@ -929,6 +929,26 @@ exactly what is in the sum stays, small, in the row.
   - Kiddo's village market lists four rows, all waiting while the boat is full.
   - With Chrome's device switched to Bug and back, Bug's harbor market on Kauaʻi opens "How many crates of taro?"
     under the Taro row, with everything else above it.
+
+### Fix round 8 at stop 2: a way back (16 Nov 2026, 19:52 HST)
+
+Brandon, with a photo of "How many crates of mangoes?": "There is no way back from this screen. If you click mango you
+have to buy mango. You can't change your mind".
+
+**Two things in the photo:**
+- **The page was the one from before fix round 7.** The goods were cards, and "how many?" sat below the list. Its
+  server answers were already the new ones. A reload brings in the rows.
+- **The fault stands either way:** "Choose again" did not read as a way back.
+
+**Changed:**
+- **"Choose again" is now "Never mind",** on "how many?" and on a trade in hand. This is a sentence change for June.
+- **Tapping the open good again closes it,** and tapping another good chooses that one instead. Nothing is bought
+  either way.
+
+**Checked:** a test holds both ways back, and 497 tests, typecheck and lint pass.
+
+**The times in this file's headings from stop 2 on are corrected to the commits' times.** Some had been written ahead
+of the clock.
 
 ### Spend, live, a child
 

@@ -78,6 +78,13 @@ describe("the first day", () => {
     g = go(g, { type: "pick", market: 0, offer });
     expect(view(g, ctx()).open).toEqual({ market: 0, offer });
     expect(view(g, ctx()).offers!.every((o) => o.open || g.today!.stock[0][o.offer] === 0)).toBe(true); // another good can still be chosen
+    // He can change his mind: another good instead, or none ("Never mind"), nothing bought.
+    const other = view(g, ctx()).offers!.find((o) => o.offer !== offer && o.open)!;
+    expect(view(go(g, { type: "pick", market: 0, offer: other.offer }), ctx()).open).toEqual({ market: 0, offer: other.offer });
+    const back = go(g, { type: "unpick" });
+    expect(view(back, ctx()).open).toBeNull();
+    expect(back.money).toBe(20);
+    expect(view(g, ctx()).buttons.map((b) => b.label)).toEqual(["Never mind"]);
     g = go(g, { type: "count", n: 2 });
     const s = view(g, ctx());
     const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];

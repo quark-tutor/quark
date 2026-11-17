@@ -127,7 +127,9 @@ export const BOAT = {
   owe: "How much do you owe the trader?",
   bought: (n: number, g: BoatGood) => `That's right. ${many(n, "crate")} of ${good(g)} ${n === 1 ? "is" : "are"} on your boat.`,
   short: (total: number, money: number) => `That's right, it's $${total}. You have $${money}.`,
-  chooseAgain: "Choose again",
+  // The way back from "how many?" or a trade, nothing bought (Brandon at stop 2, 16 Nov 2026: "There is no way back from
+  // this screen. If you click mango you have to buy mango. You can't change your mind"). Was "Choose again".
+  chooseAgain: "Never mind",
 
   // A wrong answer, and the count
   added: (n: number, p: number) => `That's ${n} and ${p} put together. You need ${n} lots of ${p}.`,

@@ -125,8 +125,10 @@ export function BoatGame({ initial }: { initial: Screen }) {
                   <button
                     type="button"
                     className={here ? `${styles.offerRow} ${styles.offerHere}` : styles.offerRow}
-                    disabled={here || !o.open || busy}
-                    onClick={() => void send({ type: "pick", market: o.market, offer: o.offer })}
+                    // He can change his mind (Brandon at stop 2, 16 Nov 2026): tapping the open good again closes it,
+                    // and tapping another good chooses that one instead. While a trade is open, "Never mind" ends it.
+                    disabled={here ? !!s.trade || busy : !o.open || busy}
+                    onClick={() => void send(here ? { type: "unpick" } : { type: "pick", market: o.market, offer: o.offer })}
                   >
                     <span>{o.label}</span>
                     <span className={styles.muted}>{o.left}</span>
