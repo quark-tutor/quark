@@ -47,7 +47,7 @@ describe("his numbers", () => {
     }
     for (const o of d.markets.flat()) expect(o.stock).toBeGreaterThanOrEqual(2);
     for (const o of d.markets.flat()) expect(o.stock).toBeLessThanOrEqual(10);
-    for (let k = 0; k < 20; k++) expect(takeOf("child", KIDDO, 4, "taro", k)).toBeLessThanOrEqual(10);
+    expect(takeOf(KIDDO)).toBe(10); // a buyer takes up to the most in one sum
   });
 });
 
@@ -249,22 +249,23 @@ describe("casting off, landing, and the days between (checks 7 to 9)", () => {
     expect(roll(g, ctx())).toBe(g);
   });
 
-  it("says why + stops at a buyer's limit, and brings another buyer for the rest (Brandon at stop 2: 'It only let me sell 3')", () => {
+  // Brandon at stop 2: "It only let me sell 3 for some reason."; "5 pineapples is not a lot of pineapples."
+  it("lets one buyer take a whole load up to 10, and brings another buyer only for more than 10, saying why", () => {
     const c = ctx("2026-11-17");
     const r = { good: "pineapples" as const, island: "kauai" as const, price: 10 };
-    // Five crates aboard, landed where they are dear.
-    let g: Game = { money: 0, space: 10, cargo: [{ good: "pineapples", count: 5, paid: 20 }], island: "home", sailing: r, today: { ...roll(newGame(), ctx()).today!, stop: "done" } };
-    g = roll(g, c);
-    const take = takeOf("child-1", KIDDO, 2, "pineapples", 0);
-    const first = view(g, c);
-    expect(first.lines).toContain(BOAT.buyer(take, "pineapples", 10));
-    expect(first.stepper).toEqual({ ask: BOAT.howManySell, max: Math.min(take, 5), maxLine: take < 5 ? BOAT.buyerLimit : null });
-    if (take < 5) {
-      g = go(g, { type: "count", n: take }, c);
-      g = go(g, n(take * 10), c);
-      const next = takeOf("child-1", KIDDO, 2, "pineapples", 1);
-      expect(view(g, c).lines).toContain(BOAT.buyerNext(next, "pineapples", 10));
-    }
+    const landed = (count: number, space: number): Game =>
+      roll({ money: 0, space, cargo: [{ good: "pineapples", count, paid: 4 * count }], island: "home", sailing: r, today: { ...roll(newGame(), ctx()).today!, stop: "done" } }, c);
+    // Five crates: one buyer takes all five, and nothing says there is a limit.
+    const five = view(landed(5, 10), c);
+    expect(five.lines).toContain(BOAT.buyer("pineapples", 10));
+    expect(five.stepper).toEqual({ ask: BOAT.howManySell, max: 5, maxLine: null });
+    // Twelve crates on the double canoe: the first buyer takes 10 at most and says so; another buyer takes the rest.
+    let g = landed(12, 20);
+    expect(view(g, c).stepper).toEqual({ ask: BOAT.howManySell, max: 10, maxLine: BOAT.buyerLimit(10) });
+    g = go(g, { type: "count", n: 10 }, c);
+    g = go(g, n(100), c);
+    expect(view(g, c).lines).toContain(BOAT.buyerNext("pineapples", 10));
+    expect(view(g, c).stepper).toEqual({ ask: BOAT.howManySell, max: 2, maxLine: null });
   });
 
   it("lands tomorrow where the rumor pointed, at the price it promised, with its reason; he says what he is owed (check 8)", () => {
@@ -274,9 +275,8 @@ describe("casting off, landing, and the days between (checks 7 to 9)", () => {
     expect(g.island).toBe(r.island);
     expect(s.title).toBe(BOAT.land(r.island));
     expect(s.lines[0]).toBe(BOAT.landReason(r.good, r.island, r.price));
-    const take = takeOf("child-1", KIDDO, 2, r.good, 0);
-    expect(s.lines[1]).toBe(BOAT.buyer(take, r.good, r.price));
-    const k = Math.min(take, count);
+    expect(s.lines[1]).toBe(BOAT.buyer(r.good, r.price));
+    const k = Math.min(takeOf(KIDDO), count);
     expect(s.stepper!.max).toBe(k);
     g = go(g, { type: "count", n: k }, ctx("2026-11-17"));
     expect(view(g, ctx("2026-11-17")).trade).toMatchObject({ question: BOAT.owed, sum: `${k} × $${r.price} = ?` });

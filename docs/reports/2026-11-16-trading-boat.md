@@ -836,6 +836,32 @@ screen never said so: + just stopped.
   - "Another buyer takes up to {k} crates of {good} at ${price} a crate." It is said for every buyer after the first.
 - **A test holds both,** and the word checks cover them: 496 tests, typecheck and lint pass.
 
+### Fix round 5 at stop 2: a buyer takes the whole load (16 Nov 2026, 19:45 HST)
+
+Brandon: "5 pineapples is not a lot of pineapples."
+
+**Changed:** a buyer takes as many as he is offered, up to the most in one sum (10, from the ladder). A second buyer
+comes only for a load above 10, as on the bigger boats. This *replaces* the fix round's "buyers take a few at a time,
+2 to 10". The ladder's cap still keeps every sum inside his tables, and that was the rule's reason.
+
+**The sentences change for June:**
+- "A buyer pays ${price} a crate for {good}." (was "A buyer takes up to {k} crates of {good} at ${price} a crate.")
+- "Another buyer pays ${price} a crate for {good}."
+- "One buyer takes {10} at most. Another buyer comes next." (only above 10)
+
+**The evidence, rerun** (careful play, median of 400 runs):
+- **Money and the boats:** the same (first boat day 7 and 9).
+- **Working facts:**
+
+  | | Week 1 | Week 2 | Week 3 |
+  |---|---|---|---|
+  | Kiddo | 12 of 30 (was 17) | 22 of 30 (was 25) | 23 of 30 (was 25) |
+  | Bug | 10 of 20 (unchanged) | 16 of 20 (was 15) | 17 of 20 (unchanged) |
+
+  So most from the second week still holds. Kiddo's canoe week holds fewer, because his sales are now one sum a good.
+- **Sums a day:** about one fewer (canoe 4, double canoe 8).
+- **Tests:** the simulation test still holds every check, and 496 tests, typecheck and lint pass.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free

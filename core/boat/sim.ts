@@ -39,7 +39,7 @@ export function play(nb: Numbers, player: Player, days: number, seed: string): R
       const price = priceAt(nb, load.good, sailing);
       let left = load.count;
       for (let k = 0; left > 0; k++) {
-        const take = Math.min(left, takeOf(seed, nb, n, load.good, k));
+        const take = Math.min(left, takeOf(nb));
         today.push({ kind: "sell", a: take, b: price });
         left -= take;
       }

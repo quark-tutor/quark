@@ -150,11 +150,11 @@ export const BOAT = {
   land: (i: BoatIsland) => `You land on ${ISLANDS[i]}.`,
   landReason: (g: BoatGood, i: BoatIsland, p: number) => `${REASONS[g](ISLANDS[i])} So ${good(g)} ${sell(g)} for $${p} a crate here.`,
   usualHere: (g: BoatGood, p: number) => `Here ${good(g)} ${sell(g)} for the usual $${p} a crate.`,
-  buyer: (k: number, g: BoatGood, p: number) => `A buyer takes up to ${many(k, "crate")} of ${good(g)} at $${p} a crate.`,
-  // After the first buyer; and when + stops at what this buyer takes while he has more (Brandon at stop 2, 16 Nov 2026:
-  // "It only let me sell 3 for some reason.").
-  buyerNext: (k: number, g: BoatGood, p: number) => `Another buyer takes up to ${many(k, "crate")} of ${good(g)} at $${p} a crate.`,
-  buyerLimit: "That's all this buyer takes. Another buyer comes next.",
+  // A buyer takes as many as he is offered, up to the most in one sum (Brandon at stop 2, 16 Nov 2026: "It only let me
+  // sell 3 for some reason."; "5 pineapples is not a lot of pineapples."). Another buyer comes only for a load above it.
+  buyer: (g: BoatGood, p: number) => `A buyer pays $${p} a crate for ${good(g)}.`,
+  buyerNext: (g: BoatGood, p: number) => `Another buyer pays $${p} a crate for ${good(g)}.`,
+  buyerLimit: (k: number) => `One buyer takes ${k} at most. Another buyer comes next.`,
   howManySell: "How many will you sell?",
   owed: "How much does the buyer owe you?",
   sold: (money: number) => `That's right. You have $${money} now.`,

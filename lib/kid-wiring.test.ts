@@ -118,7 +118,7 @@ describe("the wall's own words", () => {
     B.allTheTraderHas, B.allTheRoom, B.thatMany, B.owe, B.bought(1, "taro"), B.bought(6, "mangoes"), B.short(70, 60), B.chooseAgain, B.added(6, 5), B.oneOut("crate"),
     B.oneOut("bill"), B.letsCount, B.step(4, "crate", false), B.step(1, "crate", true), B.tryFewer, B.tryFewerButton, B.sellFewer, B.sellFewerButton, B.askGrownUp,
     B.whereSail, B.sailChoice("coconuts", "oahu", 10), B.castOffFor("kauai"), B.sailingTo("lanai"), B.land("molokai"), B.landReason("sweet-potatoes", "hawaii", 10),
-    B.usualHere("pineapples", 4), B.buyer(6, "taro", 4), B.buyerNext(2, "pineapples", 10), B.buyerLimit, B.howManySell, B.owed, B.sold(120), B.keep, B.backMade(30, "mangoes", 60), B.backLess(30, "taro", 20), B.right,
+    B.usualHere("pineapples", 4), B.buyer("taro", 4), B.buyerNext("pineapples", 10), B.buyerLimit(10), B.howManySell, B.owed, B.sold(120), B.keep, B.backMade(30, "mangoes", 60), B.backLess(30, "taro", 20), B.right,
     B.countUp(30, 60), B.builder("double", 20, 4), B.buyIt, B.notNow, B.oweBuilder, B.bundle, B.boatYours("schooner", 50), MATH_NAME,
   ];
   const all = [...Object.values(SAY).map((s) => (typeof s === "function" ? s("Pip") : s)), ...Object.values(SLOT_NAMES), ...boat];

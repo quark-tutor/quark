@@ -22,7 +22,6 @@ export const START_MONEY = 20;
 export const KEEP = 20; // a boat is offered only to a trader who keeps this much after paying for it
 export const BUNDLE = 10; // bills counted in one sum
 export const STOCK: readonly [number, number] = [2, 10]; // crates of a good at one trader, by day
-export const TAKE: readonly [number, number] = [2, 10]; // crates one buyer at the dock takes
 
 export const boatOf = (space: number): Boat => BOATS.find((b) => b.space === space) ?? BOATS[0];
 export const nextBoat = (space: number): Boat | null => BOATS[BOATS.indexOf(boatOf(space)) + 1] ?? null;
@@ -113,11 +112,11 @@ export function dayOf(seed: string, nb: Numbers, n: number, island: BoatIsland |
   return { markets: [shuffle(r, a), shuffle(r, b)], rumors: [rumors[0], rumors[1]] };
 }
 
-// How many crates the k-th buyer of a good takes on the dock on day n: 2 to 10, never more than his most in one sum.
-export function takeOf(seed: string, nb: Numbers, n: number, good: BoatGood, k: number): number {
-  const r = mulberry32(hash(`${seed}:${n}:dock`) + GOODS.indexOf(good) * 101 + k);
-  return Math.min(nb.cap, between(r, TAKE[0], TAKE[1]));
-}
+// How many crates one buyer on the dock takes: as many as he is offered, up to the most in one sum (10 until the ladder
+// says bigger multiplying). Brandon at stop 2, 16 Nov 2026: "5 pineapples is not a lot of pineapples", so a buyer no
+// longer stops at a few; only a load above the most in one sum is sold to a second buyer. Replaces the fix round's
+// "buyers take 2 to 10 at a time".
+export const takeOf = (nb: Numbers): number => nb.cap;
 
 // What a crate of a good sells for on an island: the rumor's price if he sailed there on that good's rumor, else the
 // usual. Never less than any buying price, so no choice loses money; a poor one only earns less.

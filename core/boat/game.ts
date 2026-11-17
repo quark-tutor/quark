@@ -293,7 +293,7 @@ export const buyMax = (g: Game, ctx: Ctx, market: 0 | 1, offer: number) => Math.
 // The most he can sell to this buyer: what the buyer takes, what he has, and his most in one sum.
 export function sellMax(g: Game, ctx: Ctx): number {
   const d = onSale(g);
-  return d ? Math.min(takeOf(ctx.seed, ctx.nb, g.today!.n, d.good, d.buyer), held(g, d.good), ctx.nb.cap) : 0;
+  return d ? Math.min(takeOf(ctx.nb), held(g, d.good), ctx.nb.cap) : 0;
 }
 
 type Log = (row: Omit<Turn, "day" | "on" | "island" | "money" | "short"> & { short?: boolean }) => void;
@@ -576,11 +576,11 @@ export function view(g: Game, ctx: Ctx): Screen {
       const rumored = g.sailing && g.sailing.island === island && g.sailing.good === d.good;
       const price = priceAt(ctx.nb, d.good, rumored ? g.sailing : null);
       if (!rumored) s.lines.push(BOAT.usualHere(d.good, price));
-      const take = takeOf(ctx.seed, ctx.nb, t.n, d.good, d.buyer);
-      s.lines.push(d.buyer === 0 ? BOAT.buyer(take, d.good, price) : BOAT.buyerNext(take, d.good, price));
-      // When + stops at what this buyer takes and he has more, the screen says why, and that another buyer comes.
+      s.lines.push(d.buyer === 0 ? BOAT.buyer(d.good, price) : BOAT.buyerNext(d.good, price));
+      // A buyer takes as many as he is offered, up to the most in one sum; when + stops there and he has more, the
+      // screen says why, and that another buyer comes.
       const max = sellMax(g, ctx);
-      s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit : null };
+      s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit(takeOf(ctx.nb)) : null };
       s.buttons = [{ label: BOAT.keep, action: { type: "keep" } }];
     } else if (t.builder === "offer") {
       const next = nextBoat(g.space)!;
