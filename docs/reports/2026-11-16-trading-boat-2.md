@@ -11,6 +11,103 @@ Brief: `docs/trading-boat-2-slice.md` (*Wonder Wall*, phase 4), on `phase-4-wond
 - **17 Nov, fix round 2:** the look failed on (b), by Brandon's decision, brought by the chat: "high luck on day 1
   will give one child an overwhelming lead. fix the first 3 days of the simulation, then luck after that." It started
   at 05:17. Stop 2, fix round 2, at 05:22.
+- **17 Nov, the look passed:** "It passed. go" (06:26). Stop 3 at 06:40.
+
+## Stop 3: the live database, by your hand
+
+### Where the job stands
+
+Your look passed, so everything on test is done. What is left is live's three commands, by your hand, and then the
+release.
+- **Live:** nothing has touched it yet.
+- **Spent:** nothing since stop 2.
+- **The branch:** pushed, ahead of `main` (`5663851`) by this job's commits and behind it by none, so the release still
+  fast-forwards.
+- **On Vercel now:** `main` shows the boat only on the dev server against test, and reads no table. So M1 to M3 change
+  nothing the boys see. The release is what puts the boat on their walls.
+
+Run the three back to back, in this order. Each needs the one before it:
+- without M1's columns, M2 stops with "is the Math tile's migration on this database?";
+- without M2's rows, M3 refuses: "skills holds no times-table rung: run the ladder import first."
+
+If one prints anything else, stop there and paste it in the chat. Nothing after it is run.
+
+### M1 `npm run db:push:live`
+
+- **What it does:** applies the six migrations live does not have, in order:
+  - `20261109000000_math_tile`: new columns on `skills` (`key`, `position`, `ladder`), `mastery` (`place`), `children`
+    (`math_style`) and `attempts` (`move`, `label`); `model_runs` may also take `label`;
+  - `20261109000001_math_questioned`: `attempts.verdict` may also take `questioned` and `no_number`;
+  - `20261109000002_family_familiar`: `families.familiar`, empty by default;
+  - `20261116000000_trading_boat`: two new tables, `boat_games` and `boat_turns`, which a family can read only its own
+    rows of;
+  - `20261116000001_boat_switch` adds `families.boat_on`, and `20261117000000_boat_switch_gone` drops it in the same
+    push.
+- **What it touches: LIVE**, the boys' one database. It changes the shape of `skills`, `mastery`, `children`,
+  `attempts`, `model_runs` and `families`, and adds two new tables. No existing value changes: every new column is
+  empty or takes its default. The code on Vercel reads none of it.
+- **How it is undone:** not by a command. A migration can only be taken back by a new one, and none should be needed,
+  since all six only add, and the switch's column comes and goes in one push. The CLI records each migration as it
+  applies it, so if the push stops partway, running it again applies only what is left.
+- **Checked on test:** each one is green in the migrations workflow from this branch:
+  - the Math tile's three: runs 42757383298, 42765079572 and 42765695820 (9 and 10 Nov, in their own report);
+  - the trading boat's: run 44017188011 (16 Nov, in its report);
+  - this job's two: runs 44041186215 and 44107585185 (this session).
+
+  Every proof in this job ran on test with all six applied.
+- **What you will see:**
+  - `Target: LIVE`, then the database user;
+  - the six names, then "Applying migration …" for each;
+  - "Finished supabase db push."
+
+  The script answers the CLI's `[Y/n]` with yes by itself, so "Finished" may print before the question. That is the
+  23 Oct bug line, not a fault.
+
+### M2 `npm run ladder:import:live`
+
+- **What it does:** writes the math ladder (`plan/math-ladder.yaml`) into `skills`: 14 rungs and 6 everyday areas, so
+  20 rows, matched by key. Three of the rungs are the times tables the boat reads.
+- **What it touches: LIVE**, `skills` only.
+- **How it is undone:** it is safe to run again, since it updates the same rows by key, and nothing on Vercel reads
+  them until the release. To take them out, delete the 20 rows whose key is set, in SQL, before M3 puts a place on
+  them.
+- **Checked on test:** it ran again from this branch this morning, unchanged.
+- **What you will see:** `Target: LIVE`, then "The math ladder: 14 rungs and 6 everyday areas, 20 rows in skills."
+
+### M3 `npm run boat:tables:live -- times-2-5-10=<place> times-3-4=<place>`
+
+- **What it does:** sets the family's times tables, the same for both boys, with the tables you gave in the chat. Each
+  place is `done`, `working` or `not-yet`, and a table not named is not yet. A setting that would lose money is
+  refused before anything is written: "Refused: …" and "Nothing was written."
+- **What it touches: LIVE**:
+  - `mastery.place` on the three times-table rungs, for each of the family's children;
+  - one `audit_log` row holding the setting.
+
+  It counts the children and names none.
+- **Before the release** it changes nothing the boys see, since the code on Vercel reads no table.
+- **How it is undone:** `npm run boat:tables:live -- none` sets every table back to not yet. After the release, live's
+  `/parent` does the same. Neither touches a game.
+- **Checked on test:** the command set test's tables, took them off with `none`, then set them again (fix round 1).
+  The production build showed Math in Puzzle's place, and Puzzle back after `none`. This morning it read test's
+  tables back as "The trading boat is on the wall, in Puzzle's place."
+- **What you will see:**
+  - `Target: LIVE`;
+  - "About to set, for each of the family's 2 children on LIVE:", then the three tables;
+  - "Done. Read back:", the three tables again;
+  - "The trading boat is on the wall, in Puzzle's place.", and the prices.
+
+  The tables are yours and stay out of this public report. So "in" is enough for M3, with whether it said the boat is
+  on the wall.
+
+### Then
+
+Say "stop 3 is in", with whether M1 and M2 printed what is above, and M3 said the boat is on the wall.
+
+The last stop is `/wwc:release`, typed by you: the close (the records), then the release to `main`.
+- **When Vercel deploys it:** the boat is on both boys' walls in Puzzle's place, on the next screen each one opens.
+- **Each boy's first day:** on his own iPad, with a parent beside him (the brief's *After the release*).
+- **How it comes off again:** as fix round 1 says, below. Live's `/parent`, all *Not yet*, or
+  `npm run boat:tables:live -- none`. Puzzle is back at once, and each game is kept.
 
 ## Stop 2, fix round 2: Your look, on test
 
