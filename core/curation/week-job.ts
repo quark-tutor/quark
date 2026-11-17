@@ -13,19 +13,14 @@ import type { LearnsToAct, Perspective } from "../../lib/values.ts";
 import { sourceRef } from "../content/sources.ts";
 import type { complete } from "../model.ts";
 import { kidFacingPrompt, readPrompt } from "../prompts.ts";
-import { makeMeter, runRow, type Meter } from "../runs.ts";
-import type { Usage } from "../model.ts";
-import type { Complete } from "./cards.ts";
+import { runRow, type Meter } from "../runs.ts";
 import { writeCards } from "./cards.ts";
-import type { Area, Ladder, Place, Rule, Rung } from "../../lib/ladder.ts";
-import type { MathStyle } from "../math/problem.ts";
-import { writeMath, type MathChild } from "./math.ts";
 import { subjectWatch, type GateReport } from "./gate.ts";
 import { gateTheme, type GateSetup } from "./gate-run.ts";
 import { sourceRefs, writeIdeaChain } from "./ideas.ts";
-import { DAYS_IN_WEEK, MATH_SLOT, stretchForWeek, weekSchedule, weekThread, type Scheduled, type StretchSpan } from "./schedule.ts";
+import { DAYS_IN_WEEK, stretchForWeek, weekSchedule, weekThread, type Scheduled, type StretchSpan } from "./schedule.ts";
 import type { IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic } from "./types.ts";
-import { addDays, buildWeek, nextMonday, todayIn, type WeekChild, type WeekDeps, type WeekMath, type WeekReport } from "./week.ts";
+import { addDays, buildWeek, nextMonday, todayIn, type WeekChild, type WeekDeps, type WeekReport } from "./week.ts";
 
 type Reply = { data: unknown; error: { message: string } | null };
 function maybe<R extends Reply>(r: R, what: string): R["data"] {
@@ -44,7 +39,6 @@ export type PrepareOptions = {
   week: number; // the family's week N of the plan; its thread is the stretch that holds it (stretchForWeek)
   start?: string; // YYYY-MM-DD, day 1. Default: the week's own, else counted on from week 1's, else next Monday
   child?: string; // build for one child only: an id or a nickname
-  math?: boolean; // the puzzle slot is the Math tile, whatever the week (week:build --math, on test only)
 };
 
 export type Prepared = {
@@ -60,7 +54,6 @@ export type Prepared = {
   learns: LearnsToAct | null;
   pointNames: Map<number, string>;
   existing: { id: string; week_start: string; plan_week: number | null } | null; // this week's theme, when it exists
-  math: WeekMath | null; // the Math tile's ladder and each child's places, in a week that has it
 };
 
 type PlanRowDb = {
@@ -149,14 +142,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   const lessonIds = new Set(lessonRows.map((r) => r.id));
   const used = new Set(themes.filter((t) => t.plan_week !== null && t.plan_week < week).flatMap((t) => t.topic_ids as string[]).filter((id) => lessonIds.has(id)));
   const own = new Set(((existing?.topic_ids ?? []) as string[]).filter((id) => lessonIds.has(id)));
-  const schedule = weekSchedule({
-    week,
-    thread: weekThread(threadRows, weekInStretch).map(scheduled),
-    lessons: lessonRows.map(scheduled),
-    used,
-    own,
-    ...(opts.math ? { math: true, dropOnMath: true } : {}),
-  });
+  const schedule = weekSchedule({ week, thread: weekThread(threadRows, weekInStretch).map(scheduled), lessons: lessonRows.map(scheduled), used, own });
 
   const items = must(
     await db
@@ -207,7 +193,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
     };
   }
 
-  const scheduledIds = new Set(schedule.flatMap((d) => Object.values(d.topics)).filter((id): id is string => id !== null));
+  const scheduledIds = new Set(schedule.flatMap((d) => Object.values(d.topics)));
   const weekRows = [...threadRows, ...lessonRows].filter((r) => scheduledIds.has(r.id));
   const topics = weekRows.map(weekTopic);
   // themes.topic_ids: every row the week uses, both bands, and the thread's chapter rows.
@@ -238,8 +224,6 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   const start: string =
     existing?.week_start ?? opts.start ?? (firstWeek ? addDays(firstWeek.week_start, (week - 1) * 7) : addDays(nextMonday(todayIn(family.timezone)), (week - 1) * 7));
 
-  const math = schedule.some((d) => d.math) ? await loadMath(db, family.id, children, week) : null;
-
   return {
     db,
     family: { id: family.id, timezone: family.timezone },
@@ -253,69 +237,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
     learns: profile?.learns_to_act ?? null,
     pointNames,
     existing: existing && { id: existing.id, week_start: existing.week_start, plan_week: existing.plan_week },
-    math,
   };
-}
-
-// The Math tile's own, read only for a week that has it, so a week without it never needs this job's migration: the
-// ladder from skills (npm run ladder:import), each child's style and places, the rungs and areas he has answered a
-// part on, and what his math problems in earlier weeks were on. Refuses, before spending, a math week with no ladder.
-async function loadMath(db: SupabaseClient, familyId: string, children: WeekChild[], week: number): Promise<WeekMath> {
-  const skills = must(await db.from("skills").select("id, key, name, kind, position, ladder").not("key", "is", null).order("position"), "skills") as {
-    id: string;
-    key: string;
-    name: string;
-    kind: string;
-    ladder: { asks: string; example: string; rule?: Rule; alongside?: string[]; needs?: string };
-  }[];
-  const rungs: Rung[] = skills
-    .filter((s) => s.kind === "rung")
-    .map((s) => ({ key: s.key, name: s.name, asks: s.ladder.asks, example: s.ladder.example, rule: s.ladder.rule ?? {}, ...(s.ladder.alongside ? { alongside: s.ladder.alongside } : {}) }));
-  const everyday: Area[] = skills
-    .filter((s) => s.kind === "everyday")
-    .map((s) => ({ key: s.key, name: s.name, asks: s.ladder.asks, example: s.ladder.example, ...(s.ladder.needs ? { needs: s.ladder.needs } : {}) }));
-  if (!rungs.length) throw new Error(`Week ${week} has the Math tile, but skills holds no ladder. Run npm run ladder:import.`);
-  const ladder: Pick<Ladder, "rungs" | "everyday"> = { rungs, everyday };
-  const keyOf = new Map(skills.map((s) => [s.id, s.key]));
-  const ids = children.map((c) => c.id);
-
-  const styles = must(await db.from("children").select("id, math_style").in("id", ids), "children") as { id: string; math_style: MathStyle | null }[];
-  // The family's places and things (fix round 3), for the settings: an empty list if the column is not there yet.
-  const fam = await db.from("families").select("familiar").eq("id", familyId).maybeSingle();
-  const familiar = fam.error ? [] : (((fam.data as { familiar?: string[] } | null)?.familiar ?? []) as string[]);
-  const places = must(await db.from("mastery").select("child_id, skill_id, place").in("child_id", ids).not("place", "is", null), "mastery") as { child_id: string; skill_id: string; place: Place }[];
-  const answered = must(
-    await db.from("attempts").select("child_id, questions!inner(skill_id)").in("child_id", ids).not("questions.skill_id", "is", null),
-    "attempts",
-  ) as unknown as { child_id: string; questions: { skill_id: string } }[];
-  const earlier = must(
-    await db
-      .from("cards")
-      .select("child_id, day, teaches:body->math->>teaches, themes!inner(plan_week)")
-      .eq("family_id", familyId)
-      .eq("slot", "puzzle")
-      .eq("layer", 1)
-      .lt("themes.plan_week", week)
-      .not("body->math", "is", null),
-    "cards",
-  ) as unknown as { child_id: string; day: string; teaches: string | null }[];
-
-  const mathChildren = new Map<string, MathChild>();
-  for (const [turn, c] of children.entries()) {
-    mathChildren.set(c.id, {
-      familiar,
-      turn,
-      id: c.id,
-      age: c.age,
-      reading: c.reading,
-      interests: c.interests,
-      style: styles.find((s) => s.id === c.id)?.math_style ?? null,
-      places: new Map(places.filter((p) => p.child_id === c.id && keyOf.has(p.skill_id)).map((p) => [keyOf.get(p.skill_id)!, p.place])),
-      met: new Set(answered.filter((a) => a.child_id === c.id).map((a) => keyOf.get(a.questions.skill_id)).filter((k): k is string => !!k)),
-      history: earlier.filter((e) => e.child_id === c.id && e.teaches).map((e) => ({ teaches: e.teaches!, day: e.day })),
-    });
-  }
-  return { ladder, children: mathChildren, skillIds: new Map(skills.map((s) => [s.key, s.id])) };
 }
 
 // What the family's settings already decide for days `from` to `upTo` of the week, so a guardian sees
@@ -327,8 +249,7 @@ export function settingsWatch(p: Prepared, gate: GateSetup, upTo: number, from =
     const age = gate.children.find((c) => c.id === kid.id)?.age ?? kid.age;
     for (const d of p.plan.schedule.filter((d) => d.day >= from && d.day <= upTo)) {
       for (const slot of SLOT_ORDER) {
-        const id = d.topics[slot];
-        const t = id ? p.topicById.get(id) : undefined; // a math slot has no topic
+        const t = p.topicById.get(d.topics[slot]);
         if (!t?.valuesPoints.length) continue;
         const notes = subjectWatch(t.valuesPoints, gate.rulebook.values, { id: kid.id, age }, gate.rulebook.pointNames);
         if (notes.length) watch.push(`  ${kid.nickname}: day ${d.day} ${slot} (${t.title}): ${notes.join(" ")}`);
@@ -340,11 +261,10 @@ export function settingsWatch(p: Prepared, gate: GateSetup, upTo: number, from =
 
 // --- The database and the model, for buildWeek ---
 
-function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (themeId: string) => Promise<void>; mathMeter?: Meter }): WeekDeps {
+function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (themeId: string) => Promise<void> }): WeekDeps {
   const { db, family, plan, start, week, existing, topicById } = p;
   const ideaSystem = readPrompt("ideas.md");
   const cardSystem = kidFacingPrompt("card.md");
-  const mathSystem = p.math ? kidFacingPrompt("math.md") : "";
   return {
     findTheme: async () => (existing ? { id: existing.id } : null),
     async createTheme() {
@@ -387,7 +307,6 @@ function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (theme
       );
       const chains = new Map<string, IdeaChain>();
       for (const i of saved) {
-        if (i.topic_id === null) continue; // a math day's shared rows (loadMathIdeas)
         const k = `${i.day}:${i.slot}`;
         const topic = topicById.get(i.topic_id);
         if (!topic) throw new Error(`Idea ${i.id} points at a topic this week no longer has. Rebuild the whole week.`);
@@ -434,57 +353,6 @@ function weekDeps(p: Prepared, ai: { complete: typeof complete; onTheme?: (theme
     },
     writeIdeaChain: (slot, day, earlier) => writeIdeaChain(plan, slot, day, earlier, { complete: ai.complete, system: ideaSystem }),
     writeCards: (ctx) => writeCards(ctx, { complete: ai.complete, system: cardSystem }),
-    // The Math tile (docs/math-tile-slice.md).
-    async saveMathIdeas(themeId, day) {
-      const ids: string[] = [];
-      for (let layer = 1; layer <= 4; layer++) {
-        const row = must(
-          await db
-            .from("ideas")
-            .insert({
-              theme_id: themeId,
-              topic_id: null,
-              day,
-              slot: MATH_SLOT,
-              layer,
-              parent_idea_id: ids.at(-1) ?? null,
-              title: `Math, part ${layer}`,
-              statement: "The day's math: each child's own problem, at his own place on the parents' ladder (docs/math-tile-slice.md).",
-              content_item_id: null,
-              source_refs: [],
-              question: null,
-              answer_key: null,
-            })
-            .select("id")
-            .single(),
-          "ideas",
-        );
-        ids.push(row.id);
-      }
-      return ids;
-    },
-    async deleteMathDay(themeId, day) {
-      const r = await db.from("ideas").delete().eq("theme_id", themeId).eq("day", day).is("topic_id", null).eq("slot", MATH_SLOT);
-      if (r.error) throw new Error(`Could not delete day ${day}'s math (has it been answered? npm run fixture -- clear <date> on test): ${r.error.message}`);
-    },
-    async loadMathIdeas(themeId) {
-      const rows = must(await db.from("ideas").select("id, day, layer").eq("theme_id", themeId).is("topic_id", null).eq("slot", MATH_SLOT).order("day").order("layer"), "ideas");
-      const out = new Map<number, string[]>();
-      for (const r of rows) out.set(r.day, [...(out.get(r.day) ?? []), r.id]);
-      return out;
-    },
-    // The math writer's spend is tallied on its own too, so a build can say what math adds to a week.
-    writeMath: (ctx) => {
-      const counted = ((o: Parameters<Complete>[0]) => ai.complete({ ...o, onUsage: (u: { use: Usage["use"]; model: string; input: number; output: number }) => ai.mathMeter?.add(u.use, u) } as never)) as Complete;
-      return writeMath(ctx, { complete: counted, system: mathSystem, label: `math-day${ctx.day.day}-${ctx.day.teaches}` });
-    },
-    async mathTitles(themeId, childId, beforeDay) {
-      const rows = must(
-        await db.from("cards").select("title:body->>title").eq("theme_id", themeId).eq("child_id", childId).eq("slot", MATH_SLOT).eq("layer", 1).lt("day", addDays(start, beforeDay - 1)),
-        "cards",
-      ) as { title: string | null }[];
-      return rows.map((r) => r.title).filter((t): t is string => !!t);
-    },
   };
 }
 
@@ -495,7 +363,6 @@ export type BuildOptions = {
   meter: Meter; // the run's own tally, priced into the model_runs row
   gate: GateSetup; // gateSetup() before anything is spent
   rebuild?: boolean;
-  mathOnly?: boolean; // with a one-day run: that day's math again, nothing else (week:build --math-only)
   pendingOnly?: boolean; // gate only the cards still pending (the Sunday build)
   onTheme?: (themeId: string) => Promise<void>; // told the moment a theme is made
 };
@@ -506,7 +373,6 @@ export type BuildResult = {
   gateError: string | null;
   buildSeconds: number; // the build alone
   recordError: string | null; // why the model_runs row couldn't be written
-  mathUsage: Usage[]; // the math writer's calls alone (inside the run's own tally too)
 };
 
 // A build that stopped: the original error, and whether the run could still be recorded.
@@ -539,8 +405,7 @@ export type BuildRun = { days: number } | { day: number };
 // and rethrown as a BuildStopped.
 export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions): Promise<BuildResult> {
   const started = new Date();
-  const mathMeter = makeMeter();
-  const deps = weekDeps(p, { complete: opts.complete, onTheme: opts.onTheme, mathMeter });
+  const deps = weekDeps(p, { complete: opts.complete, onTheme: opts.onTheme });
   const built = "day" in run ? 1 : run.days; // days of money spent, for model_runs
   let report: WeekReport;
   try {
@@ -556,8 +421,6 @@ export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions):
         pointNames: p.pointNames,
         rebuild: !!opts.rebuild,
         onlyChild: p.only?.id,
-        math: p.math,
-        mathOnly: !!opts.mathOnly,
       },
       deps,
     );
@@ -574,5 +437,5 @@ export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions):
     gateError = e instanceof Error ? e.message : String(e);
   }
   const recordError = await recordRun(p, opts.meter, started, true, report.themeId, built);
-  return { report, gate: gated, gateError, buildSeconds, recordError, mathUsage: mathMeter.usage() };
+  return { report, gate: gated, gateError, buildSeconds, recordError };
 }

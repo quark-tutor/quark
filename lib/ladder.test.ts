@@ -1,10 +1,9 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { ladderRows, onRule, parseLadder, rungsFor, rungsOf, tablesOf, validateLadder, type Ladder, type Place } from "./ladder";
+import { largestCount, ladderRows, parseLadder, tablesOf, validateLadder, workingTablesOf, type Ladder, type Place } from "./ladder";
 
 const ladder = parseLadder(readFileSync(join(__dirname, "..", "plan", "math-ladder.yaml"), "utf8"));
-const op = (o: "+" | "-" | "x" | "/" | "%", operands: number[], result: number) => ({ op: o, operands, result });
 
 describe("plan/math-ladder.yaml", () => {
   it("is valid, with the parents' fourteen rungs in order and six everyday areas", () => {
@@ -33,32 +32,20 @@ describe("plan/math-ladder.yaml", () => {
   });
 });
 
-describe("which rungs a sum is on", () => {
-  it("reads adding, times tables and groups the way the parents' table means them", () => {
-    expect(rungsOf(op("+", [8, 7], 15), ladder)).toEqual(["add-20", "add-100", "add-1000"]);
-    expect(rungsOf(op("+", [236, 148], 384), ladder)).toEqual(["add-1000"]);
-    expect(rungsOf(op("-", [24, 15], 9), ladder)).toEqual(["add-100", "subtract-1000"]);
-    expect(rungsOf(op("x", [7, 3], 21), ladder)).toEqual(["times-3-4", "times-6-9", "bigger-times"]);
-    expect(rungsOf(op("x", [3, 4], 12), ladder)).toEqual(["groups-of", "times-3-4", "bigger-times"]);
-    expect(rungsOf(op("x", [8, 100], 800), ladder)).toEqual(["place-value", "bigger-times"]);
-    expect(rungsOf(op("x", [9, 2], 18), ladder)).toContain("times-2-5-10");
-    // Equal groups added up are groups of too, as the rung is counted (found on test, 9 Nov 2026: "6 + 6 + 6").
-    expect(rungsOf(op("+", [6, 6, 6], 18), ladder)).toEqual(["add-20", "add-100", "add-1000", "groups-of", "times-3-4", "times-6-9", "bigger-times"]);
-  });
+describe("what the trading boat reads from a boy's places", () => {
+  const older = new Map<string, Place>([["add-20", "done"], ["add-100", "done"], ["place-value", "done"], ["add-1000", "working"], ["groups-of", "working"], ["times-2-5-10", "working"]]);
+  const younger = new Map<string, Place>([["add-20", "done"], ["add-100", "done"], ["place-value", "done"], ["groups-of", "done"], ["times-2-5-10", "done"], ["times-3-4", "working"]]);
 
-  it("puts a share on the sharing rung only on the facts of a times table the boy has", () => {
-    const share = ladder.rungs.find((r) => r.key === "sharing")!.rule;
-    expect(onRule(op("/", [24, 3], 8), share, [3, 4])).toBe(true);
-    expect(onRule(op("/", [24, 3], 8), share, [2, 5, 10])).toBe(false);
-    expect(onRule(op("/", [20, 2], 10), share, [2, 5, 10])).toBe(true);
-  });
-
-  it("gives each boy his rungs, and sharing alongside the times table he is working on", () => {
-    const older = new Map<string, Place>([["add-20", "done"], ["add-100", "done"], ["place-value", "done"], ["add-1000", "working"], ["groups-of", "working"], ["times-2-5-10", "working"]]);
-    const younger = new Map<string, Place>([["add-20", "done"], ["add-100", "done"], ["place-value", "done"], ["groups-of", "done"], ["times-2-5-10", "done"], ["times-3-4", "working"]]);
-    expect(rungsFor(ladder, older)).toEqual({ done: ["add-20", "add-100", "place-value"], working: ["add-1000", "groups-of", "times-2-5-10"], alongside: ["sharing"] });
-    expect(rungsFor(ladder, younger).alongside).toEqual(["sharing"]);
+  it("gives his prices from every times table he is placed on, and his practice from the ones he is working on", () => {
     expect(tablesOf(ladder, older)).toEqual([2, 5, 10]);
     expect(tablesOf(ladder, younger)).toEqual([2, 5, 10, 3, 4]);
+    expect(workingTablesOf(ladder, older)).toEqual([2, 5, 10]);
+    expect(workingTablesOf(ladder, younger)).toEqual([3, 4]);
+  });
+
+  it("holds a sum to 10 crates until he is placed on bigger multiplying", () => {
+    expect(largestCount(ladder, older)).toBe(10);
+    expect(largestCount(ladder, younger)).toBe(10);
+    expect(largestCount(ladder, new Map<string, Place>([...younger, ["bigger-times", "working"]]))).toBe(100);
   });
 });

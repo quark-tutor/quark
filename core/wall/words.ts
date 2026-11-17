@@ -9,10 +9,6 @@ import type { Slot } from "./card.ts";
 // and an answer to the clue is thinking on the way, so the question is asked again.
 
 export const SLOT_NAMES: Record<Slot, string> = { look: "Look", wonder: "Wonder", listen: "Listen", then: "Then", puzzle: "Puzzle" };
-// The Math tile takes the Puzzle slot in a math week (docs/math-tile-slice.md; none starts by itself, 10 Nov 2026): a
-// tile is named from its card, so a week on puzzle cards keeps "Puzzle".
-export const MATH_NAME = "Math";
-export const tileName = (slot: Slot, math: boolean) => (math ? MATH_NAME : SLOT_NAMES[slot]);
 
 export const SAY = {
   hello: (nickname: string) => `Hi, ${nickname}.`,
@@ -36,24 +32,10 @@ export const SAY = {
   toTalkAbout: "That's one to talk about.",
   forAPerson: "This one is for a person:",
   didntSend: "That didn't send. Try again.",
-  // The Math tile (docs/math-tile-slice.md, What is built 6): a wrong answer earns no clue. The moves, in order: how he
-  // got it, the same question another way, one small step at a time, something he knows, a person. "That's it." and
-  // "This one is for a person:" are the cards' own, above.
-  howGotThat: "How did you get that?",
-  anotherWay: "Here it is another way:",
-  oneStep: "One step at a time:",
-  thinkOfIt: "Think of it like this:",
-  wholeThing: "Here's the whole thing:",
-  howDoYouKnow: "How do you know?", // the younger boy's part 3, after his right answer
-  // A reply with no number, read by the judge first (Brandon, 9 Nov 2026: "Say it as a number." was "demeaning").
-  whatNumber: "What number do you get?", // anything else with no number; a second one moves him on to another wording
-  goodCatch: "Good catch. Thank you for telling me.", // he said something is missing or wrong with the problem
-  workedOut: "Here's one worked out:",
-  nowYours: "Now yours",
-  nextPart: "Next part",
-  soFar: "So far:", // above a later part's question: each earlier part's question and the answer he found
-  tellHow: "Say or type how you did it",
-  deleteDigit: "Delete",
+  // A reply that says something is missing or wrong with a sum, read by the no-number judge (core/wall/no-number.ts;
+  // Brandon, 9 Nov 2026: "Say it as a number." to such a boy was "demeaning"). Kept from the Math tile.
+  goodCatch: "Good catch. Thank you for telling me.",
+  deleteDigit: "Delete", // the number pad's last key (app/kid/number-pad.tsx)
   // Talk (docs/tutor-voice-slice.md): hold to talk, let go to send the words to the box.
   talk: "Hold to talk",
   listening: "Listening… let go when you're done",

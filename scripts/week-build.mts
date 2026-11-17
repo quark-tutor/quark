@@ -18,7 +18,6 @@
 import { parseArgs } from "node:util";
 import { createClient } from "@supabase/supabase-js";
 import { levelOf } from "../core/curation/cards.ts";
-import { planMath } from "../core/curation/math.ts";
 import { gateFailed, gateSetup } from "../core/curation/gate-run.ts";
 import { BuildStopped, buildDays, prepareWeek, settingsWatch } from "../core/curation/week-job.ts";
 import { debugTo, meteredComplete, modelFor } from "../core/model.ts";
@@ -27,7 +26,7 @@ import { SLOT_ORDER } from "../lib/lenses.ts";
 import { printGate } from "./gate-run.ts";
 import { announceTarget } from "./target.ts";
 
-const target = announceTarget();
+announceTarget();
 const { values: args } = parseArgs({
   options: {
     week: { type: "string" },
@@ -38,8 +37,6 @@ const { values: args } = parseArgs({
     rebuild: { type: "boolean", default: false },
     debug: { type: "boolean", default: false },
     plan: { type: "boolean", default: false }, // print the week and what the settings decide, then stop: nothing spent or written
-    math: { type: "boolean", default: false }, // the puzzle slot as the Math tile in any week, a theme's puzzle day left out: test only
-    "math-only": { type: "boolean", default: false }, // with --day: that day's math written again, nothing else
   },
 });
 const week = Number(args.week);
@@ -50,9 +47,6 @@ if (!Number.isInteger(days) || days < 1 || days > 7) throw new Error("--days mus
 if (day !== undefined && (!Number.isInteger(day) || day < 1 || day > 7)) throw new Error("--day must be 1 to 7");
 if (day !== undefined && args.days !== undefined) throw new Error("Use --day for one day or --days for the first few, not both.");
 if (day !== undefined && args.child) throw new Error("--day builds a day for every child; it can't be combined with --child.");
-// Math starts on live only when a later job turns it on (MATH_FROM_WEEK; Brandon, 10 Nov 2026), never by a flag.
-if ((args.math || args["math-only"]) && target === "live") throw new Error("--math and --math-only are for test only: the Math tile is off on live.");
-if (args["math-only"] && day === undefined) throw new Error("--math-only writes one day's math again: give it --day.");
 if (args.start && !/^\d{4}-\d{2}-\d{2}$/.test(args.start)) throw new Error("--start must be YYYY-MM-DD");
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -76,7 +70,7 @@ const complete = meteredComplete(meter);
 // before spending, printed as one, not as a crash with a stack trace.
 let p: Awaited<ReturnType<typeof prepareWeek>>;
 try {
-  p = await prepareWeek(db, { week, start: args.start, child: args.child, math: args.math || undefined });
+  p = await prepareWeek(db, { week, start: args.start, child: args.child });
 } catch (e) {
   console.error(`\nStopped: ${e instanceof Error ? e.message : String(e)}\nNothing was spent.`);
   process.exit(1);
@@ -88,10 +82,8 @@ const last = day ?? days; // the last
 console.log(`${plan.title}: starting ${p.start}, ${day !== undefined ? `day ${day} only` : `${days} day${days === 1 ? "" : "s"}`}.`);
 const titleOf = new Map(plan.topics.map((t) => [t.id, t]));
 for (const d of plan.schedule.filter((d) => d.day >= first && d.day <= last)) {
-  const lessons = SLOT_ORDER.filter((s) => s !== d.thread && d.topics[s]).map((s) => `${s} ${titleOf.get(d.topics[s]!)?.keys[0].split("/")[1]}`);
-  console.log(
-    `  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread]!)?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}${d.math ? "; math: each child's own problem" : ""}.`,
-  );
+  const lessons = SLOT_ORDER.filter((s) => s !== d.thread).map((s) => `${s} ${titleOf.get(d.topics[s])?.keys[0].split("/")[1]}`);
+  console.log(`  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread])?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}.`);
 }
 // Before spending: the gate's rulebook and floor, and what the family's settings already decide for
 // this week's topics, so a guardian sees the blocks before the money (docs/gate-slice.md, To settle).
@@ -109,14 +101,6 @@ if (!gate.rulebook) {
 console.log(`Ideas on ${models.ideas}; cards on ${models.cards}; the gate on ${models.gate}. ${only ? `Only ${only.nickname}.` : `${children.length} children.`}`);
 // What each child's cards are written for, from the children's rows (levelOf(), as the week page shows it).
 for (const c of only ? [only] : children) console.log(`  ${c.nickname}: written for ${levelOf(c)}.`);
-// The Math tile: each child's days, planned before anything is spent.
-if (p.math) {
-  for (const c of only ? [only] : children) {
-    const mc = p.math.children.get(c.id);
-    const days = mc ? planMath(p.math.ladder, mc) : [];
-    console.log(`  ${c.nickname}'s math: ${days.length ? days.map((d) => `day ${d.day} ${d.teaches}${d.isNew ? " (new)" : ""}${d.setting ? ` in ${d.setting}` : ""}`).join(", ") : "none (no math style, or no rung he is working on)"}.`);
-  }
-}
 if (args.plan) {
   console.log(`\n--plan: stopped before spending anything; nothing was written.${gate.documentChars !== null ? ` The gate's copy of the rulebook is ${gate.documentChars.toLocaleString()} characters.` : ""}`);
   process.exit(0);
@@ -125,7 +109,7 @@ if (args.plan) {
 const started = Date.now();
 let result;
 try {
-  result = await buildDays(p, day !== undefined ? { day } : { days }, { complete, meter, gate, rebuild: args.rebuild, mathOnly: args["math-only"] });
+  result = await buildDays(p, day !== undefined ? { day } : { days }, { complete, meter, gate, rebuild: args.rebuild });
 } catch (e) {
   const message = e instanceof Error ? e.message : String(e);
   console.error(`\nStopped: ${message}`);
@@ -145,7 +129,6 @@ for (const c of report.children) {
   const lenses = Object.entries(c.lenses).sort((a, b) => b[1] - a[1]).map(([l, n]) => `${l} ${n}`).join(", ");
   console.log(`\n${c.nickname}: ${c.cards} cards. Lenses (per day-slot): ${lenses}.`);
   console.log(`  Interests opened ${c.doors} first cards. ${c.withoutPicture} cards without a picture or recording. ${c.reasked} day-slots asked twice.`);
-  if (c.math) console.log(`  Math: ${c.math.written} problems, ${c.math.reasked} asked twice. ${c.math.days.join("; ")}.`);
   if (c.heldBack.length) {
     console.log(`  Held back as blocked (still failing the checks after a second try):`);
     for (const h of c.heldBack) console.log(`    ${h}`);
@@ -171,11 +154,6 @@ if (result.gate) {
   console.error(`\nThe gate stopped: ${result.gateError}. Cards it hadn't reached are left as they were; run npm run gate -- --week ${week}.`);
 }
 printUsage();
-if (result.mathUsage.length) {
-  const math = runRow("week:build", result.mathUsage, { ok: true, startedAt: new Date(started) });
-  const parts = report.children.reduce((n, c) => n + (c.math?.written ?? 0) * 4, 0);
-  console.log(`  Of which the math writer: ${math.models.map((m) => `${m.calls} calls, $${(m.cost ?? 0).toFixed(2)}`).join("; ")} for ${parts} math cards (the gate's share for them is in its line above).`);
-}
 if (result.recordError) console.error(result.recordError);
 console.log(`\nPreview it at /parent/week/${report.themeId}.`);
 if (!gateOk) process.exit(1);

@@ -3,7 +3,7 @@ import { parse } from "yaml";
 // The math ladder (plan/math-ladder.yaml; docs/math-tile-slice.md, The ladder): the parents' list of what to learn,
 // in order, and the everyday areas beside it. npm run ladder:import writes it into `skills`, one row each, keyed;
 // a boy's place on a rung is a `mastery` row (done or working), never in a file. This file reads and checks the
-// ladder, and says which rungs a sum is on, so checkMath() can hold a problem to a boy's own rungs. Pure.
+// ladder, and says what the trading boat takes from a boy's places: his prices and the most in one sum. Pure.
 
 export const LADDER_FILE = "math-ladder.yaml";
 const KEY = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -76,51 +76,23 @@ export function ladderRows(l: Ladder): SkillRow[] {
   ];
 }
 
-// --- Which rungs a sum is on ---
+// --- What the trading boat reads from a boy's places (docs/trading-boat-slice.md) ---
 
-export type Operation = { op: "+" | "-" | "x" | "/" | "%"; operands: number[]; result: number };
-
-// The times tables a boy has: every "by" of a times rung he is placed on. Sharing is on their facts.
+// The times tables a boy has: every "by" of a times rung he is placed on, done or working. His prices are these.
 export function tablesOf(l: Pick<Ladder, "rungs">, places: Map<string, Place>): number[] {
   return [...new Set(l.rungs.filter((r) => places.has(r.key) && r.rule.op === "x" && r.rule.by && r.key.startsWith("times-")).flatMap((r) => r.rule.by!))];
 }
 
-// Is this one operation on this rule? tables: the boy's, for a sharing rule.
-export function onRule(o: Operation, rule: Rule, tables: number[] = []): boolean {
-  const [a, b] = o.operands;
-  const max = rule.max ?? Infinity;
-  switch (o.op) {
-    case "+":
-      return (rule.op === "+" || rule.op === "+-") && [...o.operands, o.result].every((n) => n <= max);
-    case "-":
-      return (rule.op === "-" || rule.op === "+-") && a <= max;
-    case "x": {
-      if (rule.op !== "x" || o.result > max) return false;
-      const each = rule.each ?? Infinity;
-      if (rule.by) return (rule.by.includes(a) && b <= each) || (rule.by.includes(b) && a <= each);
-      return a <= each && b <= each;
-    }
-    case "/":
-      if (rule.op !== "/") return false;
-      if (rule.share) return b <= 12 && o.result <= 12 && (tables.includes(b) || tables.includes(o.result));
-      return b <= (rule.each ?? 0) && o.result <= (rule.each ?? 0);
-    case "%":
-      return rule.op === "%" && b <= (rule.each ?? 0) && Math.floor(a / b) <= (rule.each ?? 0);
-  }
+// The times tables he is working on: the practice goes to these.
+export function workingTablesOf(l: Pick<Ladder, "rungs">, places: Map<string, Place>): number[] {
+  return [...new Set(l.rungs.filter((r) => places.get(r.key) === "working" && r.rule.op === "x" && r.rule.by && r.key.startsWith("times-")).flatMap((r) => r.rule.by!))];
 }
 
-// The rungs an operation is on, in ladder order.
-// Equal groups added up ("6 + 6 + 6") are groups of, as the ladder says the rung is counted, as well as adding.
-export function rungsOf(o: Operation, l: Pick<Ladder, "rungs">, tables: number[] = []): string[] {
-  const groups: Operation | null =
-    o.op === "+" && o.operands.length >= 2 && o.operands.every((n) => n === o.operands[0]) ? { op: "x", operands: [o.operands.length, o.operands[0]], result: o.result } : null;
-  return l.rungs.filter((r) => r.rule.steps === undefined && (onRule(o, r.rule, tables) || (!!groups && onRule(groups, r.rule, tables)))).map((r) => r.key);
-}
-
-// A boy's rungs: those placed done or working, and a rung that starts alongside one he is working on.
-export function rungsFor(l: Pick<Ladder, "rungs">, places: Map<string, Place>): { done: string[]; working: string[]; alongside: string[] } {
-  const done = l.rungs.filter((r) => places.get(r.key) === "done").map((r) => r.key);
-  const working = l.rungs.filter((r) => places.get(r.key) === "working").map((r) => r.key);
-  const alongside = l.rungs.filter((r) => !places.has(r.key) && (r.alongside ?? []).some((a) => places.get(a) === "working")).map((r) => r.key);
-  return { done, working, alongside };
+// The most crates or bills in one sum (Brandon, 16 Nov 2026, at stop 1's fix round: "the size of a sum follows his
+// place on the ladder, never his boat or his money"; "A count above 10 in one sum appears only when the ladder says he
+// is working on bigger multiplying"). 10, or the bigger-multiplying rung's "each" once he is placed on it.
+export const BIGGER_RUNG = "bigger-times";
+export function largestCount(l: Pick<Ladder, "rungs">, places: Map<string, Place>): number {
+  const bigger = l.rungs.find((r) => r.key === BIGGER_RUNG);
+  return bigger && places.has(BIGGER_RUNG) ? Math.max(10, bigger.rule.each ?? 10) : 10;
 }

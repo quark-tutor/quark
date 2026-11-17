@@ -1,8 +1,6 @@
 import type { CardBody } from "../curation/cards.ts";
 import type { AnswerKey } from "../curation/types.ts";
 import type { Verdict } from "./judge.ts";
-import type { Picture, WorkedExample } from "../math/problem.ts";
-import type { MathView } from "./math.ts";
 
 // A card on the Wonder Wall: where a child is in a day-slot's chain of layers, worked out from the
 // attempts alone (nothing is kept in the browser, so a reload or the other iPad agree), and what each
@@ -36,8 +34,7 @@ export type ChainLayer = {
 };
 
 // verdict is the judge's (core/wall/judge.ts); a row from before the judge has none.
-// move is a math part's (core/wall/math.ts); null on every other card.
-export type AttemptRow = { question_id: string; correct: boolean | null; verdict?: string | null; move?: string | null; answer?: string | null; created_at: string };
+export type AttemptRow = { question_id: string; correct: boolean | null; verdict?: string | null; created_at: string };
 
 // at is the index of the layer in the chain. A card is done at the handoff: after the hints ran out
 // ("handed_off"), after an open question's answer ("open"), or after a right answer with no deeper layer
@@ -96,7 +93,7 @@ export const lineId = (cardId: string, part: "read" | "question" | "handoff" | n
 
 // --- What reaches the browser (rule 7): these fields and nothing else. A test holds each list. ---
 
-export type Tile = { slot: Slot; title: string; cardId: string; done: boolean; math: boolean };
+export type Tile = { slot: Slot; title: string; cardId: string; done: boolean };
 export type WallReply = { nickname: string; tiles: Tile[] };
 
 // url is a signed URL to the family's stored copy, or a recording's Wikimedia URL (with the MP3 Wikimedia
@@ -115,27 +112,18 @@ export type CardReply = {
   hints: string[];
   state: CardState["kind"];
   handoff?: string; // only once reached
-  math?: MathPage; // a part of a math problem
 };
 
-// A math part's page (docs/math-tile-slice.md): where he is in its moves, the graph, and the worked example on the
-// first part while the rung is new to him.
-// before: the parts he has already found, in order, so every number a later part needs is on its page (Brandon, 9 Nov
-// 2026, fix round 2: part 3 asked for the trucks' and trikes' wheels together on a page that showed neither).
-export type MathPage = { view: MathView; graph: Picture | null; example: WorkedExample | null; before: { question: string; answer: string }[] };
-
 // to_question: the guess answered the hint, so the page asks the question again and no hint is spent.
-// math: a math part's page after the answer.
 export type AnswerReply = {
-  outcome: "guess_first" | "not_yet" | "close" | "to_question" | "right" | "handoff" | "open" | "math";
-  math?: MathView;
+  outcome: "guess_first" | "not_yet" | "close" | "to_question" | "right" | "handoff" | "open";
   hint?: string;
   handoff?: string;
   next?: string; // the next layer's card id, once earned
 };
 
 export function wallReply(nickname: string, tiles: Tile[]): WallReply {
-  return { nickname, tiles: tiles.map(({ slot, title, cardId, done, math }) => ({ slot, title, cardId, done, math })) };
+  return { nickname, tiles: tiles.map(({ slot, title, cardId, done }) => ({ slot, title, cardId, done })) };
 }
 
 // The layer the state is at, with the hints seen so far, and the handoff only when the card is done.

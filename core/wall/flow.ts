@@ -5,9 +5,6 @@ import type { AnswerKey } from "../curation/types.ts";
 import { ageBand } from "../curation/gate.ts";
 import { todayIn } from "../curation/week.ts";
 import { isGuess, judgeGuess, type MatchRule } from "./answer.ts";
-import { readNumber } from "../math/numbers.ts";
-import { expected, isMath, mathState, mathView, runPart, type Move } from "./math.ts";
-import type { NoNumberInput, NoNumberResult } from "./no-number.ts";
 import type { Judgement, JudgeInput, Verdict } from "./judge.ts";
 import {
   answerReply,
@@ -73,21 +70,12 @@ export type AttemptInsert = {
   mode: "teach";
   answer: string;
   correct: boolean | null;
-  verdict: Verdict | "questioned" | "no_number" | null; // null for an open question's answer; the last two on a math part
+  verdict: Verdict | null; // null for an open question's answer
   judged_by: "model" | "rule" | null;
   reasoning: string | null; // the judge's line, for the parents; never sent to the iPad
   hints_used: number;
   seconds: number | null;
-  move?: Move | null; // a math part's move; absent on every other card
 };
-
-// What he said to "How did you get that?", for the label (lib/wall.ts labels it after the reply has gone; it is
-// recorded for the parents and does not choose the next move in this slice).
-// The judge of a math reply with no number (core/wall/no-number.ts, given by lib/wall.ts): always a verdict, "other"
-// when the model gave none in time.
-export type ReadNoNumber = (input: NoNumberInput) => Promise<NoNumberResult>;
-
-export type HowSaid = { attemptId: string; said: string; question: string; answer: number; unit: string; expression: string; wrong: string | null; band: string | null };
 
 // The judge of a guess (core/wall/judge.ts, given by lib/wall.ts): a verdict, or null when the model gave none in
 // time, and the word rule judges instead.
@@ -102,8 +90,7 @@ export type WallStore = {
   startSession(row: { family_id: string; child_id: string; device: string; started_at: string }): Promise<string>;
   endSession(id: string, reason: "child_left"): Promise<void>;
   touchSession(id: string, at: string): Promise<void>;
-  addAttempt(row: AttemptInsert): Promise<string>; // the attempt's id
-  answeredSkill?(childId: string, skillKey: string, except: string[]): Promise<boolean>; // has he answered a part on this rung or area?
+  addAttempt(row: AttemptInsert): Promise<void>;
   sign(storagePath: string): Promise<string | null>;
 };
 
@@ -172,13 +159,7 @@ export async function wallFor(store: WallStore, scope: Scope, nickname: string, 
   await visit(store, scope, now);
   return wallReply(
     nickname,
-    chains.map((chain) => ({
-      slot: chain[0].slot,
-      title: chain[0].body.title,
-      cardId: chain[0].cardId,
-      done: isDone(isMath(chain) ? mathState(chain, attempts) : chainState(chain, attempts)),
-      math: isMath(chain),
-    })),
+    chains.map((chain) => ({ slot: chain[0].slot, title: chain[0].body.title, cardId: chain[0].cardId, done: isDone(chainState(chain, attempts)) })),
   );
 }
 
@@ -212,99 +193,10 @@ export async function cardFor(
   if (!row || !onWall(row, scope, day)) return null;
   const { chain, rows } = chainOf(await store.cards({ familyId: scope.familyId, childId: scope.childId, day, slot: row.slot as Slot }), scope, day, row.slot);
   if (!chain.some((l) => l.cardId === cardId)) return null;
-  const attempts = await store.attempts(scope.childId, chain.map((l) => l.questionId));
-  if (isMath(chain)) {
-    const state = mathState(chain, attempts);
-    await visit(store, scope, now);
-    if (chain[state.at].cardId !== cardId) return { goTo: chain[state.at].cardId };
-    const m = chain[state.at].body.math!;
-    // The worked example comes first while the rung is new to him: on part 1, before he has answered it, and only
-    // if he has answered no part on that rung elsewhere (an example is written for each problem on a rung new at
-    // Sunday's build).
-    const fresh = state.at === 0 && !!m.example && !attempts.some((a) => a.question_id === chain[0].questionId);
-    const example = fresh && !(await store.answeredSkill?.(scope.childId, m.teaches, chain.map((l) => l.questionId))) ? m.example! : null;
-    // Every part before this one is right (a handoff ends the problem), so his answers to them are shown as found.
-    const before = chain.slice(0, state.at).map((l) => ({ question: l.body.question, answer: `${l.body.math!.answer} ${l.body.math!.unit}` }));
-    const page = { view: mathView(chain, state), graph: m.graph.kind === "graph" ? m.graph : null, example, before };
-    return { card: { ...cardReply(chain, state, null), math: page } };
-  }
-  const state = chainState(chain, attempts);
+  const state = chainState(chain, await store.attempts(scope.childId, chain.map((l) => l.questionId)));
   await visit(store, scope, now);
   if (chain[state.at].cardId !== cardId) return { goTo: chain[state.at].cardId };
   return { card: cardReply(chain, state, await mediaOf(store, rows[state.at])) };
-}
-
-// An answer on a math part (docs/math-tile-slice.md): a number read in code, never the model's call, against the
-// number the move asks for; his own words to "How did you get that?" and "How do you know?" are taken as they are and
-// kept. "I don't know" writes nothing and gets "Have a guess first.". Any other reply with no number is read by the
-// judge first (fix round 2): he questioned the problem, he doesn't know (nothing written, "Have a guess first."), or
-// anything else; the first and last are kept, with verdict questioned or no_number, and move him as runPart() says.
-// The reply is the part's page after it, so the page shows the next move, or the working and the next part.
-async function mathAnswer(
-  store: WallStore,
-  scope: Scope,
-  chain: ChainLayer[],
-  attempts: AttemptRow[],
-  input: { cardId: string; guess: string; seconds: number | null },
-  row: CardRow,
-  now: Date,
-  onHow?: (said: HowSaid) => void,
-  readNoNumber?: ReadNoNumber,
-): Promise<AnswerReply | null> {
-  const state = mathState(chain, attempts);
-  if (isDone(state) || chain[state.at].cardId !== input.cardId) return null;
-  const here = chain[state.at];
-  const m = here.body.math!;
-  const move = state.run.move as Move;
-  const text = input.guess.trim().slice(0, ANSWER_MAX);
-  const want = expected(m, move);
-  let correct: boolean | null = null;
-  let verdict: "right" | "not_yet" | "questioned" | "no_number" | null = null;
-  let by: AttemptInsert["judged_by"] = null;
-  let reasoning: string | null = null;
-  if (want === null) {
-    if (!/[a-z0-9]/i.test(text)) return { outcome: "guess_first" };
-  } else {
-    if (!isGuess(text)) return { outcome: "guess_first" };
-    const read = readNumber(text);
-    if ("none" in read && read.none === "no_number") {
-      const r = readNoNumber ? await readNoNumber({ setting: here.body.text, question: currentQuestion(here.body, move), said: text }) : { verdict: "other" as const, reasoning: "", by: "rule" as const, fault: null };
-      if (r.verdict === "dont_know") return { outcome: "guess_first" };
-      verdict = r.verdict === "questioned" ? "questioned" : "no_number";
-      by = r.by;
-      reasoning = r.reasoning || null;
-    } else {
-      correct = "value" in read && read.value === want;
-      verdict = correct ? "right" : "not_yet";
-      by = "rule";
-    }
-  }
-  const session = await visit(store, scope, now);
-  const seconds = input.seconds === null || !Number.isFinite(input.seconds) ? null : Math.min(SECONDS_MAX, Math.max(0, Math.round(input.seconds)));
-  const attemptId = await store.addAttempt({
-    family_id: scope.familyId,
-    session_id: session,
-    child_id: scope.childId,
-    question_id: here.questionId,
-    mode: "teach",
-    answer: text,
-    correct,
-    verdict,
-    judged_by: by,
-    reasoning,
-    hints_used: 0,
-    seconds,
-    move,
-  });
-  if (move === "how" && onHow) {
-    const before = attempts.filter((a) => a.question_id === here.questionId && a.correct === false).sort((a, b) => a.created_at.localeCompare(b.created_at));
-    onHow({ attemptId, said: text, question: here.body.question, answer: m.answer, unit: m.unit, expression: m.expression, wrong: before.at(-1)?.answer ?? null, band: bandOf(row.level) });
-  }
-  const mine = [...attempts.filter((a) => a.question_id === here.questionId), { question_id: here.questionId, correct, verdict, move, created_at: now.toISOString() }].sort((a, b) =>
-    a.created_at.localeCompare(b.created_at),
-  );
-  const run = runPart(m, mine);
-  return { outcome: "math", math: mathView(chain, { kind: "answering", at: state.at, hintsSeen: 0, run }) };
 }
 
 // The grade band from what the card was written for ("chapter_books, age 9"), as the gate sends it; null when the
@@ -325,15 +217,12 @@ export async function answer(
   now: Date,
   rule: MatchRule,
   judge?: Judge,
-  onHow?: (said: HowSaid) => void,
-  readNoNumber?: ReadNoNumber,
 ): Promise<AnswerReply | null> {
   const day = await today(store, scope, now);
   const row = await store.cardById({ familyId: scope.familyId, childId: scope.childId, id: input.cardId });
   if (!row || !onWall(row, scope, day)) return null;
   const { chain } = chainOf(await store.cards({ familyId: scope.familyId, childId: scope.childId, day, slot: row.slot as Slot }), scope, day, row.slot);
   const attempts = await store.attempts(scope.childId, chain.map((l) => l.questionId));
-  if (isMath(chain)) return mathAnswer(store, scope, chain, attempts, input, row, now, onHow, readNoNumber);
   const before = chainState(chain, attempts);
   if (!chain.length || isDone(before) || chain[before.at].cardId !== input.cardId) return null;
 
@@ -378,13 +267,4 @@ export async function answer(
   });
   const after = chainState(chain, [...attempts, { question_id: here.questionId, correct, verdict, created_at: now.toISOString() }]);
   return answerReply(judged, chain, after);
-}
-
-// The words the box answers now on a math part, for the judge of a reply with no number.
-function currentQuestion(body: ChainLayer["body"], move: Move): string {
-  const m = body.math!;
-  if (move === "wording_1") return m.wordings[0];
-  if (move === "wording_2") return m.wordings[1];
-  if (move.startsWith("step_")) return m.steps[Number(move.slice(5)) - 1]?.question ?? body.question;
-  return body.question;
 }

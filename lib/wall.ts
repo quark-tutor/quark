@@ -6,10 +6,7 @@ import { readPrompt } from "@/core/prompts";
 import { runRow } from "@/core/runs";
 import type { MatchRule } from "@/core/wall/answer";
 import type { AttemptRow } from "@/core/wall/card";
-import { answer, cardFor, wallFor, type CardRow, type HowSaid, type Judge, type Scope } from "@/core/wall/flow";
-import { LABEL_MAX_TOKENS, LABEL_SCHEMA, labelPrompt, readLabel } from "@/core/wall/label";
-import { NO_NUMBER_SCHEMA, readReply } from "@/core/wall/no-number";
-import type { ReadNoNumber } from "@/core/wall/flow";
+import { answer, cardFor, wallFor, type CardRow, type Judge, type Scope } from "@/core/wall/flow";
 import { JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_SCHEMA, JUDGE_THINKING, judgeAnswer } from "@/core/wall/judge";
 import { CLIP_RATE, heardText, parseLine, spokenUrl, type SpeechStore } from "@/core/wall/speech";
 import { hear, HEAR_MODEL, say, TUTOR_VOICE } from "@/core/speech";
@@ -128,9 +125,7 @@ export function wallStore(): SpeechStore {
     async attempts(childId, questionIds) {
       if (!questionIds.length) return [];
       return must(
-        // Not attempts.move: nothing reads it back, and live has no such column until the math migrations reach it, so
-        // the wall reads only what live has (10 Nov 2026, at the close of docs/math-tile-slice.md).
-        await db.from("attempts").select("question_id, correct, verdict, answer, created_at").eq("child_id", childId).in("question_id", questionIds).returns<AttemptRow[]>(),
+        await db.from("attempts").select("question_id, correct, verdict, created_at").eq("child_id", childId).in("question_id", questionIds).returns<AttemptRow[]>(),
         "attempts",
       );
     },
@@ -149,13 +144,7 @@ export function wallStore(): SpeechStore {
       must(await db.from("sessions").update({ ended_at: at }).eq("id", id), "sessions");
     },
     async addAttempt(row) {
-      return (must(await db.from("attempts").insert(row).select("id").single(), "attempts") as { id: string }).id;
-    },
-    // Has he answered a part on this rung or area anywhere but these questions? (The worked example shows only until he has.)
-    async answeredSkill(childId, skillKey, except) {
-      const q = db.from("attempts").select("id, questions!inner(skills!inner(key))").eq("child_id", childId).eq("questions.skills.key", skillKey);
-      const rows = must(await (except.length ? q.not("question_id", "in", `(${except.join(",")})`) : q).limit(1), "attempts") as unknown[];
-      return rows.length > 0;
+      must(await db.from("attempts").insert(row), "attempts");
     },
     async sign(path) {
       const { data, error } = await db.storage.from("content").createSignedUrl(path, SIGNED_FOR);
@@ -233,86 +222,6 @@ function judgeFor(device: Device): Judge {
   };
 }
 
-let noNumberSystem: string | undefined;
-
-// The judge of a math reply with no number (core/wall/no-number.ts; fix round 2): Haiku, as the judge, within the
-// judge's 3 seconds, before the tile answers; "other" when it gives no verdict in time. One model_runs row a reply,
-// kind judge, after the reply has gone.
-function noNumberFor(device: Device): ReadNoNumber {
-  return async (input) => {
-    noNumberSystem ??= readPrompt("no-number.md");
-    const spent = { input: 0, output: 0, calls: 0 };
-    const startedAt = new Date();
-    const r = await readReply(input, ({ prompt, timeoutMs }) =>
-      complete({
-        system: noNumberSystem!,
-        prompt,
-        maxTokens: JUDGE_MAX_TOKENS,
-        use: "judge",
-        model: JUDGE_MODEL,
-        thinking: JUDGE_THINKING,
-        json: NO_NUMBER_SCHEMA,
-        timeoutMs,
-        onUsage: (u) => {
-          spent.input += u.input;
-          spent.output += u.output;
-          spent.calls += 1;
-        },
-      }),
-    );
-    if (r.by === "rule") console.error("no number: read as other instead:", r.fault);
-    after(async () => {
-      const row = runRow("judge", [{ use: "judge", model: JUDGE_MODEL, ...spent }], { ok: r.by === "model", startedAt });
-      const { error } = await createAdminClient().from("model_runs").insert({ family_id: device.familyId, ...row });
-      if (error) console.error("no number: could not record the run:", error.message);
-    });
-    return r;
-  };
-}
-
-let labelSystem: string | undefined;
-
-// The label on what he said to "How did you get that?" on the Math tile (core/wall/label.ts), made after the reply has
-// gone and written to his attempt for the parents; it chooses nothing in this slice. One model_runs row a label.
-function labelLater(device: Device) {
-  return (h: HowSaid) =>
-    after(async () => {
-      labelSystem ??= readPrompt("label.md");
-      const spent = { input: 0, output: 0, calls: 0 };
-      const startedAt = new Date();
-      let label: ReturnType<typeof readLabel> = null;
-      try {
-        const raw = await complete<unknown>({
-          system: labelSystem,
-          prompt: labelPrompt(h),
-          maxTokens: LABEL_MAX_TOKENS,
-          use: "judge",
-          model: JUDGE_MODEL,
-          thinking: JUDGE_THINKING,
-          json: LABEL_SCHEMA,
-          timeoutMs: 15000,
-          onUsage: (u) => {
-            spent.input += u.input;
-            spent.output += u.output;
-            spent.calls += 1;
-          },
-        });
-        label = readLabel(raw);
-      } catch (e) {
-        console.error("label: no label:", (e instanceof Error ? e.message : String(e)).split("\n")[0].replace(/"[^"]*"/g, '"…"').slice(0, 160));
-      }
-      const db = createAdminClient();
-      if (label) {
-        const { error } = await db.from("attempts").update({ label: label.label, reasoning: label.reasoning || null }).eq("id", h.attemptId).eq("child_id", device.childId);
-        if (error) console.error("label: could not record it:", error.message);
-      }
-      const row = runRow("label", [{ use: "judge", model: JUDGE_MODEL, ...spent }], { ok: !!label, startedAt });
-      const { error } = await db.from("model_runs").insert({ family_id: device.familyId, ...row });
-      if (error) console.error("label: could not record the run:", error.message);
-    });
-}
-
-// A guess, judged by the model, or by the word rule when the model gives no verdict in time; on the Math tile, a
-// number read in code, and his words to "How did you get that?" labelled afterwards.
+// A guess, judged by the model, or by the word rule when the model gives no verdict in time.
 export const sendAnswer = async (device: Device, input: { cardId: string; guess: string; seconds: number | null }, now?: Date) =>
-  answer(wallStore(), scopeOf(device), input, now ?? (await wallNow()), WALL_RULE, judgeFor(device), labelLater(device), noNumberFor(device));
+  answer(wallStore(), scopeOf(device), input, now ?? (await wallNow()), WALL_RULE, judgeFor(device));

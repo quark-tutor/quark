@@ -1,4 +1,3 @@
-import { sumLine } from "../math/expr.ts";
 import type { FamilyPoint, FamilyValues } from "../../lib/family-values.ts";
 import type { GradeBand } from "../../lib/plan.ts";
 import type { Perspective } from "../../lib/values.ts";
@@ -27,7 +26,7 @@ import { pool } from "./week.ts";
 export type Policy = "pending" | "passed" | "rewritten" | "blocked";
 
 export type CodeRule = "blackball" | "never" | "too_young";
-export const MODEL_RULES = ["parent_led", "perspective", "blocked_topic", "rule_1", "rule_6", "frightening", "caution", "not_here"] as const;
+export const MODEL_RULES = ["parent_led", "perspective", "blocked_topic", "rule_1", "rule_6", "frightening", "caution"] as const;
 export type ModelRule = (typeof MODEL_RULES)[number];
 
 export type GateReason = { rule: CodeRule | ModelRule; subject?: number; note: string };
@@ -69,8 +68,7 @@ export function readFloor(file: string): Floor {
 export const ageBand = (age: number): GradeBand => (age <= 8 ? "2-3" : "4-5");
 
 // The exact age is used here, in code, for "Not yet"; it is never sent.
-// interests go to the gate for a math card only, for its not_here rule (Brandon, 9 Nov 2026, fix round 3).
-export type GateChild = { id: string; age: number; carefulAbout: string | null; interests?: string[] };
+export type GateChild = { id: string; age: number; carefulAbout: string | null };
 
 export type GateCard = {
   id: string;
@@ -157,9 +155,8 @@ export function gatePrompt(input: {
   rulebook: string;
   lines: SubjectLine[];
   perspective: Perspective | null;
-  child: { age: number; carefulAbout: string | null; interests?: string[] };
+  child: { age: number; carefulAbout: string | null };
   card: CardBody;
-  familiar?: string[]; // the family's places and things (families.familiar), for a math card's not_here rule
 }): string {
   const { card } = input;
   const note = input.child.carefulAbout?.trim();
@@ -170,7 +167,6 @@ export function gatePrompt(input: {
       ]
     : ["This card's topic is marked as touching none of the 24 subjects."];
   const hints = (card.hints ?? []).map((h, i) => `${i + 1}. ${h}`);
-  const shown = card.math ? mathLines(card) : [`Title: ${card.title}`, `Text: ${card.text}`, ...(card.image_alt?.trim() ? [`Picture: ${card.image_alt}`] : []), `Question: ${card.question}`, "Hints, in order:", ...hints, `Handoff: ${card.handoff}`];
   return [
     "The family's rulebook:",
     "",
@@ -181,39 +177,15 @@ export function gatePrompt(input: {
     `The child is in grades ${ageBand(input.child.age)}.`,
     ...(note ? [`The parents asked for care about: ${note}`] : []),
     "",
-    // A math card's setting is held to what these children have seen or done (not_here): the family's own list and
-    // this child's interests. A card that is not math is sent nothing of the kind.
-    ...(card.math
-      ? [
-          `Places and things this family knows: ${input.familiar?.length ? input.familiar.join(", ") : "(none listed)"}.`,
-          `This child is into: ${input.child.interests?.length ? input.child.interests.join(", ") : "(none listed)"}.`,
-          "",
-        ]
-      : []),
-    card.math ? "A math card, as the child would see it, with every line the tutor may say about it:" : "The card, as the child would see it:",
-    ...shown,
-  ].join("\n");
-}
-
-// A part of a math problem (docs/math-tile-slice.md): every word the child may read or hear on it, in the order the
-// tutor's moves would bring them, so the gate reads all of it, the Hawaiʻi question included (gate.md v3).
-function mathLines(card: CardBody): string[] {
-  const m = card.math!;
-  return [
+    "The card, as the child would see it:",
     `Title: ${card.title}`,
-    `The setting: ${card.text}`,
-    ...(m.graph.kind === "graph" ? [`A bar graph: ${m.graph.labels.map((l, i) => `${l} ${m.graph.numbers[i]}`).join(", ")}`] : []),
-    ...(m.example ? [`A worked example, shown first: ${m.example.text} ${m.example.working.join(" ")}`] : []),
-    `Part ${m.part} of ${m.of}: ${card.question}`,
-    ...(sumLine(m.expression) ? [`Under it, the sum the program writes: ${sumLine(m.expression)}`] : []),
-    "Said another way, after a wrong answer:",
-    ...m.wordings.map((w, i) => `${i + 1}. ${w}`),
-    "One step at a time:",
-    ...m.steps.map((s, i) => `${i + 1}. ${s.question}${sumLine(s.expression) ? ` ${sumLine(s.expression)}` : ""}`),
-    `Something the child knows: ${m.tie}`,
-    `After a right answer: ${m.working.join(" ")}`,
+    `Text: ${card.text}`,
+    ...(card.image_alt?.trim() ? [`Picture: ${card.image_alt}`] : []),
+    `Question: ${card.question}`,
+    "Hints, in order:",
+    ...hints,
     `Handoff: ${card.handoff}`,
-  ];
+  ].join("\n");
 }
 
 export const GATE_SCHEMA = {
@@ -310,7 +282,6 @@ export type GateOptions = {
   // it is (counted in staleLeft), which is what the Sunday build wants: it must not re-judge, or spend
   // on, cards an earlier firing already settled.
   pendingOnly?: boolean;
-  familiar?: string[]; // the family's places and things, for a math card (families.familiar)
 };
 
 // Cards checked at once. Forty cards a day, four at a time, is an estimated minute of a day that took 195
@@ -417,7 +388,7 @@ export async function runGate(opts: GateOptions, deps: GateDeps): Promise<GateRe
       try {
         raw = await deps.complete<unknown>({
           system: opts.system,
-          prompt: gatePrompt({ rulebook: rulebook.text, lines, perspective: c.perspective, child, card: c.body, familiar: opts.familiar }),
+          prompt: gatePrompt({ rulebook: rulebook.text, lines, perspective: c.perspective, child, card: c.body }),
           maxTokens: 16000,
           use: "gate",
           json: GATE_SCHEMA,
