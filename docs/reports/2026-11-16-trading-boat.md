@@ -537,3 +537,73 @@ judged. Stop 2 says so line by line.
 
 **What go takes:** reply **go** to take all of these, and the row out of order. Name anything you dislike instead,
 and that is another fix round on paper.
+
+## Emergency stop (16 Nov 2026, 18:30 HST): the old dev server needs your hands
+
+### What went wrong
+
+The iPad dev server from the Next.js job is still running, and it serves stale code to the boat.
+- **What it is:** `npm run dev:ipad`, started at 16:16 HST, processes 22840 (`scripts/dev-ipad.mts`), 22284
+  (`next dev`) and 2080 (its server).
+- **What it does wrong:** it picked up the new pages, and Bug's wall shows the trading boat tile, and the boat opens on
+  day 1. But its copy of `lib/ladder.ts` for the API routes is from before the clean-up, so every move answers 500.
+  Its log, `.next/dev/logs/next-development.log`, says "workingTablesOf is not a function". Touching the file did not
+  reload it.
+- **Why I stopped:** stopping those processes and clearing `.next` was refused to me (auto mode: destructive). Next.js
+  refuses a second dev server while this one holds its lock ("Another next dev server is already running"). So the
+  steps left need it restarted, and that is your hands.
+
+### What is done
+
+- **Go, 18:05.** The row is at *building* (`45bb7fb`).
+- **The clean-up** (`f5c4370`, pushed).
+  - **The gate is `main`'s:** `gate.md`, `gate.ts`, `gate-run.ts` and `gate.test.ts` have an empty diff against
+    `origin/main`. So do the Sunday build, the plan, `week:build`, the wall's cards and voice, the week page, the
+    models page and the run kinds: 18 files.
+  - **Deleted:** every file the stop-1 list named.
+  - **What still differs from `main`** is the kept list alone: the ladder, the number reader and pad, the test view,
+    the no-number judge, the fixtures and the three math migrations.
+  - **Test's math week is cleared** (`npm run fixture -- clear-math`): 56 math cards on 7 days, 28 idea rows and 1
+    answer, with none left.
+  - That push changed no migration, so it started no migrations run. The tests ran on the laptop: 466 passed, the
+    typecheck was clean, and `npm run build` was clean.
+- **The game** (`cf27641`, pushed).
+  - **`core/boat/`:** the day, the game, the simulation and the parents' log, all pure, with 27 tests.
+  - **The simulation test holds the stop-1 numbers on the game's own rules:**
+    - the careful first boat on days 6 to 9 (Kiddo) and 7 to 11 (Bug);
+    - nothing above 10 in one sum;
+    - no repeated best purchase;
+    - most working facts a week from the second week;
+    - no money lost by a careless player.
+  - **The game's tests** cover checks 1 to 9 and 11 move by move, and the log covers stop 2's last check.
+  - **The words:** every sentence is in `core/wall/words.ts` (`BOAT`). The wiring test runs them through the effort
+    words and "never tell a guess it was wrong" checks.
+  - **The server and the screens:** `lib/boat.ts` returns null with the test view off, `/kid/boat`, `/api/kid/boat`,
+    "Read it to me" through the say route, the tile, the section on `/parent`, and the fixture
+    `boat <n> [money <m> | reset]`.
+  - **The checks:** 494 tests and the typecheck pass.
+- **The migration `20261116000000_trading_boat` is on test:** run 44017188011, green ("Applying migration
+  20261116000000_trading_boat.sql... Finished supabase db push."). The live job did nothing.
+- **A device for my own check is paired on test** to child 2: `36e90f0b-d44f-4c6e-afbd-f38c3463e4c3`. Bug's game
+  stands at day 1, opened and not played. After my check I reset his game and forget the device
+  (`fixture -- boat 2 reset`, `fixture -- forget …`), so the look starts clean.
+
+### What is not done
+
+- The boat played end to end through the dev server (the moves, the next day, "Read it to me", the no-number judge,
+  the log on `/parent`).
+- `npm run build` on the finished branch, which runs before the dev server starts, never beside it.
+- Stop 2, *Your look*.
+
+### What I need
+
+**Stop the old dev server.** Either way works:
+- in the terminal where it runs, press Ctrl+C;
+- or type: `! taskkill /PID 22840 /T /F` (it stops 22284 and 2080 with it).
+
+Then type **go**. On go I:
+1. clear `.next` (only if you say so with the go; otherwise the dev server starts on it as it is);
+2. run `npm run build`;
+3. start `npm run dev:ipad`;
+4. play a day through it as child 2 and check the next day;
+5. reset that game, forget the device, and write stop 2.
