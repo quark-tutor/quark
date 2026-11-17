@@ -607,3 +607,133 @@ Then type **go**. On go I:
 3. start `npm run dev:ipad`;
 4. play a day through it as child 2 and check the next day;
 5. reset that game, forget the device, and write stop 2.
+
+### How it ended
+
+- **The first `!` command failed (my mistake).** It was `taskkill /PID 22840 /T /F`, and Git Bash turned `/PID` into
+  `C:/Program Files/Git/PID`. The doubled form, `taskkill //PID 22840 //T //F`, stopped all three processes.
+- **Brandon's "go, and clear .next first".** I had already started a dev server on the old `.next`, so I stopped it
+  (my own, started at 18:35), cleared `.next`, built and started it again.
+
+## Stop 2: Your look, on June's iPad, on test (16 Nov 2026, 18:50 HST)
+
+### Where it stands
+
+**The iPad dev server is running against test**, started at about 18:40 on an empty `.next`, after a clean
+`npm run build`. June's iPad opens the wall as before, from the Home Screen (`https://192.168.50.67:3000/kid`).
+
+**Checked through the dev server**, as test's child 2 with a device paired for the check:
+- **A buy:** 3 crates at $4, answered 7, met "That's 3 and 4 put together. You need 3 lots of 4." (on Bug's
+  numbers), then the count.
+- **The count:** a missed step went one crate at a time.
+- **A total he could not pay:** "That's right, it's $15. You have $8."
+- **Number words:** "six dollars" was read as 6.
+- **The no-number judge** (two calls, Haiku): "I don't know" got "Have a guess first. Any guess is fine.", and "you
+  never told me how many I have" got "Good catch. Thank you for telling me." and the count.
+- **The cast-off** offered the two rumors' islands.
+- **"Read it to me"** made the screen's line in Sulafat and stored it.
+- **The next day, through the test view's day:**
+  - landed on Kauaʻi, with "A big lūʻau on Kauaʻi needs pineapples. So pineapples sell for $10 a crate here.";
+  - "A buyer takes up to 3 crates of pineapples at $10 a crate.", then the second buyer;
+  - the look back, "$50 − $20 = ?", with "Count up from $20 to $50." after a miss.
+- **The double canoe:** after `fixture -- boat 2 money 500` and a skipped day, it was offered at the landing, and
+  buying it asked "4 × $100 = ?" and counted in bills.
+- **The log** (`fixture -- boat 2 log`, the same function `/parent` uses) read each day with each sum and each
+  answer's kind.
+
+**Found in Chrome, and fixed (`f62f595`):** the page kept every earlier screen's "Read it to me" button. Three parts
+shared one key; each has its own now. After the fix, one button and the crates drawn and lit as the count says
+(4 crates, 2 lit).
+
+**Then cleaned up:** both test children's games are reset (each starts at home with $20), and the device paired for
+the check is forgotten. June's iPad stays paired as Bug. The laptop's Chrome is paired as Kiddo.
+
+**The checks:** 494 tests, the typecheck, and lint on every new file pass. `npm run build` was clean on the empty
+`.next`. It ran before the last commit (the keys, a read-only GET of the screen, the fixture's log); that commit's
+tests and typecheck pass, and the dev server serves it. A build now would run beside the dev server, so it waits for
+the close.
+
+### What a release of this branch would and would not change
+
+`phase-4-wonder-wall` is ahead of `main` by the Math tile's commits, week 4's and the Next.js job's records, and this
+job's. After the clean-up:
+
+**It would not change anything the boys see, or how a card is judged:**
+- **The gate:** `gate.md`, `gate.ts` and `gate-run.ts` are `main`'s, byte for byte (no diff). Every card is judged by
+  v2.
+- **The Sunday build, the plan, `week:build`, the week page and `/parent/models`:** `main`'s.
+- **The wall's cards, "Read it to me" on a card, Talk and the night's lines:** `main`'s.
+- **The trading boat:** on Vercel the test view is off (it needs the dev server and `QUARK_TARGET=test`).
+  - The wall's tile, `/kid/boat`, `/api/kid/boat`, the boat's line in the say route and the section on `/parent`
+    each return nothing and read no table.
+  - A boat line sent to the say route answers 404, as any unknown line does.
+- **`lib/wall.ts`** asks the test view for "now". Off the dev server that is the real time, as on `main`.
+
+**It would carry, unused on live:**
+- the ladder file and `ladder:import` (and `:live`), which no live job runs;
+- the fixtures (test only);
+- four migrations that are on test and not on live: the three math ones and the boat's. A release does not apply
+  them to live (the workflow's live job waits on a secret left unset), and nothing on live reads what they add.
+
+### Your look
+
+On June's iPad, on test, as Bug, and then as Kiddo (tap the name in the test view's bar at the foot of the wall). Each
+check is its own.
+
+**Where:** the wall, the Math tile (*The trading boat*, after the cards). **Do / See:**
+
+1. A market shows goods and prices, your money, your boat's space, and one rumor. Nothing tells you what to buy or
+   how many. Pass □ Fail □
+2. Pick a good and a number: the picture shows exactly that many crates, each with its price, and the sum is written
+   beside the question ("6 × $5 = ?"). Pass □ Fail □
+3. Give the right total: the money goes down, the crates are on the boat, and you can buy again. Pass □ Fail □
+4. Give the two numbers added together: the reply says so, and the crates light up to count. Give a total one crate
+   out: the reply says you are close. Give something else: the count begins at once. No reply asks how you got it.
+   Pass □ Fail □
+5. Ask for more than you can pay for, with the right total: the trader agrees with the sum and says you are short.
+   Pass □ Fail □
+6. Ask for more than the boat holds: it will not let the number go past the space left. Pass □ Fail □
+7. After the last market, cast off: the day is over, the tile is done, and nothing more can be played today.
+   Pass □ Fail □
+8. Move the test view to tomorrow (▶): you land where the rumor pointed, the price there is what the rumor promised,
+   with its reason, and you tell the buyer what you are owed. Pass □ Fail □
+9. Skip a day in the test view (▶ twice), then come back: the boat is where you left it and nothing is lost.
+   Pass □ Fail □
+10. As Kiddo and as Bug the prices are different numbers; the game is the same. Pass □ Fail □
+11. Reach the first boat's price: type `! npm run fixture -- boat 2 money 500` (Bug; `boat 1` for Kiddo). Finish
+    the day, cast off, then ▶ to the next day. At the landing the bigger boat is offered, and buying it asks for its
+    sum ("4 × $100 = ?"). Pass □ Fail □
+
+**Where:** `/parent` on the dev server, as the test guardian (the laptop's Chrome, `https://localhost:3000/parent`).
+**See:** under *The trading boat (test only)*, each day's trades for each child: what he bought and sold, every sum,
+whether it was right at once or which help he needed, and each wrong answer with its kind. Pass □ Fail □
+
+**To know before you start:**
+- **Placeholders:** each screen's picture is a dashed box with the name of your picture that goes there. The crates
+  and bills are drawn.
+- **One move at a time:** each move goes to the server, so a tap waits a moment.
+- **"Read it to me" waits the first time:** about 4 to 5 seconds for a line never said before, then it is stored.
+- **To start a child over:** `! npm run fixture -- boat 2 reset` (or `boat 1`).
+- **To see a child's log from here:** `! npm run fixture -- boat 2 log`.
+
+### Then
+
+- **Stop 3, if you and June choose:** one of the boys plays one day on June's iPad, on test, with a parent beside him.
+  Before it, `! npm run fixture -- boat 2 reset` starts Bug's game fresh (or `boat 1`, with the bar on Kiddo, for the
+  older's numbers). Tell me what you saw, in your own words.
+- **Then `/wwc:close`** (close and hold: nothing is released). At the close:
+  - docs/12 (how the game teaches), docs/08's decisions and `docs/math-tutor-proposal.md`'s top line;
+  - *Where we are* and the README status;
+  - the board: this row *on hold*, the Math tile's row closed as replaced;
+  - the art list added to `Documents\quark-art\README.txt`;
+  - a bug line for the `!` command's slashes;
+  - the next job proposed from what the looks found.
+
+### Spend, live, a child
+
+- **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free
+  tier), all on test. The judge's runs are in `model_runs` on test.
+- **Live:** nothing. No command touched it.
+- **A child:** nothing on live changed. On test, the boat is on June's iPad, paired as Bug.
+- **Rule 7:** `boat_games` and `boat_turns` hold no name. The answers he types are kept for the parents, as on the
+  cards.
