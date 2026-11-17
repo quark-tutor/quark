@@ -499,7 +499,39 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 - **Decided: Next.js goes to 16.4.2 before the release, as its own job at the top of Next.** Brandon: "accept." 16.4.0 carries GHSA-2464-fhr4-w9xw (critical) and GHSA-p3m5-59mp-jv5r (high), and its production build stops with a security error. Nothing was replaced. `eslint-config-next` moved with it; `npm audit`'s remaining `braces` line (lint tooling) was left alone, as the brief said.
 - **Decided (Brandon, 22 Oct 2026, at the close): the release carries the bump, so Vercel's first build on 16.4.2 is the release's.** Brandon: "yes to both" (this, and the lint errors as a bug line).
 
+### Next.js to 16.4.5, released alone
+
+`docs/next-16-4-5-slice.md`, report `docs/reports/2026-11-16-next-16-4-5.md`; a tooling job on `phase-4-wonder-wall`.
+
+- **Decided (Brandon, 16 Nov 2026, 16:10, in the chat): Next.js goes to 16.4.5 and is released the same day.**
+  - His words: "can we take care of it now without impacting the weeks cards?"
+  - Why: 16.4.2 carries seven advisories of 3 Nov, all moderate. Most are cached content reaching the wrong visitor where Cache Components are on, as they are in `next.config.ts`. On 16.4.2 the build and `dev:ipad` also stopped on their first run with `SecurityFatalError`.
+  - `eslint-config-next` moved with it. Nothing else moved, and nothing was replaced.
+  - `npm audit` still lists `zod` 4.6.5 (high; it comes through `@anthropic-ai/sdk` and `eslint-plugin-react-hooks`) and `minimatch` (moderate, lint tooling). Both were left alone, as the brief said.
+  - The 16 Nov tooling bug line the week 4 report proposed was never opened.
+- **Decided (Brandon, 16 Nov 2026, 16:41, at the job's emergency stop): the bump is released alone.** The gate on live stays v2, and everything else stays on the branch.
+  - His words: "B. Release the bump alone. Leave everything else on the branch as it is."
+  - **What it replaced:** two of the brief's *Decided already* lines. One said this job ends in `/wwc:release` of the branch, carrying the Math tile's code with math off. The other said that release moves the gate's prompt from v2 to v4 for every card.
+  - **Why it stopped:** the brief's step 3 judged test's 27 Oct (40 cards, none of them math) with `main`'s `gate.md` v2 and with the branch's v4, writing nothing.
+    - 39 cards agreed, and none was held back under `not_here`.
+    - One did not agree: a Then card at layer 4 on whether slaves built the pyramid. v2 passed it 23 times in 24; v4 held it back as parent-led (subject 18, unsettled on test) 10 times in 16.
+    - v2's words with v4's rule names passed it 7 times in 8. So the math-only words v4 adds make the gate read a parent-led subject more strictly.
+  - **How it was done:**
+    - The bump (`fdc9a03`) was cherry-picked onto `main` in a worktree and checked there: 451 tests, typecheck, and a clean build.
+    - On Brandon's "go" at stop 1 it was pushed as a fast-forward of `main`.
+    - `main` was then merged into `phase-4-wonder-wall`, so the branch's next `/wwc:release` still fast-forwards.
+  - **What it leaves:** the branch's next release still carries v4 to the Sunday build.
+
 ### Releases
+
+- **Released to `main`, 16 Nov 2026: Next.js 16.4.5 alone** (tooling).
+  - **What moved:** `main` went from `4bd0ccc` to `e1046ac` at 17:13 HST, a fast-forward of one commit. `e1046ac` is the branch's bump `fdc9a03`, cherry-picked onto `main` and nothing else.
+  - **Who said so:** Brandon chose it at the job's emergency stop (16:41, "B. Release the bump alone. Leave everything else on the branch as it is."). He typed "go" at stop 1, after his look on test. Code pushed it as `git push origin next-16-4-5-main:main`; it was not run through `/wwc:release`.
+  - **Vercel:** its status on `e1046ac` went from "Vercel is deploying your app" to success, "Deployment has completed", at 17:14.
+  - **No migration,** so the migrations workflow did not run on `main`.
+  - **The branch:** `main` was merged into `phase-4-wonder-wall` (`4090dcf`, no file changed).
+  - **The look on live** passed: Brandon's `/wwc:close` at 17:15.
+  - The row goes to *live*.
 
 - **Released to `main`, 9 Nov 2026, the third of the day: the tiles rotate daily** (*Wonder Wall*), with the 14:45 release's records (`91a7950`), the chat's three inbox rows (`6ef8644`) and its two math files. It was a fast-forward of 6 commits, moving `main` from `b4e2415` to `4bd0ccc` at 18:05 HST; one look at Vercel's production deployment found it pending ("Vercel is deploying your app"). Brandon typed `/wwc:release` at the job's last stop (18:01, his clean word at *Your look*, so the close ran first), and "Go" at the release's stop; he gave no other words for it. The release changes no migration, so the migrations workflow did not run on `main`. The boys' walls turn from the deploy on: Monday 9 Nov reads Puzzle first, Tuesday 10 Nov the old order, Wednesday 11 Nov Wonder first. The row goes to *live*.
 - **Released to `main`, 9 Nov 2026, the second of the day: a theme a week** (*Week 2 builds itself*), with the 12:18 release's own records (`92030b7`). It was a fast-forward of 15 commits, moving `main` from `3af36b8` to `b4e2415` at 14:45 HST; one look at Vercel's production deployment found it pending ("Vercel is deploying your app"). Brandon typed `/wwc:release` at the job's last stop (14:41, so the close ran first), and "go" at the release's stop; he gave no other words for it. The push ran from the job's worktree as `git push origin HEAD:main`: its branch `worktree-theme-a-week` tracks `origin/phase-4-wonder-wall`, and HEAD was checked equal to it just before the push, since the phase branch itself is checked out in the main checkout. The release changes no migration, so the migrations workflow did not run on `main`. The Sunday build on Vercel now finds each week's theme from the plan's sequence; its first firing on this code is Sunday 15 Nov (week 4). The row goes to *live*.
