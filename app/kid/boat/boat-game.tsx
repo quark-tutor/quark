@@ -77,7 +77,7 @@ export function BoatGame({ initial }: { initial: Screen }) {
             {line}
           </p>
         ))}
-        <ReadAloud key={s.speak} line={`boat.screen.${tag(s.speak)}`} />
+        <ReadAloud key={`read:${s.speak}`} line={`boat.screen.${tag(s.speak)}`} />
 
         {s.offers ? (
           <div className={styles.offers}>
@@ -90,9 +90,9 @@ export function BoatGame({ initial }: { initial: Screen }) {
           </div>
         ) : null}
 
-        {s.stepper ? <Stepper key={s.speak} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} busy={busy} onPick={(n) => void send({ type: "count", n })} /> : null}
+        {s.stepper ? <Stepper key={`stepper:${s.speak}`} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} busy={busy} onPick={(n) => void send({ type: "count", n })} /> : null}
 
-        {s.trade ? <TradeBox key={s.speak} screen={s} busy={busy} onAnswer={(text) => send({ type: "answer", text })} /> : null}
+        {s.trade ? <TradeBox key={`trade:${s.speak}`} screen={s} busy={busy} onAnswer={(text) => send({ type: "answer", text })} /> : null}
 
         {s.buttons.length ? (
           <div className={styles.boatButtons}>

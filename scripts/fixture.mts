@@ -34,6 +34,7 @@
 //   npm run fixture -- boat <n>             child n's trading boat: money, boat, cargo, island, day and where he is
 //   npm run fixture -- boat <n> money <m>   set child n's money to m, so the look can reach a boat's price (check 11)
 //   npm run fixture -- boat <n> reset       start child n's trading boat over: his game and its log are deleted
+//   npm run fixture -- boat <n> log         child n's trading log, as /parent shows it
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
 // moves a date and sets a week live, as a guardian's Looks-good tap would, and writes an audit row naming itself.
 
@@ -45,6 +46,7 @@ import type { CardRow } from "../core/wall/flow.ts";
 import { forVoice, readLine, speechPath } from "../core/wall/speech.ts";
 import { dayLines, nightLines, wallLines } from "../core/wall/speech-ahead.ts";
 import { createHash, randomBytes, randomInt } from "node:crypto";
+import { dayLogs, type TurnRow } from "../core/boat/log.ts";
 import { announceTarget } from "./target.ts";
 
 const TUTOR_VOICE = "en-US-Chirp3-HD-Sulafat"; // core/speech.ts, which only the server may import
@@ -532,6 +534,17 @@ if (command === "show") {
     must(await db.from("boat_games").upsert({ child_id: kid.id, family_id: familyId, money: m, updated_at: new Date().toISOString() }).select("child_id"), "boat_games");
     must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.boat-money", target: { child: Number(arg), money: m } }).select("id"), "audit_log");
     console.log("Done.");
+  } else if (what === "log") {
+    // The parents' log as /parent shows it (core/boat/log.ts), for a look from the command line.
+    const rows = must(
+      await db.from("boat_turns").select("day, played_on, trade, kind, island, good, count, price, step, expected, answer, verdict, short, money").eq("child_id", kid.id).order("created_at"),
+      "boat_turns",
+    ) as TurnRow[];
+    for (const d of dayLogs(rows)) {
+      console.log(d.head);
+      for (const line of d.lines) console.log(`  - ${line}`);
+    }
+    if (!rows.length) console.log(`Child ${arg} has no trading yet.`);
   } else if (what === "reset") {
     console.log(`About to delete child ${arg}'s trading boat and its log, so it starts over at home with $20.`);
     const turns = must(await db.from("boat_turns").delete().eq("child_id", kid.id).select("id"), "boat_turns") as unknown[];
@@ -547,7 +560,8 @@ if (command === "show") {
       sailing: { good: string; island: string; price: number } | null;
       today: { n: number; on: string; stop: string } | null;
     } | null;
-    if (!g) console.log(`Child ${arg} has not played yet.`);
+    // must() gives [] for no row.
+    if (!g || Array.isArray(g)) console.log(`Child ${arg} has not played yet.`);
     else {
       console.log(`Child ${arg}: $${g.money}, a ${g.space}-crate boat, on ${g.island}; day ${g.today?.n ?? "-"} (${g.today?.on ?? "-"}) at ${g.today?.stop ?? "-"}.`);
       console.log(`  On board: ${g.cargo.length ? g.cargo.map((l) => `${l.count} ${l.good} (paid $${l.paid})`).join(", ") : "nothing"}.`);

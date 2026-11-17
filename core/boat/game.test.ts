@@ -70,7 +70,9 @@ describe("the first day", () => {
   });
 
   it("draws exactly the crates in the sum, with the sum beside the question and nothing else on the page (check 2)", () => {
-    let { g, offer } = atHarbor();
+    const start = atHarbor();
+    let g = start.g;
+    const offer = start.offer;
     g = go(g, { type: "pick", market: 0, offer });
     g = go(g, { type: "count", n: 2 });
     const s = view(g, ctx());
@@ -82,7 +84,9 @@ describe("the first day", () => {
   });
 
   it("takes the money and puts the crates aboard on a right total, and he can buy again (check 3)", () => {
-    let { g, offer } = atHarbor();
+    const start = atHarbor();
+    let g = start.g;
+    const offer = start.offer;
     const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
     g = go(g, { type: "pick", market: 0, offer });
     g = go(g, { type: "count", n: 2 });
@@ -96,7 +100,9 @@ describe("the first day", () => {
 
 describe("a wrong total (check 4)", () => {
   const trade = (count: number) => {
-    let { g, offer } = atHarbor();
+    const start = atHarbor();
+    let g = start.g;
+    const offer = start.offer;
     const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
     g = go(g, { type: "pick", market: 0, offer });
     g = go(g, { type: "count", n: count });
@@ -104,7 +110,9 @@ describe("a wrong total (check 4)", () => {
   };
 
   it("says when he added the two numbers, and the crates light up to count two at a time", () => {
-    let { g, p } = trade(3);
+    const t = trade(3);
+    let g = t.g;
+    const p = t.p;
     g = go(g, n(3 + p));
     const s = view(g, ctx()).trade!;
     expect(s.reply).toBe(BOAT.added(3, p));
@@ -124,7 +132,9 @@ describe("a wrong total (check 4)", () => {
   });
 
   it("never asks how he got it, never shows the answer, and costs no money", () => {
-    let { g, p } = trade(4);
+    const t = trade(4);
+    let g = t.g;
+    const p = t.p;
     g = go(g, n(7));
     const text = JSON.stringify(view(g, ctx()));
     expect(text).not.toMatch(/How did you get that/);
@@ -133,7 +143,9 @@ describe("a wrong total (check 4)", () => {
   });
 
   it("goes one crate at a time after a missed step, then offers fewer; nothing is lost", () => {
-    let { g, p } = trade(4);
+    const t = trade(4);
+    let g = t.g;
+    const p = t.p;
     g = go(g, n(1));
     g = go(g, n(1)); // the first pair missed
     expect(view(g, ctx()).trade!.step).toEqual({ ask: "1 crate: how much so far?", sum: `1 × $${p} = ?` });
@@ -164,7 +176,9 @@ describe("a wrong total (check 4)", () => {
 
 describe("money and room", () => {
   it("agrees with a right total he cannot pay and says he is short (check 5)", () => {
-    let { g, offer } = atHarbor();
+    const start = atHarbor();
+    let g = start.g;
+    const offer = start.offer;
     const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
     g = { ...g, money: 3 };
     g = go(g, { type: "pick", market: 0, offer });
@@ -176,7 +190,9 @@ describe("money and room", () => {
   });
 
   it("will not let the number pass the room left, the trader's crates or 10 (check 6)", () => {
-    let { g, offer } = atHarbor();
+    const start = atHarbor();
+    let g = start.g;
+    const offer = start.offer;
     const stock = g.today!.stock[0][offer];
     g = { ...g, cargo: [{ good: "taro", count: 8, paid: 16 }] };
     g = go(g, { type: "pick", market: 0, offer });
@@ -194,7 +210,9 @@ describe("money and room", () => {
 
 describe("casting off, landing, and the days between (checks 7 to 9)", () => {
   function sailDay1() {
-    let { g, offer } = atHarbor();
+    const start = atHarbor();
+    let g = start.g;
+    const offer = start.offer;
     const day = dayOf("child-1", KIDDO, 1, "home");
     // Buy the first rumor's good where the harbor sells it, as much as he can.
     const r = day.rumors[0];
@@ -282,7 +300,9 @@ describe("the boats (check 11)", () => {
 
   it("offers the bigger boat once he can pay and keep $20, and buying it asks for its sum", () => {
     expect(view(landed(419).g, ctx("2026-11-17")).buttons.map((b) => b.label)).toEqual([BOAT.toHarbor]);
-    let { g, c } = landed(420);
+    const l = landed(420);
+    let g = l.g;
+    const c = l.c;
     expect(view(g, c).lines).toContain(BOAT.builder("double", 20, 4));
     g = go(g, { type: "builder", buy: true }, c);
     expect(view(g, c).trade).toMatchObject({ question: BOAT.oweBuilder, sum: "4 × $100 = ?", pic: { count: 4, price: 100, unit: "bill" } });
@@ -293,7 +313,9 @@ describe("the boats (check 11)", () => {
   });
 
   it("counts more than 10 bills in bundles of up to 10, each its own sum", () => {
-    let { g, c } = landed(1600, 20);
+    const l = landed(1600, 20);
+    let g = l.g;
+    const c = l.c;
     g = go(g, { type: "builder", buy: true }, c);
     expect(view(g, c).trade).toMatchObject({ question: BOAT.bundle, sum: "10 × $100 = ?" });
     g = go(g, n(1000), c);
