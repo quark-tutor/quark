@@ -808,6 +808,34 @@ trader? 10 × $2 = ?" and "1 crate: how much so far? 1 × $2 = ?"). Nothing said
 **Checked:** typecheck, lint and 495 tests. In Chrome, Kiddo's same trade (read only) shows one "= ?" and the first
 crate outlined.
 
+### At stop 2, 19:23: the calculator game, and a proposal (open)
+
+Brandon, with a photo of the classic calculator trading game: "I mean, this was being run on a calculator and
+everyone understood it."
+
+**Taken:** pictures and characters are not what makes it work, so I withdrew options 1 and 2 above.
+
+**Proposed in their place: the trade as a row on the market screen**, not a page of its own. Tapping a good opens its
+row: how many, the crates drawn small, the sum with the box, and the count, all in that row. The prices, the rumor,
+the money and the boat never leave the screen. Selling works the same way, a row per buyer. About an hour.
+**Waiting on Brandon's yes.**
+
+### Fix round 4 at stop 2: why a buyer stops at 3 (16 Nov 2026, 19:35 HST)
+
+Brandon: "I fast forwarded a day and got to Kauai where I had 5 pineapples and they were selling for a lot. It only
+let me sell 3 for some reason."
+
+**What happened:** Bug's log shows him landed on Kauaʻi with 5 pineapples and nothing sold. The first buyer takes up
+to 3 (buyers take a few at a time, the fix round's rule). After those 3, a second buyer comes for the rest. But the
+screen never said so: + just stopped.
+
+**Changed:**
+- **Two new sentences for June:**
+  - "That's all this buyer takes. Another buyer comes next." It shows when + stops at the buyer's limit while he has
+    more.
+  - "Another buyer takes up to {k} crates of {good} at ${price} a crate." It is said for every buyer after the first.
+- **A test holds both,** and the word checks cover them: 496 tests, typecheck and lint pass.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free

@@ -151,6 +151,10 @@ export const BOAT = {
   landReason: (g: BoatGood, i: BoatIsland, p: number) => `${REASONS[g](ISLANDS[i])} So ${good(g)} ${sell(g)} for $${p} a crate here.`,
   usualHere: (g: BoatGood, p: number) => `Here ${good(g)} ${sell(g)} for the usual $${p} a crate.`,
   buyer: (k: number, g: BoatGood, p: number) => `A buyer takes up to ${many(k, "crate")} of ${good(g)} at $${p} a crate.`,
+  // After the first buyer; and when + stops at what this buyer takes while he has more (Brandon at stop 2, 16 Nov 2026:
+  // "It only let me sell 3 for some reason.").
+  buyerNext: (k: number, g: BoatGood, p: number) => `Another buyer takes up to ${many(k, "crate")} of ${good(g)} at $${p} a crate.`,
+  buyerLimit: "That's all this buyer takes. Another buyer comes next.",
   howManySell: "How many will you sell?",
   owed: "How much does the buyer owe you?",
   sold: (money: number) => `That's right. You have $${money} now.`,

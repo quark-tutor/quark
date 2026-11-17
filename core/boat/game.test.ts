@@ -249,6 +249,24 @@ describe("casting off, landing, and the days between (checks 7 to 9)", () => {
     expect(roll(g, ctx())).toBe(g);
   });
 
+  it("says why + stops at a buyer's limit, and brings another buyer for the rest (Brandon at stop 2: 'It only let me sell 3')", () => {
+    const c = ctx("2026-11-17");
+    const r = { good: "pineapples" as const, island: "kauai" as const, price: 10 };
+    // Five crates aboard, landed where they are dear.
+    let g: Game = { money: 0, space: 10, cargo: [{ good: "pineapples", count: 5, paid: 20 }], island: "home", sailing: r, today: { ...roll(newGame(), ctx()).today!, stop: "done" } };
+    g = roll(g, c);
+    const take = takeOf("child-1", KIDDO, 2, "pineapples", 0);
+    const first = view(g, c);
+    expect(first.lines).toContain(BOAT.buyer(take, "pineapples", 10));
+    expect(first.stepper).toEqual({ ask: BOAT.howManySell, max: Math.min(take, 5), maxLine: take < 5 ? BOAT.buyerLimit : null });
+    if (take < 5) {
+      g = go(g, { type: "count", n: take }, c);
+      g = go(g, n(take * 10), c);
+      const next = takeOf("child-1", KIDDO, 2, "pineapples", 1);
+      expect(view(g, c).lines).toContain(BOAT.buyerNext(next, "pineapples", 10));
+    }
+  });
+
   it("lands tomorrow where the rumor pointed, at the price it promised, with its reason; he says what he is owed (check 8)", () => {
     const { g: g0, r, count } = sailDay1();
     let g = roll(g0, ctx("2026-11-17"));

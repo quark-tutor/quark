@@ -576,8 +576,11 @@ export function view(g: Game, ctx: Ctx): Screen {
       const rumored = g.sailing && g.sailing.island === island && g.sailing.good === d.good;
       const price = priceAt(ctx.nb, d.good, rumored ? g.sailing : null);
       if (!rumored) s.lines.push(BOAT.usualHere(d.good, price));
-      s.lines.push(BOAT.buyer(takeOf(ctx.seed, ctx.nb, t.n, d.good, d.buyer), d.good, price));
-      s.stepper = { ask: BOAT.howManySell, max: sellMax(g, ctx), maxLine: null };
+      const take = takeOf(ctx.seed, ctx.nb, t.n, d.good, d.buyer);
+      s.lines.push(d.buyer === 0 ? BOAT.buyer(take, d.good, price) : BOAT.buyerNext(take, d.good, price));
+      // When + stops at what this buyer takes and he has more, the screen says why, and that another buyer comes.
+      const max = sellMax(g, ctx);
+      s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit : null };
       s.buttons = [{ label: BOAT.keep, action: { type: "keep" } }];
     } else if (t.builder === "offer") {
       const next = nextBoat(g.space)!;
