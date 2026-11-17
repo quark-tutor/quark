@@ -553,6 +553,12 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 
 ### Releases
 
+- **Released to `main`, 16 Nov 2026: the trading boat, slice 1, with the branch since 9 Nov** (the Math tile's held slice and its clean-up, week 4's content, the Next.js job's records).
+  - **What moved:** `main` went from `e1046ac` to `5663851` at 21:15 HST, a fast-forward of 49 commits.
+  - **Who said so:** Brandon typed `/wwc:release` at the trading boat's *Your look* (20:50), then "Go" at the release's stop. Before it, he decided to fix the look's faults before releasing: "No, since I got into this we're going to fix it."
+  - **What the boys see:** nothing new. The gate is `main`'s v2, byte for byte, and the trading boat is off off the dev server against test.
+  - **The migrations run on `main`:** 44037343404, green. Its live job ran the tests and the typecheck, found no `SUPABASE_DB_URL_LIVE`, and skipped "Push to the live database". The four migrations (the three of 9 Nov and the boat's) are on test only.
+  - **Vercel:** "Vercel is deploying your app" at the one look after the push.
 - **Released to `main`, 16 Nov 2026: Next.js 16.4.5 alone** (tooling).
   - **What moved:** `main` went from `4bd0ccc` to `e1046ac` at 17:13 HST, a fast-forward of one commit. `e1046ac` is the branch's bump `fdc9a03`, cherry-picked onto `main` and nothing else.
   - **Who said so:** Brandon chose it at the job's emergency stop (16:41, "B. Release the bump alone. Leave everything else on the branch as it is."). He typed "go" at stop 1, after his look on test. Code pushed it as `git push origin next-16-4-5-main:main`; it was not run through `/wwc:release`.
