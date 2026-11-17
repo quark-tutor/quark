@@ -1,1016 +1,281 @@
 # Report: the trading boat, slice 1
 
-Brief: `docs/trading-boat-slice.md` (*Wonder Wall*, phase 4), on `phase-4-wonder-wall`. Size: a slice (8 hours).
-Started 16 Nov 2026 at 17:23 HST. Stop 1 was first printed at 17:40, and its fix round on paper (below) at 18:00.
-**Brandon's "go" at 18:05** takes every recommendation in the fix round, the numbers as simulated, the one migration
-(on test only), and the row out of order.
-
-## Stop 1, fix round 1 on paper (16 Nov 2026, 17:58 HST)
-
-### Brandon's word (16 Nov 2026, after 17:40)
-
-> Not go yet: one fix round on paper. The simulation shows the flaw. The careful player's best move is the same every
-> day: fill the canoe with the rumored good at the lowest price (10 × $2), sell it all (10 × $10). A boy finds that in
-> three days and then does two easy sums forever. And a bigger boat brings 17 × $5 to a child who can afford it but is
-> still on his 5s.
->
-> Change the rule: the size of a sum follows his place on the ladder, never his boat or his money.
-> - Each trader has a limited stock of each good, a few crates (recommended 3 to 9, varied by day), so filling the
->   boat takes several purchases with different counts, at both markets.
-> - Buyers at the landing take a limited number at a time too, so a sale is several sums, never one sum on the whole
->   cargo.
-> - A bigger boat means more trades, not bigger numbers. A count above 10 in one sum appears only when the ladder says
->   he is working on bigger multiplying.
-> - Check that no single best purchase repeats day after day, and that across a week of careful play he meets most of
->   the facts in the tables he is working on. Show that in the table: for each child, how many different sums a
->   careful week holds, and which.
->
-> Run the simulation again with this and choose the boats' prices from it. Show me the page again with what changed.
->
-> Everything else stands: the day, the sentences, the clean-up list, the art list, taking the row now. Two notes:
-> Documents\quark-art already has a README and four pictures (two markets, a cast-off, a landing), so add to it rather
-> than replacing it; and the pictures there are 3:2.
-
-### What changed in this round
-
-1. **The size of a sum follows the ladder.** No sum has more than 10 crates or bills in it unless he is placed on
-   *Multiply bigger numbers*, and neither child is. The cap is read from the ladder, so it holds for any boat and any
-   amount of money.
-2. **Each trader has a few crates of each good:** 2 to 10, different each day. Filling the canoe takes two or three
-   purchases at both markets. You recommended 3 to 9; 2 to 10 lets the 2 × and 10 × facts come up, which 3 to 9
-   never does.
-3. **Buyers take a few at a time.** Each buyer on the dock takes up to 2 to 10 crates, and he chooses how many to sell
-   to each. A sale is always several sums.
-4. **His buying prices are the tables he is working on:** Kiddo $2 and $5, Bug $3 and $4. In the first run Bug bought
-   at $2 first, so his 3s and 4s only ever got the leftover crates.
-5. **A usual price.** Every dock pays it for any good that no rumor names: Kiddo $5, Bug $4. This replaces "an unnamed
-   good sells at $2". So every cheap crate is worth carrying, and a bigger boat has a use: more cheap crates, more
-   trades.
-6. **No choice loses money now; it only earns less.** A crate always sells for at least what it cost.
-7. **The boats are now 4, 15 and 40 hundred-dollar bills** (were 7, 15 and 30). A price above 10 bills is paid in
-   bundles of up to 10, each bundle a sum.
-8. **The look back asks only when both totals are $100 or less,** so it stays on adding and taking away to 100.
-9. **Each market sells four goods** (was three): the two the rumors name, at both markets with different prices, and
-   two of its own.
-10. **The art list adds to `README.txt`** in `Documents\quark-art`, keeps its four pictures and its style method, and
-    asks for 3:2 throughout.
-11. **New sentences for June,** marked *new* or *changed* below.
-
-The day, the rest of the sentences, the clean-up list, the art list and taking the row now stand.
-
-### Where the job stands
-
-- **Read:** the brief; the Math tile's report and the Next.js report's emergency stop; `docs/math-tutor-proposal.md`;
-  the ladder and `lib/ladder.ts`; everything in `core/math/`, `core/wall/` and `app/kid/` that the Math tile touched;
-  the three math migrations; docs/08's decisions from 1 Nov on, *How Quark is built with Claude* and *Bugs*;
-  `docs/15-reward-engine.md`; the rules in `CLAUDE.md`; `Documents\quark-art\README.txt`.
-- **Simulated:** the second simulation below, in a scratch file outside the repository. No other file is written and
-  nothing has run against a database.
-- **Branch:** `phase-4-wonder-wall` is checked out, as the brief names.
-- **The board:** the brief's row is third in Next. You said to take it now (above). Nothing else is in hand. The Math
-  tile's row is *waiting on*; at the close it is closed as replaced by this one.
-- **On go**, first `git pull --rebase --autostash origin phase-4-wonder-wall`, then the row moves to *building* at the
-  top with today's date. That first commit holds the board, the brief and this file.
-- **The stops pass the test:**
-  - stop 2 is *Your look*, and each check is in exact words;
-  - stop 3 guards a child (the first time a boy uses a test device);
-  - stop 4 is the close.
-- **Risky steps:**
-  - **A migration (test only).** The game's state needs one migration. On this branch the push applies it to test
-    through the migrations workflow, so there is no push stop. CLAUDE.md says a new migration waits for your yes:
-    **go is that yes.** It never goes to live in this job.
-  - **Live, money, a real person:** none. No model writes a problem. Spend is two kinds, both small and both on test:
-    - the no-number judge (Haiku, about $0.0002 a reply, only when a reply has no number);
-    - Google's voice, inside the free tier.
-  - **A child:** stop 3.
-  - **A secret:** none.
-- **Nothing needs your hands** between go and stop 2.
-- **No planned command meets the deny list.** Test's math week is cleared by a fixture through `npm run`.
-
-### The day, as a child meets it
-
-The tile is **Math** on the wall, titled **The trading boat**. It shows on the dev server against test only, beside the
-five cards, for test's two children.
-
-**The first day** starts at home with $20 and an empty canoe that holds 10 crates. Then:
-
-1. **The harbor market.** At the top: your money, your boat (*3 of 10 crates full*), what is on board, and what any
-   dock pays for anything ("Every dock pays $5 a crate for anything"). Then one rumor, and four goods, each with its
-   price a crate and how many crates the trader has.
-   - Nothing says what to buy or how many.
-   - Tap a good, then set how many with − and +. The + stops at the trader's crates or the room left on the boat,
-     whichever is less, and never passes 10.
-2. **The trade.** The page shows that many crates, each with its price, and nothing else. Beside them:
-   - the question, "How much do you owe the trader?";
-   - the sum, "6 × $5 = ?";
-   - the number pad, the box and Talk.
-
-   A right total takes the money and puts the crates aboard. He buys again, at this market or the next. *Choose
-   again* is always there.
-3. **The village market.** The same goods the rumors name, at different prices. A second rumor, and two goods of its
-   own.
-4. **Cast off.** "Where will you sail?" offers the two rumors' islands. He picks one, and the day is over: the tile
-   reads *Done for today*.
-
-**Every day after:**
-
-1. **The landing.** He lands where he sailed, and is told why the rumored good is dear there. The buyers come one at a
-   time: "A buyer takes up to 6 crates of mangoes at $10 a crate." He sets how many, the crates are drawn, and he says
-   what he is owed. Then the next buyer, until he has sold what he wants. *Keep the rest on the boat* ends it.
-2. **One look back**, when both totals are $100 or less: "You paid $30 for these mangoes and sold them for $60. How
-   much did you make?", "$60 − $30 = ?".
-3. **The boat builder**, when he has a bigger boat's price and $20 more. Up to 10 bills is one sum ("4 × $100 = ?").
-   More than 10 bills is a sum for each bundle of up to 10.
-4. The two markets and the cast-off, as on the first day.
-
-**A missed day costs nothing.** The game counts days played, not calendar days. A day left half-played is waiting at
-the same stop, with the same prices.
-
-**A wrong answer, at once:**
-- **The two numbers added:** "That's 6 and 5 put together. You need 6 lots of 5."
-- **One crate out:** "Close. One crate out."
-- **Anything else:** "Let's count them."
-- **"I don't know":** "Have a guess first. Any guess is fine."
-- **Something is missing or wrong:** "Good catch. Thank you for telling me."
-- **The count follows each of these,** except "I don't know". The crates light up two at a time, and he gives each
-  total so far ("$10 + $5 + $5 = ?").
-  - A wrong step is asked again one crate at a time.
-  - A wrong one-crate step brings "Want to try fewer?" (or "Want to sell fewer?"), and he chooses a smaller number.
-  - Where there is nothing fewer, it is "This one is for a person: Ask a grown-up to work it out with you."
-- **The answer is never shown,** and a wrong sum never costs money.
-
-**Short of money** with a right total: "That's right, it's $70. You have $60." **No room:** the + stops.
-
-### The numbers
-
-Each child's numbers come from his places on the ladder (`tablesOf()`): every number of a times table he has done or is
-working on. Test's older child is Kiddo, at the older boy's places; test's younger child is Bug, at the younger
-boy's.
-
-| | Kiddo | Bug |
-|---|---|---|
-| His numbers | $2, $5, $10 | $2, $3, $4, $5, $10 |
-| The tables he is working on | 2s, 5s, 10s | 3s, 4s |
-| Buying prices: the tables he is working on, under his top number | $2, $5 | $3, $4 |
-| The usual price: what any dock pays for a good no rumor names | $5 | $4 |
-| A rumor promises (at least $1 over the usual, and $2 over the cheaper price today) | $10 | $5 or $10 |
-
-- **At each market:** four goods. The two goods the rumors name are sold at both markets, at different prices. Each
-  market adds two goods of its own.
-- **The trader's crates:** 2 to 10 of each good, different each day.
-- **The buyers at the dock:** each takes up to 2 to 10, different for each buyer.
-- **Each day,** at least one good costs his lowest buying price.
-- **The most in one sum: 10** crates or bills. More only when he is placed on *Multiply bigger numbers*.
-- **Starting money:** $20. **The canoe:** 10 crates.
-- **A crate always sells for at least what it cost**, so no choice loses money; a poor one earns less.
-
-**The boats**, the same for both children:
-
-| Boat | Holds | Price | Its sums | First reached by careful play (median day) |
-|---|---|---|---|---|
-| Canoe | 10 crates | his from the start | | |
-| Double canoe | 20 crates | $400 | 4 × $100 | Kiddo day 7, Bug day 9 |
-| Schooner | 50 crates | $1,500 | 10 × $100, then 5 × $100 | Kiddo day 21, Bug day 29 (in 248 runs of 400) |
-| Ship | 100 crates | $4,000 | 10 × $100, four times | after day 30 for both |
-
-A boat is offered when he can pay and still keep $20.
-
-**Why $400 for the first boat and not more.** The canoe carries 10 crates, so a canoe day holds about 5 sums, and a
-canoe week meets about half of his working facts. The double canoe brings about 9 sums a day and most of them. At $400
-a careful boy has it in his second week:
-- Kiddo meets 25 of 30 facts that week, and Bug 15 of 20.
-- At $600 the boat comes on days 10 and 13, and the second week holds 23 of 30 and 12 of 20.
-
-Both prices fit the brief's "within about two weeks". $400 gets him to most of his facts a week sooner.
-
-**The simulation:** 400 runs of 30 days for each child, with three players.
-- **Careful:** buys every crate worth more where he is going than it costs, the best margin first, at both markets,
-  and sails to the better of the two rumors.
-- **In between:** follows the first rumor he hears and buys its good at the first market, fills up with anything at
-  the second, and never compares.
-- **Careless:** buys something at random at each market, in any amount, and sails to either rumor's island.
-
-| Median of 400 runs | Day 5 | Day 10 | Day 15 | Day 20 | Day 30 | First boat |
-|---|---|---|---|---|---|---|
-| Kiddo, careful | $303 | $359 | $905 | $1,434 | $1,319 | day 7, in 400 of 400 |
-| Kiddo, in between | $190 | $313 | $254 | $497 | $982 | day 11, in 400 of 400 |
-| Kiddo, careless | $65 | $134 | $196 | $259 | $308 | day 28, in 138 of 400 |
-| Bug, careful | $213 | $111 | $445 | $816 | $239 | day 9, in 400 of 400 |
-| Bug, in between | $120 | $253 | $323 | $148 | $425 | day 17, in 400 of 400 |
-| Bug, careless | $36 | $69 | $102 | $131 | $193 | never, in 30 days |
-
-Money is what he has at the end of the day, with his cargo at what he paid for it. It drops on the day a boat is
-bought.
-
-**Your checks, measured on the careful player** (median of 400 runs; a working fact is 1 to 10 times a table he is
-working on: 30 for Kiddo, 20 for Bug):
-
-| Careful play | Boat | Different sums in the week | Working facts met | The day's biggest buy the same as the day before | Sums a day |
-|---|---|---|---|---|---|
-| Kiddo, week 1 | canoe | 23 | 17 of 30 | 1 day of 6 | 5 |
-| Kiddo, week 2 | double canoe from day 7 | 30 | 25 of 30 | 1 day of 6 | 9 |
-| Kiddo, week 3 | double canoe | 32 | 25 of 30 | 1 day of 6 | 9 |
-| Kiddo, week 4 | schooner from day 21 | 32 | 26 of 30 | 1 day of 6 | 13 |
-| Bug, week 1 | canoe | 23 | 10 of 20 | 1 day of 6 | 5 |
-| Bug, week 2 | double canoe from day 9 | 32 | 15 of 20 | 0 days of 6 | 8 |
-| Bug, week 3 | double canoe | 33 | 17 of 20 | 1 day of 6 | 9 |
-| Bug, week 4 | double canoe | 33 | 17 of 20 | 0 days of 6 | 9 |
-
-**What it says:**
-- **No best purchase repeats day after day.** The day's biggest buy matches the day before on about 1 day in 6.
-- **Most of his facts in a week**, from the second week on.
-  - **The canoe weeks hold about half.** A canoe day has about 5 sums.
-  - **The facts he misses** are mostly the high counts: a trader rarely has 8 to 10 crates left by then.
-  - **The way to more in week 1 is a cheaper first boat,** not a different rule.
-- **Sums a day by boat** (careful): canoe 5 (at most 9); double canoe 9 (at most 15); schooner 13 (at most 22).
-
-**One careful week, which sums** (one run; × is a buy, a sale or a boat bundle, − is the look back):
-
-- **Kiddo, week 1 (canoe; the double canoe on day 7), 23 different sums:**
-  - The sums: 10×2, 1×5, 2×5, 3×5, 5×2, 5×5, 7×2, 8×2, 9×2, 9×5, 1×10, 2×10, 3×10, 4×10, 6×10, 8×10, 2×2, 4×100;
-    100−20, 100−23, 100−26, 100−29, 100−35.
-  - Missed: 1×2, 3×2, 4×2, 6×2, 4×5, 6×5, 7×5, 8×5, 10×5, 5×10, 7×10, 9×10, 10×10.
-- **Kiddo, week 3 (double canoe), 35 different sums:** 26 of his 30 facts.
-  - Missed: 6×2, 6×5, 8×5, 10×10.
-  - Besides his facts: 10×100 and 5×100 (the schooner), and the look backs 10−4, 15−6, 25−10, 35−14, 5−2, 90−24 and
-    90−33.
-- **Bug, week 1 (canoe), 20 different sums:**
-  - The sums: 4×3, 5×3, 6×3, 7×3, 8×3, 9×3, 1×4, 2×4, 3×4, 5×4, 6×4, 2×10, 3×10, 4×10, 6×10; 60−18, 100−32,
-    100−33, 100−35, 100−36.
-  - Missed: 1×3, 2×3, 3×3, 10×3, 4×4, 7×4, 8×4, 9×4, 10×4.
-- **Bug, week 3 (double canoe), 32 different sums:** 17 of his 20 facts.
-  - Missed: 8×3, 6×4, 8×4.
-  - Besides his facts: 1×10, 2×10 and 4×10 to 9×10 (rumored sales), and the look backs 8−6, 12−9, 20−15, 28−21, 80−28, 90−32 and
-    100−35.
-
-**One run, day by day** (⛵ = a boat bought that day):
-
-| Day | Kiddo, careful | Kiddo, in between | Kiddo, careless | Bug, careful | Bug, in between | Bug, careless |
-|---|---|---|---|---|---|---|
-| 1 | $20 | $20 | $20 | $20 | $20 | $20 |
-| 2 | $100 | $100 | $90 | $62 | $62 | $32 |
-| 3 | $174 | $170 | $146 | $130 | $124 | $35 |
-| 4 | $251 | $202 | $149 | $194 | $152 | $35 |
-| 5 | $322 | $250 | $152 | $261 | $161 | $35 |
-| 6 | $402 | $314 | $200 | $329 | $217 | $84 |
-| 7 | $67 ⛵ | $369 | $203 | $394 | $276 | $84 |
-| 8 | $190 | $411 | $203 | $63 ⛵ | $284 | $114 |
-| 9 | $311 | $49 ⛵ | $233 | $164 | $340 | $118 |
-| 10 | $420 | $93 | $248 | $261 | $384 | $146 |
-| 11 | $540 | $132 | $263 | $291 | $392 | $146 |
-| 12 | $653 | $178 | $266 | $393 | $40 ⛵ | $156 |
-| 13 | $779 | $213 | $305 | $513 | $82 | $180 |
-| 14 | $890 | $265 | $314 | $615 | $130 | $189 |
-| 15 | $988 | $293 | $314 | $679 | $154 | $191 |
-| 16 | $1,111 | $333 | $314 | $798 | $164 | $193 |
-| 17 | $1,230 | $360 | $332 | $907 | $173 | $223 |
-| 18 | $1,320 | $401 | $347 | $976 | $203 | $229 |
-| 19 | $1,419 | $426 | $347 | $1,051 | $250 | $229 |
-| 20 | $33 ⛵ | $442 | $353 | $1,128 | $264 | $237 |
-| 21 | $115 | $495 | $365 | $1,216 | $327 | $240 |
-| 22 | $299 | $567 | $381 | $1,315 | $390 | $248 |
-| 23 | $408 | $644 | $387 | $1,344 | $409 | $258 |
-| 24 | $553 | $654 | $396 | $1,373 | $419 | $262 |
-| 25 | $704 | $710 | $411 | $1,470 | $486 | $262 |
-| 26 | $891 | $772 | $43 ⛵ | $47 ⛵ | $537 | $278 |
-| 27 | $1,052 | $857 | $46 | $72 | $546 | $279 |
-| 28 | $1,210 | $937 | $54 | $198 | $616 | $279 |
-| 29 | $1,340 | $993 | $79 | $230 | $635 | $282 |
-| 30 | $1,526 | $1,043 | $112 | $357 | $712 | $295 |
-
-**A finding about the ship.** By the rules above, two markets hold about 30 crates a day worth buying, on average, so
-a ship of 100 never fills in one day. A full ship would take more traders and about 30 sums a day. Neither child reaches it in 30 days, even
-playing carefully.
-
-Recommended: leave the boats as decided, and look again at the day's length when a boy nears the schooner, on his
-real play. Nothing in this job depends on it.
-
-### Every sentence the game says, for June
-
-These sentences are written into `core/wall/words.ts`, read by June, and never by a model (rule 5: no gate call,
-since no problem is written by a model). Words in {braces} are filled in by the program. *New* and *changed* mark this
-round.
-
-**The tile and the first day**
-- Math · The trading boat · Done for today
-- You have a canoe that holds 10 crates, and $20.
-- Buy crates at the markets. Sell them for more on another island.
-- Go to the harbor market
-
-**Your boat (at the top of each market)**
-- Your money: ${money}
-- Your {canoe | double canoe | schooner | ship}: {used} of {space} crates full
-- On board: {n} crates of {good}, {n} crates of {good} · On board: nothing yet
-- Every dock pays ${usual} a crate for anything. A rumor says where one thing sells for more. *(new)*
-
-**A market**
-- The harbor market at home · The harbor market on {island} · The village market on {island}
-- {Good}: ${price} a crate · {n} crates left *(changed: the trader's crates)* · Sold out *(new)*
-- A trader says: {reason} {Good} will sell for ${price} a crate on {island}.
-- How many crates of {good}?
-- That's all the trader has. *(new: when + reaches the trader's crates)*
-- That's all the room on your boat. *(when + reaches the room left)*
-- That many
-- Go to the village market · Cast off
-
-**The rumors' reasons**
-- Mangoes: A ship full of mangoes sank near {island}.
-- Coconuts: {island} is making coconut candy for a festival.
-- Bananas: A storm blew down the banana trees on {island}.
-- Pineapples: A big lūʻau on {island} needs pineapples.
-- Taro: The taro patches on {island} flooded.
-- Sweet potatoes: Pigs dug up the sweet potato fields on {island}.
-
-**A trade**
-- How much do you owe the trader? · {n} × ${price} = ?
-- That's right. {n} crates of {good} are on your boat.
-- That's right, it's ${total}. You have ${money}.
-- Choose again
-- That's my answer · Type your answer · Delete
-
-**A wrong answer and the count**
-- That's {n} and {price} put together. You need {n} lots of {price}.
-- Close. One crate out.
-- Let's count them.
-- Have a guess first. Any guess is fine.
-- Good catch. Thank you for telling me.
-- {k} crates: how much so far? · ${so far} + ${price} + ${price} = ?
-- 1 more crate: how much so far? · ${so far} + ${price} = ?
-- Want to try fewer? · Try fewer
-- Want to sell fewer? · Sell fewer
-- This one is for a person: · Ask a grown-up to work it out with you.
-- *(removed: "10 crates: how much?", since no sum now holds more than 10)*
-
-**Cast off**
-- Where will you sail?
-- {island}: {reason} {Good} will sell for ${price} a crate there.
-- You cast off for {island}. You'll land there next time.
-- Your boat is sailing to {island}. You'll land there next time.
-- Back to the wall
-
-**The landing**
-- You land on {island}.
-- {reason, as it happened} So {good} sell for ${price} a crate here.
-- Here {good} sell for the usual ${usual} a crate. *(changed: his usual price, not $2)*
-- A buyer takes up to {k} crates of {good} at ${price} a crate. *(changed: a buyer at a time)*
-- How many will you sell? *(new)*
-- How much does the buyer owe you? · {n} × ${price} = ?
-- That's right. You have ${money} now.
-- Keep the rest on the boat *(changed from "Keep them on the boat")*
-- Go to the harbor market
-
-**The look back** (one a day, when both totals are $100 or less)
-- You paid ${paid} for these {good} and sold them for ${sold}. How much did you make? · ${sold} − ${paid} = ?
-- You paid ${paid} for these {good} and sold them for ${sold}. How much less did you get back? · ${paid} − ${sold} = ?
-- That's right.
-- Count up from ${smaller} to ${larger}.
-- This one is for a person: · Ask a grown-up to work it out with you.
-
-**The boat builder**
-- A boat builder has a {double canoe | schooner | ship} that holds {space} crates. It costs {k} hundred-dollar bills.
-- Buy it · Not now
-- How much do you owe the boat builder? · {k} × $100 = ? *(up to 10 bills)*
-- The builder counts them in bundles of 10. How much is this bundle? · {b} × $100 = ? *(new: more than 10 bills)*
-- That's right. The {boat} is yours. It holds {space} crates.
-
-**Read it to me** on each screen says that screen's words in order. On a trade it says the question and its sum in
-words ("How much do you owe the trader? 6 times 5 dollars equals what?").
-
-**Off the screen:** "How did you get that?" and every other move of the Math tile are gone.
-
-### What the parents see
-
-`/parent`, on the dev server against test only, shows *The trading boat (test only)*. For each child, newest day
-first:
-
-> Day 3 · Maui · started with $100, ended with $174
-> - Sold 6 mangoes at $10: 6 × $10 = 60. Right at once.
-> - Sold 4 mangoes at $10: 4 × $10 = 40. Said 14 (the two numbers added); right on the count's 2nd step.
-> - Look back: $100 − $26. Said 74, right at once.
-> - Harbor market: bought 9 taro at $2: 9 × $2 = 18. Right at once.
-> - Village market: bought 1 taro at $5: 1 × $5 = 5. Right at once.
-> - Sailed to Kauaʻi, on the taro rumor ($10).
-
-A wrong answer is named as one of these:
-- the two numbers added;
-- one crate out;
-- another number;
-- said he didn't know;
-- said something was wrong with it.
-
-### The art list, for Midjourney (added to `Documents\quark-art\README.txt`)
-
-**The four pictures there stand**, used as their README says:
-
-| Their file | What the game uses it for |
-|---|---|
-| `market-stilts.png` | the harbor market, and the first day's screen |
-| `market-hillside.png` | the village market |
-| `cast-off.png` | the cast-off and *Done for today* |
-| `landing.png` | every landing, for now |
-
-**To make**, all 3:2, with the README's style reference and its line "no text, no letters --ar 3:2":
-
-| # | Picture | What it shows | Where it is used |
-|---|---|---|---|
-| 1–6 | `good-mangoes`, `-coconuts`, `-bananas`, `-pineapples`, `-taro`, `-sweet-potatoes` | the good alone, a few of it, in a basket or loose (never neat crates), on a plain background | each good's line at a market, and once beside the drawn crates |
-| 7–10 | `boat-canoe`, `boat-double`, `boat-schooner`, `boat-ship` | an outrigger canoe, a double-hulled sailing canoe, a two-masted schooner and a three-masted ship, each with a coral sail, side on, on a plain background | your boat at the top of the page, the boat builder, the cast-off |
-| 11–13 | `trader`, `buyer`, `builder` | a trader at a stall, a buyer on the dock, a boat builder at work; people at work, not mascots, who never react to an answer (the faces question in docs/08 is open) | beside their lines, small |
-| later | `island-kauai`, `-oahu`, `-molokai`, `-lanai`, `-maui`, `-hawaii` | each island as you sail in | the landing; `landing.png` serves every island until then |
-
-**The README's open question** is whether the boat is a different boat in each scene. Four boat sizes mean the game
-must show his own boat, so I recommend the second way:
-- each boat as its own picture;
-- `cast-off.png` and `landing.png` made again later with open water and an empty dock.
-
-This job uses placeholders throughout, so nothing waits on it.
-
-The close adds this list to `README.txt`, under its own heading, and changes nothing already there.
-
-### The clean-up, file by file (first on go, in its own commits)
-
-Unchanged from the first print except one line in `lib/ladder.ts`, now marked.
-
-**Back to exactly what `main` has.** The first group carries the gate, and is proven by an empty
-`git diff origin/main` for each file:
-- **The gate:** `core/prompts/gate.md`, `core/curation/gate.ts`, `core/curation/gate-run.ts` and `gate.test.ts`. This
-  takes away `not_here`, "A math card", and the family list and interests sent to the gate.
-- **The Sunday build:** `core/curation/week.ts`, `week-job.ts`, `schedule.ts`, `cards.ts` and `curation.test.ts`.
-  `schedule.test.ts` goes back to `main` too, keeping week 4's lines (`de0e9a1`).
-- **The plan:** `lib/plan.ts` and `plan.test.ts`; `scripts/week-build.mts`.
-- **The wall's moves:** `core/wall/card.ts`, `flow.ts`, `flow.test.ts`, `speech.ts`, `speech.test.ts`,
-  `speech-ahead.ts` and `speech-ahead.test.ts`.
-- **The pages:** `app/kid/card/[id]/page.tsx`, `app/parent/week/[theme]/page.tsx`, `app/parent/models/page.tsx`
-  and `core/runs.ts`.
-
-**Deleted:**
-- the writer and its prompt: `core/curation/math.ts` and `core/prompts/math.md`;
-- `checkMath()`: `core/math/check.ts`, `check.test.ts`, `problem.ts` and `samples.ts`;
-- the moves and the label: `core/wall/math.ts`, `math.test.ts`, `label.ts` and `core/prompts/label.md`;
-- `app/kid/card/[id]/math-box.tsx`, once its number pad is moved out;
-- `plan/candidates/math-problems.md`.
-
-**Dropped from the brief's kept list,** because the boat does not need them:
-- **`core/math/expr.ts`.** The boat writes its three kinds of sum from its own numbers.
-- **`app/kid/math-picture.tsx`.** The boat draws crates and bills, in a new file. That file reuses `plural()` and the
-  drawing styles.
-- **In `lib/ladder.ts`:** `onRule()`, `rungsOf()` and `rungsFor()`. *Changed:* a new `largestCount()` reads the cap of
-  10, or more on *Multiply bigger numbers*, from the ladder.
-
-**Kept, and why the boat needs each:**
-
-| What | Why the boat needs it |
-|---|---|
-| `plan/math-ladder.yaml`, `lib/ladder.ts` (`validateLadder`, `ladderRows`, `tablesOf`), `ladder:import` and its `:live` twin, and `import-plan.mts` skipping the ladder | his prices and his cap |
-| `mastery.place`, and `skills.key`, `position` and `ladder` | where each child is |
-| `core/math/numbers.ts` and its test | reads "30", "$30" or "thirty dollars" |
-| the number pad, moved to `app/kid/number-pad.tsx`, and its styles | the boat's sums |
-| the test view: `lib/dev-view.ts` and its test, `app/kid/dev-bar.tsx`, `app/kid/dev/route.ts`, `wallNow()` in `lib/wall.ts` | switches child and day for the look |
-| the no-number judge: `core/wall/no-number.ts`, its test and `core/prompts/no-number.md` | a reply that questions the sum, or says "I don't know" |
-| the fixtures that are not math: `devices`, `live`, `clear`, and `places`, without the style | the look's setup |
-
-**Fixtures** `math`, `math-check` and `familiar` go, and `answers` goes back to `main`'s. New:
-- `clear-math`: clears test's math week, once;
-- `boat <n> money <amount>` and `boat <n> reset`: for check 11.
-
-**The database: nothing is deleted or reversed.** Left in place on test, unused after the clean-up:
+Brief: `docs/trading-boat-slice.md` (*Wonder Wall*, phase 4), on `phase-4-wonder-wall`. Size: a slice.
+- **Times (16 Nov 2026, HST):** started 17:23. Stop 1 at 17:40, its fix round on paper at 18:00, Brandon's go at
+  18:05. The emergency stop at 18:29. Stop 2 (*Your look*) at 18:47, then eleven fix rounds at the look. **Closed by
+  Brandon's `/wwc:release` at 20:50**, which releases next.
+- **The clock:** about three and a half hours, inside the size.
+- **The history:** the stops as printed (stop 1 with its numbers, sentences, art list and clean-up list; the emergency
+  stop; stop 2 and every fix round) are in this file's history at `fac7647`.
+
+## What could not be checked, and what is not done
+
+- **June's read of the game's sentences: not done** (rule 5: nothing reaches a child unchecked).
+  - The game's words are templates in `core/wall/words.ts` (`BOAT`), with no model writing a word, so her one read is
+    the check. She played the game on test, which covered most of them.
+  - **The ones play did not reach, for her to read:**
+    - "That's 6 and 5 put together. You need 6 lots of 5."
+    - "Close. One crate out."
+    - "Have a guess first. Any guess is fine."
+    - "Good catch. Thank you for telling me."
+    - "Want to try fewer?" · "Try fewer" · "Want to sell fewer?" · "Sell fewer"
+    - "This one is for a person: Ask a grown-up to work it out with you."
+    - "That's right, it's $70. You have $60."
+    - "That's all the trader has." · "That's all you have." · "One buyer takes 10 at most. Another buyer comes next."
+    - "Count up from $20 to $50."
+    - the boat builder's six lines;
+    - the six rumor reasons.
+  - **One sentence can no longer appear:** "How much less did you get back?". A crate always sells for at least what
+    it cost.
+  - **Becomes:** part of the next slice, proposed below.
+- **Stop 3, a boy plays a day on June's iPad: not taken.** It was the parents' choice, and the look ran late into the
+  evening. **Becomes:** part of the next slice, before the boat reaches his own iPad.
+- **The boat on the boys' iPads: not in this job.** It runs only on the dev server against test. What it takes is the
+  next slice, proposed below.
+- **The dial on Safari:** checked only by Brandon's hand at the look (fix rounds 10 and 11). Code's Chrome checks
+  were read only, so as not to move his games.
+- **Not seen: Vercel** with this branch. The release's deploy is read at the release.
+
+## What a release of this branch would and would not change
+
+`phase-4-wonder-wall` is 49 commits ahead of `main` (`e1046ac`) with this close: the third 9 Nov release's records,
+the Math tile's 15, week 4's 7, the Next.js job's 7, and this job's 19. A release fast-forwards `main` and deploys it.
+
+**It would not change anything the boys see, or how a card is judged:**
+- **The gate:** `core/prompts/gate.md`, `core/curation/gate.ts`, `core/curation/gate-run.ts` and `gate.test.ts` are
+  `main`'s, byte for byte (`git diff origin/main` is empty for each). So are the Sunday build (`week.ts`,
+  `week-job.ts`, `schedule.ts`, `cards.ts`), the plan (`lib/plan.ts`), `week:build`, the wall's cards and voice
+  (`card.ts`, `flow.ts`, `speech.ts`, `speech-ahead.ts`), the week page and the models page. Every card is judged by
+  v2, as on live.
+- **The trading boat** is off off the dev server. `lib/boat.ts` returns null and reads no table unless `NODE_ENV` is
+  development and `QUARK_TARGET` is test. So:
+  - the wall's Math tile does not show;
+  - `/kid/boat` goes back to the wall;
+  - `/api/kid/boat` answers 404, and a boat line sent to the say route answers 404;
+  - the log on `/parent` renders nothing.
+- **`lib/wall.ts`** asks the test view for "now", which off the dev server is the real time, as on `main`.
+
+**It would carry, unused on live:**
+- `plan/math-ladder.yaml` and `ladder:import` (and `:live`), which no live job runs;
+- the fixtures (test only);
+- `public/boat`'s four pictures;
+- four migrations that are on test and not on live: the three of 9 Nov and the boat's. The migrations workflow's live
+  job waits on `SUPABASE_DB_URL_LIVE`, which is unset, so a push of `main` applies none of them. Nothing on live reads
+  what they add.
+
+## What was built
+
+On `phase-4-wonder-wall`, played on `quark-test`. The as-built is in docs/12, *How the trading boat is built*.
+
+- **The clean-up** (`f5c4370`, pushed before any new code).
+  - **Removed:**
+    - the Math tile's writer (`core/curation/math.ts`, `core/prompts/math.md`);
+    - `checkMath()` and its files (`core/math/check.ts`, `problem.ts`, `samples.ts`, `expr.ts`);
+    - the moves and the label (`core/wall/math.ts`, `label.ts`, `core/prompts/label.md`);
+    - the math box and the drawn math pictures;
+    - `plan/candidates/math-problems.md`.
+  - **Back to `main`'s:** the 18 files above.
+  - **Kept for the boat:**
+    - the ladder (`tablesOf`, with the new `workingTablesOf` and `largestCount`);
+    - `core/math/numbers.ts`;
+    - the number pad, in `app/kid/number-pad.tsx`;
+    - the test view;
+    - the no-number judge, with "Good catch. Thank you for telling me.".
+  - **Test's math week** was cleared by `npm run fixture -- clear-math`: 56 cards on 7 days, 28 idea rows and 1
+    answer.
+- **The game** (`core/boat/`, pure):
+  - `day.ts`: his numbers from the ladder, a day's markets and rumors, the buyers.
+  - `game.ts`: the state, every move, the screen and what "Read it to me" says.
+  - `sim.ts`: stop 1's simulation, run as a test.
+  - `log.ts`: the parents' log.
+  - 30 tests.
+- **The server and screens:**
+  - `lib/boat.ts` reads and writes for the paired iPad, gives the no-number judge's verdict, and makes "Read it to me"
+    in Sulafat, stored by its words.
+  - `/kid/boat` (`boat-game.tsx`, `crates.tsx`), with its tile on the wall after the cards.
+  - `/api/kid/boat`: POST a move, GET the screen.
+  - The say route's `boat.screen` line.
+  - *The trading boat (test only)* on `/parent`.
+- **The words:** every sentence in `core/wall/words.ts` (`BOAT`, `MATH_NAME`). The wiring test runs them all
+  through the effort-words and never-wrong checks.
+- **The pictures:** Brandon's four (market-stilts, market-hillside, cast-off, landing) in `public/boat` as WebP at
+  1344 × 896, 144 to 223 KB each. The art list is added to `Documents\quark-art\README.txt` under its own heading.
+- **The fixtures:**
+  - `live`, `clear`, `devices` and `places` (without the style), kept from the Math tile;
+  - `clear-math`;
+  - `boat <n> [money <m> | reset | log]`.
+
+**The numbers, as built:**
+- **His buying prices** are the times tables he is working on: Kiddo $2 and $5, Bug $3 and $4. The usual price is $5
+  and $4.
+- **A rumor** is at least $1 over the usual.
+- **Stock and buyers:** each trader has 2 to 10 crates of a good, and a buyer takes up to 10. No sum holds more than
+  10 until bigger multiplying.
+- **The boats:** 4, 15 and 40 hundred-dollar bills; more than 10 bills is paid in bundles.
+- **The simulation test holds the evidence:**
+  - a careful boy has the double canoe on day 6 to 9 (Kiddo) or 7 to 11 (Bug);
+  - most of his working facts a week from the second week (Kiddo 22 of 30 and Bug 16 of 20 in week 2, with buyers
+    taking a whole load);
+  - no repeated best purchase;
+  - a careless player never loses money.
+
+## Your look: Brandon's words
+
+**`/wwc:release` at *Your look*, 20:50: every check passed.** Before it: "okay, i think we're there. this is much
+better."
+
+The checks are as written in the brief's stop 2, on June's iPad as Bug and as Kiddo, and on `/parent`.
+
+**Passed in his own words along the way:**
+- "Yes, never mind works perfectly now."
+- "it only gave me 3 intermediate problems not 10, so much better."
+
+**The fix rounds**, each committed, pushed and tested; his words are quoted in docs/08, *The trading boat, slice 1*:
+1. **His four pictures in** (18:53).
+2. **The trade screen laid out again** (19:21): "This screen layout seems a little weird."
+3. **One question at a time during the count** (19:25): "Do I answer the top one or the bottom?"
+4. **The landing says why a buyer stops** (19:32): "It only let me sell 3 for some reason."
+5. **A buyer takes the whole load, up to 10** (19:34): "5 pineapples is not a lot of pineapples."
+6. **The count goes two at a time again after a missed step, and takes the whole total at any step** (19:35): "I'm
+   currently stuck adding 2 at a time".
+7. **The trade is a row on the market screen** (19:46). This came after "Or maybe, boring?", the calculator trading
+   game ("everyone understood it") and "we're going to fix it".
+8. **"Never mind", and tapping the good again** (about 19:52): "There is no way back from this screen."
+9. **How many typed on the number pad** (about 20:00): "If I want to buy 25 bananas I need to press 25 times?"
+10. **A straight dial** (about 20:02): "How about a dial instead?", then his choice of straight.
+11. **The dial holds still** (about 20:10): "Dynamic sizing of the numbers causes the slider to jump down and up like
+    crazy."
+
+**Before the look, from Code's own check through the dev server:** the page kept every screen's "Read it to me",
+because three parts shared one key. Fixed in `f62f595`.
+
+## The emergency stop (18:29), and how it ended
+
+The Next.js job's `npm run dev:ipad` (16:16) was still running.
+- **What went wrong:** after a production build ran beside it, its API routes served code from before the clean-up
+  ("workingTablesOf is not a function").
+- **Why it needed Brandon:** stopping it was refused to Code.
+- **How it ended:**
+  - Brandon stopped it with `! taskkill //PID 22840 //T //F`, after a first try with single slashes failed in Git Bash
+    (Code's mistake).
+  - His "go, and clear .next first" followed. `.next` was cleared, the build ran clean, and the dev server was started
+    again.
+
+Both causes are bug lines in docs/08.
+
+## Migrations
+
+`20261116000000_trading_boat` (`boat_games`, `boat_turns`; guardians read, the server writes) was pushed with the game
+and applied to test by `.github/workflows/migrations.yml`: run **44017188011, green**, "Applying migration
+20261116000000_trading_boat.sql... Finished supabase db push." Its live job did nothing. **Not on live.** No migration
+was deleted or reversed.
+
+**Left in place on test, unused after the clean-up:**
 - `children.math_style`;
 - `families.familiar`;
 - `attempts.move` and `attempts.label`;
-- `attempts.verdict`'s values `questioned` and `no_number`;
+- `attempts.verdict`'s `questioned` and `no_number`;
 - `model_runs.kind` `label`.
 
-Test's week 5 math cards are deleted from test, with their questions, answers and idea rows.
-
-**After the clean-up, a release of this branch** would change nothing a child sees and nothing about how a card is
-judged. Stop 2 says so line by line.
-
-### What is built
-
-- **One migration, `boat_games` and `boat_turns`.** It goes to test by the push and the workflow, and is never on live
-  in this job.
-  - `boat_games` is one row a child: money, boat size, cargo, island, the rumor he sailed on, the game's day number,
-    the calendar day he last played, and where he is in today's day, including how many crates each trader and
-    buyer has left.
-  - `boat_turns` is one row an answer.
-  - No name, nothing about the family (rule 7). Guardians read; only the server writes.
-- **The rules as pure functions,** with tests, in `core/boat/`. A day comes from the child, the day number and the
-  island, and is the same every time it is asked. The tests include:
-  - the cap: no sum above 10 without the rung, at any boat and any money;
-  - a trade, the count, the landing, the boats;
-  - the simulation, run as a test that holds the medians above within a day or two.
-- **`/kid/boat` and its answer route,** with the tile added to the wall only when the test view is on. "Read it to me"
-  says only what is on the screen.
-- **The parents' section** on `/parent`, test view only.
-
-### Decided here (from the brief, the records and your word; say if any is wrong)
-
-1. **Real islands** (Kauaʻi, Oʻahu, Molokaʻi, Lānaʻi, Maui, Hawaiʻi Island). Home is just "home". Two markets an
-   island: the harbor market and the village market.
-2. **Six goods:** mangoes, coconuts, bananas, pineapples, taro, sweet potatoes.
-3. **Two rumors a day,** one at each market. Cast off is the choice between them.
-4. **Selling is a buyer at a time,** each taking up to a few. He chooses how many for each, or keeps the rest.
-   *Changed by your word.*
-5. **The look back** is on the good he sold for the most, when both totals are $100 or less. It ends at a person after
-   two tries (rule 3).
-6. **The voice: no lines made ahead in this job.** A line is stored by its words, so each waits 4 to 5 seconds only the
-   first time it is ever said.
-7. **Kept tools dropped:** `expr.ts`, `math-picture.tsx` and three functions of `lib/ladder.ts`.
-8. **Two other rules are touched:**
-   - rule 5: the words are templates read once by June, with no gate call;
-   - rule 4: the boats are the game's world, bought with its money, and nothing nags.
-9. **The trader's crates and the buyers' takes are 2 to 10,** not 3 to 9, so 2 × and 10 × come up. *New.*
-
-### Your word
-
-1. **The numbers as simulated:**
-   - buying on his working tables;
-   - usual prices of $5 and $4;
-   - 2 to 10 crates a trader and a buyer;
-   - boats at 4, 15 and 40 hundred-dollar bills.
-
-   **Recommended: yes.** At $600 for the first boat the canoe weeks last three or four days longer, and the second
-   week holds fewer of his facts (23 of 30 and 12 of 20).
-
-   On yes, they go into the code as they are, with the simulation as a test.
-2. **June reads the new and changed sentences** with the rest. Any she changes go in before the screens are built.
-
-**What go takes:** reply **go** to take all of these, and the row out of order. Name anything you dislike instead,
-and that is another fix round on paper.
-
-## Emergency stop (16 Nov 2026, 18:30 HST): the old dev server needs your hands
-
-### What went wrong
-
-The iPad dev server from the Next.js job is still running, and it serves stale code to the boat.
-- **What it is:** `npm run dev:ipad`, started at 16:16 HST, processes 22840 (`scripts/dev-ipad.mts`), 22284
-  (`next dev`) and 2080 (its server).
-- **What it does wrong:** it picked up the new pages, and Bug's wall shows the trading boat tile, and the boat opens on
-  day 1. But its copy of `lib/ladder.ts` for the API routes is from before the clean-up, so every move answers 500.
-  Its log, `.next/dev/logs/next-development.log`, says "workingTablesOf is not a function". Touching the file did not
-  reload it.
-- **Why I stopped:** stopping those processes and clearing `.next` was refused to me (auto mode: destructive). Next.js
-  refuses a second dev server while this one holds its lock ("Another next dev server is already running"). So the
-  steps left need it restarted, and that is your hands.
-
-### What is done
-
-- **Go, 18:05.** The row is at *building* (`45bb7fb`).
-- **The clean-up** (`f5c4370`, pushed).
-  - **The gate is `main`'s:** `gate.md`, `gate.ts`, `gate-run.ts` and `gate.test.ts` have an empty diff against
-    `origin/main`. So do the Sunday build, the plan, `week:build`, the wall's cards and voice, the week page, the
-    models page and the run kinds: 18 files.
-  - **Deleted:** every file the stop-1 list named.
-  - **What still differs from `main`** is the kept list alone: the ladder, the number reader and pad, the test view,
-    the no-number judge, the fixtures and the three math migrations.
-  - **Test's math week is cleared** (`npm run fixture -- clear-math`): 56 math cards on 7 days, 28 idea rows and 1
-    answer, with none left.
-  - That push changed no migration, so it started no migrations run. The tests ran on the laptop: 466 passed, the
-    typecheck was clean, and `npm run build` was clean.
-- **The game** (`cf27641`, pushed).
-  - **`core/boat/`:** the day, the game, the simulation and the parents' log, all pure, with 27 tests.
-  - **The simulation test holds the stop-1 numbers on the game's own rules:**
-    - the careful first boat on days 6 to 9 (Kiddo) and 7 to 11 (Bug);
-    - nothing above 10 in one sum;
-    - no repeated best purchase;
-    - most working facts a week from the second week;
-    - no money lost by a careless player.
-  - **The game's tests** cover checks 1 to 9 and 11 move by move, and the log covers stop 2's last check.
-  - **The words:** every sentence is in `core/wall/words.ts` (`BOAT`). The wiring test runs them through the effort
-    words and "never tell a guess it was wrong" checks.
-  - **The server and the screens:** `lib/boat.ts` returns null with the test view off, `/kid/boat`, `/api/kid/boat`,
-    "Read it to me" through the say route, the tile, the section on `/parent`, and the fixture
-    `boat <n> [money <m> | reset]`.
-  - **The checks:** 494 tests and the typecheck pass.
-- **The migration `20261116000000_trading_boat` is on test:** run 44017188011, green ("Applying migration
-  20261116000000_trading_boat.sql... Finished supabase db push."). The live job did nothing.
-- **A device for my own check is paired on test** to child 2: `36e90f0b-d44f-4c6e-afbd-f38c3463e4c3`. Bug's game
-  stands at day 1, opened and not played. After my check I reset his game and forget the device
-  (`fixture -- boat 2 reset`, `fixture -- forget …`), so the look starts clean.
-
-### What is not done
-
-- The boat played end to end through the dev server (the moves, the next day, "Read it to me", the no-number judge,
-  the log on `/parent`).
-- `npm run build` on the finished branch, which runs before the dev server starts, never beside it.
-- Stop 2, *Your look*.
-
-### What I need
-
-**Stop the old dev server.** Either way works:
-- in the terminal where it runs, press Ctrl+C;
-- or type: `! taskkill /PID 22840 /T /F` (it stops 22284 and 2080 with it).
-
-Then type **go**. On go I:
-1. clear `.next` (only if you say so with the go; otherwise the dev server starts on it as it is);
-2. run `npm run build`;
-3. start `npm run dev:ipad`;
-4. play a day through it as child 2 and check the next day;
-5. reset that game, forget the device, and write stop 2.
-
-### How it ended
-
-- **The first `!` command failed (my mistake).** It was `taskkill /PID 22840 /T /F`, and Git Bash turned `/PID` into
-  `C:/Program Files/Git/PID`. The doubled form, `taskkill //PID 22840 //T //F`, stopped all three processes.
-- **Brandon's "go, and clear .next first".** I had already started a dev server on the old `.next`, so I stopped it
-  (my own, started at 18:35), cleared `.next`, built and started it again.
-
-## Stop 2: Your look, on June's iPad, on test (16 Nov 2026, 18:47 HST)
-
-### Where it stands
-
-**The iPad dev server is running against test**, started at about 18:40 on an empty `.next`, after a clean
-`npm run build`. June's iPad opens the wall as before, from the Home Screen (`https://192.168.50.67:3000/kid`).
-
-**Checked through the dev server**, as test's child 2 with a device paired for the check:
-- **A buy:** 3 crates at $4, answered 7, met "That's 3 and 4 put together. You need 3 lots of 4." (on Bug's
-  numbers), then the count.
-- **The count:** a missed step went one crate at a time.
-- **A total he could not pay:** "That's right, it's $15. You have $8."
-- **Number words:** "six dollars" was read as 6.
-- **The no-number judge** (two calls, Haiku): "I don't know" got "Have a guess first. Any guess is fine.", and "you
-  never told me how many I have" got "Good catch. Thank you for telling me." and the count.
-- **The cast-off** offered the two rumors' islands.
-- **"Read it to me"** made the screen's line in Sulafat and stored it.
-- **The next day, through the test view's day:**
-  - landed on Kauaʻi, with "A big lūʻau on Kauaʻi needs pineapples. So pineapples sell for $10 a crate here.";
-  - "A buyer takes up to 3 crates of pineapples at $10 a crate.", then the second buyer;
-  - the look back, "$50 − $20 = ?", with "Count up from $20 to $50." after a miss.
-- **The double canoe:** after `fixture -- boat 2 money 500` and a skipped day, it was offered at the landing, and
-  buying it asked "4 × $100 = ?" and counted in bills.
-- **The log** (`fixture -- boat 2 log`, the same function `/parent` uses) read each day with each sum and each
-  answer's kind.
-
-**Found in Chrome, and fixed (`f62f595`):** the page kept every earlier screen's "Read it to me" button. Three parts
-shared one key; each has its own now. After the fix, one button and the crates drawn and lit as the count says
-(4 crates, 2 lit).
-
-**Then cleaned up:** both test children's games are reset (each starts at home with $20), and the device paired for
-the check is forgotten. June's iPad stays paired as Bug. The laptop's Chrome is paired as Kiddo.
-
-**The checks:** 494 tests, the typecheck, and lint on every new file pass. `npm run build` was clean on the empty
-`.next`. It ran before the last commit (the keys, a read-only GET of the screen, the fixture's log); that commit's
-tests and typecheck pass, and the dev server serves it. A build now would run beside the dev server, so it waits for
-the close.
-
-### What a release of this branch would and would not change
-
-`phase-4-wonder-wall` is ahead of `main` by the Math tile's commits, week 4's and the Next.js job's records, and this
-job's. After the clean-up:
-
-**It would not change anything the boys see, or how a card is judged:**
-- **The gate:** `gate.md`, `gate.ts` and `gate-run.ts` are `main`'s, byte for byte (no diff). Every card is judged by
-  v2.
-- **The Sunday build, the plan, `week:build`, the week page and `/parent/models`:** `main`'s.
-- **The wall's cards, "Read it to me" on a card, Talk and the night's lines:** `main`'s.
-- **The trading boat:** on Vercel the test view is off (it needs the dev server and `QUARK_TARGET=test`).
-  - The wall's tile, `/kid/boat`, `/api/kid/boat`, the boat's line in the say route and the section on `/parent`
-    each return nothing and read no table.
-  - A boat line sent to the say route answers 404, as any unknown line does.
-- **`lib/wall.ts`** asks the test view for "now". Off the dev server that is the real time, as on `main`.
-
-**It would carry, unused on live:**
-- the ladder file and `ladder:import` (and `:live`), which no live job runs;
-- the fixtures (test only);
-- four migrations that are on test and not on live: the three math ones and the boat's. A release does not apply
-  them to live (the workflow's live job waits on a secret left unset), and nothing on live reads what they add.
-
-### Your look
-
-On June's iPad, on test, as Bug, and then as Kiddo (tap the name in the test view's bar at the foot of the wall). Each
-check is its own.
-
-**Where:** the wall, the Math tile (*The trading boat*, after the cards). **Do / See:**
-
-1. A market shows goods and prices, your money, your boat's space, and one rumor. Nothing tells you what to buy or
-   how many. Pass □ Fail □
-2. Pick a good and a number: the picture shows exactly that many crates, each with its price, and the sum is written
-   beside the question ("6 × $5 = ?"). Pass □ Fail □
-3. Give the right total: the money goes down, the crates are on the boat, and you can buy again. Pass □ Fail □
-4. Give the two numbers added together: the reply says so, and the crates light up to count. Give a total one crate
-   out: the reply says you are close. Give something else: the count begins at once. No reply asks how you got it.
-   Pass □ Fail □
-5. Ask for more than you can pay for, with the right total: the trader agrees with the sum and says you are short.
-   Pass □ Fail □
-6. Ask for more than the boat holds: it will not let the number go past the space left. Pass □ Fail □
-7. After the last market, cast off: the day is over, the tile is done, and nothing more can be played today.
-   Pass □ Fail □
-8. Move the test view to tomorrow (▶): you land where the rumor pointed, the price there is what the rumor promised,
-   with its reason, and you tell the buyer what you are owed. Pass □ Fail □
-9. Skip a day in the test view (▶ twice), then come back: the boat is where you left it and nothing is lost.
-   Pass □ Fail □
-10. As Kiddo and as Bug the prices are different numbers; the game is the same. Pass □ Fail □
-11. Reach the first boat's price: type `! npm run fixture -- boat 2 money 500` (Bug; `boat 1` for Kiddo). Finish
-    the day, cast off, then ▶ to the next day. At the landing the bigger boat is offered, and buying it asks for its
-    sum ("4 × $100 = ?"). Pass □ Fail □
-
-**Where:** `/parent` on the dev server, as the test guardian (the laptop's Chrome, `https://localhost:3000/parent`).
-**See:** under *The trading boat (test only)*, each day's trades for each child: what he bought and sold, every sum,
-whether it was right at once or which help he needed, and each wrong answer with its kind. Pass □ Fail □
-
-**To know before you start:**
-- **Placeholders:** each screen's picture is a dashed box with the name of your picture that goes there. The crates
-  and bills are drawn.
-- **One move at a time:** each move goes to the server, so a tap waits a moment.
-- **"Read it to me" waits the first time:** about 4 to 5 seconds for a line never said before, then it is stored.
-- **To start a child over:** `! npm run fixture -- boat 2 reset` (or `boat 1`).
-- **To see a child's log from here:** `! npm run fixture -- boat 2 log`.
-
-### Then
-
-- **Stop 3, if you and June choose:** one of the boys plays one day on June's iPad, on test, with a parent beside him.
-  Before it, `! npm run fixture -- boat 2 reset` starts Bug's game fresh (or `boat 1`, with the bar on Kiddo, for the
-  older's numbers). Tell me what you saw, in your own words.
-- **Then `/wwc:close`** (close and hold: nothing is released). At the close:
-  - docs/12 (how the game teaches), docs/08's decisions and `docs/math-tutor-proposal.md`'s top line;
-  - *Where we are* and the README status;
-  - the board: this row *on hold*, the Math tile's row closed as replaced;
-  - the art list added to `Documents\quark-art\README.txt`;
-  - a bug line for the `!` command's slashes;
-  - the next job proposed from what the looks found.
-
-### Fix round 1 at stop 2: the four pictures in (16 Nov 2026, 18:53 HST)
-
-Brandon's word: "Put the four pictures in now. They are in C:\Users\BrandonReisen\Documents\quark-art, described in
-its README.txt. Copy them into the repository under public/ with short names (market-stilts, market-hillside,
-cast-off, landing), sized sensibly for an iPad, and show each where its placeholder is: market-stilts on the opening
-screen and the harbor market, market-hillside on the village market, cast-off on the cast-off and Done for today,
-landing on the landing. They are 3:2. Every other picture stays a placeholder. Tell me when to reload."
-
-- **The files:** the four, matched to the README by the words in each Midjourney file name, are in `public/boat/` as
-  WebP at their own 1344 × 896.
-  - `market-stilts.webp`: 155 KB
-  - `market-hillside.webp`: 223 KB
-  - `cast-off.webp`: 207 KB
-  - `landing.webp`: 144 KB
-
-  The PNGs were about 2 MB each.
-- **On the page:** each shows where its placeholder was. It is as wide as the column up to 720 px, never taller than
-  about a third of the screen, and cropped to fit rather than squeezed. Any other picture stays a placeholder.
-- **Checked:** in Chrome as Kiddo the opening screen shows `market-stilts` (1344 wide, shown at 720 × 457) and no
-  placeholder. Typecheck and lint pass. Kiddo's game is reset again.
-- **The repository is public, so these four pictures are public now.**
-
-### Fix round 2 at stop 2: the trade screen's layout (16 Nov 2026, 19:21 HST)
-
-Brandon, with a photo of June's iPad on Kiddo's 10 × $2 trade at the village market: "This screen layout seems a
-little weird."
-
-**What was off, as I read the photo:**
-- "Read it to me" sat between the title and the crates.
-- The crates hugged the left edge.
-- The number pad was six keys across, so its second row was ragged, with Delete at its end.
-- "That's my answer" sat above the pad you type with.
-- "Choose again" was a big button at the very bottom.
-
-**Changed:**
-- **The crates** are centred, with a board top and bottom and the price in the middle.
-- **The question and its sum** share one row, the sum beside the question, as the brief says. The count's step is laid
-  out the same way.
-- **"Read it to me" and "Choose again"** are small, side by side, under the question. When the count ends, "Try
-  fewer" is a full button there.
-- **One column to answer in**, up to 420 px wide: the box (big, centred digits), the number pad three keys across as
-  on a phone (1 2 3 / 4 5 6 / 7 8 9 / a wide 0 and Delete), "That's my answer" under the pad, then Talk.
-- **The market and landing screens** are as they were.
-
-**Checked:** typecheck, lint and 494 tests. In Chrome (paired as Kiddo, so it opened Kiddo's same trade, which I only
-looked at), the parts measure as above.
-
-### At stop 2, about 19:22: "Or maybe, boring?"
-
-Brandon, of the trade screen: "Or maybe, boring?"
-
-My read: yes. The Math tile failed on clutter, and this screen swings to the other end. The place, the trader and the
-goods all disappear at the moment of the sum, and what is left is a worksheet with a frame. I offered three ways, from
-cheapest:
-1. **Crates drawn to look like what is in them:** wood colours, each marked with its good and its price.
-2. **The trader asks, in character, with a strip of the place behind him:** a sentence change for June.
-3. **The Midjourney goods and trader** (the art list's next job).
-
-Recommended: 1 and 2 now, 3 with the pictures, and "boring" judged properly at stop 3. **Then:** 1 and 2 withdrawn after the calculator game (19:23, below).
-
-### Fix round 3 at stop 2: one question at a time during the count (16 Nov 2026, 19:25 HST)
-
-Brandon, with a photo of the count: "And again here, stuck on a double problem. Do I answer the top one or the
-bottom?"
-
-**The fault:** during the count the page showed two questions, each with its sum and "= ?" ("How much do you owe the
-trader? 10 × $2 = ?" and "1 crate: how much so far? 1 × $2 = ?"). Nothing said the box answers the second.
-
-**Changed:**
-- **During the count** (and after it ends), the trade's sum stays as a quiet reminder with no question mark ("10 ×
-  $2"). The step is the only question beside the box.
-- **The crates the step asks about** are outlined (dashed, in the accent colour), beside the ones already counted
-  (filled).
-- **"Read it to me"** says the same: the reminder, then the step as the one question. A test holds it: one "equals
-  what?".
-
-**Checked:** typecheck, lint and 495 tests. In Chrome, Kiddo's same trade (read only) shows one "= ?" and the first
-crate outlined.
-
-### At stop 2, 19:23: the calculator game, and a proposal
-
-Brandon, with a photo of the classic calculator trading game: "I mean, this was being run on a calculator and
-everyone understood it."
-
-**Taken:** pictures and characters are not what makes it work, so I withdrew options 1 and 2 above.
-
-**Proposed in their place: the trade as a row on the market screen**, not a page of its own. Tapping a good opens its
-row: how many, the crates drawn small, the sum with the box, and the count, all in that row. The prices, the rumor,
-the money and the boat never leave the screen. Selling works the same way, a row per buyer. About an hour.
-**Then:** taken, after the release question ("we're going to fix it"); built as fix round 7.
-
-### Fix round 4 at stop 2: why a buyer stops at 3 (16 Nov 2026, 19:32 HST)
-
-Brandon: "I fast forwarded a day and got to Kauai where I had 5 pineapples and they were selling for a lot. It only
-let me sell 3 for some reason."
-
-**What happened:** Bug's log shows him landed on Kauaʻi with 5 pineapples and nothing sold. The first buyer takes up
-to 3 (buyers take a few at a time, the fix round's rule). After those 3, a second buyer comes for the rest. But the
-screen never said so: + just stopped.
-
-**Changed:**
-- **Two new sentences for June:**
-  - "That's all this buyer takes. Another buyer comes next." It shows when + stops at the buyer's limit while he has
-    more.
-  - "Another buyer takes up to {k} crates of {good} at ${price} a crate." It is said for every buyer after the first.
-- **A test holds both,** and the word checks cover them: 496 tests, typecheck and lint pass.
-
-### Fix round 5 at stop 2: a buyer takes the whole load (16 Nov 2026, 19:34 HST)
-
-Brandon: "5 pineapples is not a lot of pineapples."
-
-**Changed:** a buyer takes as many as he is offered, up to the most in one sum (10, from the ladder). A second buyer
-comes only for a load above 10, as on the bigger boats. This *replaces* the fix round's "buyers take a few at a time,
-2 to 10". The ladder's cap still keeps every sum inside his tables, and that was the rule's reason.
-
-**The sentences change for June:**
-- "A buyer pays ${price} a crate for {good}." (was "A buyer takes up to {k} crates of {good} at ${price} a crate.")
-- "Another buyer pays ${price} a crate for {good}."
-- "One buyer takes {10} at most. Another buyer comes next." (only above 10)
-
-**The evidence, rerun** (careful play, median of 400 runs):
-- **Money and the boats:** the same (first boat day 7 and 9).
-- **Working facts:**
-
-  | | Week 1 | Week 2 | Week 3 |
-  |---|---|---|---|
-  | Kiddo | 12 of 30 (was 17) | 22 of 30 (was 25) | 23 of 30 (was 25) |
-  | Bug | 10 of 20 (unchanged) | 16 of 20 (was 15) | 17 of 20 (unchanged) |
-
-  So most from the second week still holds. Kiddo's canoe week holds fewer, because his sales are now one sum a good.
-- **Sums a day:** about one fewer (canoe 4, double canoe 8).
-- **Tests:** the simulation test still holds every check, and 496 tests, typecheck and lint pass.
-
-### Fix round 6 at stop 2: the count no longer drags (16 Nov 2026, 19:35 HST)
-
-Brandon, with a photo of Kiddo's count at "1 more crate: how much so far? $12 + $2 = ?": "Yeah I'm currently stuck
-adding 2 at a time on the other kid. I started at 2 and am up to 12, so 6 steps".
-
-**The fault:** after one missed step the count went one crate at a time and stayed that way, so 10 crates at $2 took
-ten steps of +$2.
-
-**Changed:**
-- **One crate at a time is only for the step he missed.** After it is right, the count goes two at a time again.
-- **The whole total is taken at any step.** Once he sees the pattern he can type it and be done. The log reads that as
-  "Then right (said 20)."
-
-**Checked:** a test holds both, and 497 tests, typecheck and lint pass.
-
-### At stop 2, about 19:38: release or hold
-
-Brandon: "Trying to figure out how to fix these issues. I was just gonna release but chat said no." Then, of the chat:
-"He's not right in this case".
-
-**What a release would do, checked:**
-- **The boys:** nothing changes. The gate is `main`'s, byte for byte. The boat, its tile, its page and its log read no
-  table off the dev server against test.
-- **Live migrations:** none. The four new migrations stay on test, because the workflow's live job waits on its unset
-  secret.
-- **`main` gains:**
-  - the clean-up, so the v4 gate can no longer reach live;
-  - the boat and the pictures, off until a later job turns them on;
-  - a branch that lines up with `main` again.
-- **`main` (`e1046ac`) is an ancestor of the branch,** so `/wwc:release` fast-forwards.
-- **A production build of the final commit (`266ba7a`) is clean.** It was built in a temporary worktree, away from the
-  dev server, then removed.
-
-The brief says close and hold. A `/wwc:release` typed by Brandon at the last stop overrides it, and is his go for the
-look.
-
-**Then (19:46):** Brandon chose to fix it here, not release; the row is fix round 7.
-
-
-### Fix round 7 at stop 2: the trade is a row on the market screen (16 Nov 2026, 19:46 HST)
-
-Brandon, after the release question: "No, since I got into this we're going to fix it." So the job does not release.
-He also said: "Chat is gone, and we're fully rogue." From here the fixes come from Brandon and Code, without a new
-brief from the chat.
-
-**Decided (Brandon, 16 Nov 2026, 19:23 and after):** the trade happens in its good's row on the market screen, as in
-the calculator trading game: "this was being run on a calculator and everyone understood it". *Replaces* "a picture of
-exactly what is in the sum, and nothing else on the page" (10 Nov 2026) for the page around the trade. The picture of
-exactly what is in the sum stays, small, in the row.
-
-**Changed:**
-- **The market's goods are a list,** one row each, like a price board.
-  - Tapping a good marks its row, and "how many?" opens under it. Another good can still be chosen instead.
-  - Then the trade opens in the same row: the crates, the question with its sum, the count, the box.
-  - While a trade is open the other goods wait.
-- **The money, the boat, the rumor and the usual price stay on screen** above the list throughout.
-- **The landing:** the buyer's line stays, and "how many?" and the sale open under it, the same way. The boat builder's
-  line stays over his sum.
-- **The place's picture** shows while nothing is open. A row that opens takes its room.
-- **"Read it to me" on a trade** says the row it is in, then the trade.
-
-**Checked:**
-- 497 tests, typecheck and lint pass; the test for check 2 is rewritten to the row.
-- In Chrome, read only, on your own games:
-  - Kiddo's village market lists four rows, all waiting while the boat is full.
-  - With Chrome's device switched to Bug and back, Bug's harbor market on Kauaʻi opens "How many crates of taro?"
-    under the Taro row, with everything else above it.
-
-### Fix round 8 at stop 2: a way back (16 Nov 2026, 19:52 HST)
-
-Brandon, with a photo of "How many crates of mangoes?": "There is no way back from this screen. If you click mango you
-have to buy mango. You can't change your mind".
-
-**Two things in the photo:**
-- **The page was the one from before fix round 7.** The goods were cards, and "how many?" sat below the list. Its
-  server answers were already the new ones. A reload brings in the rows.
-- **The fault stands either way:** "Choose again" did not read as a way back.
-
-**Changed:**
-- **"Choose again" is now "Never mind",** on "how many?" and on a trade in hand. This is a sentence change for June.
-- **Tapping the open good again closes it,** and tapping another good chooses that one instead. Nothing is bought
-  either way.
-
-**Checked:** a test holds both ways back, and 497 tests, typecheck and lint pass.
-
-**The times in this file's headings from stop 2 on are corrected to the commits' times.** Some had been written ahead
-of the clock.
-
-### Fix round 9 at stop 2: how many, typed (16 Nov 2026, about 20:00 HST)
-
-Brandon: "Yes, never mind works perfectly now. Also, I guessed wrong and it only gave me 3 intermediate problems not
-10, so much better. I'm not sure I like the + button. At large numbers it won't work well. If I want to buy 25
-bananas I need to press 25 times?"
-
-**Passed in his words:**
-- "Never mind" (fix round 8);
-- the count after a miss (fix round 6): "only gave me 3 intermediate problems not 10, so much better".
-
-**Changed:**
-- **"How many?" is typed on the same number pad as the sums,** shown big, then "That many". It starts at nothing, and
-  − and + are gone.
-- **A digit that would take the number past the most he can choose does not go in, and the screen says why** (check
-  6):
-  - "That's all the room on your boat." or "That's all the trader has." when buying;
-  - "One buyer takes 10 at most. Another buyer comes next." or the new "That's all you have." when selling.
-- **One new sentence for June:** "That's all you have."
-
-**For now a purchase is at most 10** (the ladder's most in one sum, and a trader's crates), so 25 bananas is not yet
-possible. Typing is what the bigger boats and bigger multiplying will need.
-
-**Checked:** 497 tests and the typecheck pass. The page renders in Chrome (read only) with no console error.
-
-### Fix round 10 at stop 2: how many, on a straight dial (16 Nov 2026, about 20:08 HST)
-
-Brandon: "How about a dial instead?" Asked round or straight, he chose straight: "Straight dial (Recommended)".
-
-**Changed:**
-- **"How many?" is a big slider,** with a notch for each crate (a notch every 5 or 10 above 20). The number shows big
-  above it, and it starts at 0.
-- **The crates are drawn as he slides,** each with its price.
-- **The dial stops at the most he can choose.** At its end the screen says why: the room, the trader's crates, "That's
-  all you have.", or one buyer's 10.
-- **The number pad is for the sums alone again,** so choosing how many no longer looks like answering.
-- **The game hands the dial the price,** and the three stepper checks in the tests carry it.
-
-**Checked:** 497 tests, typecheck and lint pass.
-
-### Fix round 11 at stop 2: the dial holds still (16 Nov 2026, about 20:10 HST)
-
-Brandon, with two photos of the dial at 1 and at 2 taro: "Dynamic sizing of the numbers causes the slider to jump
-down and up like crazy."
-
-**The fault:** the crates were drawn to fill the width. So one crate came out huge and two smaller, and the drawing's
-height changed under the slider as it moved.
-
-**Changed:**
-- **Every crate is the same size, however many there are.** The drawing is always laid out five across, in the trades
-  too.
-- **The slider sits above the crates.** The crates' room is kept for the most he can choose, so it is the same height
-  at 0 as at the most.
-- **The reason line under the slider keeps its place, empty until needed.**
-
-**Checked:** 497 tests, typecheck and lint pass.
-
-### Spend, live, a child
-
-- **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free
-  tier), all on test. The judge's runs are in `model_runs` on test.
-- **Live:** nothing. No command touched it.
-- **A child:** nothing on live changed. On test, the boat is on June's iPad, paired as Bug.
-- **Rule 7:** `boat_games` and `boat_turns` hold no name. The answers he types are kept for the parents, as on the
-  cards.
+The ladder's `skills` columns and `mastery.place` are used by the boat.
+
+## On live, money, a child
+
+- **Live: nothing.** No command touched the live database, and no migration reached it.
+- **Money:**
+  - two no-number judge calls on Haiku, about $0.0004, in `model_runs` on test;
+  - a few lines of Google's voice, inside the free tier;
+  - no model writes a problem, so a day of play spends nothing else.
+- **A child: nothing on live changed.** On test, the boat was played on June's iPad (paired as Bug, switched to Kiddo
+  by the test view's bar).
+- **Rule 7:** `boat_games` and `boat_turns` hold no name and nothing about the family. The answers a child types are
+  kept for the parents, as on the cards.
+- **Rule 4:** no prize, point, streak or timer. The boats are the game's world, bought with its money. Nothing moves
+  or makes a sound by itself.
+- **Rule 3:** the answer is never shown. The count's last step is his, and with nothing fewer the sum goes to a
+  grown-up.
+- **Rule 5:** the sentences are templates, with no gate call. June's read is open, above.
+- **The public repository** names no child. Kiddo and Bug are test's invented children. The four pictures are now
+  public.
+
+## Test, as left
+
+- Both test children's games are as Brandon left them at the look:
+  - Kiddo on day 1 at the village market, his canoe full of mangoes;
+  - Bug on day 3 at the village market on Lānaʻi, with $74, 6 crates of bananas and 4 of taro.
+- `npm run fixture -- boat <n> reset` starts either over.
+- June's iPad stays paired as Bug, and the laptop's Chrome as Kiddo. Code's check device is forgotten.
+- **The iPad dev server is stopped** (this close). Run `npm run dev:ipad` to play again.
+
+## What you now do differently
+
+- **On test, the wall has a Math tile, *The trading boat*,** after the cards. It shows only on the dev server against
+  test (`npm run dev:ipad`), with the test view's bar to switch the child and the day.
+- **New fixtures:**
+  - `npm run fixture -- boat 2 money 500` sets a child's money;
+  - `boat 2 reset` starts his game over;
+  - `boat 2 log` prints his log as `/parent` shows it.
+- **A Windows command in a `!` line needs doubled slashes** in this shell: `taskkill //PID … //T //F`.
+
+## Beyond the brief
+
+- **Built inside the brief's screens, from your looks:**
+  - the trade as a row on the market screen;
+  - the dial;
+  - "Never mind";
+  - the count's way out (the whole total at any step).
+- **Found and fixed before the look:** duplicate keys kept every screen's "Read it to me".
+- **`GET /api/kid/boat`:** the screen as it stands, with no move. It was used to check a landing without playing it.
+- **For you to decide, not changed:**
+  - **The board's *The Math tile, slice 2* row** (later) names the label choosing the next move, which is gone. Its
+    other half, the ladder moving by his results and the parents' page showing where each boy stands, still fits the
+    boat.
+  - ***The tutor does the math moves in its own live words*** (later, *The tutor*) names moves that are gone.
+- **The 9 Nov decision gave Math the Puzzle slot.** On test the boat is a sixth tile. Which it is on live is the next
+  slice's question.
+
+## Slices for Wonder Wall
+
+One slice, after this one (the project's slices: 9 becomes 10, with the Math tile's slice 1 closed as replaced):
+1. **The trading boat, slice 2: on the boys' iPads.**
+   - June reads the sentences (the list above), and a boy plays a day on test with a parent beside him.
+   - Then, by your hand at stops: the four migrations on live, the ladder and each boy's places on live, and a switch
+     that turns the boat on for the family.
+   - The Puzzle slot or a sixth tile, your call.
+   - The log's grammar fix.
+
+Reply yes to add it.
+
+## Records
+
+- `CLAUDE.md`: *Where we are*, a new lead and this job's bullet; the Math tile and gate lines brought up to date.
+- `README.md`: the status line's math sentence.
+- `docs/12-teaching-that-tests-itself.md`: *How the trading boat is built*, in place of the Math tile's section.
+- `docs/04-curation-engine.md`: *No math in the week*, in place of "The Math tile, built and off".
+- `docs/08-open-questions.md`:
+  - *The trading boat, slice 1* (the decisions, a note, what is open);
+  - a replaced line under *The Math tile, slice 1*;
+  - three bug lines.
+- `docs/math-tutor-proposal.md`: the line at its top.
+- `docs/board.md`:
+  - this row to *on hold*, waiting on the next release, which moves it to *live*;
+  - the Math tile's slice 1 row closed as replaced;
+  - the art's home is in this row's Where.
+- The board page is rebuilt.
+- `Documents\quark-art\README.txt`: the picture list, added under its own heading.
+- `core/wall/words.ts`: every sentence, named above for June.
+
+## Commits
+
+On `phase-4-wonder-wall`:
+- `45bb7fb` go;
+- `f5c4370` the clean-up;
+- `cf27641` the game and its migration;
+- `ff79913` the emergency stop;
+- `f62f595` the dev server check;
+- `deed71e` stop 2;
+- the fix rounds: `a281351`, `f6ece0c`, `8337f42`, `a3787fc`, `076101b`, `266ba7a`, `ee20d74` (the release check),
+  `e496d0e`, `b40cd58`, `c4eb455`, `d1f8d81`, `fac7647`;
+- this close.
+
+cost: not read

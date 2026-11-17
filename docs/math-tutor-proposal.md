@@ -1,5 +1,9 @@
 # Proposal: math with the tutor
 
+> **16 November 2026: the written problems below are replaced by the trading boat** (`docs/trading-boat-slice.md`;
+> docs/12, *How the trading boat is built*), after the Math tile's look failed on 10 November. The ladder and each
+> boy's pace stand: the boat's prices are the times tables he is working on.
+
 **For Brandon and June to read.** Drafted 9 November 2026 in the chat, from Brandon's answers that afternoon.
 **Status: accepted by Brandon and June, 9 November 2026** ("june and I are on the same page with this"), with the
 three recommendations at the end taken. It replaces `docs/math-practice-proposal.md` (8 November). The briefs are

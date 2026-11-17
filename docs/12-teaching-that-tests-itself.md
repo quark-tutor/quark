@@ -66,14 +66,74 @@ Built 28 Oct 2026, the tutor's slice 2 (`docs/judge-slice.md`; report `docs/repo
 
   On the dev server, against test, a whole reply took 3.5 to 3.7 s, and 6.2 s when the model ran past its limit; the laptop's database reads cross the Pacific. On live the first answers after the release are timed (Brandon, 1 Nov 2026).
 
-## How the Math tile is built (slice 1, held)
+## How the trading boat is built (slice 1)
 
-Built 9 Nov 2026 (`docs/math-tile-slice.md`; report `docs/reports/2026-11-09-math-tile.md`) on `phase-4-wonder-wall`, and proven on `quark-test` only. **It is off and held.** The look on June's iPad did not pass (Brandon, 10 Nov 2026: "the problems are cluttered, they need pictures, and "How did you get that?" is the wrong reply to a wrong answer. The design goes back to the chat"), and no week starts it by itself (docs/04, *How a week is mixed*). Its three migrations are on test only. Decisions in docs/08, *The Math tile, slice 1*. What is there, for the next design to keep or change:
+Built and played on 16 Nov 2026 (`docs/trading-boat-slice.md`; report `docs/reports/2026-11-16-trading-boat.md`) on `phase-4-wonder-wall`, on `quark-test` only. **It runs only on the dev server against test; on live it is off and reads no table** (`lib/boat.ts`). Decisions in docs/08, *The trading boat, slice 1*. It replaces the Math tile of 9 Nov (held after its look failed on 10 Nov), whose written problems, moves, label and gate changes were removed the same day; the ladder and each boy's pace stand.
 
-- **The ladder.** `plan/math-ladder.yaml` holds 14 rungs, each with a rule saying which sums are on it, and 6 everyday areas; `lib/ladder.ts` reads and checks it, and `npm run ladder:import` writes it into `skills` (`key`, `position`, `ladder`). A boy's place is a `mastery.place` row (done or working), set by a parent's hand and never in a file; "met" is worked out from places and answers. `children.math_style` (short or hidden) says how his problems are written.
-- **The problem.** Each boy's week is planned in code (`planMath()` in `core/curation/math.ts`): his working rungs in turn, everyday areas on days 3 and 6, and a worked example while a rung is new. `core/prompts/math.md` v1 writes one problem a child a day: four parts that build to one thing worth finding out, each with two other wordings, two to four steps, a tie to something he knows and two lines of working. The setting comes in turn from the family's places and things (`families.familiar`) and his interests.
-- **The check.** `checkMath()` (`core/math/check.ts`) works out every answer from its expression (`core/math/expr.ts`), and holds that no part stands alone and the last uses an earlier answer, no wording brings in a new number, nothing says the answer, every sum is on his rungs, every number a sum needs is on screen by then, and the model's words carry no sign. A problem that fails once is written again; twice, it is held back. The gate reads a math card whole, with its `not_here` rule (`gate.md` v4).
-- **The wall.** A tile named Math from its card; the part's sum written by the program under its question and under each step ("8 × 5 = ?"), and read aloud in words; a number pad beside typing and Talk; the number read in code (`core/math/numbers.ts`); the moves in a fixed order (`core/wall/math.ts`: "How did you get that?", another wording, one step at a time, something he knows, a person); "So far:" with the earlier answers; a reply with no number read by the judge first (`core/wall/no-number.ts`); his "how" labelled by Haiku afterwards, for the parents (`core/wall/label.ts`); the worked example drawn from its numbers (`app/kid/math-picture.tsx`). The week page shows each problem whole. On the dev server against test only, a bar switches the child and the day (`lib/dev-view.ts`).
+**How it teaches, in Brandon's words** (10 and 16 Nov 2026):
+
+- A word problem is three leaps at once: things become numbers, the situation becomes an operation, and the sum is
+  solved. Drilled children "crack in real world situations": practice goes to the last leap, and life tests the first
+  two.
+- "Why am I dividing? I guess this is something the teacher wants. Not: I need to divide to split pancakes fairly."
+- What worked at home was a game. "By the third time we played they could count our money and tell me how much to give
+  back."
+- A trading game does this for multiplication: "Buy 150 at $4? You better have $600 on you."
+- "The best part of the boat game is its day to day nature."
+- And later, of the classic calculator trading game: "this was being run on a calculator and everyone understood it."
+
+So **the sum is the move**: a child with money, a boat and a rumor decides what to buy and how many, and tells the
+trader what he owes. Nobody tells him what to buy.
+
+**The day** (`core/boat/game.ts`, pure, the same every time it is asked):
+- He lands where yesterday's boat sailed and sells to the buyers on the dock, one sum a good. There is one look back on
+  the day's best sale, and the boat builder comes when he can pay and keep $20.
+- Then two markets, each with four goods, a few crates each, and one rumor.
+- Then he casts off for one of the two rumors' islands, and is done until tomorrow.
+- The game counts days played, so a missed day costs nothing, and a half-played day waits.
+
+**The numbers** (`core/boat/day.ts`, from his ladder places through `lib/ladder.ts`):
+- **His prices:** the times tables he is working on (the older boy's places: $2 and $5; the younger's: $3 and $4).
+- **The usual price:** any dock pays the next of his numbers ($5 or $4) for any good no rumor names.
+- **A rumor** promises one of his numbers at least $1 over the usual.
+- **No choice loses money;** a poor one earns less.
+- **No sum holds more than 10** crates or bills until the ladder says he is working on bigger multiplying: a trader
+  has 2 to 10 of a good, a buyer takes up to 10, and a boat's price above 10 bills is paid in bundles.
+- **The boats** cost 4, 15 and 40 hundred-dollar bills (20, 50 and 100 crates), chosen from stop 1's simulation.
+  `core/boat/sim.ts` and its test hold the evidence:
+  - a careful boy has the double canoe in his second week;
+  - he meets most of the facts of his working tables a week from then;
+  - no best purchase repeats day after day.
+
+**A wrong total gets help at once, never the answer** (rule 3):
+- **The two numbers added:** "That's 6 and 5 put together. You need 6 lots of 5."
+- **One crate out:** "Close. One crate out."
+- **Anything else:** "Let's count them."
+- **The count:** then the crates light up two at a time. Each step is the one question beside the box, the trade's sum
+  stays above it as a reminder, and the crates it asks about are outlined.
+  - A missed step goes one crate at a time, for that step only.
+  - The whole total is taken at any step.
+  - When the count runs out, the trader asks "Want to try fewer?". With nothing fewer, it is "This one is for a person:".
+- "How did you get that?" is never said, and a wrong sum never costs money.
+- A reply with no number is read by the no-number judge (`core/wall/no-number.ts`): "Have a guess first." or "Good
+  catch. Thank you for telling me.".
+
+**The screen** (`app/kid/boat`):
+- The market is a list of goods, like a price board, with the money, the boat and the rumor above it.
+- The chosen good opens in its row: a straight dial for how many (a notch a crate, the crates drawn as he slides, every
+  crate the same size), then the trade, the crates drawn small with the sum beside the question, the number pad, Talk.
+- "Never mind" or tapping the good again goes back.
+- Every sentence is a template in `core/wall/words.ts` (`BOAT`), read once by June (rule 5), with no model writing a
+  word.
+- Brandon's four pictures are in `public/boat`; the other pictures are placeholders.
+- "Read it to me" says the screen, or the trade.
+
+**The record:** `boat_games` (one row a child) and `boat_turns` (one row an answer), migration `20261116000000`, on
+test only. The parents' log on `/parent` reads each day's trades: every sum, what he said, the help he needed and each
+answer's kind (`core/boat/log.ts`).
+
+**On test:** the tile shows after the cards. The test view's bar switches the child and the day, and
+`npm run fixture -- boat <n> [money <m> | reset | log]` sets it up.
 
 ## The session ends when the thinking stops (proposed)
 
