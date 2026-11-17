@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { answer, cardFor, wallFor, type AttemptInsert, type CardRow, type Judge, type Scope, type SessionRow, type WallStore } from "./flow.ts";
 import type { JudgeInput } from "./judge.ts";
+import { lineText } from "./speech.ts";
 
 // Decision 4's checks (docs/wonder-wall-1-slice.md). The fake store returns every card it holds, whatever is
 // asked, as if the query filtered nothing, so each check proves the code's own rule.
@@ -332,6 +333,62 @@ describe("the wall's order (docs/tile-rotation-slice.md)", () => {
     const wall = (await wallFor(store, scope, "Pip", WEDNESDAY)).tiles;
     expect(wall.map((t) => t.slot)).toEqual(["listen", "then", "puzzle", "look", "wonder"]);
     expect(wall.map((t) => t.done)).toEqual([false, false, true, false, false]);
+  });
+});
+
+describe("the trading boat in Puzzle's place (docs/trading-boat-2-slice.md)", () => {
+  const FIVE = ["look", "wonder", "listen", "then", "puzzle"] as const;
+  const dayOf = (day: string) => FIVE.map((slot) => card(`${day}-${slot}`, { day, slot }));
+  const boat: Scope = { ...scope, hide: ["puzzle"] };
+  // Five days in a row from Monday 26 October 2026, 8 am in Hawaii.
+  const DAYS = ["2026-10-26", "2026-10-27", "2026-10-28", "2026-10-29", "2026-10-30"];
+  const at8 = (day: string) => new Date(`${day}T18:00:00Z`);
+  // The wall as the page draws it: the tiles, with the Math tile put in at boatAt.
+  const drawn = async (store: WallStore, s: Scope, day: string) => {
+    const w = await wallFor(store, s, "Pip", at8(day));
+    const slots: string[] = w.tiles.map((t) => t.slot);
+    if (w.boatAt !== undefined) slots.splice(w.boatAt, 0, "math");
+    return slots;
+  };
+
+  it("with the switch off, is the wall as it was: Puzzle in its place, no Math tile, no boatAt", async () => {
+    const { store } = fake(DAYS.flatMap(dayOf));
+    for (const day of DAYS) {
+      const w = await wallFor(store, scope, "Pip", at8(day));
+      expect(w.tiles.map((t) => t.slot)).toContain("puzzle");
+      expect(Object.keys(w).sort()).toEqual(["nickname", "tiles"]);
+    }
+  });
+
+  it("puts the Math tile at Puzzle's index on each of five days, and leaves the other four where they were", async () => {
+    const { store } = fake(DAYS.flatMap(dayOf));
+    for (const day of DAYS) {
+      const off = await drawn(store, scope, day);
+      const on = await drawn(store, boat, day);
+      expect(on).not.toContain("puzzle");
+      expect(on.indexOf("math")).toBe(off.indexOf("puzzle"));
+      expect(on.filter((s) => s !== "math")).toEqual(off.filter((s) => s !== "puzzle"));
+    }
+  });
+
+  it("keeps the Math tile where Puzzle falls on a day whose Puzzle card was held back, or another slot's", async () => {
+    const day = "2026-10-28"; // listen, then, puzzle, look, wonder
+    const noPuzzle = fake(dayOf(day).map((c) => (c.slot === "puzzle" ? { ...c, policy: "blocked" } : c)));
+    expect(await drawn(noPuzzle.store, boat, day)).toEqual(["listen", "then", "math", "look", "wonder"]);
+    const noThen = fake(dayOf(day).filter((c) => c.slot !== "then"));
+    expect(await drawn(noThen.store, boat, day)).toEqual(["listen", "math", "look", "wonder"]);
+  });
+
+  it("refuses a Puzzle card's address, an answer to it and its line, as a card not on today's wall", async () => {
+    const { store, attempts } = fake(dayOf("2026-10-26"));
+    expect(await cardFor(store, boat, "2026-10-26-puzzle", MONDAY)).toBeNull();
+    expect(await answer(store, boat, { cardId: "2026-10-26-puzzle", guess: "answer2026-10-26-puzzle", seconds: 5 }, MONDAY, "every")).toBeNull();
+    expect(attempts).toHaveLength(0);
+    expect(await lineText(store, boat, { cardId: "2026-10-26-puzzle", part: "read" }, MONDAY)).toBeNull();
+    expect(await lineText(store, scope, { cardId: "2026-10-26-puzzle", part: "read" }, MONDAY)).not.toBeNull();
+    // The other cards open as before, and with the switch off Puzzle's does too.
+    expect(await cardFor(store, boat, "2026-10-26-look", MONDAY)).not.toBeNull();
+    expect(await cardFor(store, scope, "2026-10-26-puzzle", MONDAY)).not.toBeNull();
   });
 });
 

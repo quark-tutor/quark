@@ -10,6 +10,7 @@ import { answer, cardFor, wallFor, type CardRow, type Judge, type Scope } from "
 import { JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_SCHEMA, JUDGE_THINKING, judgeAnswer } from "@/core/wall/judge";
 import { CLIP_RATE, heardText, parseLine, spokenUrl, type SpeechStore } from "@/core/wall/speech";
 import { hear, HEAR_MODEL, say, TUTOR_VOICE } from "@/core/speech";
+import { boatHere } from "@/lib/boat-here";
 import type { Device } from "@/lib/device";
 import { wallNow } from "@/lib/dev-view";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -166,22 +167,31 @@ export function wallStore(): SpeechStore {
   };
 }
 
-const scopeOf = (device: Device): Scope => ({ familyId: device.familyId, childId: device.childId, deviceId: device.id });
+// While the trading boat is here for the child (lib/boat-here.ts: the family's switch on, and its tables give him
+// prices), Puzzle is not on his wall: its tile, its cards, an answer to one and "Read it to me" on one are refused as a
+// card not on today's wall is, and the wall says where the Math tile goes (docs/trading-boat-2-slice.md). Off, nothing
+// is hidden and the wall is as it was.
+const scopeOf = async (device: Device): Promise<Scope> => ({
+  familyId: device.familyId,
+  childId: device.childId,
+  deviceId: device.id,
+  hide: (await boatHere(device)) ? ["puzzle"] : [],
+});
 
 // now is the moment the wall reads as now: the real one, or on the dev server against test a day the test view chose
 // (lib/dev-view.ts).
-export const loadWall = async (device: Device, now?: Date) => wallFor(wallStore(), scopeOf(device), device.nickname, now ?? (await wallNow()));
-export const loadCard = async (device: Device, cardId: string, now?: Date) => cardFor(wallStore(), scopeOf(device), cardId, now ?? (await wallNow()));
+export const loadWall = async (device: Device, now?: Date) => wallFor(wallStore(), await scopeOf(device), device.nickname, now ?? (await wallNow()));
+export const loadCard = async (device: Device, cardId: string, now?: Date) => cardFor(wallStore(), await scopeOf(device), cardId, now ?? (await wallNow()));
 // "Read it to me": a signed URL to the line's audio in the tutor's voice, made on the first tap and stored; null
 // when the line isn't one the child can see now (core/wall/speech.ts).
 export const sayLine = async (device: Device, line: string, now?: Date) => {
   const parsed = parseLine(line);
-  return parsed ? spokenUrl(wallStore(), scopeOf(device), parsed, now ?? (await wallNow()), { name: TUTOR_VOICE, say: (text) => say(text) }) : null;
+  return parsed ? spokenUrl(wallStore(), await scopeOf(device), parsed, now ?? (await wallNow()), { name: TUTOR_VOICE, say: (text) => say(text) }) : null;
 };
 
 // Talk: the words in the clip the child said, handed back for the answer box. Neither is kept.
-export const hearClip = (device: Device, pcm: Uint8Array) =>
-  heardText(wallStore(), scopeOf(device), pcm, { model: HEAR_MODEL, hear: (clip) => hear(clip, { sampleRate: CLIP_RATE }) });
+export const hearClip = async (device: Device, pcm: Uint8Array) =>
+  heardText(wallStore(), await scopeOf(device), pcm, { model: HEAR_MODEL, hear: (clip) => hear(clip, { sampleRate: CLIP_RATE }) });
 
 let judgePrompt: string | undefined;
 
@@ -224,4 +234,4 @@ function judgeFor(device: Device): Judge {
 
 // A guess, judged by the model, or by the word rule when the model gives no verdict in time.
 export const sendAnswer = async (device: Device, input: { cardId: string; guess: string; seconds: number | null }, now?: Date) =>
-  answer(wallStore(), scopeOf(device), input, now ?? (await wallNow()), WALL_RULE, judgeFor(device));
+  answer(wallStore(), await scopeOf(device), input, now ?? (await wallNow()), WALL_RULE, judgeFor(device));

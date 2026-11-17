@@ -92,7 +92,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
       .order("layer")
       .returns<Card[]>(),
     supabase.from("values_profiles").select("source_hash").maybeSingle(),
-    supabase.from("families").select("timezone").single(),
+    supabase.from("families").select("timezone, boat_on").single(),
     // Who last made this week live or took it back, and when. The audit log is open to every guardian.
     supabase
       .from("audit_log")
@@ -178,6 +178,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
         <p className={styles.lede}>
           The week starting {weekday(theme.data.week_start)}. Each card is shown with its four layers: what the child sees first, then each tap
           deeper. On the Wonder Wall the tiles change order each day.
+          {family.data?.boat_on ? " While the trading boat is on, it takes Puzzle's place on the wall, and the Puzzle cards below are not shown." : null}
         </p>
       </div>
 

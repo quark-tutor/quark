@@ -12,6 +12,7 @@ import {
   chainState,
   isDone,
   reachable,
+  slotAt,
   slotOrder,
   SLOTS,
   wallReply,
@@ -94,8 +95,10 @@ export type WallStore = {
   sign(storagePath: string): Promise<string | null>;
 };
 
-// The paired iPad: one child of one family. Every step starts from it.
-export type Scope = { familyId: string; childId: string; deviceId: string };
+// The paired iPad: one child of one family. Every step starts from it. hide: the slots not on this child's wall today
+// (docs/trading-boat-2-slice.md: while the trading boat is here for him, Puzzle), so a card in one is not shown, not
+// answered and not read aloud, as a card not on today's wall is.
+export type Scope = { familyId: string; childId: string; deviceId: string; hide?: readonly Slot[] };
 
 export const SESSION_GAP_MS = 30 * 60 * 1000;
 export const ANSWER_MAX = 200;
@@ -112,7 +115,8 @@ export function onWall(row: CardRow, scope: Scope, today: string): boolean {
     row.theme.family_id === scope.familyId &&
     (row.itemId === null || row.item?.approved === true) &&
     row.question !== null &&
-    (SLOTS as readonly string[]).includes(row.slot)
+    (SLOTS as readonly string[]).includes(row.slot) &&
+    !(scope.hide ?? []).includes(row.slot as Slot)
   );
 }
 
@@ -150,16 +154,19 @@ export async function visit(store: WallStore, scope: Scope, now: Date): Promise<
 }
 
 // The wall: today's five first cards in today's order (slotOrder(), turned by one each day), each done or not. A slot
-// with no first card on the wall is left out, and the others keep their turned order.
+// with no first card on the wall is left out, and the others keep their turned order. While Puzzle is hidden for the
+// trading boat, boatAt says where among the tiles shown Puzzle falls today, which is where the Math tile goes.
 export async function wallFor(store: WallStore, scope: Scope, nickname: string, now: Date): Promise<WallReply> {
   const day = await today(store, scope, now);
   const rows = await store.cards({ familyId: scope.familyId, childId: scope.childId, day });
   const chains = slotOrder(day).map((slot) => chainOf(rows, scope, day, slot).chain).filter((c) => c.length > 0);
   const attempts = chains.length ? await store.attempts(scope.childId, chains.flat().map((l) => l.questionId)) : [];
   await visit(store, scope, now);
+  const boatAt = scope.hide?.includes("puzzle") ? slotAt(day, chains.map((c) => c[0].slot), "puzzle") : undefined;
   return wallReply(
     nickname,
     chains.map((chain) => ({ slot: chain[0].slot, title: chain[0].body.title, cardId: chain[0].cardId, done: isDone(chainState(chain, attempts)) })),
+    boatAt,
   );
 }
 

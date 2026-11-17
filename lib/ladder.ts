@@ -1,4 +1,5 @@
 import { parse } from "yaml";
+import { numbersFor, type Numbers } from "../core/boat/day.ts";
 
 // The math ladder (plan/math-ladder.yaml; docs/math-tile-slice.md, The ladder): the parents' list of what to learn,
 // in order, and the everyday areas beside it. npm run ladder:import writes it into `skills`, one row each, keyed;
@@ -78,14 +79,19 @@ export function ladderRows(l: Ladder): SkillRow[] {
 
 // --- What the trading boat reads from a boy's places (docs/trading-boat-slice.md) ---
 
+// The times-table rungs: a times rule with its tables named, keyed "times-" (2s 5s 10s, 3s 4s, 6s to 9s). The boat's
+// prices come from these alone, and the family's setting on /parent is one place on each (docs/trading-boat-2-slice.md).
+// Multiplying bigger numbers is not one: it sets the most in one sum (largestCount), which the setting does not offer.
+export const isTimesRung = (r: Pick<Rung, "key" | "rule">) => r.rule.op === "x" && !!r.rule.by && r.key.startsWith("times-");
+
 // The times tables a boy has: every "by" of a times rung he is placed on, done or working. His prices are these.
 export function tablesOf(l: Pick<Ladder, "rungs">, places: Map<string, Place>): number[] {
-  return [...new Set(l.rungs.filter((r) => places.has(r.key) && r.rule.op === "x" && r.rule.by && r.key.startsWith("times-")).flatMap((r) => r.rule.by!))];
+  return [...new Set(l.rungs.filter((r) => places.has(r.key) && isTimesRung(r)).flatMap((r) => r.rule.by!))];
 }
 
 // The times tables he is working on: the practice goes to these.
 export function workingTablesOf(l: Pick<Ladder, "rungs">, places: Map<string, Place>): number[] {
-  return [...new Set(l.rungs.filter((r) => places.get(r.key) === "working" && r.rule.op === "x" && r.rule.by && r.key.startsWith("times-")).flatMap((r) => r.rule.by!))];
+  return [...new Set(l.rungs.filter((r) => places.get(r.key) === "working" && isTimesRung(r)).flatMap((r) => r.rule.by!))];
 }
 
 // The most crates or bills in one sum (Brandon, 16 Nov 2026, at stop 1's fix round: "the size of a sum follows his
@@ -96,3 +102,9 @@ export function largestCount(l: Pick<Ladder, "rungs">, places: Map<string, Place
   const bigger = l.rungs.find((r) => r.key === BIGGER_RUNG);
   return bigger && places.has(BIGGER_RUNG) ? Math.max(10, bigger.rule.each ?? 10) : 10;
 }
+
+// The boat's numbers from a boy's places: his prices, the usual price and the most in one sum (core/boat/day.ts), or
+// null when his places give the boat none. Equal places give equal numbers, so the same family setting gives both boys
+// the same prices (Brandon, 16 Nov 2026: "the boys prices better be equal, they're competitive with each other").
+export const boatNumbers = (l: Pick<Ladder, "rungs">, places: Map<string, Place>): Numbers | null =>
+  numbersFor(tablesOf(l, places), workingTablesOf(l, places), largestCount(l, places));

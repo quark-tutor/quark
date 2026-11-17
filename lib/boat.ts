@@ -1,8 +1,6 @@
 import "server-only";
 import { after } from "next/server";
-import { numbersFor } from "@/core/boat/day";
 import { act, doneToday, landTurn, newGame, roll, view, type Action, type Ctx, type Game, type Read, type Screen, type Turn } from "@/core/boat/game";
-import { todayIn } from "@/core/curation/week";
 import { readNumber } from "@/core/math/numbers";
 import { complete } from "@/core/model";
 import { readPrompt } from "@/core/prompts";
@@ -12,16 +10,15 @@ import { JUDGE_MAX_TOKENS, JUDGE_MODEL, JUDGE_THINKING } from "@/core/wall/judge
 import { NO_NUMBER_SCHEMA, readReply } from "@/core/wall/no-number";
 import { makeSpeech, speechPath, voiceText } from "@/core/wall/speech";
 import type { Device } from "@/lib/device";
-import { devViewOn, wallNow } from "@/lib/dev-view";
-import { largestCount, tablesOf, workingTablesOf, type Ladder, type Place } from "@/lib/ladder";
+import { boatHere } from "@/lib/boat-here";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { wallStore } from "@/lib/wall";
 
 // The trading boat's reads and writes (docs/trading-boat-slice.md), as lib/wall.ts is for the cards: it starts from
 // getDevice(), and the service-role client is scoped here, in code, to that child and that child's family. The rules
-// are in core/boat/game.ts. In this slice the boat is on the dev server against test only: with the test view off
-// (Vercel, or the live env file) every function here returns null and touches no table, so nothing on live ever
-// reads boat_games or boat_turns. Nothing here logs a number, a reply or a nickname; when the no-number judge gives no
+// are in core/boat/game.ts. Whether the boat is here at all is asked in one place, lib/boat-here.ts (the family's switch
+// and its times tables; docs/trading-boat-2-slice.md): when it is not, every function here returns null and reads no
+// boat table, so with the switch off nothing reads boat_games or boat_turns. Nothing here logs a number, a reply or a nickname; when the no-number judge gives no
 // verdict, one line says why, as the judge's does.
 
 type Db = ReturnType<typeof createAdminClient>;
@@ -29,21 +26,6 @@ type Db = ReturnType<typeof createAdminClient>;
 function must<T>(r: { data: T; error: { message: string } | null }, what: string): T {
   if (r.error) throw new Error(`${what}: ${r.error.message}`);
   return r.data;
-}
-
-// His numbers from his places on the parents' ladder, and today where the family lives (the test view's day).
-async function ctxFor(db: Db, device: Device): Promise<Ctx | null> {
-  const [family, skills, placed] = await Promise.all([
-    db.from("families").select("timezone").eq("id", device.familyId).single(),
-    db.from("skills").select("key, ladder").eq("kind", "rung").not("key", "is", null),
-    db.from("mastery").select("place, skills!inner(key)").eq("child_id", device.childId).not("place", "is", null),
-  ]);
-  const tz = (must(family, "families") as { timezone: string }).timezone;
-  const rungs = (must(skills, "skills") as { key: string; ladder: { rule?: Ladder["rungs"][number]["rule"] } | null }[]).map((s) => ({ key: s.key, rule: s.ladder?.rule ?? {} }));
-  const ladder = { rungs } as unknown as Pick<Ladder, "rungs">;
-  const places = new Map((must(placed, "mastery") as unknown as { place: Place; skills: { key: string } }[]).map((p) => [p.skills.key, p.place]));
-  const nb = numbersFor(tablesOf(ladder, places), workingTablesOf(ladder, places), largestCount(ladder, places));
-  return nb ? { seed: device.childId, nb, date: todayIn(tz, await wallNow()) } : null;
 }
 
 async function load(db: Db, device: Device): Promise<Game> {
@@ -92,12 +74,11 @@ async function current(db: Db, device: Device, ctx: Ctx): Promise<{ game: Game; 
   return { game, turns: rolled && game.today!.n > 1 ? [landTurn(game)] : [], rolled };
 }
 
-// The screen for this iPad's child, or null when the boat is not here (the test view off, or no times table placed).
+// The screen for this iPad's child, or null when the boat is not here (the switch off, or no prices from the tables).
 export async function boatScreen(device: Device): Promise<Screen | null> {
-  if (!devViewOn()) return null;
-  const db = createAdminClient();
-  const ctx = await ctxFor(db, device);
+  const ctx = await boatHere(device);
   if (!ctx) return null;
+  const db = createAdminClient();
   const { game, turns, rolled } = await current(db, device, ctx);
   if (rolled) await save(db, device, game, turns);
   return view(game, ctx);
@@ -105,11 +86,9 @@ export async function boatScreen(device: Device): Promise<Screen | null> {
 
 // The wall's Math tile: whether today's day is over. Null when the boat is not here.
 export async function boatTile(device: Device): Promise<{ done: boolean } | null> {
-  if (!devViewOn()) return null;
-  const db = createAdminClient();
-  const ctx = await ctxFor(db, device);
+  const ctx = await boatHere(device);
   if (!ctx) return null;
-  return { done: doneToday(await load(db, device), ctx) };
+  return { done: doneToday(await load(createAdminClient(), device), ctx) };
 }
 
 // --- A move from the iPad ---
@@ -185,10 +164,9 @@ async function readWords(device: Device, text: string, screen: Screen): Promise<
 // A move: the game rolled to today, the move made (null if it is not one he can make now), the state and the log saved,
 // and the new screen.
 export async function boatMove(device: Device, move: Action | { type: "answer"; text: string }): Promise<Screen | null> {
-  if (!devViewOn()) return null;
-  const db = createAdminClient();
-  const ctx = await ctxFor(db, device);
+  const ctx = await boatHere(device);
   if (!ctx) return null;
+  const db = createAdminClient();
   const { game, turns: landed } = await current(db, device, ctx);
   let action: Action;
   if (move.type === "answer" && !("read" in move)) {
@@ -205,11 +183,9 @@ export async function boatMove(device: Device, move: Action | { type: "answer"; 
 // "Read it to me" on the boat: the screen's words as it stands now, in the tutor's voice, made on the first tap and
 // stored by its words like every line (core/wall/speech.ts), so a line said before is never made again.
 export async function sayBoat(device: Device): Promise<string | null> {
-  if (!devViewOn()) return null;
-  const db = createAdminClient();
-  const ctx = await ctxFor(db, device);
+  const ctx = await boatHere(device);
   if (!ctx) return null;
-  const text = voiceText(view(roll(await load(db, device), ctx), ctx).speak);
+  const text = voiceText(view(roll(await load(createAdminClient(), device), ctx), ctx).speak);
   if (!text) return null;
   const store = wallStore();
   const path = speechPath(TUTOR_VOICE, text);

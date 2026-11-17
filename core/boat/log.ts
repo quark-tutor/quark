@@ -40,12 +40,13 @@ function tradeLine(rows: TurnRow[]): string {
   const first = rows[0];
   const n = first.count ?? 0;
   const p = first.price ?? 0;
-  const good = first.good ? BOAT.good(first.good as BoatGood) : "";
+  // In crates, as the game says it ("1 crate of sweet potatoes", "3 crates of mangoes"; docs/trading-boat-2-slice.md).
+  const crates = first.good ? BOAT.crates(n, first.good as BoatGood) : `${n}`;
   const what =
     first.kind === "buy"
-      ? `Bought ${n} ${good} at $${p}: ${n} × $${p} = ${n * p}.`
+      ? `Bought ${crates} at $${p}: ${n} × $${p} = ${n * p}.`
       : first.kind === "sell"
-        ? `Sold ${n} ${good} at $${p}: ${n} × $${p} = ${n * p}.`
+        ? `Sold ${crates} at $${p}: ${n} × $${p} = ${n * p}.`
         : first.kind === "boat"
           ? `The boat builder: ${n} × $100 = ${n * 100}.`
           : `Look back: $${n} − $${p} = ${n - p}.`;

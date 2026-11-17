@@ -178,5 +178,5 @@ export const BOAT = {
   boatYours: (b: BoatName, space: number) => `That's right. The ${BOATS[b]} is yours. It holds ${space} crates.`,
 } as const;
 
-// The tile's slot name on the wall, for the trading boat (on the dev server against test only in this slice).
+// The tile's slot name on the wall, for the trading boat (while the family's switch is on, in Puzzle's place).
 export const MATH_NAME = "Math";

@@ -23,6 +23,14 @@ export function slotOrder(day: string): Slot[] {
   return [...SLOTS.slice(turn), ...SLOTS.slice(0, turn)];
 }
 
+// Where a slot falls on the day among the tiles shown: how many of them come before it in slotOrder(day). The trading
+// boat's Math tile goes where Puzzle falls (docs/trading-boat-2-slice.md), so it moves along with the rotation as
+// Puzzle would, whether or not Puzzle has a card that day.
+export function slotAt(day: string, shown: readonly Slot[], slot: Slot): number {
+  const order = slotOrder(day);
+  return shown.filter((s) => order.indexOf(s) < order.indexOf(slot)).length;
+}
+
 // One layer the wall may show: its card passed, today, in a live week, its item still approved.
 export type ChainLayer = {
   cardId: string;
@@ -94,7 +102,8 @@ export const lineId = (cardId: string, part: "read" | "question" | "handoff" | n
 // --- What reaches the browser (rule 7): these fields and nothing else. A test holds each list. ---
 
 export type Tile = { slot: Slot; title: string; cardId: string; done: boolean };
-export type WallReply = { nickname: string; tiles: Tile[] };
+// boatAt: where the trading boat's Math tile goes among the tiles, only while it holds Puzzle's place.
+export type WallReply = { nickname: string; tiles: Tile[]; boatAt?: number };
 
 // url is a signed URL to the family's stored copy, or a recording's Wikimedia URL (with the MP3 Wikimedia
 // keeps of it, which iPad Safari plays where it may not play Ogg).
@@ -122,8 +131,8 @@ export type AnswerReply = {
   next?: string; // the next layer's card id, once earned
 };
 
-export function wallReply(nickname: string, tiles: Tile[]): WallReply {
-  return { nickname, tiles: tiles.map(({ slot, title, cardId, done }) => ({ slot, title, cardId, done })) };
+export function wallReply(nickname: string, tiles: Tile[], boatAt?: number): WallReply {
+  return { nickname, tiles: tiles.map(({ slot, title, cardId, done }) => ({ slot, title, cardId, done })), ...(boatAt === undefined ? {} : { boatAt }) };
 }
 
 // The layer the state is at, with the hints seen so far, and the handoff only when the card is done.

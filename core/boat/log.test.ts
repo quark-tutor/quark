@@ -36,9 +36,17 @@ describe("the parents' log (stop 2's last check)", () => {
     expect(logs).toHaveLength(2);
     expect(logs[1].head).toBe(`Day 1 · home · 2026-11-16 · started with $20 · ended with $${20 - 3 * o.price}`);
     expect(logs[1].lines[0]).toBe(
-      `Bought 3 ${o.good.replace("-", " ")} at $${o.price}: 3 × $${o.price} = ${3 * o.price}. Said ${3 + o.price} (the two numbers added). Count, 2: ${2 * o.price} ✓. Right on the count's 2nd step.`,
+      `Bought 3 crates of ${o.good.replace("-", " ")} at $${o.price}: 3 × $${o.price} = ${3 * o.price}. Said ${3 + o.price} (the two numbers added). Count, 2: ${2 * o.price} ✓. Right on the count's 2nd step.`,
     );
     expect(logs[1].lines[1]).toMatch(/^Sailed to .+, on the .+ rumor \(\$\d+\)\.$/);
     expect(logs[0].head).toMatch(/^Day 2 · .+ · 2026-11-17 · started with \$\d+ · still on the way$/);
+  });
+
+  it("says one crate as one crate (the 16 Nov 2026 bug line: \"Sold 1 sweet potatoes at $4\")", () => {
+    const row = (o: Partial<TurnRow>): TurnRow => ({ day: 2, played_on: "2026-11-17", trade: 1, kind: "sell", island: "maui", good: "sweet-potatoes", count: 1, price: 4, step: null, expected: 4, answer: "4", verdict: "right", short: false, money: 24, ...o });
+    const [day] = dayLogs([row({ kind: "land", trade: null, good: null, count: null, price: null, expected: null, answer: null, verdict: null, money: 20 }), row({})]);
+    expect(day.lines[0]).toBe("Sold 1 crate of sweet potatoes at $4: 1 × $4 = 4. Right at once.");
+    const [many] = dayLogs([row({ count: 6, expected: 24, answer: "24" })]);
+    expect(many.lines[0]).toBe("Sold 6 crates of sweet potatoes at $4: 6 × $4 = 24. Right at once.");
   });
 });

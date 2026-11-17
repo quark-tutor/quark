@@ -10,7 +10,7 @@ import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { forgetDevice, signOut } from "./actions";
-import { BoatLog } from "./boat-log";
+import { BoatSection } from "./boat-section";
 import { PairIpad } from "./pair-ipad";
 import styles from "./parent.module.css";
 
@@ -184,7 +184,7 @@ async function ParentHome() {
         </p>
       </section>
 
-      <BoatLog kids={children.map(({ id, nickname }) => ({ id, nickname }))} />
+      <BoatSection kids={children.map(({ id, nickname }) => ({ id, nickname }))} />
 
       <section className={styles.section}>
         <h2>Coming next</h2>

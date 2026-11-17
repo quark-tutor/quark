@@ -44,6 +44,18 @@ export function numbersFor(tables: number[], working: number[], cap: number): Nu
   return { all, buy, usual, cap };
 }
 
+// What is wrong with a setting of the tables for the boat, or null when nothing is (docs/trading-boat-2-slice.md, stop 1:
+// of the 27 settings of the three times-table rungs, most make a crate cost more than a dock pays). "loses": a buying
+// price above the usual, so a crate no rumor names sells for less than it cost; "flat": no number above the usual, so a
+// rumor pays no more than any dock. The family's page refuses either, and the boat is not here with one, so slice 1's
+// promise holds: no choice loses money. Under a setting with neither, every rumor pays over every buying price.
+export type NumbersProblem = "loses" | "flat";
+export function numbersProblem(nb: Numbers): NumbersProblem | null {
+  if (Math.max(...nb.buy) > nb.usual) return "loses";
+  if (nb.all[nb.all.length - 1] <= nb.usual) return "flat";
+  return null;
+}
+
 // --- A seeded day ---
 
 type Rng = () => number;
@@ -103,7 +115,10 @@ export function dayOf(seed: string, nb: Numbers, n: number, island: BoatIsland |
     b.push({ good, price: pb, stock: stock() });
     const floor = Math.max(nb.usual + 1, Math.min(pa, pb) + 2);
     const promised = nb.all.filter((x) => x >= floor);
-    rumors.push({ good, island: others[k], price: promised.length ? pick(r, promised) : nb.all[nb.all.length - 1] });
+    // The draw is taken whether or not it is used, so the day's goods, crates and order never depend on his numbers: a
+    // change of the family's tables changes only the prices of a day in play (docs/trading-boat-2-slice.md, stop 1).
+    const drawn = r();
+    rumors.push({ good, island: others[k], price: promised.length ? promised[Math.floor(drawn * promised.length)] : nb.all[nb.all.length - 1] });
   }
   for (const good of [g[2], g[3]]) a.push({ good, price: priceFor(r, nb), stock: stock() });
   for (const good of [g[4], g[5]]) b.push({ good, price: priceFor(r, nb), stock: stock() });
