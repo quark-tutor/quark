@@ -901,6 +901,35 @@ look.
 **Open at this point:** the trade as a row on the market screen (proposed 19:23). If the job releases now, it becomes
 the next job's.
 
+### Fix round 7 at stop 2: the trade is a row on the market screen (16 Nov 2026, 20:10 HST)
+
+Brandon, after the release question: "No, since I got into this we're going to fix it." So the job does not release.
+He also said: "Chat is gone, and we're fully rogue." From here the fixes come from Brandon and Code, without a new
+brief from the chat.
+
+**Decided (Brandon, 16 Nov 2026, 19:23 and after):** the trade happens in its good's row on the market screen, as in
+the calculator trading game: "this was being run on a calculator and everyone understood it". *Replaces* "a picture of
+exactly what is in the sum, and nothing else on the page" (10 Nov 2026) for the page around the trade. The picture of
+exactly what is in the sum stays, small, in the row.
+
+**Changed:**
+- **The market's goods are a list,** one row each, like a price board.
+  - Tapping a good marks its row, and "how many?" opens under it. Another good can still be chosen instead.
+  - Then the trade opens in the same row: the crates, the question with its sum, the count, the box.
+  - While a trade is open the other goods wait.
+- **The money, the boat, the rumor and the usual price stay on screen** above the list throughout.
+- **The landing:** the buyer's line stays, and "how many?" and the sale open under it, the same way. The boat builder's
+  line stays over his sum.
+- **The place's picture** shows while nothing is open. A row that opens takes its room.
+- **"Read it to me" on a trade** says the row it is in, then the trade.
+
+**Checked:**
+- 497 tests, typecheck and lint pass; the test for check 2 is rewritten to the row.
+- In Chrome, read only, on your own games:
+  - Kiddo's village market lists four rows, all waiting while the boat is full.
+  - With Chrome's device switched to Bug and back, Bug's harbor market on Kauaʻi opens "How many crates of taro?"
+    under the Taro row, with everything else above it.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free

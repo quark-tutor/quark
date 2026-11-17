@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { Fragment, useState, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import type { Action, Screen } from "@/core/boat/game";
 import { BOAT, SAY } from "@/core/wall/words";
@@ -80,6 +80,16 @@ export function BoatGame({ initial }: { initial: Screen }) {
       ))}
     </div>
   ) : null;
+  // What opens in a row (at a market, under the good chosen; at the landing, under the buyer): "how many?" with its
+  // buttons, or the trade. The place, the money and the boat stay above it (stop 2, 16 Nov 2026).
+  const panel = s.trade ? (
+    <TradeBox key={`trade:${s.speak}`} screen={s} busy={busy} read={read} actions={buttons} onAnswer={(text) => send({ type: "answer", text })} />
+  ) : s.stepper ? (
+    <>
+      <Stepper key={`stepper:${s.speak}`} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} busy={busy} onPick={(n) => void send({ type: "count", n })} />
+      {buttons}
+    </>
+  ) : null;
   return (
     <div className={styles.boat}>
       {s.picture && DRAWN.has(s.picture) ? (
@@ -93,37 +103,43 @@ export function BoatGame({ initial }: { initial: Screen }) {
       <section className={styles.words}>
         <h1 className={styles.cardTitle}>{s.title}</h1>
         {s.note ? <p className={styles.reply}>{s.note}</p> : null}
-        {s.trade ? (
-          <TradeBox key={`trade:${s.speak}`} screen={s} busy={busy} read={read} actions={buttons} onAnswer={(text) => send({ type: "answer", text })} />
-        ) : (
-          <>
-            {s.status ? (
-              <div className={styles.status}>
-                {s.status.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
-            ) : null}
-            {s.lines.map((line) => (
-              <p key={line} className={styles.cardText}>
-                {line}
-              </p>
+        {s.status ? (
+          <div className={styles.status}>
+            {s.status.map((line) => (
+              <p key={line}>{line}</p>
             ))}
-            {read}
-            {s.offers ? (
-              <div className={styles.offers}>
-                {s.offers.map((o) => (
-                  <button key={o.offer} type="button" className={styles.offer} disabled={!o.open || busy} onClick={() => void send({ type: "pick", market: o.market, offer: o.offer })}>
+          </div>
+        ) : null}
+        {s.lines.map((line) => (
+          <p key={line} className={styles.cardText}>
+            {line}
+          </p>
+        ))}
+        {s.trade ? null : read}
+        {s.offers ? (
+          <div className={styles.offerList}>
+            {s.offers.map((o) => {
+              const here = s.open?.offer === o.offer;
+              return (
+                <Fragment key={o.offer}>
+                  <button
+                    type="button"
+                    className={here ? `${styles.offerRow} ${styles.offerHere}` : styles.offerRow}
+                    disabled={here || !o.open || busy}
+                    onClick={() => void send({ type: "pick", market: o.market, offer: o.offer })}
+                  >
                     <span>{o.label}</span>
                     <span className={styles.muted}>{o.left}</span>
                   </button>
-                ))}
-              </div>
-            ) : null}
-            {s.stepper ? <Stepper key={`stepper:${s.speak}`} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} busy={busy} onPick={(n) => void send({ type: "count", n })} /> : null}
-            {buttons}
-          </>
-        )}
+                  {here && panel ? <div className={styles.rowPanel}>{panel}</div> : null}
+                </Fragment>
+              );
+            })}
+          </div>
+        ) : panel ? (
+          <div className={styles.rowPanel}>{panel}</div>
+        ) : null}
+        {panel ? null : buttons}
         {didntSend ? <p className={`${styles.reply} ${styles.notice}`}>{SAY.didntSend}</p> : null}
       </section>
     </div>

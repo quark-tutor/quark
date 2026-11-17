@@ -69,18 +69,25 @@ describe("the first day", () => {
     expect(s.stepper).toBeNull();
   });
 
-  it("draws exactly the crates in the sum, with the sum beside the question and nothing else on the page (check 2)", () => {
+  // The trade opens in its good's row, and the market stays on screen (Brandon at stop 2, 16 Nov 2026, of the calculator
+  // trading game: "this was being run on a calculator and everyone understood it"; replaces "nothing else on the page").
+  it("draws exactly the crates in the sum, with the sum beside the question, in the good's row with the market still there (check 2)", () => {
     const start = atHarbor();
     let g = start.g;
     const offer = start.offer;
     g = go(g, { type: "pick", market: 0, offer });
+    expect(view(g, ctx()).open).toEqual({ market: 0, offer });
+    expect(view(g, ctx()).offers!.every((o) => o.open || g.today!.stock[0][o.offer] === 0)).toBe(true); // another good can still be chosen
     g = go(g, { type: "count", n: 2 });
     const s = view(g, ctx());
     const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
     expect(s.trade).toMatchObject({ pic: { count: 2, price: o.price, lit: 0, unit: "crate" }, question: BOAT.owe, sum: `2 × $${o.price} = ?`, reply: null, step: null });
-    expect(s.status).toBeNull();
-    expect(s.lines).toEqual([]);
-    expect(s.offers).toBeNull();
+    expect(s.open).toEqual({ market: 0, offer });
+    expect(s.status).toEqual(["Your money: $20", "Your canoe: 0 of 10 crates full", "On board: nothing yet"]);
+    expect(s.offers).toHaveLength(4);
+    expect(s.offers!.every((x) => !x.open)).toBe(true); // the others wait while a trade is open
+    expect(s.picture).toBeNull();
+    expect(s.speak.startsWith(BOAT.offer(o.good, o.price))).toBe(true);
   });
 
   it("takes the money and puts the crates aboard on a right total, and he can buy again (check 3)", () => {
@@ -144,8 +151,9 @@ describe("a wrong total (check 4)", () => {
     let g = t.g;
     const p = t.p;
     g = go(g, n(7));
-    const text = JSON.stringify(view(g, ctx()));
-    expect(text).not.toMatch(/How did you get that/);
+    // The trade's own words: the market beside it shows his money, which may happen to equal a total.
+    const text = JSON.stringify(view(g, ctx()).trade);
+    expect(JSON.stringify(view(g, ctx()))).not.toMatch(/How did you get that/);
     expect(text).not.toContain(`$${4 * p}`);
     expect(g.money).toBe(20);
   });

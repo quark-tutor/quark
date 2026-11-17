@@ -477,6 +477,9 @@ export type TradeView = {
 export type OfferView = { market: 0 | 1; offer: number; label: string; left: string; open: boolean };
 // picture: which of Brandon's pictures (the README in Documents/quark-art) the screen shows; a placeholder in this slice.
 export type Picture = "market-stilts" | "market-hillside" | "landing" | "cast-off";
+// open: at a market, the offer whose row holds the stepper or the trade (Brandon at stop 2, 16 Nov 2026, of the
+// calculator trading game: "this was being run on a calculator and everyone understood it"); elsewhere the stepper and
+// the trade follow the screen's lines. The place, the money and the boat stay on screen while he trades.
 export type Screen = {
   title: string;
   picture: Picture | null;
@@ -484,6 +487,7 @@ export type Screen = {
   status: string[] | null;
   lines: string[];
   offers: OfferView[] | null;
+  open: { market: 0 | 1; offer: number } | null;
   stepper: { ask: string; max: number; maxLine: string | null } | null;
   trade: TradeView | null;
   buttons: Button[];
@@ -531,8 +535,8 @@ const replyText = (h: Hand): string | null => {
   }
 };
 
-// A trade's page: a picture of exactly what is in the sum, the question with the sum beside it, and nothing else
-// (decided 10 Nov 2026).
+// A trade: a picture of exactly what is in the sum, and the question with the sum beside it. It opens in its row,
+// with the market or the dock still on screen (stop 2, 16 Nov 2026; replaces "nothing else on the page", 10 Nov 2026).
 function tradeView(h: Hand): TradeView {
   const tr = h.trade;
   const step = stepOf(h);
@@ -563,15 +567,12 @@ function statusOf(g: Game): string[] {
 export function view(g: Game, ctx: Ctx): Screen {
   const t = g.today!;
   const day = dayFor(g, ctx);
-  const s: Screen = { title: BOAT.tile, picture: null, note: noteText(t.note), status: null, lines: [], offers: null, stepper: null, trade: null, buttons: [], done: false, speak: "" };
+  const s: Screen = { title: BOAT.tile, picture: null, note: noteText(t.note), status: null, lines: [], offers: null, open: null, stepper: null, trade: null, buttons: [], done: false, speak: "" };
   const h = t.hand;
+  // What "Read it to me" says first on a trade: the row it is in.
+  let row: string | null = null;
 
-  if (h) {
-    // A trade in hand: the place, and the trade alone.
-    s.title = t.stop === "land" ? BOAT.land(g.island as BoatIsland) : t.stop === "harbor" || t.stop === "village" ? BOAT.market(t.stop, g.island) : BOAT.tile;
-    s.trade = tradeView(h);
-    s.buttons = handButtons(h);
-  } else if (t.stop === "start") {
+  if (t.stop === "start") {
     s.lines = [...BOAT.firstDay];
     s.buttons = [{ label: BOAT.toHarbor, action: { type: "next" } }];
   } else if (t.stop === "land") {
@@ -580,16 +581,25 @@ export function view(g: Game, ctx: Ctx): Screen {
     s.status = statusOf(g);
     if (g.sailing && g.sailing.island === island) s.lines.push(BOAT.landReason(g.sailing.good, island, g.sailing.price));
     const d = onSale(g);
-    if (d) {
+    if (h && h.trade.kind === "boat") {
+      // The boat builder's sum, under his offer.
+      row = BOAT.builder(h.trade.boat, BOAT_SPACE[h.trade.boat], h.trade.bills);
+      s.lines.push(row);
+    } else if (h && h.trade.kind === "back") {
+      // The look back has its own question.
+    } else if (d) {
       const rumored = g.sailing && g.sailing.island === island && g.sailing.good === d.good;
       const price = priceAt(ctx.nb, d.good, rumored ? g.sailing : null);
       if (!rumored) s.lines.push(BOAT.usualHere(d.good, price));
-      s.lines.push(d.buyer === 0 ? BOAT.buyer(d.good, price) : BOAT.buyerNext(d.good, price));
-      // A buyer takes as many as he is offered, up to the most in one sum; when + stops there and he has more, the
-      // screen says why, and that another buyer comes.
-      const max = sellMax(g, ctx);
-      s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit(takeOf(ctx.nb)) : null };
-      s.buttons = [{ label: BOAT.keep, action: { type: "keep" } }];
+      row = d.buyer === 0 ? BOAT.buyer(d.good, price) : BOAT.buyerNext(d.good, price);
+      s.lines.push(row);
+      if (!h) {
+        // A buyer takes as many as he is offered, up to the most in one sum; when + stops there and he has more, the
+        // screen says why, and that another buyer comes.
+        const max = sellMax(g, ctx);
+        s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit(takeOf(ctx.nb)) : null };
+        s.buttons = [{ label: BOAT.keep, action: { type: "keep" } }];
+      }
     } else if (t.builder === "offer") {
       const next = nextBoat(g.space)!;
       s.lines.push(BOAT.builder(next.key, next.space, next.bills));
@@ -604,20 +614,24 @@ export function view(g: Game, ctx: Ctx): Screen {
     s.status = statusOf(g);
     const r = day.rumors[m];
     s.lines = [BOAT.usual(ctx.nb.usual), BOAT.rumor(r.good, r.island, r.price)];
-    if (t.picking) {
+    // Every good stays listed. While a trade is open its row holds it, and the others wait; while he is choosing how
+    // many, another good can be chosen instead.
+    s.offers = day.markets[m].map((o, i) => {
+      const left = t.stock[m][i];
+      return { market: m, offer: i, label: BOAT.offer(o.good, o.price), left: left > 0 ? BOAT.left(left) : BOAT.soldOut, open: !h && left > 0 && buyMax(g, ctx, m, i) > 0 };
+    });
+    if (!h && !t.picking && g.space - used(g) === 0) s.lines.push(BOAT.allTheRoom);
+    const at = h && h.trade.kind === "buy" ? { market: h.trade.market, offer: h.trade.offer } : t.picking;
+    if (at) {
+      s.open = at;
+      row = BOAT.offer(day.markets[m][at.offer].good, day.markets[m][at.offer].price);
+    }
+    if (t.picking && !h) {
       const o = day.markets[m][t.picking.offer];
       const max = buyMax(g, ctx, m, t.picking.offer);
-      s.lines.push(BOAT.offer(o.good, o.price));
       s.stepper = { ask: BOAT.howMany(o.good), max, maxLine: max === g.space - used(g) ? BOAT.allTheRoom : BOAT.allTheTraderHas };
       s.buttons = [{ label: BOAT.chooseAgain, action: { type: "unpick" } }];
-    } else {
-      s.offers = day.markets[m].map((o, i) => {
-        const left = t.stock[m][i];
-        return { market: m, offer: i, label: BOAT.offer(o.good, o.price), left: left > 0 ? BOAT.left(left) : BOAT.soldOut, open: left > 0 && buyMax(g, ctx, m, i) > 0 };
-      });
-      if (g.space - used(g) === 0) s.lines.push(BOAT.allTheRoom);
-      s.buttons = [{ label: t.stop === "harbor" ? BOAT.toVillage : BOAT.castOff, action: { type: "next" } }];
-    }
+    } else if (!h) s.buttons = [{ label: t.stop === "harbor" ? BOAT.toVillage : BOAT.castOff, action: { type: "next" } }];
   } else if (t.stop === "cast") {
     s.title = BOAT.whereSail;
     s.status = statusOf(g);
@@ -627,8 +641,13 @@ export function view(g: Game, ctx: Ctx): Screen {
     if (!s.note && g.sailing) s.lines = [BOAT.sailingTo(g.sailing.island)];
   }
 
-  if (!h) s.picture = t.stop === "land" ? "landing" : t.stop === "village" ? "market-hillside" : t.stop === "cast" || t.stop === "done" ? "cast-off" : "market-stilts";
-  s.speak = speakOf(s);
+  if (h) {
+    s.trade = tradeView(h);
+    s.buttons = handButtons(h);
+  }
+  // The place's picture while nothing is open; a row that opens takes its room.
+  if (!h && !t.picking) s.picture = t.stop === "land" ? "landing" : t.stop === "village" ? "market-hillside" : t.stop === "cast" || t.stop === "done" ? "cast-off" : "market-stilts";
+  s.speak = h ? speakOf({ ...s, title: BOAT.tile, status: null, lines: row ? [row] : [], offers: null }) : speakOf(s);
   return s;
 }
 
