@@ -488,7 +488,9 @@ export type Screen = {
   lines: string[];
   offers: OfferView[] | null;
   open: { market: 0 | 1; offer: number } | null;
-  stepper: { ask: string; max: number; maxLine: string | null } | null;
+  // How many, chosen on the dial (Brandon at stop 2, 16 Nov 2026: "How about a dial instead?"): price draws the crates
+  // as he slides; maxLine says why the dial stops where it does.
+  stepper: { ask: string; max: number; maxLine: string | null; price: number } | null;
   trade: TradeView | null;
   buttons: Button[];
   done: boolean;
@@ -597,7 +599,7 @@ export function view(g: Game, ctx: Ctx): Screen {
         // A buyer takes as many as he is offered, up to the most in one sum; when + stops there and he has more, the
         // screen says why, and that another buyer comes.
         const max = sellMax(g, ctx);
-        s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit(takeOf(ctx.nb)) : BOAT.allYouHave };
+        s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit(takeOf(ctx.nb)) : BOAT.allYouHave, price };
         s.buttons = [{ label: BOAT.keep, action: { type: "keep" } }];
       }
     } else if (t.builder === "offer") {
@@ -629,7 +631,7 @@ export function view(g: Game, ctx: Ctx): Screen {
     if (t.picking && !h) {
       const o = day.markets[m][t.picking.offer];
       const max = buyMax(g, ctx, m, t.picking.offer);
-      s.stepper = { ask: BOAT.howMany(o.good), max, maxLine: max === g.space - used(g) ? BOAT.allTheRoom : BOAT.allTheTraderHas };
+      s.stepper = { ask: BOAT.howMany(o.good), max, maxLine: max === g.space - used(g) ? BOAT.allTheRoom : BOAT.allTheTraderHas, price: o.price };
       s.buttons = [{ label: BOAT.chooseAgain, action: { type: "unpick" } }];
     } else if (!h) s.buttons = [{ label: t.stop === "harbor" ? BOAT.toVillage : BOAT.castOff, action: { type: "next" } }];
   } else if (t.stop === "cast") {

@@ -86,7 +86,7 @@ export function BoatGame({ initial }: { initial: Screen }) {
     <TradeBox key={`trade:${s.speak}`} screen={s} busy={busy} read={read} actions={buttons} onAnswer={(text) => send({ type: "answer", text })} />
   ) : s.stepper ? (
     <>
-      <Stepper key={`stepper:${s.speak}`} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} busy={busy} onPick={(n) => void send({ type: "count", n })} />
+      <Stepper key={`stepper:${s.speak}`} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} price={s.stepper.price} busy={busy} onPick={(n) => void send({ type: "count", n })} />
       {buttons}
     </>
   ) : null;
@@ -148,30 +148,39 @@ export function BoatGame({ initial }: { initial: Screen }) {
   );
 }
 
-// How many: typed on the number pad, as the sums are (Brandon at stop 2, 16 Nov 2026: "If I want to buy 25 bananas I
-// need to press 25 times?"), then "That many". It starts at nothing: nothing tells him how many. A digit that would take
-// the number past the most he can choose does not go in, and the screen says why (check 6).
-function Stepper({ ask, max, maxLine, busy, onPick }: { ask: string; max: number; maxLine: string | null; busy: boolean; onPick: (n: number) => void }) {
-  const [typed, setTyped] = useState("");
-  const [refused, setRefused] = useState(false);
-  const n = Number(typed || "0");
-  function edit(change: (value: string) => string) {
-    const next = change(typed).replace(/^0+/, "");
-    if (Number(next || "0") > max) {
-      setRefused(true);
-      return;
-    }
-    setRefused(false);
-    setTyped(next);
-  }
+// How many: a straight dial with a notch a crate, slid from nothing to the most he can choose (Brandon at stop 2, 16 Nov
+// 2026: "If I want to buy 25 bananas I need to press 25 times?"; "How about a dial instead?"), then "That many". It starts
+// at nothing: nothing tells him how many. The crates are drawn as he slides. The dial stops at the most he can choose,
+// and at its end the screen says why (check 6). The number pad is for the sums alone.
+function Stepper({ ask, max, maxLine, price, busy, onPick }: { ask: string; max: number; maxLine: string | null; price: number; busy: boolean; onPick: (n: number) => void }) {
+  const [n, setN] = useState(0);
+  // A notch for each crate the dial can reach; with many, a notch every five or ten so they stay apart.
+  const every = max <= 20 ? 1 : max <= 50 ? 5 : 10;
+  const notches = Array.from({ length: Math.floor(max / every) + 1 }, (_, i) => i * every);
   return (
-    <div className={styles.boatAnswer}>
+    <div className={styles.dialBox}>
       <p className={styles.question}>{ask}</p>
-      <p className={`${styles.boatBox} ${styles.countShown}`} role="status" aria-live="polite">
+      <p className={styles.dialValue} aria-hidden>
         {n}
       </p>
-      {refused && maxLine ? <p className={styles.reply}>{maxLine}</p> : null}
-      <NumberPad disabled={busy} onChange={edit} />
+      {n > 0 ? <Crates pic={{ count: n, price, lit: 0, unit: "crate", good: null }} /> : null}
+      <input
+        type="range"
+        className={styles.dial}
+        min={0}
+        max={max}
+        step={1}
+        value={n}
+        disabled={busy}
+        aria-label={ask}
+        onChange={(e) => setN(Number(e.target.value))}
+      />
+      <div className={styles.dialNotches} aria-hidden>
+        {notches.map((x) => (
+          <span key={x}>{x === 0 || x === max || max <= 10 ? x : "·"}</span>
+        ))}
+      </div>
+      {n >= max && maxLine ? <p className={styles.cardText}>{maxLine}</p> : null}
       <button type="button" className={styles.send} disabled={n < 1 || busy} onClick={() => onPick(n)}>
         {BOAT.thatMany}
       </button>

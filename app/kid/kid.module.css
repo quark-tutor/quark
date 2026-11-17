@@ -616,12 +616,66 @@
   max-width: 520px;
   margin: 0;
 }
-/* How many, as typed on the number pad: the box's look, the number centred. */
-.countShown {
-  margin: 0;
+/* How many, on the straight dial (app/kid/boat): the number big above it, a thumb big enough for a finger, and a
+   notch a crate under the track. */
+.dialBox {
+  width: 100%;
+  max-width: 560px;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+}
+.dialValue {
+  margin: 0;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.dial {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 56px;
+  margin: 0;
+  background: transparent;
+  touch-action: pan-y;
+}
+.dial::-webkit-slider-runnable-track {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--line);
+}
+.dial::-moz-range-track {
+  height: 14px;
+  border-radius: 7px;
+  background: var(--line);
+}
+.dial::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 52px;
+  height: 52px;
+  margin-top: -19px;
+  border: 4px solid var(--accent);
+  border-radius: 50%;
+  background: var(--surface);
+}
+.dial::-moz-range-thumb {
+  width: 44px;
+  height: 44px;
+  border: 4px solid var(--accent);
+  border-radius: 50%;
+  background: var(--surface);
+}
+.dialNotches {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 .stepper {
   display: flex;

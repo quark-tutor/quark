@@ -974,6 +974,21 @@ possible. Typing is what the bigger boats and bigger multiplying will need.
 
 **Checked:** 497 tests and the typecheck pass. The page renders in Chrome (read only) with no console error.
 
+### Fix round 10 at stop 2: how many, on a straight dial (16 Nov 2026, about 20:08 HST)
+
+Brandon: "How about a dial instead?" Asked round or straight, he chose straight: "Straight dial (Recommended)".
+
+**Changed:**
+- **"How many?" is a big slider,** with a notch for each crate (a notch every 5 or 10 above 20). The number shows big
+  above it, and it starts at 0.
+- **The crates are drawn as he slides,** each with its price.
+- **The dial stops at the most he can choose.** At its end the screen says why: the room, the trader's crates, "That's
+  all you have.", or one buyer's 10.
+- **The number pad is for the sums alone again,** so choosing how many no longer looks like answering.
+- **The game hands the dial the price,** and the three stepper checks in the tests carry it.
+
+**Checked:** 497 tests, typecheck and lint pass.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free

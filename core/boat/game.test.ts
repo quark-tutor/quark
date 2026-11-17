@@ -287,14 +287,14 @@ describe("casting off, landing, and the days between (checks 7 to 9)", () => {
     // Five crates: one buyer takes all five, and nothing says there is a limit.
     const five = view(landed(5, 10), c);
     expect(five.lines).toContain(BOAT.buyer("pineapples", 10));
-    expect(five.stepper).toEqual({ ask: BOAT.howManySell, max: 5, maxLine: BOAT.allYouHave }); // said only if he types more
+    expect(five.stepper).toEqual({ ask: BOAT.howManySell, max: 5, maxLine: BOAT.allYouHave, price: 10 }); // said when the dial is at its end
     // Twelve crates on the double canoe: the first buyer takes 10 at most and says so; another buyer takes the rest.
     let g = landed(12, 20);
-    expect(view(g, c).stepper).toEqual({ ask: BOAT.howManySell, max: 10, maxLine: BOAT.buyerLimit(10) });
+    expect(view(g, c).stepper).toEqual({ ask: BOAT.howManySell, max: 10, maxLine: BOAT.buyerLimit(10), price: 10 });
     g = go(g, { type: "count", n: 10 }, c);
     g = go(g, n(100), c);
     expect(view(g, c).lines).toContain(BOAT.buyerNext("pineapples", 10));
-    expect(view(g, c).stepper).toEqual({ ask: BOAT.howManySell, max: 2, maxLine: BOAT.allYouHave });
+    expect(view(g, c).stepper).toEqual({ ask: BOAT.howManySell, max: 2, maxLine: BOAT.allYouHave, price: 10 });
   });
 
   it("lands tomorrow where the rumor pointed, at the price it promised, with its reason; he says what he is owed (check 8)", () => {
