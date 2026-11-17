@@ -16,7 +16,7 @@ The wall screen is the anchor. The other touch points use time families already 
 ## Wonder Wall: first sketch
 
 - Locked to one app (for example, Guided Access on an iPad, or a kiosk browser). No way out to the open web.
-- Home screen shows today's five cards: Look (art), Wonder (science), Listen (music), Then (history on a map), Puzzle.
+- Home screen shows today's five cards: Look (art), Wonder (science), Listen (music), Then (history on a map), Puzzle. Since 17 Nov 2026, while the family's times tables give it prices, Math, *The trading boat*, takes Puzzle's place (docs/12, *How the trading boat is built*).
 - Each card goes 3–4 layers deeper on tap, then ends with a question to take to a person.
 - Each child has a profile, with explanations written at their level.
 - Explorer passport: stamps for eras, artists and ideas they've explored.

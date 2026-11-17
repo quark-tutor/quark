@@ -375,6 +375,31 @@ Brief: `docs/trading-boat-slice.md` (*Wonder Wall*), on `phase-4-wonder-wall`; r
 - **Open, for Brandon and June:**
   - June reads the game's sentences before the boat reaches a child (rule 5). The ones not seen in play are listed in the report.
   - The boat on the boys' iPads: the Puzzle slot or a sixth tile (the 9 Nov decision gave Math the Puzzle slot); the four migrations, the ladder and each boy's places on live by Brandon's hand; a switch on live.
+  - Both settled by slice 2, below: June's read on 16 Nov (the slice 2 brief's *Decided already*), the Puzzle slot, and no switch.
+
+## The trading boat, slice 2: decided in the brief and the job (16 and 17 Nov 2026)
+
+Brief: `docs/trading-boat-2-slice.md` (*Wonder Wall*), on `phase-4-wonder-wall`; report `docs/reports/2026-11-16-trading-boat-2.md`. As built: docs/12, *How the trading boat is built*, "Slice 2: on the boys' iPads". **Built and checked on `quark-test`; its migrations, the ladder and the family's tables on live by Brandon's hand on 17 Nov 2026.** Spent: no Anthropic money; Google's voice made one boat line on test, inside the free tier. The brief's own *Decided already* lines (June has read the game's sentences; no test play by a boy; Math takes the Puzzle slot; the boys' prices are equal, "the boys prices better be equal, they're competitive with each other"; every live command is Brandon's hand) stand as written there, except where replaced below.
+
+- **Decided (16 Nov 2026, 21:45, go at stop 1): "go. On 3: luck alone. That way they can't copy off each other but they both have a chance to win."** Go took every recommendation:
+  - the row ahead of the top of Next (the unique indexes);
+  - `/parent` saves only the settings of the tables that keep the promise that no choice loses money: 6 of 27, as stop 1 found most settings let a crate sell under its cost;
+  - nothing built to narrow the gap between two careful boys. The lever, a rumor that always pays the top number, is named for later. *Partly replaced* on 17 Nov by the family's first three days (below).
+  - Code's, taken with go: a change of tables reaches both boys at once, with one line in `dayOf()` so only the prices change; a Puzzle card's address goes back to the wall; *Multiply bigger numbers* is not offered; the log reads in crates; a fault reading counts as no boat; `lib/boat-here.ts` is the one place that asks.
+- **Decided (17 Nov 2026, from the chat, the look's first round): no switch.** Brandon: "we need to have code undo the switch, and release the math trading game in place of the puzzle, that was the decision."
+  - The boat is on a child's wall, in Puzzle's place, whenever the family's times tables give it prices, on test and on live alike; with no table set, Puzzle.
+  - The switch's code, its button on `/parent` and `fixture -- switch` went. *Replaces* the brief's switch (*What is built* 1), its checks 1, 2, 3 and 8, and "released with the switch off".
+  - **The migration** `20261117000000_boat_switch_gone`, `alter table families drop column boat_on;`: that line, given in the chat, is Brandon's yes.
+  - **A command for the tables,** `npm run boat:tables` and `boat:tables:live`, the same for every child, refusing a setting that loses money.
+  - **The tables on live** are set at stop 3 by Brandon's hand (M3), with his value from the chat, which is not written here. *Replaces* the brief's *After the release* step 1 (a guardian's tap, then the switch).
+  - Code's, adjacent, taken with the look: `/parent` saves every table at *Not yet* as the boat off the wall, where it refused it before.
+- **Decided (17 Nov 2026, from the chat, the look's second round): the family's first three days.** Brandon: "high luck on day 1 will give one child an overwhelming lead. fix the first 3 days of the simulation, then luck after that."
+  - Game days 1 to 3 are the same for every child of the family: markets, goods, crates, prices and rumors, drawn from the family and the day number. From day 4, each child's own seed.
+  - *Replaces* "same prices only" (16 Nov 2026) for days 1 to 3, and stop 1's "luck alone" for those days.
+  - Code's, adjacent: where a rumor points is its own draw, so where a boy stands changes only a rumor's island on a shared day. It redraws every day under the same rules; test's games were started over, and live had none.
+- **Decided (17 Nov 2026, 06:26): the look passed.** Brandon: "It passed. go".
+- **Stop 3 (17 Nov 2026, 07:25 to 07:44), by Brandon's hand:** M1 `db:push:live` (six migrations; its first run changed nothing, and it ran with `--yes` the second time), M2 `ladder:import:live` (20 rows), M3 `boat:tables:live` (the boat on the wall).
+- **Decided (17 Nov 2026, 07:45): `/wwc:release` typed at the last stop.**
 
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
@@ -579,7 +604,10 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 
 One line each, newest first: date, where, what happened, what was expected, file, size guess. No diagnosis.
 
-- 16 Nov 2026, the parents' trading-boat log on `/parent` (phase 4): a day read "Sold 1 sweet potatoes at $4"; expected: "Sold 1 crate of sweet potatoes at $4". `core/boat/log.ts`. Size: minutes.
+- 17 Nov 2026, `db:push:live` (tooling): the Supabase CLI, fetched new by `npx` as 3.2.0 because the project does not pin it, refused to apply live's six migrations with no `--yes` ("This run can't ask because it is running in agent mode. Nothing was changed."), and `npm run db:push:live -- --yes` applied them; the script's comment still says it asks first. *Replaces* the 23 Oct line, whose CLI took the default yes. Expected: the script passes `--yes` and says so. `scripts/db-push.mts`. Size: minutes.
+- 17 Nov 2026, the Supabase CLI (tooling): it is not in the project's dependencies, so each `db:push` runs whatever `npx` fetches (3.2.0 on 17 Nov), which warns that `--db-url`, the script's only route, "is deprecated and will be removed in v4"; expected: the CLI pinned in `package.json`, and the script on `--remote` before v4. `scripts/db-push.mts`, `package.json`. Size: an hour.
+- 17 Nov 2026, a `!` command handed at a stop (tooling): M3 was handed with `<place>` placeholders, and typed as written Git Bash refused it ("syntax error near unexpected token `newline'"), so nothing ran; expected: a command handed for `!` is whole, with its choices written out. Size: minutes.
+- 17 Nov 2026, the servers Code starts on Windows (tooling): four times, stopping `npm run dev:ipad` or `npm run start` as a background task left its `next` process holding port 3000, and Code stopped each by its command line; expected: stopping the task stops the server. Size: minutes.
 - 16 Nov 2026, a `!` command given at an emergency stop (tooling): `! taskkill /PID 22840 /T /F` failed with "Invalid argument/option - 'C:/Program Files/Git/PID'", because the `!` shell is Git Bash, which turns `/PID` into a path; `//PID` worked; expected: a Windows command handed to Brandon for `!` doubles its slashes, or names PowerShell. Size: minutes.
 - 16 Nov 2026, the iPad dev server (tooling): the Next.js job's `npm run dev:ipad` (16:16) was still running when the trading boat's job began, and after a production build ran beside it, its API routes served code from before the clean-up ("workingTablesOf is not a function"); stopping it was refused to Code and needed Brandon's hands; expected: a job's close stops the dev server it started, and a build never runs beside one. `scripts/dev-ipad.mts`. Size: minutes.
 - 9 Nov 2026, the iPad dev server (tooling): a Math card on June's iPad showed Next's overlay, "Jest worker encountered 2 child process exceptions, exceeding retry limit", after `npm run build` had run beside `npm run dev:ipad`, both writing under `.next`; every card failed until the server was restarted on an empty `.next`; expected: a job never builds for production while a dev server runs, or `dev:ipad` says so when it starts. `scripts/dev-ipad.mts`. Size: minutes.
@@ -588,7 +616,6 @@ One line each, newest first: date, where, what happened, what was expected, file
 - 23 Oct 2026, live week 1's cards (phase 3): about 80 of 280 open with the lens's question pasted on ("What's down there?" on a map, a fable, a tangram; "What's funny about…" on dice), and the gate's reader notes call most of them a poor fit; expected: the lens shapes the way in, never a stock opener that doesn't fit the card. `core/prompts/card.md` line 27, `lib/lenses.ts`. Size: a job.
 - 23 Oct 2026, live week 1's cards (phase 3): about 18 say a lesson outright ("that is worth copying", "careful counters make fewer mistakes"), from how the family wants its children to learn to act; expected: the card shows the person or the act and leaves the lesson to the child. `core/prompts/card.md`. Size: an hour.
 - 23 Oct 2026, live week 1's cards (phase 3): about 15 carry facts looser than their sources (summer reaching winter in "a few hundred years" where the card's own numbers make about 700; "a thousand years" from al-Biruni to Mellan, about 650; every snowflake with six matching arms; Seurat's green "not painted anywhere"; the fossil's cause and effect backwards); expected: every fact as exact as its source. `docs/reports/2026-10-23-first-live-week.md`, *What the reader notes say*; `core/prompts/ideas.md`. Size: a job.
-- 23 Oct 2026, `db:push:live` (tooling): the CLI's `[Y/n]` is never answered: the script runs it with no input, so it takes the default, yes, and prints "Finished" before the question; its comment says it asks first; expected: the script passes `--yes` and says so. `scripts/db-push.mts`. Size: minutes.
 - 22 Oct 2026, `npm run lint` (tooling): 2 errors and 4 warnings, the same on Next.js 16.4.0 and 16.4.2: `Date.now()` called in render, `let week` never reassigned, four unused `_previous`/`_form` parameters; expected: lint clean. `app/parent/page.tsx:47`, `core/curation/cron.ts:174`. Size: minutes.
 
 - 21 Oct 2026, `/parent/models` (phase 3): a Sunday-build firing stopped at the time limit is undercounted; expected: it records what it spent. `docs/04-curation-engine.md`, "How the Sunday build is built". Size: an hour.

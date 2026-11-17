@@ -66,9 +66,9 @@ Built 28 Oct 2026, the tutor's slice 2 (`docs/judge-slice.md`; report `docs/repo
 
   On the dev server, against test, a whole reply took 3.5 to 3.7 s, and 6.2 s when the model ran past its limit; the laptop's database reads cross the Pacific. On live the first answers after the release are timed (Brandon, 1 Nov 2026).
 
-## How the trading boat is built (slice 1)
+## How the trading boat is built
 
-Built and played on 16 Nov 2026 (`docs/trading-boat-slice.md`; report `docs/reports/2026-11-16-trading-boat.md`) on `phase-4-wonder-wall`, on `quark-test` only. **It runs only on the dev server against test; on live it is off and reads no table** (`lib/boat.ts`). Decisions in docs/08, *The trading boat, slice 1*. It replaces the Math tile of 9 Nov (held after its look failed on 10 Nov), whose written problems, moves, label and gate changes were removed the same day; the ladder and each boy's pace stand.
+Slice 1 was built and played on 16 Nov 2026 (`docs/trading-boat-slice.md`; report `docs/reports/2026-11-16-trading-boat.md`) on `quark-test`. Slice 2 (16 and 17 Nov 2026, `docs/trading-boat-2-slice.md`; report `docs/reports/2026-11-16-trading-boat-2.md`) puts it on the boys' walls: **the boat is on a child's wall, in Puzzle's place, whenever the family's times tables give it prices, on test and on live alike, with no switch** ("Slice 2: on the boys' iPads", below). Decisions in docs/08, *The trading boat, slice 1* and *slice 2*. It replaces the Math tile of 9 Nov (held after its look failed on 10 Nov), whose written problems, moves, label and gate changes were removed on 16 Nov; the ladder stands.
 
 **How it teaches, in Brandon's words** (10 and 16 Nov 2026):
 
@@ -91,10 +91,15 @@ trader what he owes. Nobody tells him what to buy.
 - Then two markets, each with four goods, a few crates each, and one rumor.
 - Then he casts off for one of the two rumors' islands, and is done until tomorrow.
 - The game counts days played, so a missed day costs nothing, and a half-played day waits.
+- **Game days 1 to 3 are the family's** (slice 2): every child of the family gets the same markets, goods, crates,
+  prices and rumors on his first three days, drawn from the family and the day number. From day 4 each child's own
+  seed draws his days.
 
-**The numbers** (`core/boat/day.ts`, from his ladder places through `lib/ladder.ts`):
-- **His prices:** the times tables he is working on (the older boy's places: $2 and $5; the younger's: $3 and $4).
-- **The usual price:** any dock pays the next of his numbers ($5 or $4) for any good no rumor names.
+**The numbers** (`core/boat/day.ts`, from the ladder places through `lib/ladder.ts`):
+- **The prices:** the times tables being worked on, from the family's one setting, so every child of the family has
+  the same numbers (slice 2). 2s, 5s and 10s working on give $2 and $5; 2s, 5s and 10s done with 3s and 4s working on
+  give $3 and $4.
+- **The usual price:** any dock pays the next of the numbers ($5 or $4) for any good no rumor names.
 - **A rumor** promises one of his numbers at least $1 over the usual.
 - **No choice loses money;** a poor one earns less.
 - **No sum holds more than 10** crates or bills until the ladder says he is working on bigger multiplying: a trader
@@ -129,11 +134,66 @@ trader what he owes. Nobody tells him what to buy.
 - "Read it to me" says the screen, or the trade.
 
 **The record:** `boat_games` (one row a child) and `boat_turns` (one row an answer), migration `20261116000000`, on
-test only. The parents' log on `/parent` reads each day's trades: every sum, what he said, the help he needed and each
-answer's kind (`core/boat/log.ts`).
+test and, from 17 Nov 2026, on live. The parents' log on `/parent` reads each day's trades: every sum, what he said,
+the help he needed and each answer's kind, in crates ("Sold 1 crate of sweet potatoes at $4"; `core/boat/log.ts`).
 
-**On test:** the tile shows after the cards. The test view's bar switches the child and the day, and
-`npm run fixture -- boat <n> [money <m> | reset | log]` sets it up.
+**On test:** the test view's bar switches the child and the day on the dev server, and
+`npm run fixture -- boat <n> [money <m> | reset | log]` sets a game up. The bar no longer decides whether the boat is
+here.
+
+### Slice 2: on the boys' iPads (16 and 17 Nov 2026)
+
+**Is the boat here?** `boatHere()` in `lib/boat-here.ts` is the one place that asks. There is no switch (Brandon, 17
+Nov 2026: "release the math trading game in place of the puzzle, that was the decision").
+- **Here:** the family's times tables give the child prices that keep the promise that no choice loses money
+  (`numbersProblem()` in `core/boat/day.ts`). Its answer is the game's context: the child's seed, the family (for days
+  1 to 3), the numbers, and today where the family lives.
+- **Not here:** with no table working on or done, or with a fault reading anything (one log line, naming no child).
+  The wall is then as it was before the boat, Puzzle in its place.
+- **Who asks:** `lib/boat.ts` before every read and write, and `lib/wall.ts` for the Puzzle slot, so the wall, the card
+  pages, the boat and its routes always agree.
+
+**The family's times tables:** one setting for the family, and every child's prices come from it.
+- **Where it is set:**
+  - on `/parent`, the section *The trading boat* (`app/parent/boat-section.tsx`, `boat-tables.tsx`,
+    `setBoatTables()` in `app/parent/actions.ts`), by any guardian (rule 2);
+  - or by `npm run boat:tables` (test) and `boat:tables:live` (LIVE, Brandon's hand), `scripts/boat-tables.mts`.
+- **What it writes:** the same `mastery.place` (working, done, or empty for not yet) on the three times-table rungs
+  (2s 5s 10s; 3s 4s; 6s to 9s) for every child, and a `boat.tables` audit row. *Multiply bigger numbers* is not
+  offered.
+- **What it saves:** 7 of the 27 settings. The 6 that give prices keep the promise (`lib/boat-setting.ts`, held by a
+  test over 10 seeds, 10 days and 7 islands). The seventh is every table at not yet, which takes the boat off the
+  wall. The rest are refused with the reason ("a crate could sell for less than it cost", "a rumor pays no more than
+  any dock").
+- **What the page says:** where the boat stands ("The trading boat is on the wall, in Puzzle's place." or why not) and
+  the prices in words.
+- **A change of tables** reaches both children on the next screen either opens. The day in play keeps its goods,
+  crates, order and rumors' islands, and only the prices change: `dayOf()` always takes the rumor's draw.
+
+**The first three days are the family's** (Brandon, 17 Nov 2026: "high luck on day 1 will give one child an
+overwhelming lead. fix the first 3 days of the simulation, then luck after that."):
+- `SHARED_DAYS = 3` and `seedOf(n, child, family)` in `core/boat/day.ts`. `roll()` and `dayFor()` draw game days 1 to
+  3 from the family and the day number, and later days from the child.
+- A game day is a day played, so a child who starts later still gets the family's day 1.
+- Where a rumor points is its own draw, so where a boy stands changes only a rumor's island, never the day's goods,
+  crates or prices.
+- **What it does** (two careful boys, 2,000 pairs): they are level at day 3. Under 2s, 5s and 10s done with 3s and 4s
+  working on, the richer has 14% more at day 7 and 13% at day 14, where before it was 17% and 14% (29% at day 3).
+  Under 2s, 5s and 10s working on, 3% and 3%, where before it was 4% and 4%.
+
+**The Puzzle slot:**
+- While the boat is here for a child, the Math tile, *The trading boat*, stands where Puzzle falls in the day's
+  `slotOrder()`, and Puzzle's tile is not shown (`hide: ["puzzle"]` in the wall's scope, `core/wall/flow.ts`, read by
+  `onWall()`; `boatAt` in `core/wall/card.ts`). "Everything done" counts the boat's day in Puzzle's place.
+- A Puzzle card's address goes back to the wall, and an answer to it or "Read it to me" on it answers 404.
+- The Sunday build, the Saturday pick and the nightly lines still make Puzzle cards. The week page says "While the
+  trading boat is on the wall, it takes Puzzle's place, and the Puzzle cards below are not shown."
+
+**Taking it off:** every table at *Not yet* on `/parent`, or `npm run boat:tables:live -- none`. Puzzle is back on the
+next screen, and each child's game waits where he left it.
+
+**On live** (17 Nov 2026, by Brandon's hand): the six migrations (`20261109000000` to `20261117000000`, the switch's
+column added and dropped in the same push), the ladder's 20 rows, and the family's tables.
 
 ## The session ends when the thinking stops (proposed)
 
