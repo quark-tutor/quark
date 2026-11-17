@@ -751,6 +751,31 @@ landing on the landing. They are 3:2. Every other picture stays a placeholder. T
   placeholder. Typecheck and lint pass. Kiddo's game is reset again.
 - **The repository is public, so these four pictures are public now.**
 
+### Fix round 2 at stop 2: the trade screen's layout (16 Nov 2026, 19:20 HST)
+
+Brandon, with a photo of June's iPad on Kiddo's 10 × $2 trade at the village market: "This screen layout seems a
+little weird."
+
+**What was off, as I read the photo:**
+- "Read it to me" sat between the title and the crates.
+- The crates hugged the left edge.
+- The number pad was six keys across, so its second row was ragged, with Delete at its end.
+- "That's my answer" sat above the pad you type with.
+- "Choose again" was a big button at the very bottom.
+
+**Changed:**
+- **The crates** are centred, with a board top and bottom and the price in the middle.
+- **The question and its sum** share one row, the sum beside the question, as the brief says. The count's step is laid
+  out the same way.
+- **"Read it to me" and "Choose again"** are small, side by side, under the question. When the count ends, "Try
+  fewer" is a full button there.
+- **One column to answer in**, up to 420 px wide: the box (big, centred digits), the number pad three keys across as
+  on a phone (1 2 3 / 4 5 6 / 7 8 9 / a wide 0 and Delete), "That's my answer" under the pad, then Talk.
+- **The market and landing screens** are as they were.
+
+**Checked:** typecheck, lint and 494 tests. In Chrome (paired as Kiddo, so it opened Kiddo's same trade, which I only
+looked at), the parts measure as above.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free

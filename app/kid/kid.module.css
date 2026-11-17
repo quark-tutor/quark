@@ -464,13 +464,15 @@
   background: var(--accent-soft);
 }
 
-/* The number pad under an answer box (app/kid/number-pad.tsx): ten digits and Delete, the keys of the pairing page, a
-   row of the box's width. Kept from the Math tile for the trading boat. */
+/* The number pad under an answer box (app/kid/number-pad.tsx): three keys across, as on a phone, the keys of the
+   pairing page; 0 is two keys wide, with Delete beside it. Kept from the Math tile for the trading boat. */
 .numberPad {
-  flex-basis: 100%;
   display: grid;
-  grid-template-columns: repeat(6, minmax(64px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+}
+.zeroKey {
+  grid-column: span 2;
 }
 
 /* A sum written out by the program beside its question, from the start ("6 × $5 = ?"): as big as the question, in the
@@ -486,10 +488,12 @@
 
 /* A picture drawn by the program from its numbers, in the page's colours. */
 .drawing {
+  display: block;
   width: 100%;
   max-width: 640px;
   height: auto;
-  max-height: 46vh;
+  max-height: 40vh;
+  margin: 0 auto;
 }
 .drawText {
   fill: var(--ink);
@@ -587,6 +591,66 @@
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
+}
+/* A trade (app/kid/boat): the crates, the question with its sum beside it, the small tools, one column to answer in. */
+.trade {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.tradeAsk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 20px;
+}
+.tradeAsk .question {
+  margin: 0;
+}
+.tradeTools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.tradeTools .boatButtons {
+  display: contents;
+}
+.boatSmall {
+  min-height: 64px;
+  padding: 0 20px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.boatAnswer {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.boatBox {
+  min-height: 72px;
+  padding: 0 16px;
+  border: 2px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.boatBox::placeholder {
+  font-size: 1.25rem;
+  font-weight: 400;
 }
 .crate {
   fill: var(--surface);

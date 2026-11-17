@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import type { Action, Screen } from "@/core/boat/game";
 import { BOAT, SAY } from "@/core/wall/words";
@@ -61,6 +61,25 @@ export function BoatGame({ initial }: { initial: Screen }) {
   }
 
   const s = screen;
+  const read = <ReadAloud key={`read:${s.speak}`} line={`boat.screen.${tag(s.speak)}`} small={!!s.trade} />;
+  // On a trade, "Choose again" and the like are small, beside "Read it to me", unless the count has ended, when the
+  // way on is the thing to press.
+  const quiet = !!s.trade && !s.trade.ended;
+  const buttons = s.buttons.length ? (
+    <div className={styles.boatButtons}>
+      {s.buttons.map((b) => (
+        <button
+          key={b.label}
+          type="button"
+          className={quiet ? styles.boatSmall : b.action.type === "next" || b.action.type === "sail" || b.action.type === "fewer" ? styles.send : styles.play}
+          disabled={busy}
+          onClick={() => void send(b.action)}
+        >
+          {b.label}
+        </button>
+      ))}
+    </div>
+  ) : null;
   return (
     <div className={styles.boat}>
       {s.picture && DRAWN.has(s.picture) ? (
@@ -74,44 +93,37 @@ export function BoatGame({ initial }: { initial: Screen }) {
       <section className={styles.words}>
         <h1 className={styles.cardTitle}>{s.title}</h1>
         {s.note ? <p className={styles.reply}>{s.note}</p> : null}
-        {s.status ? (
-          <div className={styles.status}>
-            {s.status.map((line) => (
-              <p key={line}>{line}</p>
+        {s.trade ? (
+          <TradeBox key={`trade:${s.speak}`} screen={s} busy={busy} read={read} actions={buttons} onAnswer={(text) => send({ type: "answer", text })} />
+        ) : (
+          <>
+            {s.status ? (
+              <div className={styles.status}>
+                {s.status.map((line) => (
+                  <p key={line}>{line}</p>
+                ))}
+              </div>
+            ) : null}
+            {s.lines.map((line) => (
+              <p key={line} className={styles.cardText}>
+                {line}
+              </p>
             ))}
-          </div>
-        ) : null}
-        {s.lines.map((line) => (
-          <p key={line} className={styles.cardText}>
-            {line}
-          </p>
-        ))}
-        <ReadAloud key={`read:${s.speak}`} line={`boat.screen.${tag(s.speak)}`} />
-
-        {s.offers ? (
-          <div className={styles.offers}>
-            {s.offers.map((o) => (
-              <button key={o.offer} type="button" className={styles.offer} disabled={!o.open || busy} onClick={() => void send({ type: "pick", market: o.market, offer: o.offer })}>
-                <span>{o.label}</span>
-                <span className={styles.muted}>{o.left}</span>
-              </button>
-            ))}
-          </div>
-        ) : null}
-
-        {s.stepper ? <Stepper key={`stepper:${s.speak}`} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} busy={busy} onPick={(n) => void send({ type: "count", n })} /> : null}
-
-        {s.trade ? <TradeBox key={`trade:${s.speak}`} screen={s} busy={busy} onAnswer={(text) => send({ type: "answer", text })} /> : null}
-
-        {s.buttons.length ? (
-          <div className={styles.boatButtons}>
-            {s.buttons.map((b) => (
-              <button key={b.label} type="button" className={b.action.type === "next" || b.action.type === "sail" ? styles.send : styles.play} disabled={busy} onClick={() => void send(b.action)}>
-                {b.label}
-              </button>
-            ))}
-          </div>
-        ) : null}
+            {read}
+            {s.offers ? (
+              <div className={styles.offers}>
+                {s.offers.map((o) => (
+                  <button key={o.offer} type="button" className={styles.offer} disabled={!o.open || busy} onClick={() => void send({ type: "pick", market: o.market, offer: o.offer })}>
+                    <span>{o.label}</span>
+                    <span className={styles.muted}>{o.left}</span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
+            {s.stepper ? <Stepper key={`stepper:${s.speak}`} ask={s.stepper.ask} max={s.stepper.max} maxLine={s.stepper.maxLine} busy={busy} onPick={(n) => void send({ type: "count", n })} /> : null}
+            {buttons}
+          </>
+        )}
         {didntSend ? <p className={`${styles.reply} ${styles.notice}`}>{SAY.didntSend}</p> : null}
       </section>
     </div>
@@ -142,8 +154,10 @@ function Stepper({ ask, max, maxLine, busy, onPick }: { ask: string; max: number
   );
 }
 
-// A trade: the crates, the question with its sum beside it, what the tutor says back, the count's step, and the box.
-function TradeBox({ screen, busy, onAnswer }: { screen: Screen; busy: boolean; onAnswer: (text: string) => Promise<boolean> }) {
+// A trade, top to bottom: the crates, centred; the question with its sum beside it; what the tutor says back and the
+// count's step; "Read it to me" and "Choose again", small; then one narrow column to answer in: the box, the number pad
+// (three keys across, as on a phone), "That's my answer" under it, and Talk.
+function TradeBox({ screen, busy, read, actions, onAnswer }: { screen: Screen; busy: boolean; read: ReactNode; actions: ReactNode; onAnswer: (text: string) => Promise<boolean> }) {
   const t = screen.trade!;
   const [guess, setGuess] = useState("");
   async function submit(e: FormEvent) {
@@ -152,27 +166,33 @@ function TradeBox({ screen, busy, onAnswer }: { screen: Screen; busy: boolean; o
     if (await onAnswer(guess)) setGuess("");
   }
   return (
-    <div className={styles.ask}>
+    <div className={styles.trade}>
       {t.pic ? <Crates pic={t.pic} /> : null}
       {t.lines.map((line) => (
         <p key={line} className={styles.cardText}>
           {line}
         </p>
       ))}
-      <p className={styles.question}>{t.question}</p>
-      <p className={styles.sumLine}>{t.sum}</p>
+      <div className={styles.tradeAsk}>
+        <p className={styles.question}>{t.question}</p>
+        <p className={styles.sumLine}>{t.sum}</p>
+      </div>
       {t.reply ? <p className={styles.reply}>{t.reply}</p> : null}
       {t.step ? (
-        <>
+        <div className={styles.tradeAsk}>
           <p className={styles.question}>{t.step.ask}</p>
           <p className={styles.sumLine}>{t.step.sum}</p>
-        </>
+        </div>
       ) : null}
       {t.ended ? t.ended.map((line) => <p key={line} className={styles.reply}>{line}</p>) : null}
+      <div className={styles.tradeTools}>
+        {read}
+        {actions}
+      </div>
       {t.answering ? (
-        <form className={styles.answer} onSubmit={submit}>
+        <form className={styles.boatAnswer} onSubmit={submit}>
           <input
-            className={styles.box}
+            className={styles.boatBox}
             value={guess}
             onChange={(e) => setGuess(e.target.value)}
             placeholder={SAY.typeHere}
@@ -181,10 +201,10 @@ function TradeBox({ screen, busy, onAnswer }: { screen: Screen; busy: boolean; o
             enterKeyHint="send"
             autoComplete="off"
           />
+          <NumberPad disabled={busy} onChange={(edit) => setGuess((g) => edit(g))} />
           <button type="submit" className={styles.send} disabled={!guess.trim() || busy}>
             {SAY.send}
           </button>
-          <NumberPad disabled={busy} onChange={(edit) => setGuess((g) => edit(g))} />
           <Talk disabled={busy} onHeard={(words) => setGuess((g) => (g.trim() ? `${g.trim()} ${words}` : words).slice(0, 200))} />
         </form>
       ) : null}

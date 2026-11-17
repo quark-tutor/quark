@@ -24,8 +24,13 @@ export function Crates({ pic }: { pic: Pic }) {
         return (
           <g key={i}>
             <rect x={x} y={y} width={w} height={h} rx={bill ? 6 : 10} className={lit ? styles.crateLit : bill ? styles.bill : styles.crate} />
-            {bill ? null : <line x1={x + 8} y1={y + h / 2} x2={x + w - 8} y2={y + h / 2} className={styles.crateSlat} />}
-            <text x={x + w / 2} y={y + h / 2 + (bill ? 10 : 30)} textAnchor="middle" className={styles.drawText}>
+            {bill ? null : (
+              <>
+                <line x1={x + 8} y1={y + 20} x2={x + w - 8} y2={y + 20} className={styles.crateSlat} />
+                <line x1={x + 8} y1={y + h - 20} x2={x + w - 8} y2={y + h - 20} className={styles.crateSlat} />
+              </>
+            )}
+            <text x={x + w / 2} y={y + h / 2 + 10} textAnchor="middle" className={styles.drawText}>
               ${pic.price}
             </text>
           </g>
