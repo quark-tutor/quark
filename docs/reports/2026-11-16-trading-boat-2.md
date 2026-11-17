@@ -11,7 +11,7 @@ Brief: `docs/trading-boat-2-slice.md` (*Wonder Wall*, phase 4), on `phase-4-wond
 - **17 Nov, fix round 2:** the look failed on (b), by Brandon's decision, brought by the chat: "high luck on day 1
   will give one child an overwhelming lead. fix the first 3 days of the simulation, then luck after that." It started
   at 05:17. Stop 2, fix round 2, at 05:22.
-- **17 Nov, the look passed:** "It passed. go" (06:26). Stop 3 at 06:40.
+- **17 Nov, the look passed:** "It passed. go" (06:26). Stop 3 at 06:28.
 
 ## Stop 3: the live database, by your hand
 
