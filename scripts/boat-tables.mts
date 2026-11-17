@@ -56,8 +56,8 @@ function show(s: Awaited<ReturnType<typeof read>>) {
 }
 
 const now = await read();
-if (now.rungs.length === 0) throw new Error("skills holds no times-table rung: run the ladder import first. Nothing was written.");
-if (now.kids.length === 0) throw new Error("The family has no children. Nothing was written.");
+if (now.rungs.length === 0) refuse("skills holds no times-table rung: run the ladder import first.");
+if (now.kids.length === 0) refuse("the family has no children.");
 
 const args = process.argv.slice(2);
 if (args.length === 0) {
@@ -66,19 +66,26 @@ if (args.length === 0) {
   process.exit(0);
 }
 
+// A refusal is said plainly, with no stack trace, and nothing is written.
+function refuse(why: string): never {
+  console.log(`Refused: ${why}`);
+  console.log("Nothing was written.");
+  process.exit(1);
+}
+
 // The setting asked for: "none", or each table named as key=place; a table not named is not yet.
 const setting: Setting = new Map(now.rungs.map((r) => [r.key, null]));
 if (!(args.length === 1 && args[0] === "none")) {
   for (const a of args) {
     const [k, p] = a.split("=");
     if (!setting.has(k) || !(p in PLACE_WORDS)) {
-      throw new Error(`"${a}" is not a table and a place. Say each as table=place, the tables ${now.rungs.map((r) => r.key).join(", ")}, the places done, working or not-yet; or say none. Nothing was written.`);
+      refuse(`"${a}" is not a table and a place. Say each as table=place, the tables ${now.rungs.map((r) => r.key).join(", ")}, the places done, working or not-yet; or say none.`);
     }
     setting.set(k, PLACE_WORDS[p]);
   }
 }
 const check = checkSetting(now.rungs, setting);
-if ("error" in check) throw new Error(`${check.error} Nothing was written.`);
+if ("error" in check) refuse(check.error);
 
 console.log(`About to set, for each of the family's ${now.kids.length} children${target === "live" ? " on LIVE" : ""}:`);
 for (const r of now.rungs) console.log(`  ${r.name}: ${said(setting.get(r.key) ?? null)}`);
