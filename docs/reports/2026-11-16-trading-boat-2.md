@@ -72,6 +72,10 @@ If one prints anything else, stop there and paste it in the chat. Nothing after 
   - **For the close, two bug lines:**
     - the 23 Oct line is now "the CLI refuses with no `--yes`", and the script should say so and take it;
     - the CLI is unpinned, and 3.2.0 warns that `--db-url` goes in v4.
+- **M1 is in (about 07:40), by your hand, with `--yes`:** `Target: LIVE`, then "Confirmed by --yes: Apply 6
+  migrations", "Applying migration …" for each of the six in order, from `20261109000000_math_tile.sql` to
+  `20261117000000_boat_switch_gone.sql`, and "Finished supabase db push." No error. The only warnings were the CLI's
+  deprecations (`--db-url`, and two `auth` settings in `supabase/config.toml`).
 
 ### M2 `npm run ladder:import:live`
 
