@@ -507,7 +507,19 @@
   flex-direction: column;
   gap: 20px;
 }
-/* Where Brandon's picture goes (Documents/quark-art); a placeholder in this slice. 3:2, as the pictures are. */
+/* Brandon's picture of the place (public/boat), where its placeholder was: 3:2, as wide as the column up to 720 px,
+   never taller than about a third of the screen, cropped to fit rather than squeezed. */
+.scene {
+  display: block;
+  width: 100%;
+  max-width: 720px;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  max-height: 36vh;
+  object-fit: cover;
+  border-radius: var(--radius);
+}
+/* Where Brandon's picture goes (Documents/quark-art); a placeholder until it is in. 3:2, as the pictures are. */
 .placeholder {
   width: 100%;
   max-width: 720px;

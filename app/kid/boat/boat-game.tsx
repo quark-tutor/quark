@@ -16,6 +16,12 @@ import { Crates } from "./crates";
 
 type Move = Action | { type: "answer"; text: string };
 
+// Brandon's pictures that are in (Documents/quark-art, README.txt; put in on 16 Nov 2026 at stop 2), in public/boat as
+// WebP at 1344 x 896: market-stilts on the first screen and the harbor market, market-hillside on the village market,
+// cast-off on the cast-off and "Done for today", landing on the landing. Any other stays a placeholder. They show the
+// scene only: nothing in them is counted (the crates and bills are drawn), and they carry no words.
+const DRAWN = new Set(["market-stilts", "market-hillside", "cast-off", "landing"]);
+
 // A short name for the screen's words, so "Read it to me" loads the new words when the screen changes.
 const tag = (s: string) => {
   let h = 0;
@@ -57,7 +63,10 @@ export function BoatGame({ initial }: { initial: Screen }) {
   const s = screen;
   return (
     <div className={styles.boat}>
-      {s.picture ? (
+      {s.picture && DRAWN.has(s.picture) ? (
+        // eslint-disable-next-line @next/next/no-img-element -- a fixed scene in public/boat, already sized for the iPad
+        <img className={styles.scene} src={`/boat/${s.picture}.webp`} alt="" width={1344} height={896} />
+      ) : s.picture ? (
         <div className={styles.placeholder} aria-hidden>
           {s.picture}
         </div>

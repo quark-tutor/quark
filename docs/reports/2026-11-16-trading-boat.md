@@ -729,6 +729,28 @@ whether it was right at once or which help he needed, and each wrong answer with
   - a bug line for the `!` command's slashes;
   - the next job proposed from what the looks found.
 
+### Fix round 1 at stop 2: the four pictures in (16 Nov 2026, 18:55 HST)
+
+Brandon's word: "Put the four pictures in now. They are in C:\Users\BrandonReisen\Documents\quark-art, described in
+its README.txt. Copy them into the repository under public/ with short names (market-stilts, market-hillside,
+cast-off, landing), sized sensibly for an iPad, and show each where its placeholder is: market-stilts on the opening
+screen and the harbor market, market-hillside on the village market, cast-off on the cast-off and Done for today,
+landing on the landing. They are 3:2. Every other picture stays a placeholder. Tell me when to reload."
+
+- **The files:** the four, matched to the README by the words in each Midjourney file name, are in `public/boat/` as
+  WebP at their own 1344 × 896.
+  - `market-stilts.webp`: 155 KB
+  - `market-hillside.webp`: 223 KB
+  - `cast-off.webp`: 207 KB
+  - `landing.webp`: 144 KB
+
+  The PNGs were about 2 MB each.
+- **On the page:** each shows where its placeholder was. It is as wide as the column up to 720 px, never taller than
+  about a third of the screen, and cropped to fit rather than squeezed. Any other picture stays a placeholder.
+- **Checked:** in Chrome as Kiddo the opening screen shows `market-stilts` (1344 wide, shown at 720 × 457) and no
+  placeholder. Typecheck and lint pass. Kiddo's game is reset again.
+- **The repository is public, so these four pictures are public now.**
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free
