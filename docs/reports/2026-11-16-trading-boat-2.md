@@ -62,6 +62,16 @@ If one prints anything else, stop there and paste it in the chat. Nothing after 
 
   The script answers the CLI's `[Y/n]` with yes by itself, so "Finished" may print before the question. That is the
   23 Oct bug line, not a fault.
+- **The first run (07:25), by your hand: nothing was changed.**
+  - **What happened:** the CLI, fetched new by `npx` as supabase 3.2.0 because the project does not pin it, now
+    refuses to take the default when it cannot ask. It printed: "Confirmation required: Apply 6 migrations … This run
+    can't ask because it is running in agent mode. Nothing was changed."
+  - **It counts six,** as above.
+  - **So M1 is now `npm run db:push:live -- --yes`.** The script passes `--yes` on to the CLI, and that flag is the
+    answer to the one question this stop is for. Nothing else about M1 changes.
+  - **For the close, two bug lines:**
+    - the 23 Oct line is now "the CLI refuses with no `--yes`", and the script should say so and take it;
+    - the CLI is unpinned, and 3.2.0 warns that `--db-url` goes in v4.
 
 ### M2 `npm run ladder:import:live`
 
