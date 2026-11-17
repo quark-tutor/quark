@@ -4,7 +4,169 @@ Brief: `docs/trading-boat-2-slice.md` (*Wonder Wall*, phase 4), on `phase-4-wond
 - **Times (16 Nov 2026, HST):** started 21:30. Stop 1 at 21:40. **Go at 21:45:** "go. On 3: luck alone. That way
   they can't copy off each other but they both have a chance to win." Go took every recommendation and decision below.
   On question 3, luck alone: nothing narrows the gap. The tables Brandon gave in the chat were not named at go, so
-  whether they are setting A or B is seen at the tap on live (question 2).
+  whether they are setting A or B is seen at the tap on live (question 2). Stop 2 at 21:58.
+
+## Stop 2: Your look, on test
+
+### Where the job stands
+
+Everything in the plan is built, tested and proved in a production build. The dev server is running for the look.
+- **The clock:** 13 minutes since go.
+- **Live:** nothing has touched it.
+- **Spent:** no Anthropic money (no-number judge calls, none). Google's voice made one boat line, inside the free tier.
+
+**The migration on test:** `20261116000001_boat_switch` was pushed with go's commit.
+- `.github/workflows/migrations.yml` applied it: run **44041186215, green**, "Applying migration
+  20261116000001_boat_switch.sql... Finished supabase db push."
+- Its live job did nothing.
+
+**The plate:**
+- `npm test`: 43 files, 515 tests (497 before);
+- `npm run typecheck`: clean;
+- `npm run build`: clean on its first run.
+
+**Built** (`d63f5d2`; the migration `a9712cf`), as stop 1's plan says:
+- **The switch:**
+  - `lib/boat-here.ts` asks "is the boat here?" in one place;
+  - `lib/boat.ts` asks it before every read and write, and no longer reads the test view;
+  - `setBoat()` writes the switch and a `boat.switch` audit row.
+- **The tables:**
+  - `lib/boat-setting.ts` reads the family's setting, checks it and words its prices;
+  - `numbersProblem()` in `core/boat/day.ts`;
+  - `setBoatTables()` writes `mastery.place` for every child and a `boat.tables` audit row.
+- **The section on `/parent`:** `app/parent/boat-section.tsx` and `boat-tables.tsx`.
+- **The Puzzle slot:**
+  - the scope's hidden slots in `core/wall/flow.ts`, read by `onWall()`;
+  - `slotAt()` and `boatAt` in `core/wall/card.ts`;
+  - `lib/wall.ts` asks `boatHere()`;
+  - the Math tile at `boatAt` on `/kid`;
+  - "everything done" counts it;
+  - the week page's sentence.
+- **`dayOf()`** always takes the rumor's draw.
+- **The log** reads in crates, inside the boat's section, while the switch is on. The 16 Nov bug line is deleted at
+  the close.
+- **New for testing:** `npm run fixture -- switch [on|off]`.
+- **The 18 new tests:**
+  - the switch off reads only the switch, and a fault is off;
+  - all 27 settings: the 6 saved never let a crate sell under its cost, over 10 seeds, 10 days and 7 islands;
+  - equal places give two seeds equal prices and different markets;
+  - a change of tables changes only prices, over 40 seeds;
+  - the Math tile at Puzzle's index on five days, and where Puzzle has no card;
+  - a Puzzle card's page, answer and line refused while the boat is here;
+  - the log's singular and plural.
+
+### Proved in a production build, on test
+
+`npm run build`, then `npm run start` (port 3000) against test, with no dev server running.
+- **The browser:** the Chrome extension was not connected, so the checks used curl. It was paired through the app's
+  own `/api/kid/pair` with a `fixture -- code 1` code, as test's child 1, and its cookie stayed in a jar file that was
+  never printed.
+
+**With the switch off:**
+- the wall showed Wonder, Listen, Then, Look. Test has no Puzzle card on 16 Nov: the clean-up of slice 1 removed the
+  math week that held that slot;
+- `/api/kid/boat` answered 404 to GET and POST;
+- the boat's "Read it to me" answered 404;
+- `/kid/boat` went back to the wall (Next's streamed redirect to `/kid`).
+
+**With the switch on** (`fixture -- switch on`):
+- **the wall:** Wonder, Listen, Then, **Math (The trading boat)**, Look. Math stood where Puzzle falls on 16 Nov, with
+  no Puzzle card that day;
+- **the test view's bar:** not on the page;
+- **`/kid/boat`:** the game.
+
+**A trade** (child 1's test game was started over first, since its canoe was full with $0, `fixture -- boat 1 reset`):
+- 3 crates of sweet potatoes at $5;
+- a wrong total of 8 got "That's 3 and 5 put together. You need 3 lots of 5." and the count's first step;
+- 15 got "That's right. 3 crates of sweet potatoes are on your boat."
+
+**"Read it to me" on the boat:**
+- the first tap took **8.1 seconds** (made by Google and stored; the first Google call since the server started);
+- the second took **0.8 seconds**, from the store.
+
+**The log** (`fixture -- boat 1 log`, the same `dayLogs()` the page uses): "Bought 3 crates of sweet potatoes at $5: 3 ×
+$5 = 15. Said 8 (the two numbers added). Then right (said 15)." `/parent` itself needs a guardian's sign-in, which curl
+does not have, so its section is check 1 and check 7 below.
+
+**Switch off again:**
+- the Math tile was gone at once;
+- `/api/kid/boat` answered 404;
+- `/kid/boat` went back to the wall;
+- child 1's game was kept ($5, 3 crates).
+
+**No error** in the server's log. The server was stopped:
+- the background task stopped `npm`;
+- `next start` (PID 21808, checked by its command line) was stopped by Code, and port 3000 was free;
+- then `npm run dev:ipad` started.
+
+### Done on test along the way, for the record
+
+- **`fixture -- places` ran by mistake,** chained into a read. It set test's two children to slice 1's places again
+  (child 1 working on 2s, 5s and 10s; child 2 done on those and working on 3s and 4s), which is where slice 1 left
+  them. Test only.
+- **Both test games were started over** (`fixture -- boat 1 reset`, `boat 2 reset`), so the look's day 1 begins on the
+  day the look starts and lands the next day:
+  - Bug's was slice 1's (day 3, Lānaʻi, $74);
+  - Kiddo's was the production check's.
+- **Code's check device was forgotten** (`ba9bb088…`). June's iPad stays paired as Bug, and the laptop's Chrome as
+  Kiddo.
+- **The switch is off.**
+
+### Sentences
+
+- **For a child:** none new (stop 1). June's read is done.
+- **For the parents,** new on `/parent`:
+  - "Math as a trading game: each child buys crates at the markets and tells the trader what they owe. Every child gets
+    the same prices, from the times tables below; each has their own markets and rumors."
+  - **The switch's three states:** "Off. Puzzle is on the wall." · "On. The trading boat takes Puzzle's place on the
+    wall." · "On, but the times tables below give it no prices, so the wall still shows Puzzle."
+  - **The switch's button:** "Turn the trading boat on" / "Turn the trading boat off".
+  - **The tables:** "One setting for the family. Every child's prices come from it."
+    - When the places differ: "The children's places differ on … Saving sets them the same."
+  - **The prices:** "Buying prices $3 and $4. Every dock pays $4 a crate for anything. A rumor pays $5 or $10 a crate."
+  - **A refusal:**
+    - "With these tables a crate could sell for less than it cost, and the boat promises that no choice loses
+      money." / "With these tables a rumor pays no more than any dock, so there is nothing to sail for." / "With no
+      times table working on or done, the boat has no prices. Set one to working on or done."
+    - The first two add: "The settings that work: 2s, 5s and 10s alone, working on or done; or 3s and 4s working on,
+      with 2s, 5s and 10s done."
+  - **The log:** headed "What each child traded".
+- **On the week page:** "While the trading boat is on, it takes Puzzle's place on the wall, and the Puzzle cards below
+  are not shown."
+
+### Your look
+
+On June's iPad through `npm run dev:ipad` (running: `https://192.168.50.67:3000/kid`), and `/parent` on the dev
+server as the test guardian.
+
+**Before check 2:**
+- test's one nearby day with Puzzle cards is **Monday 9 Nov**. On the iPad, open
+  `https://192.168.50.67:3000/kid/dev?day=2026-11-09`; the bar's *Today* comes back to 16 Nov.
+- 9 Nov's order is Puzzle, Look, Wonder, Listen, Then. 10 Nov's is Look, Wonder, Listen, Then, Puzzle, and 10 Nov has
+  no Puzzle card on test, so check 5 shows Math where Puzzle would be.
+- **For check 7:** a sale happens at the landing. Buy 1 crate on day 1 and cast off before moving to the next day.
+- **For check 3:** "set the tables" to the ones you gave in the chat. If the page refuses them, that answers stop 1's
+  question 2.
+- **Until check 3 saves,** test's two children have different places, so the section says they differ.
+
+The checks, in the brief's words; each its own:
+1. `/parent` has a section for the trading boat: a switch, off, and the times tables, one setting for the family.
+   Pass □ Fail □
+2. With the switch off: the wall is as the boys have it today, Puzzle in its place, no Math tile. Pass □ Fail □
+3. Turn the switch on and set the tables: the wall shows Math, *The trading boat*, **where Puzzle was in today's
+   order**, and no Puzzle tile; the other four tiles have not moved. Pass □ Fail □
+4. As Bug and as Kiddo (the test view's bar): **the prices are the same numbers for both**; the markets, goods and
+   rumors are each boy's own. Pass □ Fail □
+5. Move the test view to tomorrow: Math has moved along with the rotation, as Puzzle would have. Pass □ Fail □
+6. Change the tables on `/parent`: both boys' prices change together, from the day Code named at stop 1 (**at once:
+   the next screen either boy opens**). Pass □ Fail □
+7. Play one sale of a single crate, then read the log on `/parent`: "Sold 1 crate of …". The log's heading no longer
+   says "test only". Pass □ Fail □
+8. Turn the switch off: Puzzle is back at once, the Math tile is gone, and turning it on again finds each boy's game
+   where he left it. Pass □ Fail □
+
+Your clean "go" means every one passed. A failure, named, is a fix round back to this stop. After it, stop 3 is the
+live database by your hand.
 
 ## Stop 1: after reading
 
