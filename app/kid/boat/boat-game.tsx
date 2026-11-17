@@ -163,7 +163,6 @@ function Stepper({ ask, max, maxLine, price, busy, onPick }: { ask: string; max:
       <p className={styles.dialValue} aria-hidden>
         {n}
       </p>
-      {n > 0 ? <Crates pic={{ count: n, price, lit: 0, unit: "crate", good: null }} /> : null}
       <input
         type="range"
         className={styles.dial}
@@ -180,7 +179,12 @@ function Stepper({ ask, max, maxLine, price, busy, onPick }: { ask: string; max:
           <span key={x}>{x === 0 || x === max || max <= 10 ? x : "·"}</span>
         ))}
       </div>
-      {n >= max && maxLine ? <p className={styles.cardText}>{maxLine}</p> : null}
+      {/* The reason the dial stops keeps its line, empty until it is needed, so nothing below jumps. */}
+      <p className={styles.cardText} aria-live="polite">
+        {n >= max && maxLine ? maxLine : " "}
+      </p>
+      {/* Under the dial, in room kept for the most he can choose: the crates as he slides, each the same size. */}
+      <Crates pic={{ count: n, price, lit: 0, unit: "crate", good: null }} room={max} />
       <button type="button" className={styles.send} disabled={n < 1 || busy} onClick={() => onPick(n)}>
         {BOAT.thatMany}
       </button>

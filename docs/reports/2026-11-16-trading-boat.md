@@ -989,6 +989,23 @@ Brandon: "How about a dial instead?" Asked round or straight, he chose straight:
 
 **Checked:** 497 tests, typecheck and lint pass.
 
+### Fix round 11 at stop 2: the dial holds still (16 Nov 2026, about 20:10 HST)
+
+Brandon, with two photos of the dial at 1 and at 2 taro: "Dynamic sizing of the numbers causes the slider to jump
+down and up like crazy."
+
+**The fault:** the crates were drawn to fill the width. So one crate came out huge and two smaller, and the drawing's
+height changed under the slider as it moved.
+
+**Changed:**
+- **Every crate is the same size, however many there are.** The drawing is always laid out five across, in the trades
+  too.
+- **The slider sits above the crates.** The crates' room is kept for the most he can choose, so it is the same height
+  at 0 as at the most.
+- **The reason line under the slider keeps its place, empty until needed.**
+
+**Checked:** 497 tests, typecheck and lint pass.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free
