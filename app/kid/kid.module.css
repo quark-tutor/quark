@@ -616,6 +616,13 @@
   max-width: 520px;
   margin: 0;
 }
+/* How many, as typed on the number pad: the box's look, the number centred. */
+.countShown {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .stepper {
   display: flex;
   flex-wrap: wrap;

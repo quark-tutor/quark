@@ -148,26 +148,33 @@ export function BoatGame({ initial }: { initial: Screen }) {
   );
 }
 
-// How many: − and +, never past the most he can choose, then "That many". It starts at nothing: nothing tells him how
-// many (Brandon, 16 Nov 2026).
+// How many: typed on the number pad, as the sums are (Brandon at stop 2, 16 Nov 2026: "If I want to buy 25 bananas I
+// need to press 25 times?"), then "That many". It starts at nothing: nothing tells him how many. A digit that would take
+// the number past the most he can choose does not go in, and the screen says why (check 6).
 function Stepper({ ask, max, maxLine, busy, onPick }: { ask: string; max: number; maxLine: string | null; busy: boolean; onPick: (n: number) => void }) {
-  const [n, setN] = useState(0);
+  const [typed, setTyped] = useState("");
+  const [refused, setRefused] = useState(false);
+  const n = Number(typed || "0");
+  function edit(change: (value: string) => string) {
+    const next = change(typed).replace(/^0+/, "");
+    if (Number(next || "0") > max) {
+      setRefused(true);
+      return;
+    }
+    setRefused(false);
+    setTyped(next);
+  }
   return (
-    <div className={styles.ask}>
+    <div className={styles.boatAnswer}>
       <p className={styles.question}>{ask}</p>
-      <div className={styles.stepper}>
-        <button type="button" className={styles.key} disabled={n <= 0} onClick={() => setN((x) => Math.max(0, x - 1))} aria-label="One fewer">
-          −
-        </button>
-        <span className={styles.stepValue}>{n}</span>
-        <button type="button" className={styles.key} disabled={n >= max} onClick={() => setN((x) => Math.min(max, x + 1))} aria-label="One more">
-          +
-        </button>
-        <button type="button" className={styles.send} disabled={n < 1 || busy} onClick={() => onPick(n)}>
-          {BOAT.thatMany}
-        </button>
-      </div>
-      {n >= max && maxLine ? <p className={styles.cardText}>{maxLine}</p> : null}
+      <p className={`${styles.boatBox} ${styles.countShown}`} role="status" aria-live="polite">
+        {n}
+      </p>
+      {refused && maxLine ? <p className={styles.reply}>{maxLine}</p> : null}
+      <NumberPad disabled={busy} onChange={edit} />
+      <button type="button" className={styles.send} disabled={n < 1 || busy} onClick={() => onPick(n)}>
+        {BOAT.thatMany}
+      </button>
     </div>
   );
 }

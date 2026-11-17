@@ -121,6 +121,7 @@ export const BOAT = {
   howMany: (g: BoatGood) => `How many crates of ${good(g)}?`,
   allTheTraderHas: "That's all the trader has.",
   allTheRoom: "That's all the room on your boat.",
+  allYouHave: "That's all you have.", // selling, when he types more than he carries
   thatMany: "That many",
 
   // A trade

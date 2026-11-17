@@ -597,7 +597,7 @@ export function view(g: Game, ctx: Ctx): Screen {
         // A buyer takes as many as he is offered, up to the most in one sum; when + stops there and he has more, the
         // screen says why, and that another buyer comes.
         const max = sellMax(g, ctx);
-        s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit(takeOf(ctx.nb)) : null };
+        s.stepper = { ask: BOAT.howManySell, max, maxLine: held(g, d.good) > max ? BOAT.buyerLimit(takeOf(ctx.nb)) : BOAT.allYouHave };
         s.buttons = [{ label: BOAT.keep, action: { type: "keep" } }];
       }
     } else if (t.builder === "offer") {

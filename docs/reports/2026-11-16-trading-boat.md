@@ -950,6 +950,30 @@ have to buy mango. You can't change your mind".
 **The times in this file's headings from stop 2 on are corrected to the commits' times.** Some had been written ahead
 of the clock.
 
+### Fix round 9 at stop 2: how many, typed (16 Nov 2026, about 20:00 HST)
+
+Brandon: "Yes, never mind works perfectly now. Also, I guessed wrong and it only gave me 3 intermediate problems not
+10, so much better. I'm not sure I like the + button. At large numbers it won't work well. If I want to buy 25
+bananas I need to press 25 times?"
+
+**Passed in his words:**
+- "Never mind" (fix round 8);
+- the count after a miss (fix round 6): "only gave me 3 intermediate problems not 10, so much better".
+
+**Changed:**
+- **"How many?" is typed on the same number pad as the sums,** shown big, then "That many". It starts at nothing, and
+  − and + are gone.
+- **A digit that would take the number past the most he can choose does not go in, and the screen says why** (check
+  6):
+  - "That's all the room on your boat." or "That's all the trader has." when buying;
+  - "One buyer takes 10 at most. Another buyer comes next." or the new "That's all you have." when selling.
+- **One new sentence for June:** "That's all you have."
+
+**For now a purchase is at most 10** (the ladder's most in one sum, and a trader's crates), so 25 bananas is not yet
+possible. Typing is what the bigger boats and bigger multiplying will need.
+
+**Checked:** 497 tests and the typecheck pass. The page renders in Chrome (read only) with no console error.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free

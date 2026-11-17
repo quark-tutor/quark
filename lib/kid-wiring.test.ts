@@ -115,7 +115,7 @@ describe("the wall's own words", () => {
   const boat = [
     B.tile, ...B.firstDay, B.toHarbor, B.toVillage, B.castOff, B.money(20), B.yourBoat("canoe", 3, 10), B.aboard(["3 crates of taro"]), B.aboard([]), B.usual(5),
     B.market("harbor", "home"), B.market("village", "maui"), B.offer("taro", 3), B.left(1), B.left(6), B.soldOut, B.rumor("mangoes", "maui", 10), B.howMany("bananas"),
-    B.allTheTraderHas, B.allTheRoom, B.thatMany, B.owe, B.bought(1, "taro"), B.bought(6, "mangoes"), B.short(70, 60), B.chooseAgain, B.added(6, 5), B.oneOut("crate"),
+    B.allTheTraderHas, B.allTheRoom, B.allYouHave, B.thatMany, B.owe, B.bought(1, "taro"), B.bought(6, "mangoes"), B.short(70, 60), B.chooseAgain, B.added(6, 5), B.oneOut("crate"),
     B.oneOut("bill"), B.letsCount, B.step(4, "crate", false), B.step(1, "crate", true), B.tryFewer, B.tryFewerButton, B.sellFewer, B.sellFewerButton, B.askGrownUp,
     B.whereSail, B.sailChoice("coconuts", "oahu", 10), B.castOffFor("kauai"), B.sailingTo("lanai"), B.land("molokai"), B.landReason("sweet-potatoes", "hawaii", 10),
     B.usualHere("pineapples", 4), B.buyer("taro", 4), B.buyerNext("pineapples", 10), B.buyerLimit(10), B.howManySell, B.owed, B.sold(120), B.keep, B.backMade(30, "mangoes", 60), B.backLess(30, "taro", 20), B.right,
