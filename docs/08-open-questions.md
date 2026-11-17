@@ -324,6 +324,29 @@ Brief: `docs/math-tile-slice.md` (*Wonder Wall*), from `docs/math-tutor-proposal
 - **Decided (9 Nov 2026, 20:55, fix round 4): the sum written out from the start.** Brandon: "this is still math. The written format should be there from the start to accompany the words. Otherwise this falls back into being another reading comprehension question, not a math question." So the program writes each part's and each step's sum under it ("8 × 5 = ?"), and "Read it to me" says it in words. *Replaces*, for the sum line only, stop 2's rule that no sign shows before his answer; the model's own words still carry none.
 - **Decided (10 Nov 2026, 06:19, `/wwc:close` with the look failed): stop, hold, and math off.** Brandon: "We are stopping here. The look did not pass: the problems are cluttered, they need pictures, and "How did you get that?" is the wrong reply to a wrong answer. The design goes back to the chat. Close and hold, with one change first: math must not start by itself. Turn the week-6 start off so that a release of this branch changes nothing a child sees and the weeks keep Puzzle and 28 short lessons, until a later job turns it on." So `MATH_FROM_WEEK` and `MATH_FROM_SEQUENCE` are null; every week keeps Puzzle and its 28 short lessons and every theme feeds all five slots; `docs/saturday-pick-slice.md` is back to its 9 Nov text; `week:build:live` refuses `--math`; and the wall no longer reads `attempts.move`, so the branch runs on live without the math migrations. *Replaces* the brief's "released before Sunday 29 November's 6 am build, so week 6 (30 November) is the first week with Math", and stop 1's 21 short lessons from week 6. The board row waits on the chat's new design.
 
+## Week 4 on live, a day late: decided in the brief and the job (16 Nov 2026)
+
+Brief: `docs/week-4-slice.md` (*Week 2 builds itself*), on `phase-4-wonder-wall`; report `docs/reports/2026-11-16-week-4.md`. Content only: no code, no migration. As built: docs/04, "How a week is mixed" (the library at 116) and "How the Sunday build is built" (live week 4). Saturday 14 Nov's pick was missed, so Sunday's build refused week 4 and spent nothing. On Monday 16 Nov the 32 were written, checked on test, put on live, built by hand from `main` ($14.53) and tapped.
+
+- **Decided (16 Nov 2026, in the brief, written in the chat at 12:15):**
+  - The order stays as the candidates file marks it, so time zones lands on Wednesday 18 Nov and the phonograph on Saturday 21 Nov. Monday's ʻIolani lights may be seen a day late or not at all.
+  - No code changes, so math stays off and the tiles rotate as released.
+  - The Sunday build stays as it is: it refused and spent nothing, as it should.
+  - Every live command is Brandon's hand at a planned stop.
+  - A week built by hand must match one built by Vercel's code, or it is built from `main` in a worktree.
+- **Decided (16 Nov 2026): a missed Saturday means a refused Sunday and a hand build on Monday; what it cost was one day.** Brandon, 12:08: "i just checked and i have no week 4 waiting." The boys had no cards on Monday morning; the week was on their walls from the tap at about 3 pm. A reminder when the library is short is not this job's (the brief's *Not in this job*), and is proposed in the report for an inbox row on Brandon's yes.
+- **Decided (16 Nov 2026, at stop 1): week 4 is built from `main` in a worktree.** The phase branch sends the gate `gate.md` v4 (the Math tile's `not_here` rule, and "A math card") and `main` sends v2; the brief's rule settled it. The library import and the fetch ran from the phase branch, whose library held the 32.
+- **Decided (16 Nov 2026, 12:25, go at stop 1): the ★ 32, with two changes.** Brandon: "go, but strike the pāhoehoe and ʻaʻā lesson and take the next wonder candidate in its place." So seed dispersal (candidate 19) takes Thursday's wonder. Taken with go:
+  - William Tell (32) in the place of Clair de lune (26), which went to the Moon on 8 Nov;
+  - the other six Hawaiʻi lessons kept as offered under the Hawaiʻi standard (8 Nov).
+  *Replaces* the candidates file's ★ on 15 and 26.
+- **Decided (16 Nov 2026, while writing): what the summaries leave out.** Bonheur's police permit to wear trousers (points 10 and 22), the Kingdom's end (17), Banneker's letter about slavery and Revere's ride (18), the gods in Orion's myth (4), ages in billions of years (5), and William Tell's apple (20). The nēnē's title says it came back, since it was moved from endangered to threatened in 2019.
+- **Decided (16 Nov 2026, 14:07, stop 2): the look on test passed.** Brandon: "pass for those. running commands now". Then M1 to M4 ran by his hand.
+- **Decided (16 Nov 2026, 15:00, stop 3): week 4 tapped as built, and the Banneker card stands.** Brandon: "The look passed. Tapped as built at [time]. The Banneker card reads the way we want." So five first cards are missing later in the week:
+  - the older's Tuesday puzzle, Friday look and Saturday listen;
+  - both boys' Wednesday puzzle.
+  The younger's Sunday Banneker card at layer 4 brings in slavery and Jefferson, which the summary left out. The gate passed it, and the parents keep it (*touches a guardian's say*, point 18). *Replaces* the brief's "five first cards for each boy on each" day as the condition for the tap, for this week; a rebuild before the tap was offered and not taken.
+
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
 Brandon's review of the 14 Oct day 1 cards: a lot of words, one picture, and lines no human tutor would write. The worst was "Wren, you love art" on the listen card: it tells a child what he is instead of letting him see it for himself. Not a rule against definitional statements, which would bite later (calling a child a helper can be the right thing at the right moment). The question is the tutor's voice. Proposed as step 4d, after 2b, since a card that starts from a picture needs the picture.
