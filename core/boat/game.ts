@@ -1,5 +1,5 @@
 import { BOAT, SAY, type BoatGood, type BoatIsland, type BoatName, type BoatUnit } from "../wall/words.ts";
-import { BUNDLE, KEEP, START_MONEY, boatOf, dayOf, nextBoat, priceAt, takeOf, type Day, type Numbers, type Rumor } from "./day.ts";
+import { BUNDLE, KEEP, START_MONEY, boatOf, dayOf, nextBoat, priceAt, seedOf, takeOf, type Day, type Numbers, type Rumor } from "./day.ts";
 
 // The trading boat's game (docs/trading-boat-slice.md): where a boy is in his day, each move he makes, and the screen it
 // shows. The day: he lands where yesterday's boat was sent and sells to the buyers on the dock, a few crates each; one
@@ -57,9 +57,9 @@ export type Today = {
 export type Game = { money: number; space: number; cargo: Load[]; island: BoatIsland | "home"; sailing: Rumor | null; today: Today | null };
 export const newGame = (): Game => ({ money: START_MONEY, space: 10, cargo: [], island: "home", sailing: null, today: null });
 
-// seed: the child's id; nb: his numbers from the ladder; date: today where the family lives (the test view's day on the
-// dev server).
-export type Ctx = { seed: string; nb: Numbers; date: string };
+// seed: the child's id; family: his family's id, whose seed draws game days 1 to 3 for every child of it (seedOf() in
+// day.ts); nb: his numbers from the ladder; date: today where the family lives (the test view's day on the dev server).
+export type Ctx = { seed: string; family: string; nb: Numbers; date: string };
 
 // What the child's answer said: a number read in code (core/math/numbers.ts), or, with no number, the no-number
 // judge's verdict ("other" when it gave none, and for two numbers at once).
@@ -97,7 +97,7 @@ export type Action =
   | { type: "sail"; rumor: 0 | 1 };
 
 const clone = <T,>(x: T): T => structuredClone(x);
-export const dayFor = (g: Game, ctx: Ctx): Day => dayOf(ctx.seed, ctx.nb, g.today!.n, g.island);
+export const dayFor = (g: Game, ctx: Ctx): Day => dayOf(seedOf(g.today!.n, ctx.seed, ctx.family), ctx.nb, g.today!.n, g.island);
 export const used = (g: Game) => g.cargo.reduce((t, l) => t + l.count, 0);
 const held = (g: Game, good: BoatGood) => g.cargo.find((l) => l.good === good)?.count ?? 0;
 
@@ -113,7 +113,7 @@ export function roll(g: Game, ctx: Ctx): Game {
 
 function begin(g: Game, ctx: Ctx, n: number, island: BoatIsland | "home"): Game {
   g.island = island;
-  const day = dayOf(ctx.seed, ctx.nb, n, island);
+  const day = dayOf(seedOf(n, ctx.seed, ctx.family), ctx.nb, n, island);
   const landing = n > 1;
   g.today = {
     n,

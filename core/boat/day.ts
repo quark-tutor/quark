@@ -3,8 +3,9 @@ import type { BoatGood, BoatIsland, BoatName } from "../wall/words.ts";
 // The trading boat's world and its day (docs/trading-boat-slice.md; stop 1's fix round, 16 Nov 2026). Brandon: "the
 // size of a sum follows his place on the ladder, never his boat or his money." So a trader has a few crates of each good
 // and a buyer on the dock takes a few at a time, never more than his ladder allows in one sum; a bigger boat means more
-// trades, not bigger numbers. Everything here is worked out from the child, the game's day number and the island he is
-// on, and is the same every time it is asked: no model, no clock, no database. Pure.
+// trades, not bigger numbers. Everything here is worked out from the child (his family, for the first three days), the
+// game's day number and the island he is on, and is the same every time it is asked: no model, no clock, no database.
+// Pure.
 
 export const GOODS: readonly BoatGood[] = ["mangoes", "coconuts", "bananas", "pineapples", "taro", "sweet-potatoes"];
 export const ISLANDS: readonly BoatIsland[] = ["kauai", "oahu", "molokai", "lanai", "maui", "hawaii"];
@@ -95,15 +96,25 @@ function priceFor(r: Rng, nb: Numbers, not?: number): number {
   return pick(r, xs.length ? xs : nb.buy);
 }
 
-// A day's two markets and two rumors, for one child (seed: his id), on the game's day n, on the island he is on.
-// The two goods the rumors name are sold at both markets at different prices; each market adds two goods of its own;
-// each trader has 2 to 10 crates of each, never more than his most in one sum; at least one good costs his lowest
-// buying price. A rumor names an island he is not on and a price at least $1 over the usual and $2 over the cheaper of
-// today's two prices for that good.
+// The first three game days are the family's (Brandon, 17 Nov 2026: "high luck on day 1 will give one child an
+// overwhelming lead. fix the first 3 days of the simulation, then luck after that."): drawn from the family and the day
+// number, so every child of the family gets the same days 1 to 3 whenever he plays them. From day 4, his own seed. A
+// game day is a day played, not a date. Replaces "same prices only" (16 Nov 2026) for days 1 to 3.
+export const SHARED_DAYS = 3;
+export const seedOf = (n: number, child: string, family?: string): string => (family !== undefined && n <= SHARED_DAYS ? `family:${family}` : child);
+
+// A day's two markets and two rumors, from the day's seed (seedOf(): the family's for days 1 to 3, else the child's
+// id), on the game's day n, on the island he is on. The two goods the rumors name are sold at both markets at
+// different prices; each market adds two goods of its own; each trader has 2 to 10 crates of each, never more than his
+// most in one sum; at least one good costs his lowest buying price. A rumor names an island he is not on and a price at
+// least $1 over the usual and $2 over the cheaper of today's two prices for that good. Where the rumors point is a draw
+// of its own, the islands in one order for the seed, less the island he is on: so where he is changes only a rumor's
+// island, never the day's goods, crates, prices or rumors' goods, and two boys on different islands on a shared day
+// still have the same day but where a rumor points at the island one of them is on.
 export function dayOf(seed: string, nb: Numbers, n: number, island: BoatIsland | "home"): Day {
   const r = mulberry32(hash(`${seed}:${n}`));
   const g = shuffle(r, GOODS);
-  const others = shuffle(r, ISLANDS.filter((i) => i !== island));
+  const others = shuffle(mulberry32(hash(`${seed}:${n}:islands`)), ISLANDS).filter((i) => i !== island);
   const stock = () => Math.min(nb.cap, between(r, STOCK[0], STOCK[1]));
   const a: Offer[] = [];
   const b: Offer[] = [];

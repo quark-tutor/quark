@@ -45,11 +45,11 @@ describe("is the trading boat here?", () => {
     expect(await boatHere(device)).toBeNull();
   });
 
-  it("with tables that give prices, is here with the child's own seed and the family's numbers, with no switch read", async () => {
+  it("with tables that give prices, is here with the child's own seed, the family's for days 1 to 3, and the family's numbers, with no switch read", async () => {
     replies.mastery = { data: places(["times-2-5-10", "done"], ["times-3-4", "working"]), error: null };
     const { boatHere } = await import("./boat-here");
     const ctx = await boatHere(device);
-    expect(ctx).toMatchObject({ seed: "child-1", nb: { buy: [3, 4], usual: 4, cap: 10 } });
+    expect(ctx).toMatchObject({ seed: "child-1", family: "family-1", nb: { buy: [3, 4], usual: 4, cap: 10 } });
     expect(ctx!.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(read.sort()).toEqual(["families", "mastery", "skills"]);
   });

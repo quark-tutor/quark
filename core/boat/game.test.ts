@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { BOAT, SAY } from "../wall/words";
-import { dayOf, numbersFor, takeOf } from "./day";
-import { act, doneToday, newGame, roll, view, type Action, type Ctx, type Game } from "./game";
+import { ISLANDS, dayOf, numbersFor, seedOf, takeOf } from "./day";
+import { act, dayFor, doneToday, newGame, roll, view, type Action, type Ctx, type Game } from "./game";
 
 // The trading boat, move by move (docs/trading-boat-slice.md, stop 2's checks). Test's two children's numbers.
 const KIDDO = numbersFor([2, 5, 10], [2, 5, 10], 10)!;
 const BUG = numbersFor([2, 5, 10, 3, 4], [3, 4], 10)!;
-const ctx = (date = "2026-11-16", nb = KIDDO, seed = "child-1"): Ctx => ({ seed, nb, date });
+const ctx = (date = "2026-11-16", nb = KIDDO, seed = "child-1"): Ctx => ({ seed, family: "family-1", nb, date });
 
 function go(g: Game, a: Action, c: Ctx = ctx()): Game {
   const r = act(g, a, c);
@@ -87,7 +87,7 @@ describe("the first day", () => {
     expect(view(g, ctx()).buttons.map((b) => b.label)).toEqual(["Never mind"]);
     g = go(g, { type: "count", n: 2 });
     const s = view(g, ctx());
-    const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
+    const o = dayOf(seedOf(1, "child-1", "family-1"), KIDDO, 1, "home").markets[0][offer];
     expect(s.trade).toMatchObject({ pic: { count: 2, price: o.price, lit: 0, unit: "crate" }, question: BOAT.owe, sum: `2 × $${o.price} = ?`, reply: null, step: null });
     expect(s.open).toEqual({ market: 0, offer });
     expect(s.status).toEqual(["Your money: $20", "Your canoe: 0 of 10 crates full", "On board: nothing yet"]);
@@ -101,7 +101,7 @@ describe("the first day", () => {
     const start = atHarbor();
     let g = start.g;
     const offer = start.offer;
-    const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
+    const o = dayOf(seedOf(1, "child-1", "family-1"), KIDDO, 1, "home").markets[0][offer];
     g = go(g, { type: "pick", market: 0, offer });
     g = go(g, { type: "count", n: 2 });
     g = go(g, n(2 * o.price));
@@ -117,7 +117,7 @@ describe("a wrong total (check 4)", () => {
     const start = atHarbor();
     let g = start.g;
     const offer = start.offer;
-    const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
+    const o = dayOf(seedOf(1, "child-1", "family-1"), KIDDO, 1, "home").markets[0][offer];
     g = go(g, { type: "pick", market: 0, offer });
     g = go(g, { type: "count", n: count });
     return { g, p: o.price };
@@ -216,7 +216,7 @@ describe("money and room", () => {
     const start = atHarbor();
     let g = start.g;
     const offer = start.offer;
-    const o = dayOf("child-1", KIDDO, 1, "home").markets[0][offer];
+    const o = dayOf(seedOf(1, "child-1", "family-1"), KIDDO, 1, "home").markets[0][offer];
     g = { ...g, money: 3 };
     g = go(g, { type: "pick", market: 0, offer });
     g = go(g, { type: "count", n: 2 });
@@ -250,7 +250,7 @@ describe("casting off, landing, and the days between (checks 7 to 9)", () => {
     const start = atHarbor();
     let g = start.g;
     const offer = start.offer;
-    const day = dayOf("child-1", KIDDO, 1, "home");
+    const day = dayOf(seedOf(1, "child-1", "family-1"), KIDDO, 1, "home");
     // Buy the first rumor's good where the harbor sells it, as much as he can.
     const r = day.rumors[0];
     const at = day.markets[0].findIndex((o) => o.good === r.good);
@@ -378,5 +378,45 @@ describe("the boats (check 11)", () => {
     g = go(g, n(500), c);
     expect(g.space).toBe(50);
     expect(g.money).toBe(100);
+  });
+});
+
+describe("the family's first three days (Brandon, 17 Nov 2026: \"fix the first 3 days of the simulation, then luck after that\")", () => {
+  const PLACES = ["home", ...ISLANDS] as const;
+  const day = (child: string, family: string, n: number, island: (typeof PLACES)[number]) => dayOf(seedOf(n, child, family), BUG, n, island);
+  const rolled = (child: string, family: string) => roll(newGame(), { seed: child, family, nb: BUG, date: "2026-11-17" });
+
+  it("gives two children of one family identical days 1 to 3, wherever each is, but where a rumor points at his own island", () => {
+    for (let n = 1; n <= 3; n++)
+      for (const a of PLACES)
+        for (const b of PLACES) {
+          const [x, y] = [day("child-1", "family-1", n, a), day("child-2", "family-1", n, b)];
+          expect(x.markets).toEqual(y.markets);
+          expect(x.rumors.map(({ good, price }) => ({ good, price }))).toEqual(y.rumors.map(({ good, price }) => ({ good, price })));
+          if (a === b) expect(x).toEqual(y);
+          for (const r of x.rumors) expect(r.island).not.toBe(a);
+        }
+  });
+
+  it("starts two children of one family on the same day 1: the same harbor market, crates, prices and rumors", () => {
+    const [one, two] = [rolled("child-1", "family-1"), rolled("child-2", "family-1")];
+    expect(one.today).toEqual(two.today);
+    expect(dayFor(one, { seed: "child-1", family: "family-1", nb: BUG, date: "2026-11-17" })).toEqual(dayFor(two, { seed: "child-2", family: "family-1", nb: BUG, date: "2026-11-17" }));
+  });
+
+  it("gives each child his own days from day 4", () => {
+    for (let n = 4; n <= 12; n++)
+      for (const island of PLACES) expect(day("child-1", "family-1", n, island).markets).not.toEqual(day("child-2", "family-1", n, island).markets);
+  });
+
+  it("gives a child of another family different days 1 to 3", () => {
+    for (let n = 1; n <= 3; n++)
+      for (const island of PLACES) expect(day("child-1", "family-1", n, island).markets).not.toEqual(day("child-3", "family-2", n, island).markets);
+  });
+
+  it("counts a game day as a day played: a child who starts later still gets the family's day 1, whatever the date", () => {
+    const early = roll(newGame(), { seed: "child-1", family: "family-1", nb: BUG, date: "2026-11-17" });
+    const late = roll(newGame(), { seed: "child-2", family: "family-1", nb: BUG, date: "2026-12-02" });
+    expect({ ...early.today, on: null }).toEqual({ ...late.today, on: null });
   });
 });

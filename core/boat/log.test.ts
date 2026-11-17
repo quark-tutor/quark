@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { dayOf, numbersFor } from "./day";
+import { dayOf, numbersFor, seedOf } from "./day";
 import { act, landTurn, newGame, roll, type Action, type Ctx, type Game, type Turn } from "./game";
 import { dayLogs, type TurnRow } from "./log";
 
 const nb = numbersFor([2, 5, 10], [2, 5, 10], 10)!;
-const ctx = (date: string): Ctx => ({ seed: "child-1", nb, date });
+const ctx = (date: string): Ctx => ({ seed: "child-1", family: "family-1", nb, date });
 const asRow = (t: Turn): TurnRow => ({ ...t, played_on: t.on });
 
 describe("the parents' log (stop 2's last check)", () => {
@@ -17,7 +17,7 @@ describe("the parents' log (stop 2's last check)", () => {
       g = r.game;
       turns.push(...r.turns);
     };
-    const day = dayOf("child-1", nb, 1, "home");
+    const day = dayOf(seedOf(1, "child-1", "family-1"), nb, 1, "home");
     const at = day.markets[0].findIndex((o) => o.stock >= 3);
     const o = day.markets[0][at];
     go({ type: "next" });

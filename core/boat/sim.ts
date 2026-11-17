@@ -1,5 +1,5 @@
 import type { BoatGood, BoatIsland } from "../wall/words.ts";
-import { BOATS, BUNDLE, KEEP, START_MONEY, dayOf, hash, priceAt, takeOf, type Numbers, type Offer, type Rumor } from "./day.ts";
+import { BOATS, BUNDLE, KEEP, START_MONEY, dayOf, hash, priceAt, seedOf, takeOf, type Numbers, type Offer, type Rumor } from "./day.ts";
 
 // Stop 1's simulation (docs/reports/2026-11-16-trading-boat.md, fix round 1), on the game's own day: markets, rumors,
 // stock and buyers from dayOf() and takeOf(). Three players: careful (every crate worth more where he is going than it
@@ -22,7 +22,8 @@ function rng(seed: number) {
   };
 }
 
-export function play(nb: Numbers, player: Player, days: number, seed: string): Run {
+// family: when given, days 1 to 3 are the family's, as in the game (seedOf()); without it, his own seed from day 1.
+export function play(nb: Numbers, player: Player, days: number, seed: string, family?: string): Run {
   const choose = rng(hash(`choices:${seed}:${player}`));
   const pick = <T,>(xs: readonly T[]) => xs[Math.floor(choose() * xs.length)];
   let money = START_MONEY;
@@ -33,7 +34,7 @@ export function play(nb: Numbers, player: Player, days: number, seed: string): R
   const run: Run = { worth: [], reached: BOATS.slice(1).map(() => null), sums: [], biggest: [] };
   for (let n = 1; n <= days; n++) {
     const today: Sum[] = [];
-    const day = dayOf(seed, nb, n, island);
+    const day = dayOf(seedOf(n, seed, family), nb, n, island);
     let back: { paid: number; sold: number } | null = null;
     for (const load of cargo) {
       const price = priceAt(nb, load.good, sailing);

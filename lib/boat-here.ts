@@ -11,8 +11,8 @@ import { createAdminClient } from "@/lib/supabase/admin";
 // 1, as changed at stop 2's fix round): the family's times tables give him prices that keep slice 1's promise
 // (numbersProblem()). There is no switch (Brandon, 17 Nov 2026: "release the math trading game in place of the
 // puzzle"): the tables are set for the family on /parent or by `npm run boat:tables`, and with no table working on or
-// done the boat is not here and Puzzle is, as before the boat. The answer is the game's context: his seed, his numbers
-// and today where the family lives (the test view's day on the dev server). lib/boat.ts asks it before every read and
+// done the boat is not here and Puzzle is, as before the boat. The answer is the game's context: his seed, his family's (for
+// game days 1 to 3, the same for every child of the family), his numbers and today where the family lives (the test view's day on the dev server). lib/boat.ts asks it before every read and
 // write, and lib/wall.ts asks it for the Puzzle slot, so the wall, the card pages, the boat and its routes always agree.
 //
 // A fault reading anything counts as not here, with one line saying so, so the boat can never break the wall: the wall
@@ -34,5 +34,5 @@ export async function boatHere(device: Device): Promise<Ctx | null> {
   const nb = boatNumbers({ rungs } as unknown as Pick<Ladder, "rungs">, places);
   if (!nb || numbersProblem(nb)) return null;
   const { timezone } = family.data as { timezone: string };
-  return { seed: device.childId, nb, date: todayIn(timezone, await wallNow()) };
+  return { seed: device.childId, family: device.familyId, nb, date: todayIn(timezone, await wallNow()) };
 }
