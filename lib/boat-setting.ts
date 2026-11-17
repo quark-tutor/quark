@@ -2,10 +2,12 @@ import { numbersProblem, type Numbers } from "../core/boat/day.ts";
 import { boatNumbers, isTimesRung, type Place, type Rule } from "./ladder.ts";
 
 // The family's times tables for the trading boat (docs/trading-boat-2-slice.md, What is built 2): one setting on
-// /parent, a place on each times-table rung (not yet, working on, done), written the same for every child, so both boys
-// have the same prices (Brandon, 16 Nov 2026: "the boys prices better be equal"). This file reads the setting from the
-// children's places, checks a setting before it is saved, and says in the parents' words what prices it gives. Pure.
-// For the parents only: no word here reaches a child, and no rung's name or level is shown on the iPad.
+// /parent and in `npm run boat:tables`, a place on each times-table rung (not yet, working on, done), written the same
+// for every child, so both boys have the same prices (Brandon, 16 Nov 2026: "the boys prices better be equal"). The
+// setting is also the boat's only way onto the wall: there is no switch (Brandon, 17 Nov 2026). A setting that gives
+// prices puts the boat in Puzzle's place; every table at not yet takes it off, and Puzzle is back. This file reads the
+// setting from the children's places, checks a setting before it is saved, and says in the parents' words what it
+// gives. Pure. For the parents only: no word here reaches a child, and no rung's name or level is shown on the iPad.
 
 export type TimesRung = { id: string; key: string; name: string; rule: Rule };
 export type Setting = Map<string, Place | null>; // a rung's key → its place; null is not yet
@@ -36,10 +38,11 @@ export function settingOf(rungs: TimesRung[], children: Map<string, Place>[]): {
 
 const placed = (setting: Setting) => new Map([...setting].filter((e): e is [string, Place] => e[1] !== null));
 
-// What a setting gives the boat: its numbers, or the reason it is refused, in the parents' words.
-export function checkSetting(rungs: TimesRung[], setting: Setting): { nb: Numbers } | { error: string } {
+// What a setting gives the boat: its numbers; null numbers when no table is working on or done, which is the boat off
+// the wall and Puzzle in its place; or the reason it is refused, in the parents' words.
+export function checkSetting(rungs: TimesRung[], setting: Setting): { nb: Numbers | null } | { error: string } {
   const nb = boatNumbers({ rungs: rungs.map((r) => ({ ...r, asks: "", example: "" })) }, placed(setting));
-  if (!nb) return { error: "With no times table working on or done, the boat has no prices. Set one to working on or done." };
+  if (!nb) return { nb: null };
   const problem = numbersProblem(nb);
   const works = "The settings that work: 2s, 5s and 10s alone, working on or done; or 3s and 4s working on, with 2s, 5s and 10s done.";
   if (problem === "loses") return { error: `With these tables a crate could sell for less than it cost, and the boat promises that no choice loses money. ${works}` };
@@ -56,5 +59,30 @@ export function pricesLine(nb: Numbers): string {
   return `Buying prices ${dollars(nb.buy)}. Every dock pays $${nb.usual} a crate for anything. A rumor pays ${either(nb.all.filter((x) => x > nb.usual))} a crate.`;
 }
 
+// Where the boat stands under a setting, as /parent says it first.
+export function boatLine(check: { nb: Numbers | null } | { error: string }): string {
+  if ("error" in check) return "The trading boat is not on the wall: these times tables give it no prices that work, so the wall shows Puzzle.";
+  if (!check.nb) return "The trading boat is not on the wall: no times table is working on or done, so the wall shows Puzzle.";
+  return "The trading boat is on the wall, in Puzzle's place.";
+}
+
 // A place from the form: "working", "done", or anything else is not yet.
 export const placeOf = (v: unknown): Place | null => (v === "working" || v === "done" ? v : null);
+
+// The family's setting from what a page or a script reads: the skills' rows, the children, and the children's places.
+// The check is null when the ladder is not loaded.
+export type PlacedRow = { child_id: string; place: Place; skills: { key: string } };
+export function familySetting(skills: Parameters<typeof timesRungs>[0], kids: { id: string }[], placedRows: PlacedRow[]) {
+  const rungs = timesRungs(skills);
+  const { setting, differ } = settingOf(
+    rungs,
+    kids.map((k) => new Map(placedRows.filter((r) => r.child_id === k.id).map((r) => [r.skills.key, r.place]))),
+  );
+  return { rungs, setting, differ, check: rungs.length ? checkSetting(rungs, setting) : null };
+}
+
+// The rows a setting is saved as: every child, every times-table rung, the same place; not yet is a place of null, so
+// nothing is deleted and other rungs are left as they are.
+export function settingRows(kids: { id: string }[], rungs: TimesRung[], setting: Setting, at: string) {
+  return kids.flatMap((kid) => rungs.map((r) => ({ child_id: kid.id, skill_id: r.id, place: setting.get(r.key) ?? null, updated_at: at })));
+}

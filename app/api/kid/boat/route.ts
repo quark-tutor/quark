@@ -3,8 +3,8 @@ import { getDevice } from "@/lib/device";
 import { actionOf, boatMove, boatScreen } from "@/lib/boat";
 
 // A move on the trading boat from the paired iPad (docs/trading-boat-slice.md): a named move, never free text but for
-// an answer's words. The reply is the next screen. A move he cannot make now, or the boat where it is not (the family's
-// switch off, or no prices from its tables), is refused and nothing is written. Nothing here logs the move or the answer.
+// an answer's words. The reply is the next screen. A move he cannot make now, or the boat where it is not (no prices from
+// the family's times tables), is refused and nothing is written. Nothing here logs the move or the answer.
 
 // The screen as it stands, as the page shows it: no move is made.
 export async function GET() {

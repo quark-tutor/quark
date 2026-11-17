@@ -4,7 +4,7 @@ import styles from "./parent.module.css";
 
 // The trading boat's log for the parents (docs/trading-boat-slice.md, stop 2): each day's trades for each child,
 // every sum and what he said to it (core/boat/log.ts). Shown inside the boat's section on /parent while the family's
-// switch is on (docs/trading-boat-2-slice.md); read through the guardian's own session, so row-level security keeps it
+// times tables put the boat on the wall (docs/trading-boat-2-slice.md); read through the guardian's own session, so row-level security keeps it
 // to the family.
 export async function BoatLog({ kids }: { kids: { id: string; nickname: string }[] }) {
   const supabase = await createClient();

@@ -16,9 +16,9 @@ import { wallStore } from "@/lib/wall";
 
 // The trading boat's reads and writes (docs/trading-boat-slice.md), as lib/wall.ts is for the cards: it starts from
 // getDevice(), and the service-role client is scoped here, in code, to that child and that child's family. The rules
-// are in core/boat/game.ts. Whether the boat is here at all is asked in one place, lib/boat-here.ts (the family's switch
-// and its times tables; docs/trading-boat-2-slice.md): when it is not, every function here returns null and reads no
-// boat table, so with the switch off nothing reads boat_games or boat_turns. Nothing here logs a number, a reply or a nickname; when the no-number judge gives no
+// are in core/boat/game.ts. Whether the boat is here at all is asked in one place, lib/boat-here.ts (the family's times
+// tables; docs/trading-boat-2-slice.md): when it is not, every function here returns null and reads no boat table, so
+// with no table set nothing reads boat_games or boat_turns. Nothing here logs a number, a reply or a nickname; when the no-number judge gives no
 // verdict, one line says why, as the judge's does.
 
 type Db = ReturnType<typeof createAdminClient>;
@@ -74,7 +74,7 @@ async function current(db: Db, device: Device, ctx: Ctx): Promise<{ game: Game; 
   return { game, turns: rolled && game.today!.n > 1 ? [landTurn(game)] : [], rolled };
 }
 
-// The screen for this iPad's child, or null when the boat is not here (the switch off, or no prices from the tables).
+// The screen for this iPad's child, or null when the boat is not here (no prices from the family's times tables).
 export async function boatScreen(device: Device): Promise<Screen | null> {
   const ctx = await boatHere(device);
   if (!ctx) return null;

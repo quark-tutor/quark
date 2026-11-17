@@ -1,10 +1,10 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-// "Is the boat here?" (lib/boat-here.ts; docs/trading-boat-2-slice.md, What is built 1). With the switch off it reads
-// the switch and nothing else, so the wall, the boat and its routes behave as on main before this slice. A fault counts
-// as off. On, with a setting that gives prices, it answers with the child's seed and numbers.
+// "Is the boat here?" (lib/boat-here.ts; docs/trading-boat-2-slice.md, as changed at stop 2's fix round). There is no
+// switch (Brandon, 17 Nov 2026): the boat is here whenever the family's times tables give the child prices, on test and
+// on live alike, and with no table set it is not, and the wall shows Puzzle. A fault counts as not here.
 
 type Reply = { data: unknown; error: { message: string } | null };
 let read: string[] = [];
@@ -34,43 +34,44 @@ const places = (...p: [string, string][]) => p.map(([key, place]) => ({ place, s
 
 beforeEach(() => {
   read = [];
-  replies = { skills: { data: rungs, error: null } };
+  replies = { skills: { data: rungs, error: null }, families: { data: { timezone: "Pacific/Honolulu" }, error: null } };
   vi.spyOn(console, "error").mockImplementation(() => {});
 });
 
 describe("is the trading boat here?", () => {
-  it("with the switch off, is not, and reads the switch and nothing else", async () => {
-    replies.families = { data: { timezone: "Pacific/Honolulu", boat_on: false }, error: null };
+  it("with no times table set, is not, and the wall shows Puzzle", async () => {
+    replies.mastery = { data: [], error: null };
     const { boatHere } = await import("./boat-here");
     expect(await boatHere(device)).toBeNull();
-    expect(read).toEqual(["families"]);
   });
 
-  it("counts a fault reading the switch as off, and says so in one line naming no child", async () => {
-    replies.families = { data: null, error: { message: 'column families.boat_on does not exist' } };
-    const { boatHere } = await import("./boat-here");
-    expect(await boatHere(device)).toBeNull();
-    expect(read).toEqual(["families"]);
-    expect(console.error).toHaveBeenCalledTimes(1);
-    expect(JSON.stringify(vi.mocked(console.error).mock.calls)).not.toMatch(/Pip|child-1/);
-  });
-
-  it("with the switch on, is here with the child's own seed and the family's numbers", async () => {
-    replies.families = { data: { timezone: "Pacific/Honolulu", boat_on: true }, error: null };
+  it("with tables that give prices, is here with the child's own seed and the family's numbers, with no switch read", async () => {
     replies.mastery = { data: places(["times-2-5-10", "done"], ["times-3-4", "working"]), error: null };
     const { boatHere } = await import("./boat-here");
     const ctx = await boatHere(device);
     expect(ctx).toMatchObject({ seed: "child-1", nb: { buy: [3, 4], usual: 4, cap: 10 } });
     expect(ctx!.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(read.sort()).toEqual(["families", "mastery", "skills"]);
   });
 
-  it("with the switch on, is not here when the tables give no prices, or prices that lose money", async () => {
-    replies.families = { data: { timezone: "Pacific/Honolulu", boat_on: true }, error: null };
-    const { boatHere } = await import("./boat-here");
-    replies.mastery = { data: [], error: null };
-    expect(await boatHere(device)).toBeNull();
+  it("is not here when the tables give prices that lose money", async () => {
     replies.mastery = { data: places(["times-2-5-10", "done"], ["times-3-4", "done"]), error: null };
+    const { boatHere } = await import("./boat-here");
     expect(await boatHere(device)).toBeNull();
+  });
+
+  it("counts a fault reading anything as not here, and says so in one line naming no child", async () => {
+    const { boatHere } = await import("./boat-here");
+    for (const table of ["families", "skills", "mastery"]) {
+      vi.mocked(console.error).mockClear();
+      replies.mastery = { data: places(["times-2-5-10", "working"]), error: null };
+      replies.families = { data: { timezone: "Pacific/Honolulu" }, error: null };
+      replies.skills = { data: rungs, error: null };
+      replies[table] = { data: null, error: { message: `relation ${table} could not be read` } };
+      expect(await boatHere(device)).toBeNull();
+      expect(console.error).toHaveBeenCalledTimes(1);
+      expect(JSON.stringify(vi.mocked(console.error).mock.calls)).not.toMatch(/Pip|child-1/);
+    }
   });
 
   it("is asked by every boat function in lib/boat.ts, and by the wall's scope, and the test view decides nothing", () => {
@@ -80,5 +81,17 @@ describe("is the trading boat here?", () => {
     }
     expect(boat).not.toMatch(/devViewOn/);
     expect(readFileSync(join(__dirname, "wall.ts"), "utf8")).toMatch(/hide: \(await boatHere\(device\)\) \? \["puzzle"\] : \[\]/);
+  });
+
+  it("has no switch: no code reads families.boat_on, and /parent has no button for it", () => {
+    const root = join(__dirname, "..");
+    const files = (dir: string): string[] =>
+      readdirSync(dir).flatMap((f) => {
+        const p = join(dir, f);
+        return statSync(p).isDirectory() ? files(p) : /\.(ts|tsx|mts)$/.test(f) && !f.endsWith(".test.ts") ? [p] : [];
+      });
+    for (const p of ["app", "lib", "core", "scripts"].flatMap((d) => files(join(root, d)))) {
+      expect(readFileSync(p, "utf8"), p).not.toMatch(/boat_on|setBoat\b|boat-switch/);
+    }
   });
 });

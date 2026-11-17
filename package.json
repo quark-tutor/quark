@@ -20,6 +20,8 @@
     "plan:import:live": "node --env-file=.env.live.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-plan.mts",
     "ladder:import": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-ladder.mts",
     "ladder:import:live": "node --env-file=.env.live.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-ladder.mts",
+    "boat:tables": "node --env-file=.env.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/boat-tables.mts",
+    "boat:tables:live": "node --env-file=.env.live.local --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/boat-tables.mts",
     "content:fetch": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content-fetch.mts",
     "content:fetch:live": "node --env-file=.env.live.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/content-fetch.mts",
     "week:build": "node --env-file=.env.local --conditions=react-server --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/week-build.mts",

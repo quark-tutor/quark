@@ -167,10 +167,10 @@ export function wallStore(): SpeechStore {
   };
 }
 
-// While the trading boat is here for the child (lib/boat-here.ts: the family's switch on, and its tables give him
-// prices), Puzzle is not on his wall: its tile, its cards, an answer to one and "Read it to me" on one are refused as a
-// card not on today's wall is, and the wall says where the Math tile goes (docs/trading-boat-2-slice.md). Off, nothing
-// is hidden and the wall is as it was.
+// While the trading boat is here for the child (lib/boat-here.ts: the family's times tables give him prices), Puzzle
+// is not on his wall: its tile, its cards, an answer to one and "Read it to me" on one are refused as a
+// card not on today's wall is, and the wall says where the Math tile goes (docs/trading-boat-2-slice.md). With no table
+// set, nothing is hidden and the wall is as it was.
 const scopeOf = async (device: Device): Promise<Scope> => ({
   familyId: device.familyId,
   childId: device.childId,

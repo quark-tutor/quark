@@ -351,7 +351,7 @@ describe("the trading boat in Puzzle's place (docs/trading-boat-2-slice.md)", ()
     return slots;
   };
 
-  it("with the switch off, is the wall as it was: Puzzle in its place, no Math tile, no boatAt", async () => {
+  it("with no times table set, is the wall as it was: Puzzle in its place, no Math tile, no boatAt", async () => {
     const { store } = fake(DAYS.flatMap(dayOf));
     for (const day of DAYS) {
       const w = await wallFor(store, scope, "Pip", at8(day));
@@ -386,7 +386,7 @@ describe("the trading boat in Puzzle's place (docs/trading-boat-2-slice.md)", ()
     expect(attempts).toHaveLength(0);
     expect(await lineText(store, boat, { cardId: "2026-10-26-puzzle", part: "read" }, MONDAY)).toBeNull();
     expect(await lineText(store, scope, { cardId: "2026-10-26-puzzle", part: "read" }, MONDAY)).not.toBeNull();
-    // The other cards open as before, and with the switch off Puzzle's does too.
+    // The other cards open as before, and with no table set Puzzle's does too.
     expect(await cardFor(store, boat, "2026-10-26-look", MONDAY)).not.toBeNull();
     expect(await cardFor(store, scope, "2026-10-26-puzzle", MONDAY)).not.toBeNull();
   });

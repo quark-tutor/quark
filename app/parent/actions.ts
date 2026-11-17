@@ -3,7 +3,7 @@
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { audit } from "@/lib/audit";
-import { checkSetting, placeOf, timesRungs, type Setting } from "@/lib/boat-setting";
+import { checkSetting, placeOf, settingRows, timesRungs, type Setting } from "@/lib/boat-setting";
 import { requireGuardian } from "@/lib/guardian";
 import { generatePairingCode, hashSecret } from "@/lib/pairing";
 import { createClient } from "@/lib/supabase/server";
@@ -59,25 +59,12 @@ export async function forgetDevice(deviceId: string) {
   refresh();
 }
 
-// The trading boat's switch (docs/trading-boat-2-slice.md): any guardian turns it on or off for the family (rule 2),
-// through the guardian's own session, which row-level security keeps to the family's row; the server writes the audit
-// row. On, the Math tile takes Puzzle's place on the wall; off, Puzzle is back at once and each boy's game waits.
-export async function setBoat(on: boolean) {
-  const guardian = await requireGuardian();
-  if (!guardian) return;
-
-  const supabase = await createClient();
-  const { data, error } = await supabase.from("families").update({ boat_on: on }).eq("id", guardian.familyId).select("id");
-  if (error) throw error;
-
-  if (data.length > 0) await audit(guardian, "boat.switch", { on });
-  refresh();
-}
-
 export type BoatTablesState = { error?: string; saved?: boolean };
 
 // The family's times tables for the boat: one setting, written as the same mastery.place on each times-table rung for
-// every child, so both boys have the same prices. A setting that would let a crate lose money is refused, saying why
+// every child, so both boys have the same prices. Any guardian sets it (rule 2), through the guardian's own session.
+// It is also the boat's way on and off the wall (no switch; Brandon, 17 Nov 2026): prices put it in Puzzle's place,
+// every table at not yet takes it off. A setting that would let a crate lose money is refused, saying why
 // (lib/boat-setting.ts). Not yet is a place of null, so nothing is deleted. The audit row holds the setting, never a
 // child.
 export async function setBoatTables(_prev: BoatTablesState, formData: FormData): Promise<BoatTablesState> {
@@ -98,8 +85,7 @@ export async function setBoatTables(_prev: BoatTablesState, formData: FormData):
   const check = checkSetting(rungs, setting);
   if ("error" in check) return { error: check.error };
 
-  const at = new Date().toISOString();
-  const rows = kids.data.flatMap((kid) => rungs.map((r) => ({ child_id: kid.id, skill_id: r.id, place: setting.get(r.key) ?? null, updated_at: at })));
+  const rows = settingRows(kids.data, rungs, setting, new Date().toISOString());
   if (rows.length) {
     const { error } = await supabase.from("mastery").upsert(rows, { onConflict: "child_id,skill_id" });
     if (error) return { error: `Couldn't save: ${error.message}` };

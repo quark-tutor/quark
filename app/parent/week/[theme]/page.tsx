@@ -8,6 +8,7 @@ import { readFloor, type PolicyNotes } from "@/core/curation/gate";
 import { backToReviewProblem, childSummary, daysBuilt, floorLine, liveProblems, longDay, plural, rulebookLine, statusWords, whenWords } from "@/core/curation/live";
 import { todayIn } from "@/core/curation/week";
 import { readSafetyFloor } from "@/core/prompts";
+import { familySetting, type PlacedRow } from "@/lib/boat-setting";
 import { currentRulebookHash } from "@/lib/family-rulebook";
 import { requireGuardian } from "@/lib/guardian";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -81,7 +82,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
 
   // Row-level security keeps all of this to the guardian's own family.
   const supabase = await createClient();
-  const [theme, kids, cards, rulebook, family, said, nowHash] = await Promise.all([
+  const [theme, kids, cards, rulebook, family, said, nowHash, rungs, placed] = await Promise.all([
     supabase.from("themes").select("id, title, week_start, status").eq("id", themeId).maybeSingle(),
     supabase.from("children").select("id, nickname").order("birth_month"),
     supabase
@@ -92,7 +93,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
       .order("layer")
       .returns<Card[]>(),
     supabase.from("values_profiles").select("source_hash").maybeSingle(),
-    supabase.from("families").select("timezone, boat_on").single(),
+    supabase.from("families").select("timezone").single(),
     // Who last made this week live or took it back, and when. The audit log is open to every guardian.
     supabase
       .from("audit_log")
@@ -104,9 +105,15 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
       .returns<{ action: string; created_at: string; guardians: { display_name: string } | null }[]>(),
     // The hash of the guardians' answers now: a verdict counts only against it.
     currentRulebookHash(createAdminClient(), guardian.familyId),
+    // The family's times tables: while they give the trading boat prices, it takes Puzzle's place on the wall.
+    supabase.from("skills").select("id, key, name, position, ladder").eq("kind", "rung").not("key", "is", null),
+    supabase.from("mastery").select("child_id, place, skills!inner(key)").not("place", "is", null),
   ]);
   for (const r of [theme, kids, cards, rulebook, family, said]) if (r.error) throw new Error(r.error.message);
   if (!theme.data) return <p>No such week.</p>;
+  // A fault reading the tables only leaves the sentence out; the boat's own read decides the wall (lib/boat-here.ts).
+  const boatCheck = rungs.error || placed.error ? null : familySetting(rungs.data, kids.data ?? [], placed.data as unknown as PlacedRow[]).check;
+  const boatOn = !!boatCheck && "nb" in boatCheck && !!boatCheck.nb;
 
   // Pictures and recordings: the approved items, with their stored copies through signed URLs that
   // last an hour. The bucket is private; nothing here is a public URL to it.
@@ -178,7 +185,7 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
         <p className={styles.lede}>
           The week starting {weekday(theme.data.week_start)}. Each card is shown with its four layers: what the child sees first, then each tap
           deeper. On the Wonder Wall the tiles change order each day.
-          {family.data?.boat_on ? " While the trading boat is on, it takes Puzzle's place on the wall, and the Puzzle cards below are not shown." : null}
+          {boatOn ? " While the trading boat is on the wall, it takes Puzzle's place, and the Puzzle cards below are not shown." : null}
         </p>
       </div>
 

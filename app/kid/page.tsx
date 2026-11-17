@@ -25,9 +25,9 @@ export default function WonderWallPage() {
 async function WonderWall() {
   const device = await getDevice();
   if (!device) redirect("/kid/pair");
-  // The trading boat's tile (docs/trading-boat-2-slice.md): while the family's switch is on and its tables give him
-  // prices, the Math tile stands where Puzzle falls in today's order and Puzzle's tile is not shown; otherwise null,
-  // and the wall is as it was. boatAt comes from the wall's own read of the same switch (lib/wall.ts).
+  // The trading boat's tile (docs/trading-boat-2-slice.md): while the family's times tables give him prices, the Math
+  // tile stands where Puzzle falls in today's order and Puzzle's tile is not shown; otherwise null, and the wall is as
+  // it was. boatAt comes from the wall's own read of the same tables (lib/wall.ts, lib/boat-here.ts).
   const [{ nickname, tiles, boatAt }, boat] = await Promise.all([loadWall(device), boatTile(device)]);
   const mathAt = boat && boatAt !== undefined ? boatAt : null;
   const allDone = tiles.length > 0 && tiles.every((t) => t.done) && (mathAt === null || boat!.done);

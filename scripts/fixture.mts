@@ -35,8 +35,8 @@
 //   npm run fixture -- boat <n> money <m>   set child n's money to m, so the look can reach a boat's price (check 11)
 //   npm run fixture -- boat <n> reset       start child n's trading boat over: his game and its log are deleted
 //   npm run fixture -- boat <n> log         child n's trading log, as /parent shows it
-//   npm run fixture -- switch [on|off]      the family's trading-boat switch on test, as a guardian's tap on /parent
-//                                           sets it (docs/trading-boat-2-slice.md); with no word, says where it is
+// The family's times tables for the trading boat, which put it on the wall, are `npm run boat:tables` (test) and
+// `boat:tables:live`, not a fixture: scripts/boat-tables.mts.
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
 // moves a date and sets a week live, as a guardian's Looks-good tap would, and writes an audit row naming itself.
 
@@ -570,18 +570,6 @@ if (command === "show") {
       if (g.sailing) console.log(`  Sailing on the ${g.sailing.good} rumor to ${g.sailing.island}, at $${g.sailing.price}.`);
     }
   }
-} else if (command === "switch") {
-  // The trading boat's switch on test, for a check without signing in as the test guardian. It writes an audit row
-  // naming itself, as the other fixtures do.
-  if (arg === "on" || arg === "off") {
-    console.log(`About to turn the trading boat ${arg} for test's family.`);
-    must(await db.from("families").update({ boat_on: arg === "on" }).eq("id", familyId).select("id"), "families");
-    must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.boat-switch", target: { on: arg === "on" } }).select("id"), "audit_log");
-    console.log("Done.");
-  } else if (arg === undefined) {
-    const f = must(await db.from("families").select("boat_on").eq("id", familyId).single(), "families") as { boat_on: boolean };
-    console.log(`The trading boat is ${f.boat_on ? "on" : "off"} for test's family.`);
-  } else throw new Error("Say on or off: npm run fixture -- switch on");
 } else if (command === "judge") {
   await (await import("./judge-table.mts")).runJudgeTable(arg);
 } else {
