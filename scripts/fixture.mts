@@ -31,6 +31,9 @@
 //                                           boy's rungs, child 2 at the younger's; the trading boat's prices come from them
 //   npm run fixture -- clear-math           delete the held Math tile's cards from test, with their questions, answers
 //                                           and idea rows (docs/trading-boat-slice.md, The clean-up); once
+//   npm run fixture -- boat <n>             child n's trading boat: money, boat, cargo, island, day and where he is
+//   npm run fixture -- boat <n> money <m>   set child n's money to m, so the look can reach a boat's price (check 11)
+//   npm run fixture -- boat <n> reset       start child n's trading boat over: his game and its log are deleted
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
 // moves a date and sets a week live, as a guardian's Looks-good tap would, and writes an audit row naming itself.
 
@@ -516,6 +519,41 @@ if (command === "show") {
   if (left.length) throw new Error(`${left.length} math cards are still there.`);
   must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.clear-math", target: { cards: cards.length, attempts: gone.length, ideas: ideas.length } }).select("id"), "audit_log");
   console.log(`Deleted ${gone.length} answers, ${ideas.length} idea rows and, with them, ${cards.length} math cards. None is left.`);
+} else if (command === "boat") {
+  // The trading boat on test (docs/trading-boat-slice.md): look at a child's game, set his money, or start it over.
+  const [what, amount] = process.argv.slice(4);
+  const kids = must(await db.from("children").select("id").eq("family_id", familyId).order("birth_month"), "children") as { id: string }[];
+  const kid = kids[Number(arg) - 1];
+  if (!kid) throw new Error("Say which child: npm run fixture -- boat 1");
+  if (what === "money") {
+    const m = Number(amount);
+    if (!Number.isInteger(m) || m < 0) throw new Error("Say how much: npm run fixture -- boat 1 money 720");
+    console.log(`About to set child ${arg}'s trading boat money to $${m}.`);
+    must(await db.from("boat_games").upsert({ child_id: kid.id, family_id: familyId, money: m, updated_at: new Date().toISOString() }).select("child_id"), "boat_games");
+    must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.boat-money", target: { child: Number(arg), money: m } }).select("id"), "audit_log");
+    console.log("Done.");
+  } else if (what === "reset") {
+    console.log(`About to delete child ${arg}'s trading boat and its log, so it starts over at home with $20.`);
+    const turns = must(await db.from("boat_turns").delete().eq("child_id", kid.id).select("id"), "boat_turns") as unknown[];
+    must(await db.from("boat_games").delete().eq("child_id", kid.id).select("child_id"), "boat_games");
+    must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.boat-reset", target: { child: Number(arg), turns: turns.length } }).select("id"), "audit_log");
+    console.log(`Deleted the game and ${turns.length} log rows.`);
+  } else {
+    const g = must(await db.from("boat_games").select("money, space, cargo, island, sailing, today").eq("child_id", kid.id).maybeSingle(), "boat_games") as {
+      money: number;
+      space: number;
+      cargo: { good: string; count: number; paid: number }[];
+      island: string;
+      sailing: { good: string; island: string; price: number } | null;
+      today: { n: number; on: string; stop: string } | null;
+    } | null;
+    if (!g) console.log(`Child ${arg} has not played yet.`);
+    else {
+      console.log(`Child ${arg}: $${g.money}, a ${g.space}-crate boat, on ${g.island}; day ${g.today?.n ?? "-"} (${g.today?.on ?? "-"}) at ${g.today?.stop ?? "-"}.`);
+      console.log(`  On board: ${g.cargo.length ? g.cargo.map((l) => `${l.count} ${l.good} (paid $${l.paid})`).join(", ") : "nothing"}.`);
+      if (g.sailing) console.log(`  Sailing on the ${g.sailing.good} rumor to ${g.sailing.island}, at $${g.sailing.price}.`);
+    }
+  }
 } else if (command === "judge") {
   await (await import("./judge-table.mts")).runJudgeTable(arg);
 } else {

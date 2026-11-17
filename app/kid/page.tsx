@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SAY, SLOT_NAMES } from "@/core/wall/words";
+import { BOAT, MATH_NAME, SAY, SLOT_NAMES } from "@/core/wall/words";
+import { boatTile } from "@/lib/boat";
 import { getDevice } from "@/lib/device";
 import { loadWall } from "@/lib/wall";
 import { DevBar } from "./dev-bar";
@@ -24,7 +25,9 @@ export default function WonderWallPage() {
 async function WonderWall() {
   const device = await getDevice();
   if (!device) redirect("/kid/pair");
-  const { nickname, tiles } = await loadWall(device);
+  // The trading boat's tile (docs/trading-boat-slice.md): on the dev server against test only, after the cards; null
+  // anywhere else, where nothing reads the boat's tables.
+  const [{ nickname, tiles }, boat] = await Promise.all([loadWall(device), boatTile(device)]);
 
   return (
     <>
@@ -32,9 +35,8 @@ async function WonderWall() {
         <h1 className={styles.hello}>{SAY.hello(nickname)}</h1>
         {tiles.length > 0 && tiles.every((t) => t.done) ? <p className={styles.muted}>{SAY.everythingDone}</p> : null}
       </header>
-      {tiles.length === 0 ? (
-        <p className={styles.nothing}>{SAY.nothingToday}</p>
-      ) : (
+      {tiles.length === 0 ? <p className={styles.nothing}>{SAY.nothingToday}</p> : null}
+      {tiles.length > 0 || boat ? (
         <nav className={styles.tiles} aria-label="Today's cards">
           {tiles.map((t) => (
             // prefetch off: opening a card is a visit, so it happens only on a tap.
@@ -44,8 +46,15 @@ async function WonderWall() {
               {t.done ? <span className={styles.tileSlot}>{SAY.doneToday}</span> : null}
             </Link>
           ))}
+          {boat ? (
+            <Link href="/kid/boat" prefetch={false} className={boat.done ? `${styles.tile} ${styles.tileDone}` : styles.tile}>
+              <span className={styles.tileSlot}>{MATH_NAME}</span>
+              <span className={styles.tileTitle}>{BOAT.tile}</span>
+              {boat.done ? <span className={styles.tileSlot}>{SAY.doneToday}</span> : null}
+            </Link>
+          ) : null}
         </nav>
-      )}
+      ) : null}
       <DevBar device={device} />
     </>
   );

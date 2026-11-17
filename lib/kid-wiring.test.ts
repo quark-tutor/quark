@@ -3,7 +3,7 @@ import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { BRILLIANCE } from "../core/curation/cards.ts";
-import { SAY, SLOT_NAMES } from "../core/wall/words.ts";
+import { BOAT, MATH_NAME, SAY, SLOT_NAMES } from "../core/wall/words.ts";
 
 // The kid view's wiring (docs/wonder-wall-1-slice.md, decisions 3 to 5): every read and write goes through
 // lib/wall.ts (and the device lookup), nothing on the kid path logs anything, nothing links out, and the
@@ -34,8 +34,13 @@ describe("the kid view", () => {
   });
 
   it("logs nothing on the kid path but a failed hear's or say's message and why the judge gave no verdict, so no guess, nickname, reply, heard word or line reaches a log", () => {
-    const logging = [...KID, "lib/wall.ts", "lib/speech-ahead.ts", ...sources("core/wall")].filter((p) => /\bconsole\./.test(code(p))).map(name);
-    expect(logging.sort()).toEqual(["app/api/kid/hear/route.ts", "app/api/kid/say/route.ts", "lib/wall.ts"]);
+    const logging = [...KID, "lib/wall.ts", "lib/boat.ts", "lib/speech-ahead.ts", ...sources("core/wall"), ...sources("core/boat")].filter((p) => /\bconsole\./.test(code(p))).map(name);
+    expect(logging.sort()).toEqual(["app/api/kid/hear/route.ts", "app/api/kid/say/route.ts", "lib/boat.ts", "lib/wall.ts"]);
+    // The trading boat's no-number judge (docs/trading-boat-slice.md): the fault alone, and the database's message.
+    expect(code("lib/boat.ts").match(/\bconsole\.[^;]*;/g)).toEqual([
+      `console.error("no number: read as other instead:", r.fault);`,
+      `console.error("no number: could not record the run:", error.message);`,
+    ]);
     expect(code("app/api/kid/hear/route.ts").match(/\bconsole\.[^;]*;/g)).toEqual([
       `console.error("hear: Talk failed", error instanceof Error ? error.message : "unknown error");`,
     ]);
@@ -73,7 +78,7 @@ describe("the tutor's voice and ears (docs/tutor-voice-slice.md)", () => {
   });
 
   it("are server-only, so a browser import would stop the build", () => {
-    for (const p of ["core/speech.ts", "core/speech/google.ts", "lib/wall.ts", "lib/speech-ahead.ts"]) {
+    for (const p of ["core/speech.ts", "core/speech/google.ts", "lib/wall.ts", "lib/boat.ts", "lib/speech-ahead.ts"]) {
       expect(code(p), p).toMatch(/^import "server-only";/);
     }
   });
@@ -105,7 +110,27 @@ describe("the tutor's voice and ears (docs/tutor-voice-slice.md)", () => {
 });
 
 describe("the wall's own words", () => {
-  const all = [...Object.values(SAY).map((s) => (typeof s === "function" ? s("Pip") : s)), ...Object.values(SLOT_NAMES)];
+  // The trading boat's sentences (docs/trading-boat-slice.md), each filled in as the game fills it.
+  const B = BOAT;
+  const boat = [
+    B.tile, ...B.firstDay, B.toHarbor, B.toVillage, B.castOff, B.money(20), B.yourBoat("canoe", 3, 10), B.aboard(["3 crates of taro"]), B.aboard([]), B.usual(5),
+    B.market("harbor", "home"), B.market("village", "maui"), B.offer("taro", 3), B.left(1), B.left(6), B.soldOut, B.rumor("mangoes", "maui", 10), B.howMany("bananas"),
+    B.allTheTraderHas, B.allTheRoom, B.thatMany, B.owe, B.bought(1, "taro"), B.bought(6, "mangoes"), B.short(70, 60), B.chooseAgain, B.added(6, 5), B.oneOut("crate"),
+    B.oneOut("bill"), B.letsCount, B.step(4, "crate", false), B.step(1, "crate", true), B.tryFewer, B.tryFewerButton, B.sellFewer, B.sellFewerButton, B.askGrownUp,
+    B.whereSail, B.sailChoice("coconuts", "oahu", 10), B.castOffFor("kauai"), B.sailingTo("lanai"), B.land("molokai"), B.landReason("sweet-potatoes", "hawaii", 10),
+    B.usualHere("pineapples", 4), B.buyer(6, "taro", 4), B.howManySell, B.owed, B.sold(120), B.keep, B.backMade(30, "mangoes", 60), B.backLess(30, "taro", 20), B.right,
+    B.countUp(30, 60), B.builder("double", 20, 4), B.buyIt, B.notNow, B.oweBuilder, B.bundle, B.boatYours("schooner", 50), MATH_NAME,
+  ];
+  const all = [...Object.values(SAY).map((s) => (typeof s === "function" ? s("Pip") : s)), ...Object.values(SLOT_NAMES), ...boat];
+
+  it("say what a trading boat line should, word for word", () => {
+    expect(B.bought(1, "taro")).toBe("That's right. 1 crate of taro is on your boat.");
+    expect(B.landReason("mangoes", "maui", 10)).toBe("A ship full of mangoes sank near Maui. So mangoes sell for $10 a crate here.");
+    expect(B.usualHere("taro", 4)).toBe("Here taro sells for the usual $4 a crate.");
+    expect(B.backMade(30, "taro", 60)).toBe("You paid $30 for this taro and sold it for $60. How much did you make?");
+    expect(B.market("harbor", "home")).toBe("The harbor market at home");
+    expect(B.step(1, "crate", false)).toBe("1 crate: how much so far?");
+  });
 
   it("use no brilliance words", () => {
     for (const s of all) expect(s).not.toMatch(BRILLIANCE);

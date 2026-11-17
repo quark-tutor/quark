@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getDevice } from "@/lib/device";
+import { sayBoat } from "@/lib/boat";
 import { sayLine } from "@/lib/wall";
 
 // "Read it to me" from the paired iPad (docs/tutor-voice-slice.md): the line is named by its card and part
@@ -19,7 +20,10 @@ export async function GET(request: Request) {
   if (!device) return NextResponse.json({ ok: false }, { status: 401 });
 
   const line = new URL(request.url).searchParams.get("line") ?? "";
-  const url = await sayLine(device, line).catch((error: unknown) => {
+  // "boat.screen.<n>": the trading boat's screen as it stands now (lib/boat.ts); n changes with the screen, so the
+  // player loads the new words rather than replaying the last.
+  const said = /^boat\.screen(\.[0-9a-z]+)?$/.test(line) ? sayBoat(device) : sayLine(device, line);
+  const url = await said.catch((error: unknown) => {
     console.error("say: Read it to me failed", fault(error));
     return undefined;
   });
