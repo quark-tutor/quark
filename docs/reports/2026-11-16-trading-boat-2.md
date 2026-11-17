@@ -8,8 +8,105 @@ Brief: `docs/trading-boat-2-slice.md` (*Wonder Wall*, phase 4), on `phase-4-wond
 - **17 Nov 2026:** stop 2's look failed on the brief, not on the build. The chat brought it, quoting Brandon: "we
   need to have code undo the switch, and release the math trading game in place of the puzzle, that was the
   decision." The fix round started at 04:45. Stop 2, fix round 1, at 04:58.
+- **17 Nov, fix round 2:** the look failed on (b), by Brandon's decision, brought by the chat: "high luck on day 1
+  will give one child an overwhelming lead. fix the first 3 days of the simulation, then luck after that." It started
+  at 05:17. Stop 2, fix round 2, at 05:22.
 
-## Stop 2, fix round 1: Your look, on test
+## Stop 2, fix round 2: Your look, on test
+
+### Where the job stands
+
+Game days 1, 2 and 3 are now the same for every child of a family. They are drawn from the family and the day number,
+not the child, and from day 4 each child has his own seed, as before. A game day is a day played, so each boy gets the
+same first three whenever he plays them.
+- **The clock:** 5 minutes since the fix round began.
+- **Live:** nothing has touched it.
+- **Spent:** nothing.
+- **This replaces** "same prices only" (16 Nov) for days 1 to 3.
+
+**Built** (`8727d94`):
+- **The rule:**
+  - `SHARED_DAYS = 3` and `seedOf(n, child, family)` in `core/boat/day.ts`;
+  - the game's context carries the family (`lib/boat-here.ts`: `device.familyId`);
+  - `roll()` and `dayFor()` draw each day from `seedOf()`.
+- **The sim:** `play()` takes the family too, so it can measure the change.
+- **One thing beyond the letter of the ask:**
+  - **The problem:** `dayOf()` drew where the rumors point from the same random stream as everything else. A boy on
+    another island on day 2 would then have had a wholly different day 2, though it was a shared day.
+  - **The fix:** the islands are now a draw of their own, one order for the day's seed less the island he is on. Where
+    he is changes only a rumor's island, never the day's goods, crates, prices or rumors' goods and prices.
+  - **What is left:** on a shared day, two boys on different islands differ only where the family's rumor points at the
+    island one of them stands on. His then points at the next island in the order, since a rumor never names his own
+    island.
+  - **No rule changed:** the change re-draws every day, the child's own days included, with the same rules. The test
+    games were started over, and live has no game.
+- **Nothing else changes:** no sentence, screen, number or rule. `dayOf()`'s rumor draw is kept.
+- **A commit missed last round:** `37444a1` commits the command's plain refusals, which fix round 1 made and ran but
+  left out of its commits.
+
+**The plate:**
+- `npm test`: 43 files, 523 tests (5 new);
+- `npm run typecheck`: clean;
+- `npm run build`: clean.
+
+**The new tests** (`core/boat/game.test.ts`, *the family's first three days*):
+- two children of one family get identical days 1 to 3 on every pair of islands, but where a rumor points at his own
+  island, and identical days on the same island;
+- both start on the same day 1, the same `today`;
+- each gets his own days from day 4, through day 12, on every island;
+- a child of another family gets different days 1 to 3;
+- a child who starts on 2 Dec still gets the family's day 1.
+
+**The gap:** two careful boys under 2s, 5s and 10s done and 3s and 4s working on, over 2,000 pairs. Before, the richer
+has 17% more at day 7 and 14% more at day 14 (47% and 42% at 9 in 10). After, 14% and 13% (35% and 36% at 9 in 10).
+At day 3 they are level, where before the richer had 29% more (78% at 9 in 10).
+- **What it means:** the overwhelming early leads are gone, and the worst gaps at 9 in 10 narrow by about a quarter.
+  The typical gap at day 7 is from days 4 to 7's luck, and barely moves.
+- **Checked:** the island draw alone, with no shared days, gives 15% and 15%, so it changes the game's odds by no more
+  than noise.
+- **The script:** a scratch script outside the repository, which runs `core/boat/sim.ts`'s `play()` with and without
+  the family.
+
+### Proved in a production build, on test
+
+- **How:** `npm run build`, then `npm run start` on port 3000, with the dev server stopped. Both test games were
+  started over first, and test's children 1 and 2 were each paired through `/api/kid/pair`. The cookies stayed in jar
+  files that were never printed, and were deleted after.
+- **Day 1's harbor market** was identical for both, word for word:
+  - pineapples $3 (4 crates), mangoes $3 (10), sweet potatoes $4 (4), taro $3 (10);
+  - "Every dock pays $4 a crate for anything";
+  - the trader's rumor: "Pigs dug up the sweet potato fields on Hawaiʻi Island. Sweet potatoes will sell for $10 a
+    crate on Hawaiʻi Island."
+- **Today's wall** still reads Listen, Then, Math, Look, Wonder.
+- **After:**
+  - both games were started over again, for the look;
+  - the two check devices were forgotten (`67d31984…`, `1937b612…`);
+  - `next start` was stopped by its command line;
+  - `npm run dev:ipad` was started; it is running.
+- **Test, otherwise as fix round 1 left it:** the tables are 2s, 5s and 10s done and 3s and 4s working on, today has 9
+  Nov's cards, and June's iPad is paired.
+
+### Sentences
+
+None new or changed, for a child or for the parents.
+
+### Stop 3 and how the boat comes off
+
+As fix round 1 says, below. Nothing in this round is a migration, so M1 is the same six.
+
+### Your look
+
+On June's iPad at `https://192.168.50.67:3000/kid` (`npm run dev:ipad`, running), with no sign-in. Both games start
+on day 1. Tap *The trading boat*, then *Go to the harbor market*.
+
+The one check:
+- As Bug and as Kiddo (the test view's bar), day 1's harbor market shows the same goods, prices, crates and rumor.
+  Pass □ Fail □
+
+Your clean "go" means it passed. A failure, named, is a fix round back to this stop. After it, stop 3 is the three
+commands on live by your hand.
+
+## Stop 2, fix round 1: Your look, on test (failed on (b), 17 Nov)
 
 ### Where the job stands
 
