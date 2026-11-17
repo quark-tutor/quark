@@ -5,8 +5,167 @@ Brief: `docs/trading-boat-2-slice.md` (*Wonder Wall*, phase 4), on `phase-4-wond
   they can't copy off each other but they both have a chance to win." Go took every recommendation and decision below.
   On question 3, luck alone: nothing narrows the gap. The tables Brandon gave in the chat were not named at go, so
   whether they are setting A or B is seen at the tap on live (question 2). Stop 2 at 21:58.
+- **17 Nov 2026:** stop 2's look failed on the brief, not on the build. The chat brought it, quoting Brandon: "we
+  need to have code undo the switch, and release the math trading game in place of the puzzle, that was the
+  decision." The fix round started at 04:45. Stop 2, fix round 1, at 04:58.
 
-## Stop 2: Your look, on test
+## Stop 2, fix round 1: Your look, on test
+
+### Where the job stands
+
+There is no switch. The boat is on a child's wall, in Puzzle's place, whenever the family's times tables give it
+prices, on test and on live alike. With no table set, the wall shows Puzzle, as the boys have it today.
+- **The clock:** 13 minutes since the fix round began.
+- **Live:** nothing has touched it.
+- **Spent:** nothing. No model call, and no new voice line.
+
+**What the fix round asked, and what was done:**
+1. **The switch is gone.**
+   - Gone from code: no code reads `families.boat_on`, and `setBoat()` is gone.
+   - Gone from `/parent`: the switch's button and its three states are gone.
+   - `fixture -- switch` is gone, and so are their tests.
+   - `lib/boat-here.ts` now asks only the tables: with prices, the boat is here; with none, or with a fault, it is
+     not, and Puzzle is on the wall.
+   - A new test holds it: no file in `app`, `lib`, `core` or `scripts` names `boat_on`, `setBoat` or the fixture.
+2. **The migration.** `20261117000000_boat_switch_gone.sql` holds one line, `alter table families drop column
+   boat_on;`, under a header quoting Brandon. It was pushed (`5234be8`), and run **44107585185** applied it on test,
+   **green**: "Applying migration 20261117000000_boat_switch_gone.sql... Finished supabase db push." Its live job did
+   nothing.
+3. **The command.** `npm run boat:tables` sets the family's tables, and `boat:tables:live` is its twin
+   (`scripts/boat-tables.mts`).
+   - It writes the same `mastery.place` for every child on the three times-table rungs, with a `boat.tables` audit
+     row, as `/parent` saves it.
+   - It refuses, with `/parent`'s words, a setting that loses money or has nothing to sail for. It also refuses any
+     word it does not know. A refusal prints "Refused: …" and "Nothing was written.", with no stack trace.
+   - With no words, it prints the setting and what it gives. With `none`, it sets every table to not yet, which takes
+     the boat off the wall.
+   - The package test holds that only the `:live` twin reads the live file, and that the twin differs from the test
+     script only in that file.
+   - It accepts 7 of the 27 settings: the 6 that give prices, and none.
+   - **Used on test:** test's two children are now 2s, 5s and 10s *done* and 3s and 4s *working on*, both the same.
+     It read back: "The trading boat is on the wall, in Puzzle's place. Buying prices $3 and $4. Every dock pays $4 a
+     crate for anything. A rumor pays $5 or $10 a crate."
+4. **Kept as built:**
+   - the Puzzle slot;
+   - equal prices from one setting;
+   - the tables setting and the log on `/parent`;
+   - the log in crates;
+   - the `dayOf()` line.
+5. **One change of my own, adjacent:** with no switch, the setting is the only way off. So **`/parent` now saves
+   every table at *Not yet*** as the boat off the wall, where before it refused that setting.
+   - The section says so in words: "To take the boat off the wall, set every table to not yet: Puzzle is back at
+     once, and each child's game waits where they left it."
+   - The log shows while the boat is on the wall.
+   - The week page's sentence now follows the tables.
+
+**The plate:**
+- `npm test`: 43 files, 518 tests;
+- `npm run typecheck`: clean;
+- `npm run build`: clean (`38c599c`, `5234be8`).
+
+### Proved in a production build, on test, without the switch
+
+`npm run build`, then `npm run start` on port 3000 against test, with the dev server stopped. The checks used curl,
+with test's child 1 and child 2 each paired through the app's own `/api/kid/pair`. Their cookies stayed in jar files
+in the scratchpad, never printed, and were deleted after.
+- **Today's wall** (17 Nov's order is Listen, Then, Puzzle, Look, Wonder): **Listen, Then, Math (*The trading boat*),
+  Look, Wonder**, the same for both children. There was no Puzzle tile and no test-view bar.
+- **The prices,** at each child's first market:
+  - **child 1:** sweet potatoes $4, pineapples $3, coconuts $4, mangoes $4. Every dock pays $4. Today's rumor is
+    pineapples to Lānaʻi at $5.
+  - **child 2:** bananas $4, pineapples $4, mangoes $4, sweet potatoes $3. Every dock pays $4. Today's rumor is
+    pineapples to Kauaʻi at $10.
+  - **The same numbers** ($3 and $4 to buy, $4 at any dock, a rumor at $5 or $10), with each boy's own goods and
+    rumors.
+- **Off with `none`:** the wall read Listen, Then, **Puzzle**, Look, Wonder. `/api/kid/boat` answered 404, and
+  `/kid/boat` went back to the wall (Next's streamed redirect to `/kid`).
+- **On again** (the tables set back): Math was back where Puzzle falls, and child 1's game was where he left it, at
+  the harbor market.
+- **Not seen:** `/parent` needs a guardian's sign-in, which curl does not have. Its section and the week page's
+  sentence are covered by the tests, the typecheck and the build. The look below asks for no sign-in.
+- **Not repeated:** the trade and "Read it to me". The game and the voice did not change in this round; stop 2's
+  first proof has them, below.
+- **After:**
+  - the server was stopped, and `next start` (PID 20788) was stopped by its command line;
+  - both test games were started over;
+  - the two check devices were forgotten (`f64fc14d…`, `54689500…`);
+  - `npm run dev:ipad` was started; it is running.
+
+### Done on test along the way, for the record
+
+- **Today's cards:** test had no card on 17 Nov, so `fixture -- today 2026-11-09` moved 9 Nov's 40 passed cards to
+  today and set their week live. Today's wall is now five tiles, so check (a) is a real wall and not Math alone. 9 Nov
+  now has no cards on test.
+- **The tables** on test: 2s, 5s and 10s done; 3s and 4s working on, for both children. They were set by the command,
+  then by `none`, then set again.
+- **Both games** were started over (`fixture -- boat 1 reset`, `boat 2 reset`).
+- **June's iPad** stays paired as Bug (`7bf285e9…`).
+
+### Sentences
+
+- **For a child:** none new or changed.
+- **For the parents,** changed on `/parent`:
+  - "Math as a trading game, in Puzzle's place on the wall: each child buys crates at the markets and tells the
+    trader what they owe. Every child gets the same prices, from the times tables below; each has their own markets
+    and rumors."
+  - **Where the boat stands, one of three:**
+    - "The trading boat is on the wall, in Puzzle's place."
+    - "The trading boat is not on the wall: no times table is working on or done, so the wall shows Puzzle."
+    - "The trading boat is not on the wall: these times tables give it no prices that work, so the wall shows
+      Puzzle."
+  - **The tables:** "One setting for the family. Every child's prices come from it. To take the boat off the wall, set
+    every table to not yet: Puzzle is back at once, and each child's game waits where they left it."
+  - **With no ladder loaded:** "The math ladder isn't loaded on this copy of Quark yet, so the wall shows Puzzle."
+  - **Gone:** the switch's three states and its button, and the refusal "With no times table working on or done…".
+- **On the week page:** "While the trading boat is on the wall, it takes Puzzle's place, and the Puzzle cards below
+  are not shown."
+
+### Stop 3, as it now stands, and how the boat comes off
+
+Stop 3 is three commands by your hand. Each gets its three lines in the report before you run it.
+- **M1 `npm run db:push:live`:** six migrations on **LIVE**.
+  - **The Math tile's three:** `20261109000000`, `…0001` and `…0002`, green on test in runs 42757383298, 42765079572
+    and 42765695820.
+  - **The trading boat's:** `20261116000000`, green in run 44017188011.
+  - **This job's two:** `20261116000001` adds `boat_on` (run 44041186215) and `20261117000000` drops it (run
+    44107585185). On live the two run in the same push, so `families` ends as it is now.
+  - The code on Vercel reads none of what they add.
+- **M2 `npm run ladder:import:live`:** the ladder's rows into `skills` on **LIVE**. Safe to run again.
+- **M3 `npm run boat:tables:live -- times-2-5-10=<place> times-3-4=<place>`** on **LIVE**, with the tables you gave in
+  the chat. A table not named is not yet, and the places are `done`, `working` and `not-yet`.
+  - The value stays out of this public repository, so the report records that it ran, not what it printed.
+  - Setting it changes nothing the boys see until the release, because the code on Vercel shows the boat only on the
+    dev server against test and reads no table.
+  - If the release went first, nothing would change either: with no table set, the wall shows Puzzle.
+- **The release** (`/wwc:release`, typed by you) then puts the boat on both boys' walls, in Puzzle's place, on the
+  first screen each opens.
+
+**How it is taken off again, if it has to be** (each way keeps both games, and putting the tables back finds each
+boy where he left off):
+1. **On live's `/parent`:** *The trading boat*, set every table to *Not yet*, then *Save the times tables*. Puzzle is
+   back on the next screen either boy opens. Any guardian can do it, from any device.
+2. **By command:** `npm run boat:tables:live -- none`.
+3. **Already built in:** a fault reading the tables counts as no boat, so Puzzle shows.
+4. **If the code itself had to go:** a revert of the release on `main`, which is your merge.
+
+**Proved on test:** way 2, at the production build above. Way 1 is the same write through `/parent`, covered by the
+tests.
+
+### Your look
+
+On June's iPad at `https://192.168.50.67:3000/kid` (`npm run dev:ipad`, running), with no sign-in. Today's wall on
+test is 9 Nov's cards moved to today. 17 Nov's order is Listen, Then, Puzzle, Look, Wonder, so the boat stands third.
+Both games start on day 1.
+
+The two checks, each its own:
+- **(a)** Today's wall shows *The trading boat* where Puzzle goes, and it is the game approved on 16 Nov.
+  Pass □ Fail □
+- **(b)** As Bug and as Kiddo (the test view's bar), the prices are the same numbers. Pass □ Fail □
+
+Your clean "go" means both passed. A failure, named, is a fix round back to this stop. After it, stop 3 is the three
+commands on live by your hand.
+
+## Stop 2, first time: Your look, on test (failed on the brief, 17 Nov)
 
 ### Where the job stands
 
