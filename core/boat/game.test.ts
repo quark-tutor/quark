@@ -116,12 +116,20 @@ describe("a wrong total (check 4)", () => {
     g = go(g, n(3 + p));
     const s = view(g, ctx()).trade!;
     expect(s.reply).toBe(BOAT.added(3, p));
-    expect(s.step).toEqual({ ask: "2 crates: how much so far?", sum: `$${p} + $${p} = ?` });
+    expect(s.step).toEqual({ ask: "2 crates: how much so far?", sum: `$${p} + $${p} = ?`, k: 2 });
     g = go(g, n(2 * p));
     expect(view(g, ctx()).trade!.pic!.lit).toBe(2);
-    expect(view(g, ctx()).trade!.step).toEqual({ ask: "3 crates: how much so far?", sum: `$${2 * p} + $${p} = ?` });
+    expect(view(g, ctx()).trade!.step).toEqual({ ask: "3 crates: how much so far?", sum: `$${2 * p} + $${p} = ?`, k: 3 });
     g = go(g, n(3 * p));
     expect(g.cargo[0].count).toBe(3);
+  });
+
+  it("asks one question at a time during the count: Read it to me says the trade's sum as a reminder and the step as the question", () => {
+    const t = trade(3);
+    const s = view(go(t.g, n(99)), ctx());
+    expect(s.speak).toContain(`3 times $${t.p}.`);
+    expect(s.speak).not.toContain("How much do you owe the trader?");
+    expect(s.speak.match(/equals what\?/g)).toHaveLength(1);
   });
 
   it("says he is close when he is one crate out, and counts at once for anything else", () => {
@@ -148,7 +156,7 @@ describe("a wrong total (check 4)", () => {
     const p = t.p;
     g = go(g, n(1));
     g = go(g, n(1)); // the first pair missed
-    expect(view(g, ctx()).trade!.step).toEqual({ ask: "1 crate: how much so far?", sum: `1 × $${p} = ?` });
+    expect(view(g, ctx()).trade!.step).toEqual({ ask: "1 crate: how much so far?", sum: `1 × $${p} = ?`, k: 1 });
     g = go(g, n(1));
     expect(view(g, ctx()).trade!.ended).toEqual([BOAT.tryFewer]);
     expect(view(g, ctx()).buttons.map((b) => b.label)).toEqual([BOAT.tryFewerButton]);

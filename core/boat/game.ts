@@ -462,7 +462,7 @@ export type TradeView = {
   question: string;
   sum: string;
   reply: string | null;
-  step: { ask: string; sum: string } | null;
+  step: { ask: string; sum: string; k: number } | null; // k: the crates counted once this step is right
   ended: string[] | null;
   answering: boolean;
 };
@@ -541,7 +541,7 @@ function tradeView(h: Hand): TradeView {
     question,
     sum: sumOf(tr),
     reply: replies.length ? replies.join(" ") : null,
-    step: step && !h.ended ? { ask: BOAT.step(step.k, unitOf(tr), step.more), sum: step.sum } : null,
+    step: step && !h.ended ? { ask: BOAT.step(step.k, unitOf(tr), step.more), sum: step.sum, k: step.k } : null,
     ended: h.ended === "fewer" ? [tr.kind === "sell" ? BOAT.sellFewer : BOAT.tryFewer] : h.ended === "person" ? [SAY.forAPerson, BOAT.askGrownUp] : null,
     answering: !h.ended,
   };
@@ -637,7 +637,9 @@ function speakOf(s: Screen): string {
   if (s.offers) for (const o of s.offers) parts.push(`${o.label}. ${o.left}.`);
   if (s.stepper) parts.push(s.stepper.ask);
   if (s.trade) {
-    parts.push(...s.trade.lines, s.trade.question, spoken(s.trade.sum));
+    // One question at a time: during the count the trade's sum is said as a reminder, and the step is the question.
+    if (s.trade.step || s.trade.ended) parts.push(...s.trade.lines, spoken(s.trade.sum.replace(/\s*=\s*\?$/, "")));
+    else parts.push(...s.trade.lines, s.trade.question, spoken(s.trade.sum));
     if (s.trade.reply) parts.push(s.trade.reply);
     if (s.trade.step) parts.push(s.trade.step.ask, spoken(s.trade.step.sum));
     if (s.trade.ended) parts.push(...s.trade.ended);

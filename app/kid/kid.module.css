@@ -662,6 +662,21 @@
   stroke: var(--accent);
   stroke-width: 4;
 }
+/* The crates the count's step asks about now: outlined in the accent colour, not yet filled. */
+.crateNow {
+  fill: var(--surface);
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-dasharray: 10 6;
+}
+/* During the count, the trade's sum as a quiet reminder, with no question mark. */
+.sumGoal {
+  margin: 0;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
 .crateSlat {
   stroke: var(--line);
   stroke-width: 3;

@@ -167,16 +167,23 @@ function TradeBox({ screen, busy, read, actions, onAnswer }: { screen: Screen; b
   }
   return (
     <div className={styles.trade}>
-      {t.pic ? <Crates pic={t.pic} /> : null}
+      {t.pic ? <Crates pic={t.pic} now={t.step?.k ?? null} /> : null}
       {t.lines.map((line) => (
         <p key={line} className={styles.cardText}>
           {line}
         </p>
       ))}
-      <div className={styles.tradeAsk}>
-        <p className={styles.question}>{t.question}</p>
-        <p className={styles.sumLine}>{t.sum}</p>
-      </div>
+      {/* One question at a time (Brandon at stop 2, 16 Nov 2026: "Do I answer the top one or the bottom?"). During the
+          count the trade's sum stays as a quiet reminder, with no question mark, and the step is the only question
+          beside the box. */}
+      {t.step || t.ended ? (
+        <p className={styles.sumGoal}>{t.sum.replace(/\s*=\s*\?$/, "")}</p>
+      ) : (
+        <div className={styles.tradeAsk}>
+          <p className={styles.question}>{t.question}</p>
+          <p className={styles.sumLine}>{t.sum}</p>
+        </div>
+      )}
       {t.reply ? <p className={styles.reply}>{t.reply}</p> : null}
       {t.step ? (
         <div className={styles.tradeAsk}>

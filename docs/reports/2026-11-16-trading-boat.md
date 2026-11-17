@@ -776,6 +776,38 @@ little weird."
 **Checked:** typecheck, lint and 494 tests. In Chrome (paired as Kiddo, so it opened Kiddo's same trade, which I only
 looked at), the parts measure as above.
 
+### At stop 2, 19:20: "Or maybe, boring?" (open)
+
+Brandon, of the trade screen: "Or maybe, boring?"
+
+My read: yes. The Math tile failed on clutter, and this screen swings to the other end. The place, the trader and the
+goods all disappear at the moment of the sum, and what is left is a worksheet with a frame. I offered three ways, from
+cheapest:
+1. **Crates drawn to look like what is in them:** wood colours, each marked with its good and its price.
+2. **The trader asks, in character, with a strip of the place behind him:** a sentence change for June.
+3. **The Midjourney goods and trader** (the art list's next job).
+
+Recommended: 1 and 2 now, 3 with the pictures, and "boring" judged properly at stop 3. **Waiting on Brandon's word.**
+
+### Fix round 3 at stop 2: one question at a time during the count (16 Nov 2026, 19:30 HST)
+
+Brandon, with a photo of the count: "And again here, stuck on a double problem. Do I answer the top one or the
+bottom?"
+
+**The fault:** during the count the page showed two questions, each with its sum and "= ?" ("How much do you owe the
+trader? 10 × $2 = ?" and "1 crate: how much so far? 1 × $2 = ?"). Nothing said the box answers the second.
+
+**Changed:**
+- **During the count** (and after it ends), the trade's sum stays as a quiet reminder with no question mark ("10 ×
+  $2"). The step is the only question beside the box.
+- **The crates the step asks about** are outlined (dashed, in the accent colour), beside the ones already counted
+  (filled).
+- **"Read it to me"** says the same: the reminder, then the step as the one question. A test holds it: one "equals
+  what?".
+
+**Checked:** typecheck, lint and 495 tests. In Chrome, Kiddo's same trade (read only) shows one "= ?" and the first
+crate outlined.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free
