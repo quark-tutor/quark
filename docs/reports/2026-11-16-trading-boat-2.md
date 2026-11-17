@@ -113,6 +113,20 @@ If one prints anything else, stop there and paste it in the chat. Nothing after 
 
   The tables are yours and stay out of this public report. So "in" is enough for M3, with whether it said the boat is
   on the wall.
+- **M3 is in (07:44), by your hand,** with your tables from the chat, on the second try. The first try was the line
+  with its `<place>` words left in; the shell refused it before npm started, so nothing ran.
+  - It set them for the family's 2 children and read them back the same.
+  - It said "The trading boat is on the wall, in Puzzle's place." and gave a prices line.
+  - Its printout is not copied here.
+
+### Stop 3 is in (07:45)
+
+All three commands ran on live by your hand, each printing what this section said it would:
+- **M1:** the six migrations, with `--yes` on the second run;
+- **M2:** the ladder's 20 rows;
+- **M3:** the family's tables, the boat on the wall.
+
+The boys see nothing new yet: the code on Vercel reads no table. **Nothing was spent.**
 
 ### Then
 
@@ -176,6 +190,11 @@ At day 3 they are level, where before the richer had 29% more (78% at 9 in 10).
   The typical gap at day 7 is from days 4 to 7's luck, and barely moves.
 - **Checked:** the island draw alone, with no shared days, gives 15% and 15%, so it changes the game's odds by no more
   than noise.
+- **Under stop 1's other setting** (2s, 5s and 10s working on; run at stop 3, 17 Nov, with the same script):
+  - **before:** the richer has 4% more at day 7 and 4% at day 14 (12% and 10% at 9 in 10), and 9% at day 3 (25%);
+  - **after:** 3% and 3% (7% and 8% at 9 in 10), and level at day 3.
+
+  The gaps there were small from the start, and the shared days still close the first three.
 - **The script:** a scratch script outside the repository, which runs `core/boat/sim.ts`'s `play()` with and without
   the family.
 
