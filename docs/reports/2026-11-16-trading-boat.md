@@ -862,6 +862,21 @@ comes only for a load above 10, as on the bigger boats. This *replaces* the fix 
 - **Sums a day:** about one fewer (canoe 4, double canoe 8).
 - **Tests:** the simulation test still holds every check, and 496 tests, typecheck and lint pass.
 
+### Fix round 6 at stop 2: the count no longer drags (16 Nov 2026, 19:50 HST)
+
+Brandon, with a photo of Kiddo's count at "1 more crate: how much so far? $12 + $2 = ?": "Yeah I'm currently stuck
+adding 2 at a time on the other kid. I started at 2 and am up to 12, so 6 steps".
+
+**The fault:** after one missed step the count went one crate at a time and stayed that way, so 10 crates at $2 took
+ten steps of +$2.
+
+**Changed:**
+- **One crate at a time is only for the step he missed.** After it is right, the count goes two at a time again.
+- **The whole total is taken at any step.** Once he sees the pattern he can type it and be done. The log reads that as
+  "Then right (said 20)."
+
+**Checked:** a test holds both, and 497 tests, typecheck and lint pass.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free

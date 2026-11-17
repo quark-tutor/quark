@@ -305,7 +305,7 @@ function answer(g: Game, ctx: Ctx, a: Extract<Action, { type: "answer" }>, log: 
   t.note = null;
   const tr = h.trade;
   const step = stepOf(h);
-  const row = (verdict: Verdict, expected: number, short = false) =>
+  const row = (verdict: Verdict, expected: number, short = false, atStep: number | null = step ? step.k : null) =>
     log({
       trade: h.no,
       kind: tr.kind,
@@ -313,7 +313,7 @@ function answer(g: Game, ctx: Ctx, a: Extract<Action, { type: "answer" }>, log: 
       // The look back's sum is its larger and smaller total ("$60 − $30"), kept in count and price.
       count: tr.kind === "back" ? Math.max(tr.sold, tr.paid) : tr.count,
       price: tr.kind === "back" ? Math.min(tr.sold, tr.paid) : priceOf(tr),
-      step: step ? step.k : null,
+      step: atStep,
       expected,
       answer: a.text.slice(0, 200),
       verdict,
@@ -353,11 +353,19 @@ function answer(g: Game, ctx: Ctx, a: Extract<Action, { type: "answer" }>, log: 
   const p = priceOf(tr);
   const want = tr.count * p;
 
-  // The count: each step's total is his own, and the last step is the whole sum.
+  // The count: each step's total is his own, and the last step is the whole sum. The whole total is taken at any step:
+  // once he sees the pattern he need not walk to the end (Brandon at stop 2, 16 Nov 2026: "I'm currently stuck adding 2
+  // at a time ... I started at 2 and am up to 12, so 6 steps").
   if (step && h.count) {
     const so = step.k * p;
+    if (value === want && step.k < tr.count) {
+      row("right", want, tr.kind === "buy" && want > g.money, null);
+      return complete(g, h);
+    }
     if (value === so) {
       h.count.lit = step.k;
+      // One crate at a time is for the step he missed; after it is right the count goes two at a time again.
+      h.count.single = false;
       h.reply = null;
       if (step.k === tr.count) {
         row("right", so, tr.kind === "buy" && so > g.money);

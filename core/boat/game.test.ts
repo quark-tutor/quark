@@ -165,6 +165,20 @@ describe("a wrong total (check 4)", () => {
     expect(g.money).toBe(20);
   });
 
+  // Brandon at stop 2: "I'm currently stuck adding 2 at a time ... I started at 2 and am up to 12, so 6 steps."
+  it("goes back to two at a time after a right one-crate step, and takes the whole total at any step", () => {
+    const t = trade(4);
+    let g = t.g;
+    const p = t.p;
+    g = go(g, n(1)); // the trade's sum missed: the count
+    g = go(g, n(1)); // the first pair missed: one at a time
+    g = go(g, n(p)); // 1 crate right
+    expect(view(g, ctx()).trade!.step).toEqual({ ask: "3 crates: how much so far?", sum: `$${p} + $${p} + $${p} = ?`, k: 3 });
+    g = go(g, n(4 * p)); // the whole total, a step early
+    expect(g.today!.hand).toBeNull();
+    expect(g.cargo[0].count).toBe(4);
+  });
+
   it("answers I don't know with a guess first, and a questioned sum with thanks, then the count", () => {
     let { g } = trade(3);
     g = go(g, { type: "answer", read: { none: "dont_know" }, text: "I don't know" });
