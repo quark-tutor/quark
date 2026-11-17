@@ -87,6 +87,7 @@ If one prints anything else, stop there and paste it in the chat. Nothing after 
   them.
 - **Checked on test:** it ran again from this branch this morning, unchanged.
 - **What you will see:** `Target: LIVE`, then "The math ladder: 14 rungs and 6 everyday areas, 20 rows in skills."
+- **M2 is in (07:43), by your hand:** exactly that, and nothing else. No row was left over from before.
 
 ### M3 `npm run boat:tables:live -- times-2-5-10=<place> times-3-4=<place>`
 
