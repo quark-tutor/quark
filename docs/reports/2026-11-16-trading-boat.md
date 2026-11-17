@@ -877,6 +877,30 @@ ten steps of +$2.
 
 **Checked:** a test holds both, and 497 tests, typecheck and lint pass.
 
+### At stop 2, 19:55: release or hold
+
+Brandon: "Trying to figure out how to fix these issues. I was just gonna release but chat said no." Then, of the chat:
+"He's not right in this case".
+
+**What a release would do, checked:**
+- **The boys:** nothing changes. The gate is `main`'s, byte for byte. The boat, its tile, its page and its log read no
+  table off the dev server against test.
+- **Live migrations:** none. The four new migrations stay on test, because the workflow's live job waits on its unset
+  secret.
+- **`main` gains:**
+  - the clean-up, so the v4 gate can no longer reach live;
+  - the boat and the pictures, off until a later job turns them on;
+  - a branch that lines up with `main` again.
+- **`main` (`e1046ac`) is an ancestor of the branch,** so `/wwc:release` fast-forwards.
+- **A production build of the final commit (`266ba7a`) is clean.** It was built in a temporary worktree, away from the
+  dev server, then removed.
+
+The brief says close and hold. A `/wwc:release` typed by Brandon at the last stop overrides it, and is his go for the
+look.
+
+**Open at this point:** the trade as a row on the market screen (proposed 19:23). If the job releases now, it becomes
+the next job's.
+
 ### Spend, live, a child
 
 - **Money:** two no-number judge calls on Haiku (about $0.0004) and two lines of Google's voice (inside the free
