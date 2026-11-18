@@ -246,8 +246,10 @@ async function writeChildCards(opts: WeekOptions, deps: WeekDeps, themeId: strin
 
 // One day of the week into its theme: the Sunday build, a day a firing (docs/looks-good-slice.md). Day 1
 // makes the theme; a day that already has ideas, built or half built, is refused unless `rebuild`, which
-// clears that one day first, because nothing in the database stops a day being written twice. The ideas
-// carry on from the earlier days of their slot, and the theme goes to review once every day is in.
+// clears that one day first. Behind this refusal, the database refuses a second idea for a theme, day, slot
+// and layer, and a second card for an idea and a child (20261117000001_unique_ideas_cards), so two builds of
+// one day at once end with one of them stopped, never a day written twice. The ideas carry on from the
+// earlier days of their slot, and the theme goes to review once every day is in.
 async function buildOneDay(opts: WeekOptions, deps: WeekDeps, days: number, kids: WeekChild[]): Promise<WeekReport> {
   const { plan } = opts;
   const day = opts.day!;

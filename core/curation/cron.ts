@@ -45,8 +45,9 @@ export function nextWeek(input: { themes: ThemeRow[]; own: Set<string>; today: s
 export type DayCount = { ideas: number; cards: Record<string, number>; questions: Record<string, number> };
 export type DayState = "empty" | "complete" | "partial";
 
-// Complete only on exact counts, so a day written twice (the database has no unique constraint to stop it)
-// is partial too, and is cleared and built again.
+// Complete only on exact counts, so a day that is short is partial, and is cleared and built again. A day
+// written twice would be partial too, though the database's unique indexes on ideas and cards
+// (20261117000001_unique_ideas_cards) now refuse the second copy, so a firing that met one stopped short.
 export function dayState(count: DayCount | undefined, childIds: string[]): DayState {
   if (!count) return "empty";
   const held = count.ideas + Object.values(count.cards).reduce((a, b) => a + b, 0) + Object.values(count.questions).reduce((a, b) => a + b, 0);
