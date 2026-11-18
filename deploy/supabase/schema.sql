@@ -156,6 +156,10 @@ create table values_settings (
 --   rejected_by; the 'frightening' flag.
 -- The week build adds, in supabase/migrations/20261014000000_week_build.sql: ideas.day (1-7) and
 --   cards.door (the interest that opened a layer-1 card).
+-- A day written once adds, in supabase/migrations/20261117000001_unique_ideas_cards.sql: one idea for
+--   a theme, day, slot and layer (unique ideas_theme_day_slot_layer) and one card for an idea and a
+--   child (unique cards_idea_child), replacing the plain indexes on ideas (theme_id, day, slot, layer)
+--   and cards (idea_id).
 
 -- Any one guardian can place one. Only that guardian can lift it. Lifted rows stay for the audit.
 create table blackballs (
@@ -291,7 +295,7 @@ create table cards (
   created_at      timestamptz not null default now()
 );
 create index on cards (child_id, day, slot, layer);
-create index on cards (idea_id);
+create index on cards (idea_id);                  -- since 17 Nov 2026: unique (idea_id, child_id), noted above
 
 -- A question as rendered on a card (teach or check). The answer key lives on the idea;
 -- the per-child wording and hints live here. Never shown to the child.

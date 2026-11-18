@@ -401,6 +401,24 @@ Brief: `docs/trading-boat-2-slice.md` (*Wonder Wall*), on `phase-4-wonder-wall`;
 - **Stop 3 (17 Nov 2026, 07:25 to 07:44), by Brandon's hand:** M1 `db:push:live` (six migrations; its first run changed nothing, and it ran with `--yes` the second time), M2 `ladder:import:live` (20 rows), M3 `boat:tables:live` (the boat on the wall).
 - **Decided (17 Nov 2026, 07:45): `/wwc:release` typed at the last stop.**
 
+## A day cannot be written twice: decided in the brief and the job (17 Nov 2026)
+
+Brief: `docs/unique-indexes-slice.md` (*Week 2 builds itself*), on `phase-4-wonder-wall`; report `docs/reports/2026-11-17-unique-indexes.md`. As built: docs/04, "How the Sunday build is built", *The lock*. The one migration, `20261117000001_unique_ideas_cards`, is on test (run 44264033725, green) and on live, put there by Brandon's hand. Spent: $3.71, all on test.
+
+- **Decided (17 Nov 2026, 21:31, in the brief):** Brandon: "i would say the day can't be written twice and then maybe see if we can't get wonder wall slice 2 after that." The lock, `buildWeek`'s refusal and `--rebuild` stay as they are, in front of the indexes.
+- **Decided (17 Nov 2026, 22:05, go at stop 1):** Brandon: "go". Go took:
+  - **the indexes**, `ideas (theme_id, day, slot, layer)` and `cards (idea_id, child_id)`. The idea comes first so that the cards index also serves reads by idea. *Replaces* the brief's `(child_id, idea_id)` in column order only. The brief's other choice, `(child_id, day, slot, layer)`, was not taken, because a test fixture that moves a day's date would trip it;
+  - **the drops**: the two plain indexes the new ones make redundant, `ideas (theme_id, day, slot, layer)` and `cards (idea_id)`, dropped in the same migration;
+  - **the refusal in the database's own words**, with no code to reword it;
+  - **test's weeks**: week 5 (the held Math tile's Moon week) deleted for the proof, and the proof's week 2 deleted after it;
+  - **the spend**: the proof on test at about $4.20. It came to $3.71.
+- **M1 (17 Nov 2026, about 22:35), by Brandon's hand:** `npm run db:push:live -- --yes` applied the migration and printed "Finished supabase db push." with no error. So live held no doubles.
+- **Decided (17 Nov 2026, about 22:39): the live project's address and database user come out of the report.** Brandon: "Before the close, take the live project's address and the database user out of stop 3 in the report, and say whether that commit was already pushed."
+  - They were taken out in `da15ec4`.
+  - `9f85f6f` had already been pushed, so they stay in the public history. Only a force push could change that, which is Brandon's hands.
+  - `docs/reports/2026-10-20-gate-live.md` holds them too. Taking them out there was offered, with no answer before the release.
+- **Decided (17 Nov 2026, 22:41): `/wwc:release` typed at the last stop.**
+
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
 Brandon's review of the 14 Oct day 1 cards: a lot of words, one picture, and lines no human tutor would write. The worst was "Wren, you love art" on the listen card: it tells a child what he is instead of letting him see it for himself. Not a rule against definitional statements, which would bite later (calling a child a helper can be the right thing at the right moment). The question is the tutor's voice. Proposed as step 4d, after 2b, since a card that starts from a picture needs the picture.
