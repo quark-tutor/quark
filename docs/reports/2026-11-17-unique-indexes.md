@@ -315,3 +315,25 @@ release: say so, and finding the doubles on live is a new stop.
 After M1, say here what its last lines read (and to the chat). On a clean M1 I record it, and the last stop is
 yours: type `/wwc:release` (stop 3), which closes first, then carries the migration file to `main` so `main`
 agrees with live.
+
+## Stop 3: the release (17 Nov 2026, 22:37 HST)
+
+**M1 is in on live.** Brandon typed `npm run db:push:live -- --yes` in this session (`!`) at about 22:35. It printed:
+
+- `Target: LIVE (jjdeyuhkcpatqysauerh.supabase.co)`
+- `Database user: postgres.jjdeyuhkcpatqysauerh`
+- the CLI's result line, `{"upToDate":false,"dryRun":false,"migrations":["20261117000001_unique_ideas_cards.sql"],…,"message":"Finished supabase db push.",…}`
+- the CLI's notes: the `--db-url` deprecation warning (the 17 Nov bug line) and two `auth` config warnings
+- `Confirmed by --yes: Apply 1 migration…`
+- last, `Applying migration 20261117000001_unique_ideas_cards.sql...`
+
+There was no error. "Applying migration…" comes last only because `scripts/db-push.mts` writes the CLI's stdout
+before its stderr. So live holds both unique indexes, which means **live had no doubles**, and its two plain indexes
+are dropped. Nothing a child sees changed.
+
+**What is left:** the release. `main` does not have the migration file yet, so `main` and live disagree until it
+goes. `/wwc:release` closes first: docs/04's *The lock* and *Which week and which day*, `deploy/supabase/schema.sql`,
+*Where we are* and the board row to *live*. The release's run on `main` should find the migration on test and skip
+live (no `SUPABASE_DB_URL_LIVE`), and live has it already.
+
+At the last stop, type `/wwc:release` to close and release, or `/wwc:close` to close and hold.
