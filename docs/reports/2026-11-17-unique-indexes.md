@@ -140,7 +140,7 @@ Nothing. Every check in the brief was taken, above.
 
 - The Sunday route's 500 reply for a `failed` firing carries no reason, for any fault. The reason is kept only in the
   audit row, so Vercel's log shows a bare 500 (`core/curation/cron.ts`, `end()`). The route's own catch does give
-  one. For Brandon to take or drop.
+  one. **Dropped** (Brandon, 17 Nov 2026, about 22:46: "The bare 500 finding is dropped: no bug line.").
 
 ## On live
 

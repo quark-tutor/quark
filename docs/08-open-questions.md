@@ -418,6 +418,7 @@ Brief: `docs/unique-indexes-slice.md` (*Week 2 builds itself*), on `phase-4-wond
   - `9f85f6f` had already been pushed, so they stay in the public history. Only a force push could change that, which is Brandon's hands.
   - `docs/reports/2026-10-20-gate-live.md` holds them too. Taking them out there was offered, with no answer before the release.
 - **Decided (17 Nov 2026, 22:41): `/wwc:release` typed at the last stop.**
+- **Decided (17 Nov 2026, about 22:46): the bare 500 is dropped.** Brandon: "The bare 500 finding is dropped: no bug line." The finding was that the Sunday route's 500 reply for a failed firing carries no reason, which is kept in the audit row only.
 
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
@@ -596,6 +597,13 @@ Decided (Brandon, 22 Oct 2026, 08:17, in the chat), `docs/next-16-4-2-slice.md`,
 
 ### Releases
 
+- **Released to `main`, 17 Nov 2026, the second of the day: a day cannot be written twice** (*Week 2 builds itself*), with the 08:05 release's own records (`a78e90e`).
+  - **What moved:** `main` went from `2042ac1` to `eef7b90` at 22:45 HST, a fast-forward of 8 commits.
+  - **Who said so:** Brandon typed `/wwc:release` at the job's last stop (22:41, after M1, so the close ran first), and "go" at the release's stop. Between them he said: "The bare 500 finding is dropped: no bug line."
+  - **What the boys see:** nothing new. The code change is two comments. The migration was on live already, from M1 by Brandon's hand.
+  - **The migrations run on `main`:** 44269814297, green. Its live job ran the tests (523) and the typecheck, found no `SUPABASE_DB_URL_LIVE`, and skipped "Push to the live database".
+  - **Vercel:** "Vercel is deploying your app" at the first look after the push, then "Deployment has completed" at 22:47.
+  - The row goes to *live*.
 - **Released to `main`, 17 Nov 2026: the trading boat, slice 2, on the boys' iPads** (*Wonder Wall*), with the 16 Nov release's own records and slice 2's board row.
   - **What moved:** `main` went from `5663851` to `2042ac1` at 08:05 HST, a fast-forward of 20 commits.
   - **Who said so:** Brandon typed `/wwc:release` at the job's last stop (07:45, after stop 3, so the close ran first), and "go" at the release's stop; he gave no other words for it.
