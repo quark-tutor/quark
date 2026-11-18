@@ -320,8 +320,8 @@ agrees with live.
 
 **M1 is in on live.** Brandon typed `npm run db:push:live -- --yes` in this session (`!`) at about 22:35. It printed:
 
-- `Target: LIVE (jjdeyuhkcpatqysauerh.supabase.co)`
-- `Database user: postgres.jjdeyuhkcpatqysauerh`
+- `Target: LIVE`, with the live project's address
+- the live database user
 - the CLI's result line, `{"upToDate":false,"dryRun":false,"migrations":["20261117000001_unique_ideas_cards.sql"],…,"message":"Finished supabase db push.",…}`
 - the CLI's notes: the `--db-url` deprecation warning (the 17 Nov bug line) and two `auth` config warnings
 - `Confirmed by --yes: Apply 1 migration…`
