@@ -195,3 +195,123 @@ Each check is in the four parts, at the end, quoted from what the terminal print
 Reply **go** to take all of these.
 
 **Go (17 Nov 2026, 22:05):** Brandon: "go". The pull found the branch up to date; the board row is at *building*.
+
+## Stop 2: the live database, by your hand (17 Nov 2026, 22:15 HST)
+
+Everything before M1 is done: the migration on test, the proof, and tests, typecheck and the build. Test has
+nothing new on it: it now holds week 1 alone. The job spent **$3.71**, all on test (the brief's line was $5). The
+size clock reads about 20 minutes since go, against an hour.
+
+### Couldn't check
+
+- **No pictures.** Every check is a reading in the terminal, with no browser, so the words below are the results.
+
+### What was done
+
+- **The migration** `supabase/migrations/20261117000001_unique_ideas_cards.sql` (`866c648`), as reviewed at stop 1,
+  unchanged. Pushed on `phase-4-wonder-wall`, it was applied to quark-test by the workflow: run **44264033725,
+  green**.
+  - The run printed "Mode: apply (this push changed supabase/migrations)."
+  - Its tests passed: 43 files, 523 tests. The typecheck passed.
+  - The push printed "Applying migration 20261117000001_unique_ideas_cards.sql... Finished supabase db push."
+  - So the two names it drops were right, and test is the first copy with the indexes.
+  - Its live job was skipped, as on every branch push.
+- **The two comments** (`2385017`), above `buildOneDay` in `core/curation/week.ts` and above `dayState` in
+  `core/curation/cron.ts`, now say what refuses a second copy. No code path changed, so no test was added.
+- **Test's week 5 was deleted** (the held Math tile's Moon week, from 10 Nov: 112 ideas, 224 cards, no answers), so
+  the cron's next week on test was week 2. `week:build -- --week 2 --plan` passed first, at $0.
+- **The proof's week 2 was deleted after the proof** (40 ideas, 80 cards over 2 days). Its audit rows and model runs
+  stay.
+- **The dev server** was started for the firings and stopped after them. Stopping its task left `next` holding port
+  3000 again, the 17 Nov bug line, so it was stopped by its process id. The port was checked free before the build.
+- **`npm test`:** 43 files, 523 tests, passed. **`npm run typecheck`:** clean. **`npm run build`:** exit 0,
+  "Compiled successfully".
+
+### Code's checks
+
+A scratchpad script (`proof.mts`) ran each one against quark-test. It refuses anything but test, and prints ids,
+counts and the database's own sentences, never a name.
+
+1. **A second idea is refused.**
+   - **Where:** quark-test after run 44264033725. Week 1's idea for day 1, look, layer 1 (`7957aac5…`).
+   - **Do:** 1. Insert a copy of it: the same theme, day, slot and layer. 2. Read the first back. 3. Count the rows
+     for that key.
+   - **See:** code 23505 naming `ideas_theme_day_slot_layer`; the first row unchanged; 1 row.
+   - **Pass.** "refused, code 23505: duplicate key value violates unique constraint "ideas_theme_day_slot_layer"; Key
+     (theme_id, day, slot, layer)=(2766c559…, 1, look, 1) already exists." Then "first unchanged: true; rows for that
+     theme, day, slot and layer: 1".
+2. **A second card is refused.**
+   - **Where:** the same, for child 1's card of that idea (`6780439c…`).
+   - **Do:** 1. Insert a copy of it: the same idea and child. 2. Read the first back. 3. Count the cards for that
+     idea and child.
+   - **See:** code 23505 naming `cards_idea_child`; the first row unchanged; 1 card.
+   - **Pass.** "refused, code 23505: duplicate key value violates unique constraint "cards_idea_child"; Key (idea_id,
+     child_id)=(7957aac5…, 6643533e…) already exists." Then "first unchanged: true; cards for that idea and child: 1".
+3. **A day still builds through the Sunday build's path.**
+   - **Where:** quark-test with the indexes on and week 1 its only week, so the cron's next week is week 2, from
+     Mon 23 Nov. The dev server is running.
+   - **Do:** 1. `npm run cron:week`. 2. Read the audit rows. 3. Count the day.
+   - **See:** `built`, week 2, day 1; then 20 ideas and, for each child, 20 cards and 20 questions.
+   - **Pass.**
+     - The reply was `"outcome": "built", "week": 2, "day": 1`, $1.948, 134.9 seconds.
+     - The audit rows read *started*, *theme* (`b6fa8945…`), then *built* with 39 passed and 0 pending. The 40th card
+       was held by the card checks.
+     - The count: "day 1 (2026-11-23): 20 ideas; child 1 20 cards, 20 questions; child 2 20 cards, 20 questions".
+4. **A partial day in a firing is cleared and written again.**
+   - **Where:** the same week. Day 2 holds one planted idea (`77eee125…`), a copy of a day 1 idea with its day set
+     to 2: the count read "day 2: 1 ideas; child 1 0 cards…".
+   - **Do:** 1. `npm run cron:week`. 2. Ask whether the planted idea is still there. 3. Count the day. 4. Search the
+     dev server's log for "duplicate" and "23505".
+   - **See:**
+     - `built`, day 2.
+     - The planted idea gone.
+     - 20 ideas, and 20 cards and 20 questions for each child.
+     - Nothing refused.
+   - **Pass.**
+     - The reply was `"outcome": "built", "week": 2, "day": 2`, $1.7598, 119.7 seconds.
+     - The planted idea: "gone".
+     - The count: "day 2 (2026-11-24): 20 ideas; child 1 20 cards, 20 questions; child 2 20 cards, 20 questions".
+     - The log held 0 matches.
+     - A firing that had not cleared the day would have been refused at buildOneDay's "already built, or half built"
+       check, or by the index on the planted row's key. It got neither.
+
+### Found, not built
+
+- The Sunday route's 500 reply for a `failed` firing carries no reason, for any fault. The reason is kept only in the
+  audit row, so Vercel's log shows a bare 500 (`core/curation/cron.ts`, `end()`). The route's own catch does give
+  one. For you to take or drop.
+
+### M1, by your hand (LIVE)
+
+Type, whole, as typed:
+
+```
+npm run db:push:live -- --yes
+```
+
+- **What it does:** applies this job's one migration, `20261117000001_unique_ideas_cards`, to the live database. It
+  makes two unique indexes, `ideas_theme_day_slot_layer` and `cards_idea_child`, and drops the two plain indexes they
+  replace. No row is added, changed or deleted.
+- **What it touches:** **LIVE**, the boys' one database: the `ideas` and `cards` tables. Each index builds in well
+  under a second at live's size, and the change holds each table for about that long. A wall that reads cards at that
+  instant waits that long. Nothing a child sees changes. It is Tuesday night, so the Sunday rule (no M1 between 6 am
+  and 9 pm on a Sunday) is met.
+- **How it is undone:** by a later migration that drops the two unique indexes and makes the two plain ones again.
+  Nothing is lost either way. If live holds a double, the push fails at the first create and changes nothing: no
+  index made, none dropped, and the migration not recorded.
+- **What was checked on test:** run 44264033725 (green) applied this same file from this branch, in this session,
+  and checks 1 to 4 passed on it.
+
+**Clean, its last lines read:**
+
+```
+Applying migration 20261117000001_unique_ideas_cards.sql...
+Finished supabase db push.
+```
+
+**A double on live reads** `ERROR: could not create unique index "…" (SQLSTATE 23505)` and exits 1. Then do not
+release: say so, and finding the doubles on live is a new stop.
+
+After M1, say here what its last lines read (and to the chat). On a clean M1 I record it, and the last stop is
+yours: type `/wwc:release` (stop 3), which closes first, then carries the migration file to `main` so `main`
+agrees with live.
