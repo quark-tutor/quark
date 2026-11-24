@@ -254,3 +254,87 @@ And: "Also confirm Vercel's limit on the number of cron entries before building 
   says so.
 
 The row is at *building*, at the top of the board.
+
+## Emergency stop (21:58)
+
+**What went wrong.** At 21:51 the Anthropic API began refusing every call: "You have reached your specified workspace
+API usage limits. You will regain access on 2026-12-01 at 00:00 UTC." That is **Monday 30 November at 2 pm in
+Hawaiʻi**, the day after Sunday's build. Nothing can be written or built on test until the limit is raised. That is your
+hands in the Anthropic Console, so this is the stop.
+
+**What it means for live.** If live's key is in the same workspace, the limit stops more than this job:
+- **The Sunday build on 29 November fails**, whether or not this job is released. So would a Saturday pick built by hand.
+- **The judge of a child's answer** falls back to the word rule.
+- "Read it to me" and Talk are Google's, so they are unaffected.
+
+Code cannot see which workspace live's key belongs to.
+
+### What is done
+
+- **The build**, on `phase-4-wonder-wall`, pushed up to `804bdb5` (`1e96548` and this stop's commit follow):
+  - the schedule leaves gaps rather than refusing, a week no theme holds is short lessons alone, a theme names its
+    week in its chapter's `week:` (go, change 3), and a week has four tiles while the boat is here;
+  - the lesson writer: `core/curation/lessons.ts` (pure, tested), `lessons-job.ts`, three prompts (`lesson-ideas.md`
+    v3, `lesson.md` v2, `lesson-check.md` v2), the search (`core/content/search.ts`), holidays (`holidays.ts`), and
+    the route `/api/cron/lessons`;
+  - the Sunday build writes what its day lacks first, under the writer's lock, then builds; it fires every hour from
+    6 am to 9 pm;
+  - `vercel.json` has 23 entries;
+  - `/parent` has a line on the lessons the app wrote, with each lesson and each try folded under it; the Sunday line
+    says when a firing wrote lessons first; the week page counts the tiles and says there is no Puzzle;
+  - `fixture -- lessons | no-pick <week> | drop-lesson <key>`, and `npm run cron:lessons`.
+- **Tests:** 561 pass (44 files), and the typecheck is clean. `npm run build` waits for the dev server to stop.
+- **The migration** `20261123000000_lessons_runs` is applied on test by the workflow (run 45348069150, green; live
+  skipped, as set).
+- **On test:**
+  - test is set as live is: its one week renumbered week 5, every file lesson counted as used, and the boat on
+    (`boat:tables`: 2s, 5s and 10s done, 3s and 4s working);
+  - `fixture -- places` was run as a read and turned out to write: it set slice 1's two places, which `boat:tables`
+    then put back to the family's one setting;
+  - `plan:import` on test kept the app's lessons: 144 from the file and 5 from the app, before and after.
+- **What the firings did on test** (seven firings, $10.72 in all):
+  - The first wrote 1 lesson in 218 seconds for $2.36. Its rows showed four causes, all fixed in `1e96548`:
+    1. the writer described what it saw in a picture, which the checker could not see;
+    2. one article often lacked the mechanism;
+    3. the checker read values points too widely (contour lines as point 17, a troll in music as point 3);
+    4. listen ideas met no US public-domain recording.
+  - After the fixes, five firings wrote 17 lessons for $6.76, **about $0.40 a lesson**. Each firing took 78 to 167
+    seconds and wrote 2 to 4 lessons; a tile it missed was taken by the next.
+  - One lesson repeated live's week 5 (a compass). Test had no copy of the file's lessons then, so the repeat check
+    could not see it. It was dropped, and test now holds every title, as live does.
+  - **21 lessons are written for test's week 6, and 7 day-slots are open.** They include Eratosthenes' shadow, a
+    Yellowstone geyser recording (National Park Service), the Lion and the Mouse, Rembrandt's Three Trees, the camera
+    obscura, a lock on the Erie Canal, and the piccolo in The Stars and Stripes Forever (the Marine Band).
+  - **The week clusters:** three lessons on light and color (prism, rainbow, soap bubbles) and two on how a map shows
+    hills. The ideas call now also sees what is already written for the same week (`lesson-ideas.md` v3). It is
+    tested in code, not yet on the model.
+
+### What is not done
+
+- **The rest of test's week:**
+  - its 7 open day-slots (about $3);
+  - one taken out again so a Sunday firing must write it;
+  - the week built through the Sunday route (about $11.50).
+- **My checks in the browser:** seven days, four tiles and no Puzzle, every first card's picture or recording, the
+  credit lines, `/parent`'s lines and the money.
+- **Stop 2,** and the records.
+
+### The cost, against stop 1's estimate
+
+- Writing comes to about $0.40 a lesson, against stop 1's $0.18. That is about $11 for a week of 28.
+- With the build without Puzzle (about $11.50), a week comes to about **$22.50**, against stop 1's $17 to $18.50 and
+  today's $14.50.
+- Each run stays far under the $25 line: a writing firing is $1 to $1.80, a Sunday day about $1.65.
+- One lever is named for stop 2: the checker on the writing model (Sonnet) rather than the gate's (Opus), about $2 a
+  week less.
+
+### What I need
+
+1. **Raise the workspace's monthly API limit** in the Anthropic Console (the workspace's limits page). Recommended: by
+   $50 for November. This job's test needs about $20 more. If live's key is in this workspace, week 6 on live needs
+   about $22.50 before 1 December, the judge a few cents.
+2. **Tell me whether live's key is in the same workspace.** If it is, raising the limit is needed for Sunday 29
+   November whatever happens to this job.
+
+**Reply go** once the limit is raised. I will finish test's week, take my checks with pictures, and stop at stop 2.
+Size: 0.8 hours since go, on a job sized at 8.

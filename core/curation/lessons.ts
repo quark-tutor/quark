@@ -75,6 +75,7 @@ export type Check = { unsupported: { claim: string; why: string }[]; repeats: st
 export type WriterContext = {
   used: string[]; // every title the family has had, in the library and the plan
   recent: Partial<Record<DaySlot, string[]>>; // the subjects lately on each tile, most recent last
+  upcoming: string[]; // lessons in the library no week has used yet: what is already written for the coming week
 };
 
 export type WriterDeps<C extends Candidate = Candidate> = {

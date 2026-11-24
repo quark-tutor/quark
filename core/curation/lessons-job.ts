@@ -211,6 +211,9 @@ export function makeRoundDeps(db: SupabaseClient, ai: { complete: typeof complet
         need.hawaiiDays.length ? `In Hawaiʻi it is also ${need.hawaiiDays.join(" and ")}: not a lesson of its own, only a possible tie-in line if an article states one.` : null,
         `Subjects lately on this tile, most recent last: ${(ctx.recent[need.slot] ?? []).join(", ") || "none yet"}.`,
         rejected.length ? `Already tried for this tile today, and not used: ${rejected.join("; ")}.` : null,
+        ctx.upcoming.length
+          ? `Already written for the same week, on every tile (make this lesson different from all of them in its subject and its idea: not a second lesson on light and color, or on how a map shows hills): ${ctx.upcoming.join("; ")}.`
+          : null,
         "",
         "Every lesson and topic the family has already had (propose none of these again, under any name):",
         ...ctx.used.map((t) => `- ${t}`),
@@ -354,13 +357,16 @@ export function makeRoundDeps(db: SupabaseClient, ai: { complete: typeof complet
 
     async context(): Promise<WriterContext> {
       const rows = must(
-        await db.from("plan_topics").select("title, slot, subject, kind, position").in("kind", ["short", "thread"]).eq("grade_band", "2-3"),
+        await db.from("plan_topics").select("id, title, slot, subject, kind, position").in("kind", ["short", "thread"]).eq("grade_band", "2-3"),
         "plan_topics",
-      ) as { title: string; slot: DaySlot | null; subject: string; kind: string; position: number | null }[];
+      ) as { id: string; title: string; slot: DaySlot | null; subject: string; kind: string; position: number | null }[];
+      const themes = must(await db.from("themes").select("topic_ids"), "themes") as { topic_ids: string[] | null }[];
+      const used = new Set(themes.flatMap((t) => t.topic_ids ?? []));
       const recent: WriterContext["recent"] = {};
       const lessons = rows.filter((r) => r.kind === "short" && r.slot).sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
       for (const slot of ["look", "wonder", "listen", "then", "puzzle"] as DaySlot[]) recent[slot] = lessons.filter((l) => l.slot === slot).slice(-8).map((l) => l.subject);
-      return { used: [...new Set(rows.map((r) => r.title))], recent };
+      const upcoming = lessons.filter((l) => !used.has(l.id)).map((l) => l.title);
+      return { used: [...new Set(rows.map((r) => r.title))], recent, upcoming };
     },
 
     async takenHolidays(familyId, week) {

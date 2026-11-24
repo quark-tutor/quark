@@ -104,7 +104,7 @@ function writer(over: { ideas?: LessonIdea[][]; candidates?: Record<string, Cand
   };
   return { deps, calls, deadline: clock + 600_000 };
 }
-const ctx = { used: ["Why ice floats"], recent: {} };
+const ctx = { used: ["Why ice floats"], recent: {}, upcoming: [] };
 
 describe("writing one lesson", () => {
   it("writes from the first idea whose article, picture, draft and check all hold, and stores its item", async () => {
