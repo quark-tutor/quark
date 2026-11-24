@@ -420,6 +420,30 @@ Brief: `docs/unique-indexes-slice.md` (*Week 2 builds itself*), on `phase-4-wond
 - **Decided (17 Nov 2026, 22:41): `/wwc:release` typed at the last stop.**
 - **Decided (17 Nov 2026, about 22:46): the bare 500 is dropped.** Brandon: "The bare 500 finding is dropped: no bug line." The finding was that the Sunday route's 500 reply for a failed firing carries no reason, which is kept in the audit row only.
 
+## Week 5 on live, a day late: decided in the brief and the job (23 Nov 2026)
+
+Brief: `docs/week-5-slice.md` (*Week 2 builds itself*), on `phase-4-wonder-wall`; report `docs/reports/2026-11-23-week-5.md`. Content only: no code, no migration. As built: docs/04, "How a week is mixed" (the library at 144, and week 5's pick) and "How the Sunday build is built" (live week 5). Saturday 21 Nov's pick was missed, so Sunday 22 Nov's build wrote nothing for week 5. On Monday 23 Nov the 28 were written, checked on test, put on live and built by hand from the main checkout ($14.33).
+
+- **Decided (23 Nov 2026, in the brief, written in the chat at 18:00):**
+  - The whole week in one build, as week 4, not day 1 first (Brandon: "Whole week, as week 4"). Monday's cards may be seen late that night, or not at all.
+  - The pick is the left-overs plus eleven new, not a fresh forty (Brandon: "Leftovers plus 11 new").
+  - Week 6's theme is not in this job (Brandon: "Leave to Saturday 28"). Saturday 28 Nov's pick carries week 6's theme, week 6's 28 and week 7's theme, so the theme loses its week of lead once.
+  - No code changes, every live command is Brandon's hand at a planned stop, and everything `docs/saturday-pick-slice.md` lists under *Decided already* holds.
+- **Decided (23 Nov 2026): a second missed Saturday cost a second day.** As with week 4, the Sunday build wrote nothing and the week was built by hand on Monday; the boys had no cards on Monday until the week was tapped.
+- **Decided (23 Nov 2026, at stop 1): week 5 is built from the main checkout.** The phase branch differed from `main` only in `docs/`, so a hand build sends the same as Vercel's code. *Replaces*, for this week, week 4's worktree from `main`.
+- **Decided (23 Nov 2026, 18:16, go at stop 1): the ★ 28.** Brandon: "Go". Go took:
+  - the phonautograph (29) not offered, since week 4's phonograph told its story, and five beats to a bar in its place;
+  - Little Nemo's first page, 15 October 1905, with its last panels' words;
+  - the three Hawaiʻi items kept under the Hawaiʻi standard: the flag, the bobtail squid line, Honolulu at 21 degrees north;
+  - Sarah Josepha Hale's Thanksgiving on Thursday 26 Nov's then, and the flag on Sunday 29 Nov, the day after Lā Kūʻokoʻa;
+  - the board row rewritten at the close as "Saturday 28 Nov: week 6's theme and 28 short lessons, and week 7's theme", at the top of Next.
+- **Decided (23 Nov 2026, while writing): what the summaries leave out, and three files swapped.**
+  - Left out: the 1621 harvest and its people (point 17), the war Lincoln's proclamation was written in (15 and 20) and its prayer (1); how West African instruments reached America (18); Tchaikovsky's death soon after his Sixth (12); Harvey's experiments on animals; the Cherokee's forced removal (17); the Kingdom's end (17).
+  - Not claimed: how many years Hale campaigned, or how many presidents she wrote to (the sources disagree); whether the Roman die's opposite faces add to seven; how many plants the tapestry shows.
+  - Swapped, for credit lines that read right: Sargent's Google Art Project file (its title carried Wikidata codes) for a clean copy; Harvey's arm figure (credited "Unknown authorUnknown author, Unknown date") for the Bibliothèque nationale de France's plate from the 1628 book; Henry Inman's Sequoyah dropped (its title carried the same codes). *Replaces* the candidates file's items on 5, 8 and 21.
+- **Stop 2 (23 Nov 2026, about 18:41): no word on the look at test's `/parent/content`.** Brandon ran M1 to M4, which the stop gave only on go.
+- **Decided (23 Nov 2026, 19:08, stop 3): Brandon's `/wwc:close` at the week page's look.** It is his go for the look, so its three checks passed: seven days with five first cards a day apart from the three named empty tiles, *Before you tap* naming every card held back, and every title the idea's name. He named neither choice, so no day was rebuilt (A, the recommended). The tap is his on the page; its time is not in the job's records. Three first cards are missing: both boys' Monday then (the acronym) and the younger's Tuesday listen (the pedal harp).
+
 ## How the tutor sounds: raised reviewing the first cards (15 Oct 2026)
 
 Brandon's review of the 14 Oct day 1 cards: a lot of words, one picture, and lines no human tutor would write. The worst was "Wren, you love art" on the listen card: it tells a child what he is instead of letting him see it for himself. Not a rule against definitional statements, which would bite later (calling a child a helper can be the right thing at the right moment). The question is the tutor's voice. Proposed as step 4d, after 2b, since a card that starts from a picture needs the picture.
