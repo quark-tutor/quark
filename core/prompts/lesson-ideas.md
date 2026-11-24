@@ -1,4 +1,4 @@
-<!-- lesson-ideas v1 (23 Nov 2026, docs/week-without-hands-slice.md). Used by core/curation/lessons-job.ts (use: "curate"):
+<!-- lesson-ideas v2 (23 Nov 2026: v2 names up to two articles, and where open recordings come from; docs/week-without-hands-slice.md). Used by core/curation/lessons-job.ts (use: "curate"):
      one call for each short lesson the app writes, before anything is searched. It proposes three ideas for one tile on
      one day, each with the Wikipedia article and the searches that may find an open picture or recording of it. Not
      kid-facing. The rules are the ones Claude Code was held to when it wrote the library by hand (docs/04, "How a week
@@ -14,7 +14,7 @@ You are given the tile, the date the lesson falls on (with any holiday that day)
 
 - **look**: a picture to look at closely (a painting, a print, an object, a map, a photograph) and one idea about how it was made or what it shows. Art, history, geography or science.
 - **wonder**: a why or a how about the natural or the made world, with a picture that shows it. Mostly science.
-- **listen**: a recording to listen to (a piece of music, an instrument, a song, an animal or a natural sound) and one idea about what to hear in it. The recording must be one an open collection holds: music written long ago played by a US military band, a recording more than a hundred years old, a US government recording, or a natural sound. Never a piece known only from modern commercial recordings.
+- **listen**: a recording to listen to (a piece of music, an instrument, a song, an animal or a natural sound) and one idea about what to hear in it. Only recordings that are public domain in the US can be used, and on Wikimedia Commons nearly all of those are: music written before about 1920 played by the United States Marine Band, Navy Band, Army Band or Air Force Band; a recording made before 1926 (Edison cylinders, early Victor records); and sounds recorded by the US government (the National Park Service, NOAA, the Fish and Wildlife Service, NASA). Birdsong and most modern recordings on Commons carry licenses Quark cannot use. Choose ideas such a recording can carry.
 - **then**: a moment in the past, a person who made or figured something out, or a fable, myth, story or poem, with a picture of it.
 - **puzzle**: a piece of mathematics with something to work out (counting, shapes, measuring, patterns, fractions, multiplying), with a picture of something real that shows it.
 
@@ -31,8 +31,8 @@ You are given the tile, the date the lesson falls on (with any holiday that day)
 ## For each idea, return
 
 - `title`, `subject` (history, geography, science, art, music, literature or math) and `holiday` (true or false);
-- `article`: the exact title of the English Wikipedia article that covers this idea best (the lesson will be written from it and checked against it, so it must state the facts the lesson needs);
+- `articles`: the exact title of the English Wikipedia article that covers this idea best, and, where the idea turns on how something works and that article may not explain it, a second article that does ("The Montgolfier brothers", then "Hot air balloon"). The lesson will be written only from these and checked against them, so between them they must state every fact the lesson needs;
 - `shows`: one line on what the picture or recording must show for the idea to work;
-- `searches`: two or three searches, each a `source` (met, aic or commons) and a short `query` of plain words a catalogue would use (a title, a maker, an object name). For listen, search commons only, for a recording ("Marine Band Sousa march", "humpback whale song"). For the other tiles, any of the three.
+- `searches`: two or three searches, each a `source` (met, aic or commons) and a short `query` of plain words a catalogue would use (a title, a maker, an object name). For listen, search commons only, for a recording, naming the performer or the agency where you can ("Marine Band Sousa march", "Navy Band Hall of the Mountain King", "NOAA humpback whale", "National Park Service elk bugle", "Edison cylinder 1910 banjo"). For the other tiles, any of the three.
 
 Return three ideas, the best first, each different from the others.

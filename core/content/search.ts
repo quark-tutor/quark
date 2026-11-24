@@ -78,8 +78,9 @@ export function usPublicDomainRecording(templates: string[]): boolean {
 // article, or it is a page of meanings.
 export type Reference = { title: string; url: string; text: string };
 export const REFERENCE_CHARS = 14_000; // about 3,500 tokens: the article's opening sections
+export const SECOND_CHARS = 8_000; // a second article, on the idea's mechanism, is cut shorter
 
-export async function wikipediaArticle(title: string): Promise<Reference | null> {
+export async function wikipediaArticle(title: string, chars = REFERENCE_CHARS): Promise<Reference | null> {
   const params = new URLSearchParams({ action: "query", prop: "extracts", explaintext: "1", redirects: "1", titles: title, format: "json", formatversion: "2" });
   const reply = (await get(`https://en.wikipedia.org/w/api.php?${params}`)) as { query?: { pages?: { title: string; missing?: boolean; extract?: string }[] } };
   const page = reply.query?.pages?.[0];
@@ -89,6 +90,19 @@ export async function wikipediaArticle(title: string): Promise<Reference | null>
   return {
     title: page.title,
     url: `https://en.wikipedia.org/wiki/${encodeURIComponent(page.title.replace(/ /g, "_"))}`,
-    text: text.length > REFERENCE_CHARS ? `${text.slice(0, REFERENCE_CHARS)}…` : text,
+    text: text.length > chars ? `${text.slice(0, chars)}…` : text,
   };
+}
+
+// The idea's own article, and a second one on its mechanism where the idea names one (the Montgolfier brothers'
+// article never says why warm air rises; "Hot air balloon" does): one text, each under its own heading. Null when
+// the first is missing; a missing second is left out.
+export async function wikipediaArticles(titles: string[]): Promise<Reference | null> {
+  const [first, second] = titles.filter((t) => t.trim());
+  if (!first) return null;
+  const main = await wikipediaArticle(first);
+  if (!main) return null;
+  const more = second && second.toLowerCase() !== first.toLowerCase() ? await wikipediaArticle(second, SECOND_CHARS) : null;
+  if (!more || more.title === main.title) return main;
+  return { title: `${main.title}" and "${more.title}`, url: main.url, text: `${main.text}\n\n--- The article "${more.title}" ---\n\n${more.text}` };
 }

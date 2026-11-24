@@ -66,7 +66,7 @@ describe("a recording is used only when it is public domain in the US", () => {
 // --- One lesson against a small world ---
 
 const need: Need = { slot: "look", day: 1, date: "2026-11-30", holiday: null, hawaiiDays: [] };
-const idea = (title: string, over: Partial<LessonIdea> = {}): LessonIdea => ({ title, subject: "art", holiday: false, article: title, shows: "it", searches: [{ source: "met", query: title }], ...over });
+const idea = (title: string, over: Partial<LessonIdea> = {}): LessonIdea => ({ title, subject: "art", holiday: false, articles: [title], shows: "it", searches: [{ source: "met", query: title }], ...over });
 const draft = (title: string, use = [1]): Draft => ({ use, title, subject: "art", summary_2_3: "A fact.", summary_4_5: "A deeper fact.", parent_note: "" });
 const fine: Check = { unsupported: [], repeats: "", values_points: [], whole_hawaii: false, title_names_idea: true };
 const found = (title: string): Candidate[] => [
@@ -81,7 +81,7 @@ function writer(over: { ideas?: LessonIdea[][]; candidates?: Record<string, Cand
   const deps: WriterDeps = {
     now: () => new Date(clock),
     ideas: async () => (over.ideas ?? [[idea("The Harvesters, and far things pale")]])[calls.ideas++] ?? [],
-    reference: async (article) => ((over.articles ?? [article]).includes(article) ? { title: article, url: "https://en.wikipedia.org/wiki/x", text: "The article." } : null),
+    reference: async ([article]) => ((over.articles ?? [article]).includes(article) ? { title: article, url: "https://en.wikipedia.org/wiki/x", text: "The article." } : null),
     candidates: async (i) => (over.candidates ? over.candidates[i.title] ?? [] : found(i.title)),
     write: async ({ idea: i, problems }) => {
       calls.write.push({ title: i.title, problems });
@@ -133,7 +133,7 @@ describe("writing one lesson", () => {
 
   it("never writes text only: an idea with no open picture, no article, or a flagged first item is passed over", async () => {
     const w = writer({
-      ideas: [[idea("No picture"), idea("No article", { article: "Missing" }), idea("Flagged"), idea("Good")]],
+      ideas: [[idea("No picture"), idea("No article", { articles: ["Missing"] }), idea("Flagged"), idea("Good")]],
       candidates: { "No picture": [], "No article": found("No article"), Flagged: found("Flagged"), Good: found("Good") },
       articles: ["No picture", "Flagged", "Good"],
       flagged: ["Flagged picture"],

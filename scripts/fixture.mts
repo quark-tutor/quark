@@ -35,6 +35,11 @@
 //   npm run fixture -- boat <n> money <m>   set child n's money to m, so the look can reach a boat's price (check 11)
 //   npm run fixture -- boat <n> reset       start child n's trading boat over: his game and its log are deleted
 //   npm run fixture -- boat <n> log         child n's trading log, as /parent shows it
+//   npm run fixture -- lessons              the library: the file's lessons and the app's (docs/week-without-hands-slice.md),
+//                                           how many no week has used per tile, and each lesson the app wrote, with its items
+//   npm run fixture -- no-pick <week>       put test where live is on a Saturday nobody picked: the family's latest week is
+//                                           renumbered <week>, and every file lesson no week has used is counted as that week's,
+//                                           so the next week has no theme and no lessons, and the writer sees every title, as live
 // The family's times tables for the trading boat, which put it on the wall, are `npm run boat:tables` (test) and
 // `boat:tables:live`, not a fixture: scripts/boat-tables.mts.
 // unpass only ever writes `pending`: nothing here can pass a card, so the gate stays the only thing that does; today
@@ -134,12 +139,12 @@ if (command === "show") {
     days: number | null;
     started_at: string;
     finished_at: string;
-    models: { use: string; calls: number; cost: number | null }[];
+    models: { use: string; calls: number; cost: number | null; input: number; output: number }[];
     cost: number;
   }[];
   for (const r of rows.reverse()) {
     const seconds = Math.round((Date.parse(r.finished_at) - Date.parse(r.started_at)) / 1000);
-    const calls = r.models.map((m) => `${m.use} ${m.calls}`).join(", ");
+    const calls = r.models.map((m) => `${m.use} ${m.calls} (${Math.round(m.input / 1000)}k in, ${Math.round(m.output / 1000)}k out, $${(m.cost ?? 0).toFixed(2)})`).join(", ");
     console.log(`${r.finished_at.slice(0, 19)}  ${r.kind}${r.ok ? "" : " (stopped)"}  ${r.days ?? "-"} day  ${seconds}s  ${calls}  $${Number(r.cost).toFixed(2)}`);
   }
 } else if (command === "speech") {
@@ -570,6 +575,48 @@ if (command === "show") {
       if (g.sailing) console.log(`  Sailing on the ${g.sailing.good} rumor to ${g.sailing.island}, at $${g.sailing.price}.`);
     }
   }
+} else if (command === "lessons") {
+  const rows = must(await db.from("plan_topics").select("id, key, slot, title, subject, position, sources").eq("kind", "short").eq("grade_band", "2-3").order("position"), "plan_topics") as {
+    id: string;
+    key: string;
+    slot: string;
+    title: string;
+    subject: string;
+    position: number;
+    sources: { url: string; license: string }[];
+  }[];
+  const themes = must(await db.from("themes").select("plan_week, topic_ids").eq("family_id", familyId), "themes") as { plan_week: number | null; topic_ids: string[] }[];
+  const used = new Set(themes.flatMap((t) => t.topic_ids ?? []));
+  const app = rows.filter((r) => r.key.startsWith("app/"));
+  console.log(`The library: ${rows.length - app.length} lessons from the file, ${app.length} written by the app. Weeks built: ${themes.map((t) => t.plan_week).join(", ") || "none"}.`);
+  for (const slot of ["look", "wonder", "listen", "then", "puzzle"]) {
+    console.log(`  ${slot}: ${rows.filter((r) => r.slot === slot && !used.has(r.id)).length} no week has used`);
+  }
+  for (const r of app) console.log(`  ${r.position} ${r.slot} ${r.key.split("/")[1]}: ${r.title} (${r.subject}) ${used.has(r.id) ? "[used]" : ""}\n      ${r.sources.map((x) => `${x.url} (${x.license})`).join("\n      ")}`);
+} else if (command === "drop-lesson") {
+  // One lesson the app wrote, taken out of test's library before any week uses it (a repeat, say), so the writer
+  // writes that tile's day again.
+  const rows = must(await db.from("plan_topics").select("id, key").like("key", `app/${arg}/%`), "plan_topics") as { id: string; key: string }[];
+  if (rows.length === 0) throw new Error(`No lesson the app wrote has the key ${arg}.`);
+  const themes = must(await db.from("themes").select("topic_ids").eq("family_id", familyId), "themes") as { topic_ids: string[] }[];
+  if (themes.some((t) => rows.some((r) => (t.topic_ids ?? []).includes(r.id)))) throw new Error(`A week already uses ${arg}; delete that week first.`);
+  console.log(`About to delete the app's lesson ${arg} (${rows.length} rows) from test's library.`);
+  must(await db.from("plan_topics").delete().in("id", rows.map((r) => r.id)).select("id"), "plan_topics");
+  must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.drop-lesson", target: { key: arg } }).select("id"), "audit_log");
+  console.log("Done.");
+} else if (command === "no-pick") {
+  const week = Number(arg);
+  if (!Number.isInteger(week) || week < 2) throw new Error("Say the week number test's latest week becomes: npm run fixture -- no-pick 5");
+  const themes = must(await db.from("themes").select("id, plan_week, week_start, topic_ids").eq("family_id", familyId).order("week_start"), "themes") as { id: string; plan_week: number | null; week_start: string; topic_ids: string[] }[];
+  if (themes.length === 0) throw new Error("Test has no week to renumber.");
+  const latest = themes.at(-1)!;
+  const used = new Set(themes.flatMap((t) => t.topic_ids ?? []));
+  const lessons = must(await db.from("plan_topics").select("id, key").eq("kind", "short").like("key", "short/%"), "plan_topics") as { id: string; key: string }[];
+  const unused = lessons.filter((l) => !used.has(l.id));
+  console.log(`About to renumber test's latest week (from ${latest.week_start}) from week ${latest.plan_week} to week ${week}, and count ${unused.length / 2} file lessons no week has used as that week's.`);
+  must(await db.from("themes").update({ plan_week: week, topic_ids: [...(latest.topic_ids ?? []), ...unused.map((l) => l.id)] }).eq("id", latest.id).select("id"), "themes");
+  must(await db.from("audit_log").insert({ family_id: familyId, guardian_id: null, action: "fixture.no-pick", target: { week, from: latest.plan_week, counted: unused.length } }).select("id"), "audit_log");
+  console.log(`Done. Test's next week is ${week + 1}; all ${lessons.length / 2} file lessons are used.`);
 } else if (command === "judge") {
   await (await import("./judge-table.mts")).runJudgeTable(arg);
 } else {

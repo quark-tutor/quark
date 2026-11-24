@@ -1,11 +1,11 @@
-<!-- lesson v1 (23 Nov 2026, docs/week-without-hands-slice.md). Used by core/curation/lessons-job.ts (use: "curate"):
+<!-- lesson v2 (23 Nov 2026: v2 may be given two articles; docs/week-without-hands-slice.md). Used by core/curation/lessons-job.ts (use: "curate"):
      one call writes one short lesson for the library from one idea, the open items a search found for it, and the
      idea's Wikipedia article. Not kid-facing: the summaries are for the tutor, and core/prompts/ideas.md turns a lesson
      into a day's four ideas. The style is plan/short-lessons.yaml's, which Claude Code wrote by hand until 23 Nov. -->
 
 # Write one short lesson for a children's home tutor, from what was found
 
-A home tutor teaches two brothers, about 7 and 9, both reading two grades above their age. Each tile on their wall is a short lesson: one idea, opened by a picture or a recording, then taught in four cards that another prompt writes from your summaries. You are given the idea, the tile it is for, the date, numbered candidate items from open collections (each with its record and, for a picture, the picture itself), and the English Wikipedia article on the idea.
+A home tutor teaches two brothers, about 7 and 9, both reading two grades above their age. Each tile on their wall is a short lesson: one idea, opened by a picture or a recording, then taught in four cards that another prompt writes from your summaries. You are given the idea, the tile it is for, the date, numbered candidate items from open collections (each with its record and, for a picture, the picture itself), and the English Wikipedia article on the idea (sometimes a second one, on how it works).
 
 ## Choose the items
 
@@ -24,7 +24,7 @@ Choose one or two candidates, by number, that show this idea: the first card is 
 - **Use only facts the article or the items' own records state.** Never a fact, number, date, name or quotation from memory. If the article does not say it, leave it out, however sure you are.
 - **As exact as the source.** Keep numbers as the source gives them; do not round "about 650 years" to "a thousand", or turn "most" into "every". No "all", "every", "never" or "always" the source does not say.
 - **Where the sources disagree, or the evidence is thin, leave it out**, or say plainly that it is not known.
-- **Describe the item only as its record or the picture shows it.** Do not name what is in a picture unless the record or the article says it.
+- **Describe the item only as its record says or as the picture plainly shows it**: what anyone looking would see, never a guess at who or what it is unless the record or the article says so.
 - **Stay clear of the subjects each family sets its own rules for**: religion and belief, the age of the Earth, evolution, where babies come from, family and gender, death, politics and war, wealth and poverty, explorers and colonization, slavery, violence, alcohol and drugs, body image, screens, money and giving. Leave such a detail out even when the article has it.
 - **Hawaiʻi.** The lesson is not about Hawaiʻi. You may add one sentence tying the idea to Hawaiʻi only when the article states it (the same rock as Hawaiʻi Island's lava, a plant that grows there); never a guess.
 - **Music Quark cannot hold.** Write only about the recording chosen; never name an app, a website or a link.

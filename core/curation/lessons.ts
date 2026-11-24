@@ -61,7 +61,7 @@ export type LessonIdea = {
   title: string;
   subject: Subject;
   holiday: boolean;
-  article: string;
+  articles: string[]; // one or two English Wikipedia articles: the idea's own, and one that explains its mechanism
   shows: string;
   searches: { source: "met" | "aic" | "commons"; query: string }[];
 };
@@ -80,7 +80,7 @@ export type WriterContext = {
 export type WriterDeps<C extends Candidate = Candidate> = {
   now: () => Date;
   ideas: (need: Need, ctx: WriterContext, rejected: string[]) => Promise<LessonIdea[]>;
-  reference: (article: string) => Promise<Reference | null>;
+  reference: (articles: string[]) => Promise<Reference | null>; // null when the first article is missing
   candidates: (idea: LessonIdea, slot: DaySlot) => Promise<C[]>;
   write: (input: { need: Need; idea: LessonIdea; candidates: C[]; reference: Reference; problems: string[] }) => Promise<Draft>;
   check: (input: { draft: Draft; items: C[]; reference: Reference; ctx: WriterContext }) => Promise<Check>;
@@ -103,8 +103,8 @@ export async function writeLesson<C extends Candidate>(need: Need, ctx: WriterCo
 
   const attempt = async (idea: LessonIdea): Promise<string | { key: string; draft: Draft; items: C[] }> => {
     if (ctx.used.some((t) => same(t, idea.title)) || tried.some((t) => same(t.title, idea.title))) return "already in the library";
-    const reference = await deps.reference(idea.article);
-    if (!reference) return `no Wikipedia article "${idea.article}"`;
+    const reference = await deps.reference(idea.articles);
+    if (!reference) return `no Wikipedia article "${idea.articles[0] ?? ""}"`;
     const found = await deps.candidates(idea, need.slot);
     if (found.length === 0) return need.slot === "listen" ? "no recording that is public domain in the US" : "no open picture";
 

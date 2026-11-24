@@ -7,7 +7,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { credit, type Credit } from "../content/credit.ts";
 import { flagItem } from "../content/flag.ts";
 import { isOpenLicense } from "../content/rule.ts";
-import { retryOnce, searchAic, searchCommons, searchMet, usPublicDomainRecording, wikipediaArticle, type Reference } from "../content/search.ts";
+import { retryOnce, searchAic, searchCommons, searchMet, usPublicDomainRecording, wikipediaArticles, type Reference } from "../content/search.ts";
 import { sourceRef, storagePath, type SourceRef } from "../content/sources.ts";
 import { fetchFromSource, syncItem, type SyncDeps } from "../content/sync.ts";
 import { USER_AGENT, type FetchedItem } from "../content/types.ts";
@@ -73,6 +73,15 @@ function recordOf(source: string, item: FetchedItem, lines: string[]): string {
     .join("\n");
 }
 
+// The earlier titles a lesson might repeat: those sharing a word of five letters or more with its title or summaries.
+// The ideas call is given every title; the checker needs only these, which keeps its prompt short.
+const words = (s: string) => new Set(s.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").match(/[a-z]{5,}/g) ?? []);
+export function near(draft: Pick<Draft, "title" | "summary_2_3" | "summary_4_5">, used: string[]): string[] {
+  const mine = words(`${draft.title} ${draft.summary_2_3} ${draft.summary_4_5}`);
+  const close = used.filter((t) => [...words(t)].some((w) => mine.has(w)));
+  return close.length ? close.slice(0, 60) : ["(none)"];
+}
+
 const slugOf = (title: string) =>
   title
     .normalize("NFKD")
@@ -96,7 +105,7 @@ const IDEAS_SCHEMA = {
           title: { type: "string" },
           subject: { type: "string", enum: [...SUBJECTS] },
           holiday: { type: "boolean" },
-          article: { type: "string" },
+          articles: { type: "array", items: { type: "string" } },
           shows: { type: "string" },
           searches: {
             type: "array",
@@ -108,7 +117,7 @@ const IDEAS_SCHEMA = {
             },
           },
         },
-        required: ["title", "subject", "holiday", "article", "shows", "searches"],
+        required: ["title", "subject", "holiday", "articles", "shows", "searches"],
         additionalProperties: false,
       },
     },
@@ -210,7 +219,7 @@ export function makeRoundDeps(db: SupabaseClient, ai: { complete: typeof complet
       return reply.ideas.slice(0, 3);
     },
 
-    reference: (article) => wikipediaArticle(article),
+    reference: (articles) => wikipediaArticles(articles),
 
     async candidates(idea, slot) {
       const audio = slot === "listen";
@@ -263,7 +272,7 @@ export function makeRoundDeps(db: SupabaseClient, ai: { complete: typeof complet
         pictures.length ? `The pictures above are candidates ${pictures.map((c) => c.n).join(", ")}, in that order.` : "The candidates are recordings: their records are below.",
         ...candidates.flatMap((c) => ["", `Candidate ${c.n}:`, c.record]),
         "",
-        `The Wikipedia article, "${reference.title}":`,
+        `The Wikipedia article${reference.title.includes(`" and "`) ? "s" : ""}, "${reference.title}":`,
         reference.text,
         ...(problems.length ? ["", "Your last draft of this lesson had these problems. Write it again without them:", ...problems.map((p) => `- ${p}`)] : []),
       ];
@@ -279,20 +288,22 @@ export function makeRoundDeps(db: SupabaseClient, ai: { complete: typeof complet
     },
 
     async check({ draft, items, reference, ctx }) {
+      const pictures = items.filter((c) => c.image);
       const prompt = [
+        pictures.length ? `The pictures above are items ${items.map((c, i) => (c.image ? i + 1 : null)).filter(Boolean).join(", ")}, in that order.` : "The items are recordings: their records are below.",
         `The lesson: ${draft.title} (${draft.subject})`,
         `Summary for the younger child: ${draft.summary_2_3}`,
         `Summary for the older child: ${draft.summary_4_5}`,
         `Parent note: ${draft.parent_note || "none"}`,
         "",
         ...items.flatMap((c, i) => [`Item ${i + 1}:`, c.record, ""]),
-        `The Wikipedia article, "${reference.title}":`,
+        `The Wikipedia article${reference.title.includes(`" and "`) ? "s" : ""}, "${reference.title}":`,
         reference.text,
         "",
-        "Every title the family has already had:",
-        ...ctx.used.map((t) => `- ${t}`),
+        "The titles the family has already had that share a word with this lesson (the ideas call saw every title):",
+        ...near(draft, ctx.used).map((t) => `- ${t}`),
       ];
-      return run<Check>({ system: readPrompt("lesson-check.md"), prompt: prompt.join("\n"), json: CHECK_SCHEMA, use: "gate", maxTokens: 6000, label: "lesson-check" });
+      return run<Check>({ system: readPrompt("lesson-check.md"), prompt: prompt.join("\n"), images: pictures.map((c) => c.image!), json: CHECK_SCHEMA, use: "gate", maxTokens: 6000, label: "lesson-check" });
     },
 
     async store(c) {
