@@ -42,6 +42,7 @@ export type WeekPlan = {
   topicIds: string[]; // every plan_topics row the week uses, both bands, for themes.topic_ids
   topics: WeekTopic[];
   schedule: DayPlan[]; // all seven days, even when fewer are built
+  slots: DaySlot[]; // the tiles the week builds: all five, or four while the trading boat takes Puzzle's place
 };
 
 export type AnswerKey = { accept: string[]; rubric: string };

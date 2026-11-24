@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SLOT_ORDER, type DaySlot } from "../../lib/lenses";
-import { stretchForWeek, weekSchedule, weekThread, type Scheduled } from "./schedule";
+import { ALL_SLOTS, gapsText, scheduleGaps, stretchForWeek, weekSchedule, weekSlots, weekThread, WITHOUT_PUZZLE, type DayPlan, type Scheduled } from "./schedule";
 
 // Egypt's order inside every week: then, wonder, look, listen, then, puzzle.
 const EGYPT_SLOTS: DaySlot[] = ["then", "wonder", "look", "listen", "then", "puzzle"];
@@ -11,6 +11,8 @@ const egypt = (week: number) => weekThread(thread, week);
 // A theme: one week of seven topics, on look, wonder, then, listen, look, then, puzzle (plan/candidates/themes.md).
 const THEME_SLOTS: DaySlot[] = ["look", "wonder", "then", "listen", "look", "then", "puzzle"];
 const theme = (name: string): Scheduled[] => THEME_SLOTS.map((slot, i) => ({ id: `${name}-${i + 1}`, slot, title: `${name} ${i + 1}` }));
+// Every topic id a day holds.
+const ids = (d: DayPlan) => Object.values(d.topics) as string[];
 
 describe("weekSchedule", () => {
   it("puts the thread on its own slot one day at a time, and the next short lesson on each other slot", () => {
@@ -31,16 +33,16 @@ describe("weekSchedule", () => {
 
   it("carries on the thread and skips lessons earlier weeks used", () => {
     const first = weekSchedule({ week: 1, thread: egypt(1), lessons: lessonsFor(20), used: new Set() });
-    const used = new Set(first.flatMap((d) => Object.values(d.topics)).filter((id) => !id.startsWith("egypt")));
+    const used = new Set(first.flatMap(ids).filter((id) => !id.startsWith("egypt")));
     const second = weekSchedule({ week: 2, thread: egypt(2), lessons: lessonsFor(20), used });
     expect(second[0].topics[second[0].thread!]).toBe("egypt-8");
-    expect(second.flatMap((d) => Object.values(d.topics)).some((id) => used.has(id))).toBe(false);
+    expect(second.flatMap(ids).some((id) => used.has(id))).toBe(false);
   });
 
   it("keeps a week's own lessons on a rebuild, even when the library has changed", () => {
     const lessons = lessonsFor(10);
     const before = weekSchedule({ week: 1, thread: egypt(1), lessons, used: new Set() });
-    const own = new Set(before.flatMap((d) => Object.values(d.topics)));
+    const own = new Set(before.flatMap(ids));
     const added = [{ id: "look-new", slot: "look" as const, title: "New" }, ...lessons];
     expect(weekSchedule({ week: 1, thread: egypt(1), lessons: added, used: new Set(), own })).toEqual(before);
   });
@@ -48,7 +50,7 @@ describe("weekSchedule", () => {
   it("gives all five slots to short lessons once the thread has run out", () => {
     const week = weekSchedule({ week: 4, thread: egypt(4), lessons: lessonsFor(10), used: new Set() });
     expect(week.map((d) => d.thread)).toEqual(["listen", "then", "puzzle", null, null, null, null]); // topics 22-24
-    expect(Object.values(week[3].topics).every((id) => !id.startsWith("egypt"))).toBe(true);
+    expect(ids(week[3]).every((id) => !id.startsWith("egypt"))).toBe(true);
   });
 
   it("runs a theme's seven topics from its day 1, one a day on its own slots, beside 28 short lessons", () => {
@@ -58,14 +60,43 @@ describe("weekSchedule", () => {
     const short = week.flatMap((d) => SLOT_ORDER.filter((s) => s !== d.thread).map((s) => d.topics[s]));
     expect(short).toHaveLength(28);
     // look 5, wonder 6, listen 6, then 5, puzzle 6
-    expect(SLOT_ORDER.map((s) => short.filter((id) => id.startsWith(`${s}-`)).length)).toEqual([5, 6, 6, 5, 6]);
+    expect(SLOT_ORDER.map((s) => short.filter((id) => id?.startsWith(`${s}-`)).length)).toEqual([5, 6, 6, 5, 6]);
   });
 
-  it("stops before building anything when a slot runs out, naming every slot short", () => {
+  it("leaves a slot's later days open when it runs out, and names them, rather than refusing the week (23 Nov 2026)", () => {
     const lessons = lessonsFor(6).filter((l) => !(l.slot === "look" && l.id !== "look-1"));
-    expect(() => weekSchedule({ week: 1, thread: egypt(1), lessons, used: new Set(["puzzle-1"]) })).toThrow(
-      "Not enough short lessons for week 1: the look card needs 6 and 1 is left; the puzzle card needs 6 and 5 are left. Add lessons to plan/short-lessons.yaml and run npm run plan:import.",
+    const week = weekSchedule({ week: 1, thread: egypt(1), lessons, used: new Set(["puzzle-1"]) });
+    expect(week[0].topics).toEqual({ look: "look-1", wonder: "wonder-1", listen: "listen-1", then: "egypt-1", puzzle: "puzzle-2" });
+    const gaps = scheduleGaps(week, ALL_SLOTS);
+    // look: day 1 has look-1, day 3 is Egypt's, so days 2, 4, 5, 6 and 7 are open; puzzle: day 6 is Egypt's, so day 7 is.
+    expect(gaps).toEqual([
+      { day: 2, slot: "look" },
+      { day: 4, slot: "look" },
+      { day: 5, slot: "look" },
+      { day: 6, slot: "look" },
+      { day: 7, slot: "look" },
+      { day: 7, slot: "puzzle" },
+    ]);
+    expect(gapsText(1, gaps)).toBe(
+      "Not enough short lessons for week 1: the look card needs 5 more; the puzzle card needs 1 more. The app writes them (npm run cron:lessons), or add lessons to plan/short-lessons.yaml and run npm run plan:import.",
     );
+  });
+
+  it("builds short lessons alone on every tile for a week no theme holds, and four tiles while the boat is here (23 Nov 2026)", () => {
+    const five = weekSchedule({ week: 6, thread: [], lessons: lessonsFor(7), used: new Set() });
+    expect(five.every((d) => d.thread === null && ids(d).length === 5)).toBe(true);
+    expect(five[6].topics).toEqual({ look: "look-7", wonder: "wonder-7", listen: "listen-7", then: "then-7", puzzle: "puzzle-7" });
+    const four = weekSchedule({ week: 6, thread: [], lessons: lessonsFor(7), used: new Set(), slots: WITHOUT_PUZZLE });
+    expect(four.flatMap(ids)).toHaveLength(28);
+    expect(four[0].topics).toEqual({ look: "look-1", wonder: "wonder-1", listen: "listen-1", then: "then-1" });
+    expect(scheduleGaps(four, WITHOUT_PUZZLE)).toEqual([]);
+  });
+
+  it("leaves a theme's puzzle topic out while the boat is here, and fills that day's four tiles with lessons", () => {
+    const week = weekSchedule({ week: 5, thread: theme("moon"), lessons: lessonsFor(10), used: new Set(), slots: WITHOUT_PUZZLE });
+    expect(week.map((d) => d.thread)).toEqual(["look", "wonder", "then", "listen", "look", "then", null]);
+    expect(week[6].topics).toEqual({ look: "look-5", wonder: "wonder-6", listen: "listen-6", then: "then-5" });
+    expect(week.flatMap(ids)).not.toContain("moon-7");
   });
 
   it("fits the picked lessons into weeks 1 to 5 exactly, with the vote, Nellie Bly, time zones, the phonograph and Thanksgiving on their days", async () => {
@@ -74,7 +105,7 @@ describe("weekSchedule", () => {
     const { parseLibrary } = await import("../../lib/plan");
     const lib = parseLibrary(readFileSync(join(__dirname, "..", "..", "plan", "short-lessons.yaml"), "utf8"));
     const lessons = lib.lessons.map((l) => ({ id: l.key, slot: l.slot, title: l.title }));
-    const shortIn = (week: ReturnType<typeof weekSchedule>) => week.flatMap((d) => SLOT_ORDER.filter((s) => s !== d.thread).map((s) => d.topics[s]));
+    const shortIn = (week: ReturnType<typeof weekSchedule>) => week.flatMap((d) => SLOT_ORDER.filter((s) => s !== d.thread).map((s) => d.topics[s]!));
 
     const week1 = weekSchedule({ week: 1, thread: egypt(1), lessons, used: new Set() });
     expect(week1[0].topics).toEqual({ look: "great-wave", wonder: "leap-years", listen: "carnival-of-the-animals", then: "egypt-1", puzzle: "two-dice" });
@@ -127,11 +158,11 @@ describe("weekSchedule", () => {
     ]);
     expect(new Set(shortIn(week5))).toEqual(new Set(lessons.slice(116, 144).map((l) => l.id)));
 
-    // Week 6 has nothing left, so a Sunday firing for it refuses before spending.
+    // Week 6 has no theme and nothing left in the file: with the boat here, every one of its 28 day-slots is open, for
+    // the app's own writer (docs/week-without-hands-slice.md).
     const five = new Set([...four, ...shortIn(week5)]);
-    expect(() => weekSchedule({ week: 6, thread: theme("next"), lessons, used: five })).toThrow(
-      "Not enough short lessons for week 6: the look card needs 5 and 0 are left; the wonder card needs 6 and 0 are left; the listen card needs 6 and 0 are left; the then card needs 5 and 0 are left; the puzzle card needs 6 and 0 are left.",
-    );
+    const week6 = weekSchedule({ week: 6, thread: [], lessons, used: five, slots: WITHOUT_PUZZLE });
+    expect(scheduleGaps(week6, WITHOUT_PUZZLE)).toHaveLength(28);
   });
 });
 
@@ -149,12 +180,23 @@ describe("stretchForWeek", () => {
     expect(stretchForWeek([EGYPT, MOON, { stretch: "antarctica", sequence: 3, topics: 7 }], 6)).toEqual({ stretch: "antarctica", weekInStretch: 1 });
   });
 
-  it("refuses a week no stretch holds, naming the file to write", () => {
-    expect(() => stretchForWeek([EGYPT, MOON], 6)).toThrow(
-      "No theme for week 6: the plan's stretches reach week 5. Write plan/<theme>.yaml with sequence: 3 (one week: seven topics), then run npm run plan:import.",
-    );
-    expect(() => stretchForWeek([EGYPT], 7)).toThrow(
-      "No theme for week 7: the plan's stretches reach week 4. Write plan/<theme>.yaml with sequence: 4 (one week: seven topics), after themes for weeks 5 to 6, then run npm run plan:import.",
+  it("finds no stretch for a week none holds, which is then short lessons alone (23 Nov 2026)", () => {
+    expect(stretchForWeek([EGYPT, MOON], 6)).toBeNull();
+    expect(stretchForWeek([EGYPT], 7)).toBeNull();
+  });
+
+  it("gives a theme that names its week that week, after weeks with no theme (Brandon, 23 Nov 2026, at go)", () => {
+    const later = { stretch: "volcanoes", sequence: 3, topics: 7, named: 8 };
+    expect(stretchForWeek([EGYPT, MOON, later], 8)).toEqual({ stretch: "volcanoes", weekInStretch: 1 });
+    for (const week of [6, 7, 9]) expect(stretchForWeek([EGYPT, MOON, later], week)).toBeNull();
+    expect(stretchForWeek([EGYPT, MOON, later], 5)).toEqual({ stretch: "the-moon", weekInStretch: 1 }); // the Moon, counted, as before
+    // A theme counted on after a named one starts the week after it.
+    expect(stretchForWeek([EGYPT, MOON, later, { stretch: "rivers", sequence: 4, topics: 7 }], 9)).toEqual({ stretch: "rivers", weekInStretch: 1 });
+  });
+
+  it("refuses a theme naming a week the stretches before it already hold", () => {
+    expect(() => stretchForWeek([EGYPT, MOON, { stretch: "volcanoes", sequence: 3, topics: 7, named: 5 }], 6)).toThrow(
+      "The plan's stretches are out of order: volcanoes names week 5, but the stretches before it reach week 5; a theme names a later week. Fix the files under plan/ and run npm run plan:import.",
     );
   });
 
@@ -165,5 +207,21 @@ describe("stretchForWeek", () => {
     expect(() => stretchForWeek([EGYPT, MOON, { stretch: "antarctica", sequence: 2, topics: 7 }], 2)).toThrow(
       "The plan's stretches are out of order: the-moon and antarctica have the same sequence, 2; each stretch needs its own.",
     );
+  });
+});
+
+describe("weekSlots", () => {
+  const day = (slots: readonly string[], each = 4) => new Map(slots.map((s) => [s, each])) as Map<(typeof ALL_SLOTS)[number], number>;
+  it("is all five, or four while the boat is here, for a week with no day yet", () => {
+    expect(weekSlots(new Map(), false)).toEqual(ALL_SLOTS);
+    expect(weekSlots(new Map(), true)).toEqual(WITHOUT_PUZZLE);
+  });
+  it("keeps the tiles of the week's earliest whole day, whatever the boat says now", () => {
+    expect(weekSlots(new Map([[1, day(WITHOUT_PUZZLE)]]), false)).toEqual(WITHOUT_PUZZLE);
+    expect(weekSlots(new Map([[1, day(ALL_SLOTS)]]), true)).toEqual(ALL_SLOTS);
+  });
+  it("does not read a half-built day, which is cleared and built again", () => {
+    expect(weekSlots(new Map([[1, day(["look", "wonder", "listen"])]]), false)).toEqual(ALL_SLOTS);
+    expect(weekSlots(new Map([[1, day(ALL_SLOTS, 2)]]), true)).toEqual(WITHOUT_PUZZLE);
   });
 });

@@ -14,7 +14,8 @@ import {
   parsePlan,
   planRows,
   planWarnings,
-  sequenceProblems,
+  namedWeek,
+  stretchWeeks,
   validateLibrary,
   validatePlan,
   type PlanRow,
@@ -29,7 +30,7 @@ if (!url || !key) throw new Error("Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SEC
 const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
 // Each file as the rows it becomes, with the key prefix its rows share; a stretch's sequence too.
-type Unit = { file: string; title: string; prefix: string; rows: PlanRow[]; count: string; sequence?: number };
+type Unit = { file: string; title: string; prefix: string; rows: PlanRow[]; count: string; sequence?: number; topics?: number; named?: number };
 
 const dir = join(import.meta.dirname, "..", "plan");
 // The math ladder is not the plan: npm run ladder:import writes it, into skills.
@@ -48,12 +49,15 @@ const units: Unit[] = readdirSync(dir)
     if (errors.length) throw new Error(`plan/${f}:\n  ${errors.join("\n  ")}`);
     if (`${doc.stretch}.yaml` !== f) throw new Error(`plan/${f}: stretch must match the file name`);
     for (const w of planWarnings(doc)) console.warn(`plan/${f}: warning: ${w}`);
-    return { file: f, title: doc.title, prefix: `${doc.stretch}/`, rows: planRows(doc), count: `${doc.weeks.length} ${doc.weeks.length === 1 ? "week" : "weeks"}`, sequence: doc.sequence };
+    return { file: f, title: doc.title, prefix: `${doc.stretch}/`, rows: planRows(doc), count: `${doc.weeks.length} ${doc.weeks.length === 1 ? "week" : "weeks"}`, sequence: doc.sequence, topics: doc.weeks.reduce((n, w) => n + w.topics.length, 0), named: namedWeek(doc.sequence, doc.weeks[0]?.week) };
   });
 
-// The stretches run 1, 2, 3 with no gap and no two alike (docs/04, "The long-term plan"): checked across
-// the files, before anything is written.
-const order = sequenceProblems(units.filter((u) => u.sequence !== undefined).map((u) => ({ name: `plan/${u.file}`, sequence: u.sequence! })));
+// The stretches run 1, 2, 3 with no gap and no two alike, and a theme that names its week names one after every
+// week the stretches before it hold (docs/04, "The long-term plan"): checked across the files, before anything
+// is written. Lessons the app wrote (keys app/...) are not a file's, so no file's import touches them.
+const order = stretchWeeks(
+  units.filter((u) => u.sequence !== undefined).map((u) => ({ stretch: `plan/${u.file}`, sequence: u.sequence!, topics: u.topics!, named: u.named })),
+).problems;
 if (order.length) throw new Error(`The plan's stretches are out of order:\n  ${order.join("\n  ")}`);
 
 for (const unit of units) {

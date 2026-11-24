@@ -151,7 +151,7 @@ export async function buildWeek(opts: WeekOptions, deps: WeekDeps): Promise<Week
   // 2. Ideas, shared by every child: slots side by side, days in order within a slot so each day's
   //    first layer can be new.
   if (chains.length === 0) {
-    const bySlot = await pool([...SLOT_ORDER], SLOT_ORDER.length, async (slot) => {
+    const bySlot = await pool([...plan.slots], plan.slots.length, async (slot) => {
       const written: IdeaChain[] = [];
       for (let day = 1; day <= days; day++) {
         const chain = await deps.writeIdeaChain(slot, day, written);
@@ -280,7 +280,7 @@ async function buildOneDay(opts: WeekOptions, deps: WeekDeps, days: number, kids
   const earlier = saved.filter((c) => c.day < day);
 
   // Ideas, shared by every child: slots side by side, each carrying on from its earlier days.
-  const chains = await pool([...SLOT_ORDER], SLOT_ORDER.length, async (slot) => {
+  const chains = await pool([...plan.slots], plan.slots.length, async (slot) => {
     const chain = await deps.writeIdeaChain(slot, day, earlier.filter((c) => c.slot === slot));
     chain.ids = await deps.saveIdeas(themeId, chain);
     return chain;

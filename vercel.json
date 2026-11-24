@@ -2,13 +2,27 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "crons": [
     { "path": "/api/cron/week", "schedule": "0 16 * * 0" },
+    { "path": "/api/cron/week", "schedule": "0 17 * * 0" },
     { "path": "/api/cron/week", "schedule": "0 18 * * 0" },
+    { "path": "/api/cron/week", "schedule": "0 19 * * 0" },
     { "path": "/api/cron/week", "schedule": "0 20 * * 0" },
+    { "path": "/api/cron/week", "schedule": "0 21 * * 0" },
     { "path": "/api/cron/week", "schedule": "0 22 * * 0" },
+    { "path": "/api/cron/week", "schedule": "0 23 * * 0" },
     { "path": "/api/cron/week", "schedule": "0 0 * * 1" },
+    { "path": "/api/cron/week", "schedule": "0 1 * * 1" },
     { "path": "/api/cron/week", "schedule": "0 2 * * 1" },
+    { "path": "/api/cron/week", "schedule": "0 3 * * 1" },
     { "path": "/api/cron/week", "schedule": "0 4 * * 1" },
+    { "path": "/api/cron/week", "schedule": "0 5 * * 1" },
     { "path": "/api/cron/week", "schedule": "0 6 * * 1" },
+    { "path": "/api/cron/week", "schedule": "0 7 * * 1" },
+    { "path": "/api/cron/lessons", "schedule": "0 11 * * *" },
+    { "path": "/api/cron/lessons", "schedule": "0 15 * * *" },
+    { "path": "/api/cron/lessons", "schedule": "0 19 * * *" },
+    { "path": "/api/cron/lessons", "schedule": "0 23 * * *" },
+    { "path": "/api/cron/lessons", "schedule": "0 3 * * *" },
+    { "path": "/api/cron/lessons", "schedule": "0 7 * * *" },
     { "path": "/api/cron/speech", "schedule": "0 13 * * *" }
   ]
 }

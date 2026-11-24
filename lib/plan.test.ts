@@ -10,7 +10,9 @@ import {
   parsePlan,
   planRows,
   planWarnings,
+  namedWeek,
   sequenceProblems,
+  stretchWeeks,
   validateLibrary,
   validatePlan,
   type Library,
@@ -92,7 +94,7 @@ describe("validatePlan", () => {
     plan.weeks[0] = { ...plan.weeks[0], week: 2, perspective: undefined, values_points: [25] };
     expect(validatePlan(plan)).toEqual(
       expect.arrayContaining([
-        "weeks must be numbered 1, 2, 3... in order; found 2 at position 1",
+        "weeks must be numbered 1, 2, 3... in order, or a theme's one chapter numbered by the family's week it holds; found 2 at position 1",
         "week 2: values point 25 is not 1-24",
         "week 2: values_points need a perspective",
       ]),
@@ -124,6 +126,34 @@ describe("validatePlan", () => {
     expect(validatePlan(plan)).toEqual([]);
     plan.weeks.push({ ...plan.weeks[0], week: 2 });
     expect(validatePlan(plan)).toEqual(["a theme after the first stretch is one week: one chapter of 7 topics (this has 2 chapters and 14 topics)"]);
+  });
+
+  it("lets a theme's one chapter name the family's week it holds (Brandon, 23 Nov 2026, at go)", () => {
+    const plan = { ...smallPlan(), sequence: 3 };
+    plan.weeks[0].topics.push(topic("history", "look") as Plan["weeks"][0]["topics"][0]);
+    plan.weeks[0] = { ...plan.weeks[0], week: 8 };
+    expect(validatePlan(plan)).toEqual([]);
+    expect(namedWeek(3, 8)).toBe(8);
+    expect(namedWeek(2, 1)).toBeUndefined(); // the Moon's chapter 1: counted on, as before
+    expect(namedWeek(1, 3)).toBeUndefined(); // Egypt's chapters are its own weeks
+  });
+});
+
+describe("stretchWeeks", () => {
+  it("counts Egypt and the Moon on, as before, and gives a named theme its week", () => {
+    const { weeks, problems } = stretchWeeks([
+      { stretch: "ancient-egypt", sequence: 1, topics: 24 },
+      { stretch: "the-moon", sequence: 2, topics: 7 },
+      { stretch: "volcanoes", sequence: 3, topics: 7, named: 9 },
+    ]);
+    expect(problems).toEqual([]);
+    expect(Object.fromEntries(weeks)).toEqual({ "ancient-egypt": [1, 2, 3, 4], "the-moon": [5], volcanoes: [9] });
+  });
+
+  it("finds none wrong in the plan's own files", () => {
+    const stretches = files.map((f) => parsePlan(readFileSync(join(dir, f), "utf8"))).filter((d) => !isLibrary(d));
+    const spans = stretches.map((d) => ({ stretch: d.stretch, sequence: d.sequence, topics: d.weeks.reduce((n, w) => n + w.topics.length, 0), named: namedWeek(d.sequence, d.weeks[0]?.week) }));
+    expect(stretchWeeks(spans).problems).toEqual([]);
   });
 });
 

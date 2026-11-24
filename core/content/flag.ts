@@ -32,8 +32,9 @@ export function describeItem(item: FetchedItem): string {
   return lines.filter(Boolean).join("\n");
 }
 
-export async function flagItem(item: FetchedItem, image?: ModelImage): Promise<FlagResult> {
-  const result = await complete<FlagResult>({
+// `run` is the call to make: a run that counts its own spend passes its metered complete (the lesson writer).
+export async function flagItem(item: FetchedItem, image?: ModelImage, run: typeof complete = complete): Promise<FlagResult> {
+  const result = await run<FlagResult>({
     system: readPrompt("flag-content.md"),
     prompt: describeItem(item),
     images: image ? [image] : [],

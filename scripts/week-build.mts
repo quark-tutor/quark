@@ -1,6 +1,7 @@
 // Build one week of the plan: the theme, its shared ideas, and every child's cards and questions.
 // A week is mixed (docs/04, "How a week is mixed"): the thread on one slot a day, short lessons on
-// the other four. --week N is the family's week N of the plan. The work itself is in
+// the others; a week no theme holds is short lessons alone, and while the trading boat is here there is
+// no Puzzle tile. --week N is the family's week N of the plan. The work itself is in
 // core/curation/week-job.ts, which the Sunday route uses too; this keeps the flags and the printing.
 //   npm run week:build -- --week 1
 //   npm run week:build -- --week 1 --child Pip --days 2     (one child, the first two days)
@@ -22,7 +23,6 @@ import { gateFailed, gateSetup } from "../core/curation/gate-run.ts";
 import { BuildStopped, buildDays, prepareWeek, settingsWatch } from "../core/curation/week-job.ts";
 import { debugTo, meteredComplete, modelFor } from "../core/model.ts";
 import { makeMeter, runRow } from "../core/runs.ts";
-import { SLOT_ORDER } from "../lib/lenses.ts";
 import { printGate } from "./gate-run.ts";
 import { announceTarget } from "./target.ts";
 
@@ -66,8 +66,9 @@ const models = { ideas: modelFor("curate"), cards: modelFor("write"), gate: mode
 const meter = makeMeter();
 const complete = meteredComplete(meter);
 
-// prepareWeek() only reads, so a refusal from it ("Not enough short lessons…", "No theme for week…") is a stop
-// before spending, printed as one, not as a crash with a stack trace.
+// prepareWeek() only reads, so a refusal from it (the plan's stretches out of order) is a stop before spending,
+// printed as one, not as a crash with a stack trace. A library that cannot fill the days asked for is refused by
+// buildDays(), also before spending ("Not enough short lessons…").
 let p: Awaited<ReturnType<typeof prepareWeek>>;
 try {
   p = await prepareWeek(db, { week, start: args.start, child: args.child });
@@ -81,10 +82,14 @@ const first = day ?? 1; // the first day built
 const last = day ?? days; // the last
 console.log(`${plan.title}: starting ${p.start}, ${day !== undefined ? `day ${day} only` : `${days} day${days === 1 ? "" : "s"}`}.`);
 const titleOf = new Map(plan.topics.map((t) => [t.id, t]));
+if (!plan.slots.includes("puzzle")) console.log("  No Puzzle cards: the trading boat takes Puzzle's place on the wall.");
 for (const d of plan.schedule.filter((d) => d.day >= first && d.day <= last)) {
-  const lessons = SLOT_ORDER.filter((s) => s !== d.thread).map((s) => `${s} ${titleOf.get(d.topics[s])?.keys[0].split("/")[1]}`);
-  console.log(`  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${titleOf.get(d.topics[d.thread])?.title})` : "the thread has ended"}; short lessons: ${lessons.join(", ")}.`);
+  const keyOf = (id: string | undefined) => (id ? titleOf.get(id)?.keys[0].split("/")[1] : undefined) ?? "(none yet)";
+  const lessons = plan.slots.filter((s) => s !== d.thread).map((s) => `${s} ${keyOf(d.topics[s])}`);
+  const thread = d.thread ? titleOf.get(d.topics[d.thread] ?? "")?.title : undefined;
+  console.log(`  Day ${d.day}: ${d.thread ? `${plan.thread?.title} on ${d.thread} (${thread})` : plan.thread ? "the thread has ended" : "no theme"}; short lessons: ${lessons.join(", ")}.`);
 }
+if (p.gaps.length) console.log(`  Still to write: ${p.gaps.map((g) => `day ${g.day} ${g.slot}`).join(", ")} (npm run cron:lessons writes them).`);
 // Before spending: the gate's rulebook and floor, and what the family's settings already decide for
 // this week's topics, so a guardian sees the blocks before the money (docs/gate-slice.md, To settle).
 const gate = await gateSetup(db, p.family.id);

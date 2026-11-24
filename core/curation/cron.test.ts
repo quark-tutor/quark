@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { blockedBy, cronFiring, dayState, nextDay, nextWeek, scrubNames, type BuiltDay, type CronDeps, type CronReply, type CronRow, type CronTarget, type DayCount, type ThemeRow } from "./cron";
+import { blockedBy, cronFiring, dayState, nextDay, nextWeek, scrubNames, slotsOf, type BuiltDay, type CronDeps, type CronReply, type CronRow, type CronTarget, type DayCount, type ThemeRow } from "./cron";
+import { ALL_SLOTS, WITHOUT_PUZZLE } from "./schedule";
 
 // Invented children only (Pip and Wren, as gate.test.ts has).
 const kids = [
@@ -9,6 +10,8 @@ const kids = [
 ];
 const childIds = kids.map((k) => k.id);
 const whole = (): DayCount => ({ ideas: 20, cards: { c1: 20, c2: 20 }, questions: { c1: 20, c2: 20 } });
+// A whole day while the trading boat takes Puzzle's place: four tiles, 16 of each (23 Nov 2026).
+const wholeFour = (): DayCount => ({ ideas: 16, cards: { c1: 16, c2: 16 }, questions: { c1: 16, c2: 16 }, slots: { look: 4, wonder: 4, listen: 4, then: 4 } });
 const theme = (over: Partial<ThemeRow> = {}): ThemeRow => ({ id: "t1", week_start: "2026-10-26", plan_week: 1, status: "generating", ...over });
 
 describe("nextWeek", () => {
@@ -52,6 +55,15 @@ describe("a day's state", () => {
     expect(dayState({ ...whole(), cards: { c1: 20, c2: 12 } }, childIds)).toBe("partial");
     expect(dayState({ ...whole(), questions: { c1: 20 } }, childIds)).toBe("partial"); // a card without its question
     expect(dayState({ ideas: 40, cards: { c1: 40, c2: 40 }, questions: { c1: 40, c2: 40 } }, childIds)).toBe("partial"); // written twice
+  });
+
+  it("counts a day of four tiles whole while the boat takes Puzzle's place, and not in a week of five", () => {
+    expect(dayState(wholeFour(), childIds, WITHOUT_PUZZLE)).toBe("complete");
+    expect(dayState(wholeFour(), childIds, ALL_SLOTS)).toBe("partial");
+    expect(dayState({ ...wholeFour(), slots: { look: 4, wonder: 4, listen: 4, puzzle: 4 } }, childIds, WITHOUT_PUZZLE)).toBe("partial"); // the wrong four
+    expect(slotsOf(new Map([[1, wholeFour()]]), false)).toEqual(WITHOUT_PUZZLE); // a week keeps the tiles it started with
+    expect(slotsOf(new Map(), true)).toEqual(WITHOUT_PUZZLE);
+    expect(slotsOf(new Map(), false)).toEqual(ALL_SLOTS);
   });
 
   it("picks the earliest day that is not complete, and whether it must be cleared", () => {
@@ -104,13 +116,14 @@ describe("scrubNames", () => {
 });
 
 // A firing against a small world: an in-memory audit log, themes and day counts, and a build that adds a day.
-function world(over: { themes?: ThemeRow[]; own?: string[]; families?: { id: string; timezone: string }[]; env?: string | null; library?: string | null; prepareError?: string; gate?: string | null; buildError?: string; built?: Partial<BuiltDay>; gateResult?: { problem: string } | { passed: number; heldBack: number; pending: number; cost: number }; at?: string } = {}) {
+function world(over: { themes?: ThemeRow[]; own?: string[]; families?: { id: string; timezone: string }[]; env?: string | null; library?: string | null; prepareError?: string; gate?: string | null; buildError?: string; built?: Partial<BuiltDay>; gateResult?: { problem: string } | { passed: number; heldBack: number; pending: number; cost: number }; at?: string; open?: number[]; write?: "blocked" | "failed" | "half"; writeSeconds?: number; boat?: boolean } = {}) {
   let clock = Date.parse(over.at ?? "2026-10-25T16:00:00Z");
   let n = 0;
   const log: CronRow[] = (over.own ?? []).map((id) => ({ id: `seed-${id}`, created_at: "2026-10-01T00:00:00Z", target: { outcome: "theme" as const, week: 1, day: 1, theme: id } }));
   const themes: ThemeRow[] = over.themes ?? [];
   const counts = new Map<string, Map<number, DayCount>>();
-  const calls = { build: [] as { day: number; rebuild: boolean }[], prepare: 0, gate: 0 };
+  const calls = { build: [] as { day: number; rebuild: boolean }[], prepare: 0, gate: 0, write: [] as number[] };
+  const open = new Set(over.open ?? []); // days whose tiles the library cannot fill yet
   const deps: CronDeps<string> = {
     now: () => new Date(clock),
     families: async () => over.families ?? [{ id: "f1", timezone: "Pacific/Honolulu" }],
@@ -152,6 +165,16 @@ function world(over: { themes?: ThemeRow[]; own?: string[]; families?: { id: str
     gatePending: async () => {
       calls.gate += 1;
       return over.gateResult ?? { passed: 0, heldBack: 0, pending: 0, cost: 0 };
+    },
+    boatHere: async () => over.boat ?? false,
+    gapsOn: (_prepared, day) => (open.has(day) ? [{ day, slot: "look" as const }, { day, slot: "then" as const }] : []),
+    writeLessons: async (_prepared, run) => {
+      calls.write.push(run.day);
+      clock += (over.writeSeconds ?? 60) * 1000;
+      if (over.write === "blocked") return { kind: "blocked" as const };
+      if (over.write === "failed") return { kind: "failed" as const, error: "Pip's search failed", cost: 0.2 };
+      if (over.write !== "half") open.delete(run.day);
+      return { kind: "done" as const, written: over.write === "half" ? 1 : 2, missed: over.write === "half" ? 1 : 0, cost: 0.45 };
     },
   };
   return { deps, log, themes, counts, calls, at: (iso: string) => void (clock = Date.parse(iso)), advance: (ms: number) => void (clock += ms) };
@@ -213,18 +236,7 @@ describe("a firing", () => {
       expect(w.calls.prepare).toBe(0);
     });
 
-    it("a library that cannot fill the week", async () => {
-      const w = world({ library: "Not enough short lessons for week 2: the look card needs 7 and 0 are left; the puzzle card needs 7 and 3 are left. Add lessons to plan/short-lessons.yaml and run npm run plan:import." });
-      const reply = await fire(w);
-      expect(reply).toMatchObject({ outcome: "refused" });
-      expect(reply.reason).toMatch(/^Not enough short lessons for week 2: the look card needs 7 and 0 are left/);
-      refusedTwice(w);
-    });
-
-    it("a week no theme holds, or stretches out of order (a theme a week, 8 Nov 2026)", async () => {
-      const w = world({ library: "No theme for week 6: the plan's stretches reach week 5. Write plan/<theme>.yaml with sequence: 3 (one week: seven topics), then run npm run plan:import." });
-      expect(await fire(w)).toMatchObject({ outcome: "refused", reason: expect.stringMatching(/^No theme for week 6/) });
-      refusedTwice(w);
+    it("stretches out of order (a theme a week, 8 Nov 2026)", async () => {
       const w2 = world({ library: "The plan's stretches are out of order: no stretch has sequence 2; the sequence runs 1, 2, 3... with no gap. Fix the files under plan/ and run npm run plan:import." });
       expect(await fire(w2)).toMatchObject({ outcome: "refused" });
       refusedTwice(w2);
@@ -259,6 +271,46 @@ describe("a firing", () => {
       expect((await fire(two)).reason).toBe("expected one family, found 2");
       expect(two.log).toEqual([]);
     });
+  });
+
+  describe("a day the library cannot fill yet (23 Nov 2026: a Sunday is never refused for want of content)", () => {
+    it("writes the day's missing lessons first, then builds it when there is time", async () => {
+      const w = world({ open: [1], writeSeconds: 60 });
+      const reply = await fire(w);
+      expect(reply).toMatchObject({ outcome: "built", day: 1 });
+      expect(w.calls.write).toEqual([1]);
+      expect(w.calls.build).toEqual([{ day: 1, rebuild: false }]);
+      expect(w.log.at(-1)!.target).toMatchObject({ outcome: "built", lessons: 2, lessons_cost: 0.45, cost: 1.9 });
+    });
+
+    it("leaves the build to the next firing when writing took most of the five minutes", async () => {
+      const w = world({ open: [1], writeSeconds: 150 });
+      expect(await fire(w)).toMatchObject({ outcome: "wrote", day: 1, reason: "wrote 2 short lessons for day 1; the next firing builds it" });
+      expect(w.calls.build).toEqual([]);
+      w.advance(3_600_000); // the next hour's firing builds it, writing nothing
+      expect(await fire(w)).toMatchObject({ outcome: "built", day: 1 });
+      expect(w.calls.write).toEqual([1]);
+    });
+
+    it("says what is still to write, and builds nothing, when a lesson could not be written", async () => {
+      const w = world({ open: [1], write: "half" });
+      expect(await fire(w)).toMatchObject({ outcome: "wrote", reason: "wrote 1 short lessons for day 1; 2 still to write" });
+      expect(w.calls.build).toEqual([]);
+    });
+
+    it("stands aside while a lesson firing is writing the week, and ends as failed, scrubbed, when the writing fails", async () => {
+      const blocked = world({ open: [1], write: "blocked" });
+      expect(await fire(blocked)).toMatchObject({ outcome: "refused", reason: "another firing is writing week 1's short lessons" });
+      const failed = world({ open: [1], write: "failed" });
+      expect(await fire(failed)).toMatchObject({ outcome: "failed" });
+      expect(failed.log.at(-1)!.target).toMatchObject({ error: "[child]'s search failed", lessons_cost: 0.2 });
+    });
+  });
+
+  it("builds four-tile days while the boat is here, and a week keeps them", async () => {
+    const w = world({ themes: [theme()], own: ["t1"], boat: false });
+    w.counts.set("t1", new Map<number, DayCount>([[1, wholeFour()]]));
+    expect(await fire(w)).toMatchObject({ outcome: "built", day: 2 }); // day 1 is whole as four tiles, though the boat is off now
   });
 
   it("is not held by an earlier firing that ended, so a hand retry after a failure goes straight on", async () => {
@@ -339,12 +391,12 @@ describe("a firing", () => {
 describe("vercel.json", () => {
   const vercel = JSON.parse(readFileSync(new URL("../../vercel.json", import.meta.url), "utf8")) as { crons: { path: string; schedule: string }[] };
 
-  it("has nine entries: the Sunday build's eight and the tutor's lines made ahead, on two paths", () => {
-    expect(vercel.crons).toHaveLength(9);
-    expect(new Set(vercel.crons.map((c) => c.path))).toEqual(new Set(["/api/cron/week", "/api/cron/speech"]));
+  it("has 23 entries: the Sunday build's 16, the lesson writer's 6 and the tutor's lines made ahead, on three paths", () => {
+    expect(vercel.crons).toHaveLength(23); // Hobby allows 100 a project, each at most once a day (checked 23 Nov 2026)
+    expect(new Set(vercel.crons.map((c) => c.path))).toEqual(new Set(["/api/cron/week", "/api/cron/lessons", "/api/cron/speech"]));
   });
 
-  it("has the eight Sunday firings, once each, two hours apart in Hawaii time", () => {
+  it("has the sixteen Sunday firings, once each, every hour from 6 am to 9 pm Hawaii time", () => {
     const week = vercel.crons.filter((c) => c.path === "/api/cron/week");
     const hawaii = week.map((c) => {
       const m = c.schedule.match(/^0 (\d{1,2}) \* \* ([01])$/); // one fixed hour on one fixed day: valid on Hobby
@@ -352,8 +404,18 @@ describe("vercel.json", () => {
       const utc = Number(m![1]);
       return { weekday: utc < 10 ? (Number(m![2]) + 6) % 7 : Number(m![2]), hour: (utc - 10 + 24) % 24 }; // Hawaii is UTC-10 all year
     });
-    expect(hawaii).toEqual([6, 8, 10, 12, 14, 16, 18, 20].map((hour) => ({ weekday: 0, hour })));
-    expect(new Set(week.map((c) => c.schedule)).size).toBe(8);
+    expect(hawaii).toEqual([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21].map((hour) => ({ weekday: 0, hour })));
+    expect(new Set(week.map((c) => c.schedule)).size).toBe(16);
+  });
+
+  it("writes lessons six times a day, at 1, 5 and 9 am and 1, 5 and 9 pm Hawaii, once a day each as Hobby allows", () => {
+    const lessons = vercel.crons.filter((c) => c.path === "/api/cron/lessons");
+    const hawaii = lessons.map((c) => {
+      const m = c.schedule.match(/^0 (\d{1,2}) \* \* \*$/);
+      expect(m, c.schedule).not.toBeNull();
+      return (Number(m![1]) - 10 + 24) % 24;
+    });
+    expect(hawaii.sort((a, b) => a - b)).toEqual([1, 5, 9, 13, 17, 21]);
   });
 
   it("makes the tutor's lines once a day at 3 am Hawaii, which Hobby allows (once a day, within the hour)", () => {
@@ -362,7 +424,7 @@ describe("vercel.json", () => {
   });
 
   it("points at routes that stop at five minutes, the Hobby limit", () => {
-    for (const route of ["week", "speech"]) {
+    for (const route of ["week", "speech", "lessons"]) {
       expect(readFileSync(new URL(`../../app/api/cron/${route}/route.ts`, import.meta.url), "utf8"), route).toMatch(/export const maxDuration = 300;/);
     }
   });

@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 
   const meter = makeMeter(); // this firing's own tally: a warm instance keeps earlier ones
   try {
-    const reply = await cronFiring(makeCronDeps(createAdminClient(), { complete: meteredComplete(meter), meter }), {
+    const reply = await cronFiring(makeCronDeps(createAdminClient(), { complete: meteredComplete(meter), meter, metered: meteredComplete }), {
       schedule: request.headers.get("x-vercel-cron-schedule"),
     });
     return Response.json(reply, { status: reply.outcome === "failed" ? 500 : 200 });

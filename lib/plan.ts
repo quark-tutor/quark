@@ -7,9 +7,12 @@ import { PERSPECTIVE, type Perspective } from "./values.ts";
 // lesson is one idea chain on one slot, not tied to a stretch or a week (decided 16 Oct 2026,
 // docs/08). npm run plan:import turns both into plan_topics rows with planRows() and libraryRows().
 //
-// The stretches run in `sequence` order, 1, 2, 3 with no gap, each starting the week after the one
-// before it ends. Egypt, sequence 1, is 24 topics (weeks 1 to 4); every stretch after it is a theme,
-// one week of seven topics, picked by the parents on a Saturday (decided 8 Nov 2026, docs/08).
+// The stretches run in `sequence` order, 1, 2, 3 with no gap. Egypt, sequence 1, is 24 topics (weeks 1 to
+// 4); every stretch after it is a theme, one week of seven topics (decided 8 Nov 2026, docs/08). A theme
+// names the family's week it holds in its one chapter's own `week:` line (`week: 7`), so one written later
+// lands on the week it names; a theme whose chapter says `week: 1`, as the Moon's does, is counted on from
+// the stretch before it, as before. A week no stretch holds is short lessons alone (Brandon, 23 Nov 2026;
+// docs/week-without-hands-slice.md; stretchWeeks below).
 
 export const SUBJECTS = ["history", "geography", "science", "art", "music", "literature", "math"] as const;
 export const SLOTS = ["look", "wonder", "listen", "then", "puzzle"] as const;
@@ -103,6 +106,38 @@ export function sequenceProblems(stretches: { name: string; sequence: number }[]
   return problems;
 }
 
+// A stretch as the order of weeks needs it: its name, its place in the plan, how many thread topics it has,
+// and, for a theme, the family's week its chapter names (absent when it is counted on, as the Moon is).
+export type StretchSpan = { stretch: string; sequence: number; topics: number; named?: number };
+
+// The family's weeks each stretch holds. Egypt, and a theme that names no week, are counted on from the
+// stretch before: a stretch holds its topics ÷ 7 weeks, rounded up, from the week after the last one held.
+// A theme that names its week holds that week, and any week between is short lessons alone. The problems,
+// in plain words: a gap or a clash in the sequence, or a named week that is not after every week the
+// stretches before it hold.
+export function stretchWeeks(spans: StretchSpan[]): { weeks: Map<string, number[]>; problems: string[] } {
+  const problems = sequenceProblems(spans.map((s) => ({ name: s.stretch, sequence: s.sequence })));
+  const weeks = new Map<string, number[]>();
+  let next = 1; // the first week the next stretch may hold
+  for (const s of [...spans].sort((a, b) => a.sequence - b.sequence)) {
+    if (s.named !== undefined) {
+      if (s.named < next) problems.push(`${s.stretch} names week ${s.named}, but the stretches before it reach week ${next - 1}; a theme names a later week`);
+      weeks.set(s.stretch, [s.named]);
+      next = Math.max(next, s.named + 1);
+    } else {
+      const held = Math.ceil(s.topics / 7);
+      weeks.set(s.stretch, Array.from({ length: held }, (_, i) => next + i));
+      next += held;
+    }
+  }
+  return { weeks, problems };
+}
+
+// The family's week a theme's chapter names, or undefined when it is counted on: only a stretch after the
+// first, and only a chapter numbered 2 or more (a theme's chapter numbered 1 is counted, as the Moon's is).
+export const namedWeek = (sequence: number, chapter: number | null | undefined): number | undefined =>
+  sequence > 1 && Number.isInteger(chapter) && chapter! > 1 ? chapter! : undefined;
+
 // The sources list, the same for stretches and the library. Returns the ids it found.
 function checkSources(sources: PlanSource[] | undefined, errors: string[]): Set<string> {
   const ids = new Set<string>();
@@ -169,7 +204,10 @@ export function validatePlan(plan: Plan): string[] {
   }
   weeks.forEach((w, i) => {
     const where = `week ${w?.week ?? "?"}`;
-    if (w?.week !== i + 1) errors.push(`weeks must be numbered 1, 2, 3... in order; found ${w?.week} at position ${i + 1}`);
+    // A theme's one chapter may say which of the family's weeks it holds (namedWeek); every other chapter is
+    // numbered 1, 2, 3 in order.
+    const named = i === 0 && namedWeek(plan.sequence, w?.week) !== undefined;
+    if (w?.week !== i + 1 && !named) errors.push(`weeks must be numbered 1, 2, 3... in order, or a theme's one chapter numbered by the family's week it holds; found ${w?.week} at position ${i + 1}`);
     if (!text(w?.title)) errors.push(`${where}: missing title`);
     if (!text(w?.why)) errors.push(`${where}: missing why`);
     checkPoints(w?.values_points, w?.perspective, where, errors);

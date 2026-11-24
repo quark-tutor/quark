@@ -8,14 +8,20 @@
 // firing is stopped at five minutes. So a firing records itself in audit_log (action week.cron, no
 // guardian), takes a lock out of those rows, and only ever builds the earliest day that is not complete.
 
+import type { DaySlot } from "../../lib/lenses.ts";
 import { faultText } from "./gate.ts";
-import { DAYS_IN_WEEK } from "./schedule.ts";
+import { ALL_SLOTS, DAYS_IN_WEEK, LAYERS, weekSlots, type Gap } from "./schedule.ts";
 import { nextMonday, todayIn } from "./week.ts";
 
 export const CRON_ACTION = "week.cron";
 export const LOCK_MINUTES = 10; // longer than the five minutes a firing may run
-export const IDEAS_A_DAY = 20; // five slots, four layers
-export const CARDS_A_DAY = 20; // per child: one card for each idea, and one question for each card
+// A whole day is four layers on each of the week's tiles: 20 ideas, and per child 20 cards and 20 questions, or 16 of
+// each while the trading boat takes Puzzle's place (23 Nov 2026). A card for each idea, a question for each card.
+export const perDay = (slots: readonly DaySlot[]) => slots.length * LAYERS;
+// After writing a day's missing lessons, a firing builds the day only if this much of its five minutes is gone or
+// less: a day takes about 130 to 180 seconds. Otherwise the next firing builds it.
+export const BUILD_AFTER_WRITING_SECONDS = 100;
+export const WRITING_SECONDS = 220; // a Sunday firing stops starting a lesson after this
 
 // --- Which week ---
 
@@ -41,33 +47,42 @@ export function nextWeek(input: { themes: ThemeRow[]; own: Set<string>; today: s
 
 // --- Which day ---
 
-// What one day of a theme holds: ideas, and per child the cards and questions.
-export type DayCount = { ideas: number; cards: Record<string, number>; questions: Record<string, number> };
+// What one day of a theme holds: ideas (and, where read, how many on each tile), and per child the cards and questions.
+export type DayCount = { ideas: number; cards: Record<string, number>; questions: Record<string, number>; slots?: Partial<Record<DaySlot, number>> };
 export type DayState = "empty" | "complete" | "partial";
 
 // Complete only on exact counts, so a day that is short is partial, and is cleared and built again. A day
 // written twice would be partial too, though the database's unique indexes on ideas and cards
 // (20261117000001_unique_ideas_cards) now refuse the second copy, so a firing that met one stopped short.
-export function dayState(count: DayCount | undefined, childIds: string[]): DayState {
+export function dayState(count: DayCount | undefined, childIds: string[], slots: readonly DaySlot[] = ALL_SLOTS): DayState {
   if (!count) return "empty";
   const held = count.ideas + Object.values(count.cards).reduce((a, b) => a + b, 0) + Object.values(count.questions).reduce((a, b) => a + b, 0);
   if (held === 0) return "empty";
-  const whole = count.ideas === IDEAS_A_DAY && childIds.every((c) => count.cards[c] === CARDS_A_DAY && count.questions[c] === CARDS_A_DAY);
+  const n = perDay(slots);
+  const tiles = !count.slots || (Object.keys(count.slots).length === slots.length && slots.every((s) => count.slots![s] === LAYERS));
+  const whole = count.ideas === n && tiles && childIds.every((c) => count.cards[c] === n && count.questions[c] === n);
   return whole ? "complete" : "partial";
 }
 
 // The earliest day that is not complete, and whether it has to be cleared first. Null: all seven are in.
-export function nextDay(counts: Map<number, DayCount>, childIds: string[]): { day: number; rebuild: boolean } | null {
+export function nextDay(counts: Map<number, DayCount>, childIds: string[], slots: readonly DaySlot[] = ALL_SLOTS): { day: number; rebuild: boolean } | null {
   for (let day = 1; day <= DAYS_IN_WEEK; day++) {
-    const state = dayState(counts.get(day), childIds);
+    const state = dayState(counts.get(day), childIds, slots);
     if (state !== "complete") return { day, rebuild: state === "partial" };
   }
   return null;
 }
 
+// The week's tiles, from what its days hold (weekSlots: those of its earliest whole day), or the boat now.
+export function slotsOf(counts: Map<number, DayCount>, boatHere: boolean): readonly DaySlot[] {
+  const ideas = new Map<number, Map<DaySlot, number>>();
+  for (const [day, c] of counts) if (c.slots) ideas.set(day, new Map(Object.entries(c.slots) as [DaySlot, number][]));
+  return weekSlots(ideas, boatHere);
+}
+
 // --- The rows a firing leaves, and the lock ---
 
-export type Outcome = "started" | "theme" | "built" | "nothing" | "refused" | "failed";
+export type Outcome = "started" | "theme" | "built" | "wrote" | "nothing" | "refused" | "failed"; // wrote: lessons written, no day built
 export type CronTarget = {
   outcome: Outcome;
   week: number | null;
@@ -81,7 +96,7 @@ export type CronTarget = {
 };
 export type CronRow = { id: string; created_at: string; target: CronTarget };
 
-const isEnd = (o: Outcome) => o === "built" || o === "nothing" || o === "refused" || o === "failed";
+const isEnd = (o: Outcome) => o === "built" || o === "wrote" || o === "nothing" || o === "refused" || o === "failed";
 const before = (a: CronRow, b: CronRow) => {
   const t = Date.parse(a.created_at) - Date.parse(b.created_at);
   return t !== 0 ? t < 0 : a.id < b.id;
@@ -137,11 +152,18 @@ export type CronDeps<B> = {
   prepare: (week: number, start: string) => Promise<B>; // throws "Not enough short lessons…" when the library is short, "No theme for week…" when no stretch holds the week
   gateProblem: (prepared: B) => string | null; // no rulebook, or one older than the guardians' answers
   build: (prepared: B, run: { day: number; rebuild: boolean; onTheme: (themeId: string) => Promise<void> }) => Promise<BuiltDay>;
+  boatHere: (familyId: string) => Promise<boolean>; // the trading boat holds Puzzle's place for the family
+  gapsOn: (prepared: B, day: number) => Gap[]; // the day's tiles with no short lesson yet
+  // Write the day's missing lessons under the lessons.write lock (core/curation/lessons.ts, writeRound).
+  writeLessons: (
+    prepared: B,
+    run: { day: number; names: string[]; deadline: number },
+  ) => Promise<{ kind: "blocked" } | { kind: "done"; written: number; missed: number; cost: number } | { kind: "failed"; error: string; cost: number }>;
   gatePending: (themeId: string) => Promise<{ problem: string } | { passed: number; heldBack: number; pending: number; cost: number }>;
 };
 
 export type CronReply = {
-  outcome: "built" | "nothing" | "refused" | "failed";
+  outcome: "built" | "wrote" | "nothing" | "refused" | "failed";
   week: number | null;
   day: number | null;
   theme: string | null;
@@ -177,6 +199,7 @@ export async function cronFiring<B>(deps: CronDeps<B>, ctx: { schedule: string |
   let theme: string | null = next.kind === "build" ? next.theme : null;
   let rebuild = false;
   let allBuilt = false;
+  let slots: readonly DaySlot[] = ALL_SLOTS;
   let early: { outcome: "refused" | "nothing"; reason: string } | null = null;
   const weekStartOf = (id: string) => themes.find((t) => t.id === id)!.week_start;
 
@@ -185,7 +208,9 @@ export async function cronFiring<B>(deps: CronDeps<B>, ctx: { schedule: string |
     const status = themes.find((t) => t.id === theme)!.status;
     if (status === "live" || status === "done") early = { outcome: "nothing", reason: `week ${week} is already ${status}` };
     else {
-      const upcoming = nextDay(await deps.counts(theme, weekStartOf(theme)), childIds);
+      const counts = await deps.counts(theme, weekStartOf(theme));
+      slots = slotsOf(counts, await deps.boatHere(family.id));
+      const upcoming = nextDay(counts, childIds, slots);
       if (upcoming) ({ day, rebuild } = upcoming);
       else allBuilt = true;
     }
@@ -194,7 +219,7 @@ export async function cronFiring<B>(deps: CronDeps<B>, ctx: { schedule: string |
   }
 
   const started = await deps.audit(family.id, { outcome: "started", week, day, theme, schedule: ctx.schedule });
-  const end = async (outcome: "built" | "nothing" | "refused" | "failed", extra: Record<string, unknown> = {}): Promise<CronReply> => {
+  const end = async (outcome: "built" | "wrote" | "nothing" | "refused" | "failed", extra: Record<string, unknown> = {}): Promise<CronReply> => {
     await deps.audit(family.id, { outcome, started, week, day, theme, ...extra });
     const { reason, cost } = extra as { reason?: string; cost?: number };
     return { outcome, week, day, theme, ...(reason ? { reason } : {}), ...(cost !== undefined ? { cost } : {}), seconds: seconds() };
@@ -209,7 +234,7 @@ export async function cronFiring<B>(deps: CronDeps<B>, ctx: { schedule: string |
     }
     // The day may have been built between the read and the lock; read it again before clearing anything.
     if (theme && day !== null) {
-      const again = nextDay(await deps.counts(theme, weekStartOf(theme)), childIds);
+      const again = nextDay(await deps.counts(theme, weekStartOf(theme)), childIds, slots);
       if (!again || again.day !== day) return await end("nothing", { reason: `day ${day} of week ${week} was built by another firing` });
       rebuild = again.rebuild;
     }
@@ -236,6 +261,26 @@ export async function cronFiring<B>(deps: CronDeps<B>, ctx: { schedule: string |
     const noGate = deps.gateProblem(prepared);
     if (noGate) return await end("refused", { reason: clean(oneLine(noGate)) });
 
+    // A day the library cannot fill yet: write what it lacks first (Brandon, 23 Nov 2026: a Sunday is never refused
+    // for want of content), under the lesson writer's lock, then build if there is time, else the next firing does.
+    let wrote: { written: number; cost: number } | null = null;
+    if (deps.gapsOn(prepared, day!).length) {
+      const r = await deps.writeLessons(prepared, { day: day!, names: kids.map((k) => k.nickname), deadline: began.getTime() + WRITING_SECONDS * 1000 });
+      if (r.kind === "blocked") return await end("refused", { reason: `another firing is writing week ${week}'s short lessons` });
+      if (r.kind === "failed") return await end("failed", { error: clean(r.error), lessons_cost: r.cost });
+      wrote = { written: r.written, cost: r.cost };
+      prepared = await deps.prepare(week!, (next as { start: string }).start);
+      const left = deps.gapsOn(prepared, day!).length;
+      if (left || seconds() > BUILD_AFTER_WRITING_SECONDS) {
+        return await end("wrote", {
+          reason: left ? `wrote ${r.written} short lessons for day ${day}; ${left} still to write` : `wrote ${r.written} short lessons for day ${day}; the next firing builds it`,
+          lessons: r.written,
+          lessons_cost: r.cost,
+          cost: r.cost,
+        });
+      }
+    }
+
     const built = await deps.build(prepared, {
       day: day!,
       rebuild,
@@ -250,6 +295,7 @@ export async function cronFiring<B>(deps: CronDeps<B>, ctx: { schedule: string |
       held_back: built.heldBack,
       pending: built.pending,
       cost: built.cost,
+      ...(wrote ? { lessons: wrote.written, lessons_cost: wrote.cost } : {}),
       ...(built.gateError ? { gate_error: clean(faultText(built.gateError)) } : {}),
     });
   } catch (e) {

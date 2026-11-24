@@ -8,7 +8,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { ageFrom } from "../../lib/beliefs.ts";
 import { SLOT_ORDER, type DaySlot } from "../../lib/lenses.ts";
-import { otherBand, type PlanSource } from "../../lib/plan.ts";
+import { namedWeek, otherBand, type PlanSource } from "../../lib/plan.ts";
 import type { LearnsToAct, Perspective } from "../../lib/values.ts";
 import { sourceRef } from "../content/sources.ts";
 import type { complete } from "../model.ts";
@@ -17,8 +17,9 @@ import { runRow, type Meter } from "../runs.ts";
 import { writeCards } from "./cards.ts";
 import { subjectWatch, type GateReport } from "./gate.ts";
 import { gateTheme, type GateSetup } from "./gate-run.ts";
+import { boatHereForFamily } from "./boat-week.ts";
 import { sourceRefs, writeIdeaChain } from "./ideas.ts";
-import { DAYS_IN_WEEK, stretchForWeek, weekSchedule, weekThread, type Scheduled, type StretchSpan } from "./schedule.ts";
+import { DAYS_IN_WEEK, gapsText, scheduleGaps, stretchForWeek, weekSchedule, weekSlots, weekThread, type Gap, type Scheduled, type StretchSpan } from "./schedule.ts";
 import type { IdeaChain, IdeaLayer, OfferedItem, WeekPlan, WeekTopic } from "./types.ts";
 import { addDays, buildWeek, nextMonday, todayIn, type WeekChild, type WeekDeps, type WeekReport } from "./week.ts";
 
@@ -54,6 +55,7 @@ export type Prepared = {
   learns: LearnsToAct | null;
   pointNames: Map<number, string>;
   existing: { id: string; week_start: string; plan_week: number | null } | null; // this week's theme, when it exists
+  gaps: Gap[]; // day-slots the library cannot fill yet: the app's writer fills them, and a build refuses a day with one
 };
 
 type PlanRowDb = {
@@ -75,8 +77,9 @@ type PlanRowDb = {
 const COLUMNS = "id, key, kind, position, grade_band, subject, slot, title, summary, sources, perspective, values_points, parent_note, parent_id";
 
 // The family, its children, the week mixed from the plan and the library, and when it starts. Throws
-// before anything is spent when the family isn't one, a child isn't there, or the library can't fill
-// the week (weekSchedule). The one family per copy is every script's assumption.
+// before anything is spent when the family isn't one, a child isn't there, or the plan's stretches are out
+// of order. A library that cannot fill the week leaves gaps (Prepared.gaps); buildDays refuses a day with one.
+// The one family per copy is every script's assumption.
 export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Promise<Prepared> {
   const { week } = opts;
   const families = must(await db.from("families").select("id, name, timezone"), "families");
@@ -106,24 +109,25 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
 
   // The week, mixed: the thread on one slot a day, short lessons on the rest (docs/04, "How a week is mixed").
   // The thread is the stretch that holds this week, found from every stretch's sequence and topic count.
-  const outline = must(await db.from("plan_topics").select("key, kind, sequence").eq("kind", "thread").eq("grade_band", "2-3"), "plan_topics") as {
+  // A theme that names its week (its chapter's `week:`) holds that week; a week no stretch holds has no thread.
+  const outline = must(await db.from("plan_topics").select("key, kind, sequence, week").eq("kind", "thread").eq("grade_band", "2-3"), "plan_topics") as {
     key: string;
     sequence: number;
+    week: number | null;
   }[];
-  if (outline.length === 0) throw new Error("plan_topics has no stretch. Run npm run plan:import.");
   const spans = new Map<string, StretchSpan>();
   for (const r of outline) {
     const name = r.key.split("/")[0];
-    const span = spans.get(name) ?? { stretch: name, sequence: r.sequence, topics: 0 };
+    const span = spans.get(name) ?? { stretch: name, sequence: r.sequence, topics: 0, named: namedWeek(r.sequence, r.week) };
     if (span.sequence !== r.sequence) throw new Error(`Stretch "${name}" has topics with two sequences. Run npm run plan:import.`);
     span.topics++;
     spans.set(name, span);
   }
-  const { stretch, weekInStretch } = stretchForWeek([...spans.values()], week);
-  const stretchRows = must(await db.from("plan_topics").select(COLUMNS).like("key", `${stretch}/%`), "plan_topics") as PlanRowDb[];
-  if (stretchRows.length === 0) throw new Error(`No stretch "${stretch}" in plan_topics. Check plan/${stretch}.yaml and npm run plan:import.`);
+  const held = stretchForWeek([...spans.values()], week);
+  const stretch = held?.stretch ?? null;
+  const stretchRows = stretch ? (must(await db.from("plan_topics").select(COLUMNS).like("key", `${stretch}/%`), "plan_topics") as PlanRowDb[]) : [];
+  if (stretch && stretchRows.length === 0) throw new Error(`No stretch "${stretch}" in plan_topics. Check plan/${stretch}.yaml and npm run plan:import.`);
   const shortRows = must(await db.from("plan_topics").select(COLUMNS).eq("kind", "short"), "plan_topics") as PlanRowDb[];
-  if (shortRows.length === 0) throw new Error("No short lessons in plan_topics. Check plan/short-lessons.yaml and npm run plan:import.");
 
   const byKey = new Map([...stretchRows, ...shortRows].map((r) => [r.key, r]));
   const chapters = new Map(stretchRows.filter((r) => r.kind === "week").map((r) => [r.id, r]));
@@ -142,7 +146,19 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   const lessonIds = new Set(lessonRows.map((r) => r.id));
   const used = new Set(themes.filter((t) => t.plan_week !== null && t.plan_week < week).flatMap((t) => t.topic_ids as string[]).filter((id) => lessonIds.has(id)));
   const own = new Set(((existing?.topic_ids ?? []) as string[]).filter((id) => lessonIds.has(id)));
-  const schedule = weekSchedule({ week, thread: weekThread(threadRows, weekInStretch).map(scheduled), lessons: lessonRows.map(scheduled), used, own });
+
+  // The week's tiles: those of its earliest whole day, or, with none yet, all five unless the trading boat is here
+  // for the family, which takes Puzzle's place (Brandon, 23 Nov 2026).
+  const ideaRows = existing ? (must(await db.from("ideas").select("day, slot").eq("theme_id", existing.id), "ideas") as { day: number; slot: DaySlot }[]) : [];
+  const ideasByDay = new Map<number, Map<DaySlot, number>>();
+  for (const i of ideaRows) {
+    const bySlot = ideasByDay.get(i.day) ?? new Map<DaySlot, number>();
+    bySlot.set(i.slot, (bySlot.get(i.slot) ?? 0) + 1);
+    ideasByDay.set(i.day, bySlot);
+  }
+  const slots = weekSlots(ideasByDay, await boatHereForFamily(db, family.id));
+  const thread = held ? weekThread(threadRows, held.weekInStretch).map(scheduled) : [];
+  const schedule = weekSchedule({ week, thread, lessons: lessonRows.map(scheduled), used, own, slots });
 
   const items = must(
     await db
@@ -193,7 +209,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
     };
   }
 
-  const scheduledIds = new Set(schedule.flatMap((d) => Object.values(d.topics)));
+  const scheduledIds = new Set(schedule.flatMap((d) => Object.values(d.topics) as string[]));
   const weekRows = [...threadRows, ...lessonRows].filter((r) => scheduledIds.has(r.id));
   const topics = weekRows.map(weekTopic);
   // themes.topic_ids: every row the week uses, both bands, and the thread's chapter rows.
@@ -207,15 +223,16 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
   ];
   const threadToday = schedule.find((d) => d.thread)?.topics;
   const firstThread = topics.find((t) => t.kind === "thread" && threadToday && Object.values(threadToday).includes(t.id));
-  const stretchTitle = stretch.split("-").map((w: string) => w[0].toUpperCase() + w.slice(1)).join(" ");
+  const stretchTitle = stretch?.split("-").map((w: string) => w[0].toUpperCase() + w.slice(1)).join(" ") ?? "";
 
   const plan: WeekPlan = {
     week,
     title: firstThread?.chapter ? `Week ${week}: ${firstThread.chapter.title}, with short lessons` : `Week ${week}: short lessons`,
-    thread: schedule.some((d) => d.thread) ? { stretch, title: stretchTitle } : null,
+    thread: stretch && schedule.some((d) => d.thread) ? { stretch, title: stretchTitle } : null,
     topicIds,
     topics,
     schedule,
+    slots: [...slots],
   };
 
   // When the week starts: its own date if it has one, else the one asked for, else counted on from
@@ -237,6 +254,7 @@ export async function prepareWeek(db: SupabaseClient, opts: PrepareOptions): Pro
     learns: profile?.learns_to_act ?? null,
     pointNames,
     existing: existing && { id: existing.id, week_start: existing.week_start, plan_week: existing.plan_week },
+    gaps: scheduleGaps(schedule, slots),
   };
 }
 
@@ -249,7 +267,8 @@ export function settingsWatch(p: Prepared, gate: GateSetup, upTo: number, from =
     const age = gate.children.find((c) => c.id === kid.id)?.age ?? kid.age;
     for (const d of p.plan.schedule.filter((d) => d.day >= from && d.day <= upTo)) {
       for (const slot of SLOT_ORDER) {
-        const t = p.topicById.get(d.topics[slot]);
+        const id = d.topics[slot];
+        const t = id ? p.topicById.get(id) : undefined;
         if (!t?.valuesPoints.length) continue;
         const notes = subjectWatch(t.valuesPoints, gate.rulebook.values, { id: kid.id, age }, gate.rulebook.pointNames);
         if (notes.length) watch.push(`  ${kid.nickname}: day ${d.day} ${slot} (${t.title}): ${notes.join(" ")}`);
@@ -404,6 +423,9 @@ export type BuildRun = { days: number } | { day: number };
 // leaves pending is the caller's to report (gateFailed); a build that throws is recorded as stopped
 // and rethrown as a BuildStopped.
 export async function buildDays(p: Prepared, run: BuildRun, opts: BuildOptions): Promise<BuildResult> {
+  // A day with a tile the library cannot fill is refused before anything is spent (the app's writer fills it).
+  const gaps = p.gaps.filter((g) => ("day" in run ? g.day === run.day : g.day <= run.days));
+  if (gaps.length) throw new Error(gapsText(p.week, gaps));
   const started = new Date();
   const deps = weekDeps(p, { complete: opts.complete, onTheme: opts.onTheme });
   const built = "day" in run ? 1 : run.days; // days of money spent, for model_runs

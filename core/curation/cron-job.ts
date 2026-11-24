@@ -5,9 +5,13 @@
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { complete } from "../model.ts";
-import { runRow, type Meter } from "../runs.ts";
+import { makeMeter, runRow, type Meter } from "../runs.ts";
+import type { DaySlot } from "../../lib/lenses.ts";
+import { boatHereForFamily } from "./boat-week.ts";
 import { CRON_ACTION, type BuiltDay, type CronDeps, type CronRow, type CronTarget, type DayCount, type ThemeRow } from "./cron.ts";
 import { gateSetup, gateTheme, type GateSetup } from "./gate-run.ts";
+import { writeRound } from "./lessons.ts";
+import { makeRoundDeps } from "./lessons-job.ts";
 import { buildDays, prepareWeek, type Prepared } from "./week-job.ts";
 
 // What the model names and the key are checked against; the values are never read out.
@@ -27,7 +31,7 @@ const dayNumber = (date: string, weekStart: string) => Math.round((Date.parse(`$
 
 export function makeCronDeps(
   db: SupabaseClient,
-  ai: { complete: typeof complete; meter: Meter },
+  ai: { complete: typeof complete; meter: Meter; metered?: (meter: Meter) => typeof complete },
   env: Record<string, string | undefined> = process.env,
 ): CronDeps<CronBundle> {
   const spent = () => runRow("week:build", ai.meter.usage(), { ok: true, startedAt: new Date() }).cost;
@@ -59,7 +63,7 @@ export function makeCronDeps(
     // Ideas, cards and questions per day, so a day is "built" only when all of it is there.
     async counts(themeId, weekStart) {
       const [ideas, cards, questions] = await Promise.all([
-        db.from("ideas").select("day").eq("theme_id", themeId),
+        db.from("ideas").select("day, slot").eq("theme_id", themeId),
         db.from("cards").select("child_id, day").eq("theme_id", themeId),
         db.from("questions").select("cards!inner(child_id, day, theme_id)").eq("cards.theme_id", themeId),
       ]);
@@ -68,7 +72,11 @@ export function makeCronDeps(
         if (!map.has(day)) map.set(day, { ideas: 0, cards: {}, questions: {} });
         return map.get(day)!;
       };
-      for (const i of must(ideas, "ideas") as { day: number }[]) at(i.day).ideas += 1;
+      for (const i of must(ideas, "ideas") as { day: number; slot: DaySlot }[]) {
+        const d = at(i.day);
+        d.ideas += 1;
+        d.slots = { ...d.slots, [i.slot]: (d.slots?.[i.slot] ?? 0) + 1 };
+      }
       for (const c of must(cards, "cards") as { child_id: string; day: string }[]) {
         const d = at(dayNumber(c.day, weekStart));
         d.cards[c.child_id] = (d.cards[c.child_id] ?? 0) + 1;
@@ -112,6 +120,30 @@ export function makeCronDeps(
     },
 
     gateProblem: (b) => b.gate.missing,
+
+    boatHere: (familyId) => boatHereForFamily(db, familyId),
+
+    gapsOn: (b, day) => b.prepared.gaps.filter((g) => g.day === day),
+
+    // The day's missing lessons, written by the app's own writer on a meter of their own, so the week's build row
+    // and the lessons' row each count only their own spend (core/curation/lessons.ts).
+    async writeLessons(b, run) {
+      const meter = makeMeter();
+      const writeComplete = ai.metered ? ai.metered(meter) : ai.complete;
+      const r = await writeRound(makeRoundDeps(db, { complete: writeComplete, meter }), {
+        familyId: b.prepared.family.id,
+        names: run.names,
+        week: b.prepared.week,
+        gaps: b.prepared.gaps,
+        start: b.prepared.start,
+        deadline: run.deadline,
+        by: "sunday",
+        onlyDay: run.day,
+      });
+      if (r.kind === "blocked") return r;
+      if (r.kind === "failed") return r;
+      return { kind: "done", written: r.written.length, missed: r.missed.length, cost: r.cost };
+    },
 
     async build(b, run): Promise<BuiltDay> {
       const result = await buildDays(b.prepared, { day: run.day }, { complete: ai.complete, meter: ai.meter, gate: b.gate, rebuild: run.rebuild, pendingOnly: true, onTheme: run.onTheme });

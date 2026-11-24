@@ -62,6 +62,7 @@ const plan: WeekPlan = {
   topicIds: [],
   topics: [...thread, ...lessons],
   schedule: weekSchedule({ week: 1, thread, lessons, used: new Set() }),
+  slots: ["look", "wonder", "listen", "then", "puzzle"],
 };
 
 // What the schema asks for: four named layers, and four named cards.

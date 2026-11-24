@@ -6,6 +6,8 @@
 //                              about $1.90 and two to four minutes a day, so it can be called again for the next one
 //   npm run cron:speech        the tutor's lines made ahead: every line of today's cards in the tutor's voice
 //                              (docs/lines-ahead-slice.md), about a minute and a half, inside Google's free tier
+//   npm run cron:lessons       the app's lesson writer: what next week's tiles still lack, one lesson a tile
+//                              (docs/week-without-hands-slice.md), about $1 and up to five minutes
 //   npm run cron:week -- --port 3001
 // Exits 1 on anything but a 200. Not a live script: each route off Vercel refuses unless its own QUARK_TARGET is test.
 
@@ -13,7 +15,7 @@ import { request } from "node:http";
 import { parseArgs } from "node:util";
 import { announceTarget } from "./target.ts";
 
-const ROUTES = { week: "/api/cron/week", speech: "/api/cron/speech" } as const;
+const ROUTES = { week: "/api/cron/week", speech: "/api/cron/speech", lessons: "/api/cron/lessons" } as const;
 
 announceTarget(); // prints which database the dev server will use, and refuses live values in .env.local
 const { values: args } = parseArgs({ options: { port: { type: "string", default: "3000" }, route: { type: "string", default: "week" } } });
