@@ -255,7 +255,7 @@ And: "Also confirm Vercel's limit on the number of cron entries before building 
 
 The row is at *building*, at the top of the board.
 
-## Emergency stop (21:58)
+## Emergency stop (21:53)
 
 **What went wrong.** At 21:51 the Anthropic API began refusing every call: "You have reached your specified workspace
 API usage limits. You will regain access on 2026-12-01 at 00:00 UTC." That is **Monday 30 November at 2 pm in
