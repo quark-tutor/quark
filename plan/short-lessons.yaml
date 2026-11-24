@@ -5,7 +5,8 @@
 # picked are in plan/candidates/short-lessons.md (week 1's 28, 16 Oct 2026) and
 # plan/candidates/short-lessons-2.md (week 2's 28, picked 1 Nov 2026, added after week 1's) and
 # plan/candidates/short-lessons-3.md (week 3's 28, picked 7 Nov 2026, added after week 2's) and
-# plan/candidates/short-lessons-4.md (week 4's 32, picked 16 Nov 2026, added after week 3's).
+# plan/candidates/short-lessons-4.md (week 4's 32, picked 16 Nov 2026, added after week 3's) and
+# plan/candidates/short-lessons-5.md (week 5's 28, picked 23 Nov 2026, added after week 4's).
 #
 # Format: lib/plan.ts (ShortLesson). Import with npm run plan:import. Summaries are for the tutor,
 # not the child: plain facts, the mechanism named. Every lesson says which values points it
@@ -965,6 +966,197 @@ sources:
     url: https://commons.wikimedia.org/wiki/File:Pennyfarthing-1886.jpg
     license: public domain
 
+  # --- week 5 (picked 23 Nov 2026; plan/candidates/short-lessons-5.md) ---
+  # look
+  - id: commons-little-nemo-1905-10-15
+    title: Little Nemo in Slumberland, the first page, Winsor McCay, New York Herald, 15 October 1905
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Little_Nemo_1905-10-15.jpg
+    license: public domain
+  - id: commons-rousseau-equatorial-jungle-nga
+    title: The Equatorial Jungle, Henri Rousseau, 1909 (National Gallery of Art)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Henri_Rousseau,_The_Equatorial_Jungle,_1909,_NGA_46688.jpg
+    license: CC0
+  - id: commons-ruysch-flowers-marble-rijksmuseum
+    title: Still Life with Flowers on a Marble Tabletop, Rachel Ruysch, 1716 (Rijksmuseum)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Stilleven_met_bloemen_op_een_marmeren_tafelblad,_SK-A-2338.jpg
+    license: CC0
+  - id: met-unicorn-rests-in-a-garden
+    title: The Unicorn Rests in a Garden (from the Unicorn Tapestries), about 1495-1505
+    publisher: The Metropolitan Museum of Art, 37.80.6
+    url: https://www.metmuseum.org/art/collection/search/467642
+    license: CC0
+  - id: commons-sargent-carnation-lily-1885
+    title: Carnation, Lily, Lily, Rose, John Singer Sargent, 1885-86
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:John_Singer_Sargent_-_Carnation_Lily_Lily_Rose.jpg
+    license: public domain
+  # wonder
+  - id: commons-nasa-fundy-tides
+    title: The Bay of Fundy at high tide and at low tide, from NASA's Terra satellite (ASTER)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Fundy_High_%26_Low_tide.jpg
+    license: public domain (NASA)
+  - id: commons-archimedes-lever-1824
+    title: Archimedes moving the Earth with a lever, engraving, Mechanics Magazine, London, 1824
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Archimedes_lever_(Small).jpg
+    license: public domain
+  - id: commons-harvey-arm-plates-1628
+    title: The four figures of the arm, from William Harvey's Exercitatio anatomica de motu cordis, Frankfurt, 1628 (Bibliothèque nationale de France)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Illustrations_de_Exercitatio_anatomica_de_motu_cordis_et_sanguinis_in_animalibus..._-_(Non_identifi%C3%A9)_;_William_Harvey,_aut._du_texte_-_btv1b2100015j_(2_of_2).jpg
+    license: public domain
+  - id: commons-widder-euplokamis-glow
+    title: A comb jelly of the genus Euplokamis giving off light (F. Widder), 1999
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Bioluminescence_emitted_by_comb_jelly_of_genus_Euplokamis.jpg
+    license: public domain
+  - id: commons-noaa-glowing-coral
+    title: A coral glowing in the deep North Atlantic, NOAA's Bioluminescence 2009 expedition
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Expl2337_-_Flickr_-_NOAA_Photo_Library.jpg
+    license: public domain (NOAA)
+  - id: commons-muybridge-horse-1878
+    title: The Horse in Motion, Sallie Gardner at a gallop, Eadweard Muybridge, 1878
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:The_Horse_in_Motion_high_res.jpg
+    license: public domain
+  - id: commons-gilbert-terrella
+    title: William Gilbert's terrella, the round magnet he called a little Earth, De Magnete, 1600
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Gilbert_De_Magnete_Illo039.jpg
+    license: public domain
+  - id: commons-gilbert-needles
+    title: Compass needles around a magnet, William Gilbert, De Magnete, 1600
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Gilbert_De_Magnete_Illo011.jpg
+    license: public domain
+  # listen
+  - id: commons-mozart-k265-theme
+    title: Mozart, Twelve Variations on Ah vous dirai-je, maman, K. 265, the theme (recording, made on a computer)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Ah_je_vous_dirai_maman_theme.wav
+    license: public domain
+  - id: commons-mozart-k265-var1
+    title: Mozart, Twelve Variations on Ah vous dirai-je, maman, K. 265, variation 1 (recording, made on a computer)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Ah_je_vous_dirai_maman_Var_1.wav
+    license: public domain
+  - id: commons-lapitino-harp-1915
+    title: Fantasia on Bellini's Norma, a harp solo by Francis J. Lapitino (recording), Victor 17929, 16 November 1915
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:17929B-Fantasia.ogg
+    license: public domain
+  - id: met-erard-pedal-harp-1895
+    title: Pedal harp, Erard et Cie, Paris, 1895
+    publisher: The Metropolitan Museum of Art, 1978.100.1a-f
+    url: https://www.metmuseum.org/art/collection/search/503163
+    license: CC0
+  - id: commons-ossman-buffalo-rag-1906
+    title: The Buffalo Rag, Tom Turpin, played on the banjo by Vess L. Ossman (recording), Victor 16779, 26 January 1906
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Tom_Turpin_-_Vess_L._Ossman_-_The_Buffalo_Rag.ogg
+    license: public domain
+  - id: met-banjo-1870
+    title: Banjo, United States, about 1870-1910
+    publisher: The Metropolitan Museum of Art, 89.4.2820
+    url: https://www.metmuseum.org/art/collection/search/505348
+    license: CC0
+  - id: commons-usaf-waltz-of-the-flowers
+    title: Waltz of the Flowers, from The Nutcracker, Tchaikovsky, the Concert Band of the United States Air Force Band (recording), 1996
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Waltz_of_the_Flowers_-_Concert_Band_-_United_States_Air_Force_Band.mp3
+    license: public domain (United States Air Force Band)
+  - id: commons-nutcracker-1892-act1
+    title: The Nutcracker's first production, St Petersburg, 1892, Act I, with Sergei Legat as the Nutcracker and Stanislava Belinskaya as Clara
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Nutcracker_-Scene_from_Act_I_-Sergei_Legat_as_Nutcracker,_Stanislava_Stanislavovna_Belinskaya_as_Clara,_%26_Unidentified_as_a_Gingerbread_Soldier_-1892.jpg
+    license: public domain
+  - id: commons-fur-elise-1-4
+    title: Für Elise, Beethoven, measures 1-4 (recording, made on a computer)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:F%C3%BCr-Elise-Audio-Sample-measures-1-4.ogg
+    license: public domain
+  - id: commons-fur-elise-23-27
+    title: Für Elise, Beethoven, measures 23-27 (recording, made on a computer)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:F%C3%BCr-Elise-Audio-Sample-measures-23-27.ogg
+    license: public domain
+  - id: commons-musopen-tchaikovsky-6-ii
+    title: Tchaikovsky, Symphony No. 6, second movement (Allegro con grazia), Musopen Symphony Orchestra (recording), 2012
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Tchaikovsky_-_Symphony_No._6_in_B_minor,_Op._74_%27Path%C3%A9tique%27_-_II._Allegro_con_grazia_(Musopen_Symphony).flac
+    license: public domain
+  # then
+  - id: commons-noaa-scuba-diver-guam
+    title: A NOAA scuba diver entering the water at Two Lovers Point, Guam, 2022
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:NOAA_scuba_diver_entering_water_Two_Lovers_Point_Guam_2022.png
+    license: public domain (NOAA)
+  - id: met-wilson-globe-1828
+    title: Terrestrial globe, James Wilson, Albany, New York, 1828
+    publisher: The Metropolitan Museum of Art, 69.50
+    url: https://www.metmuseum.org/art/collection/search/8487
+    license: CC0
+  - id: commons-lambdin-sarah-hale-1831
+    title: Sarah Josepha Hale, painted by James Reid Lambdin, about 1831
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Sarah_Hale_portrait.jpg
+    license: public domain
+  - id: commons-nara-thanksgiving-proclamation-1863
+    title: Abraham Lincoln's Thanksgiving Proclamation of 3 October 1863, page 1 (US National Archives)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:President_Abraham_Lincoln%27s_Thanksgiving_Day_Proclamation_of_October_3,_1863_(Presidential_Proclamation_106)-_10-03-1863_(page_1_of_3)_(4131303701).jpg
+    license: public domain (US National Archives)
+  - id: commons-king-sequoyah-1836
+    title: Sequoyah, Cherokee inventor, Charles Bird King, 1836
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Sequoyah,_Cherokee_inventor,_by_C.B._King,_1836.jpg
+    license: public domain
+  - id: commons-flag-of-hawaii
+    title: The flag of Hawaiʻi
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Flag_of_Hawaii.svg
+    license: public domain
+  # puzzle
+  - id: commons-knibb-dial
+    title: A clock dial signed by Joseph Knibb of London, with IIII for four
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Knibb-Dial.jpg
+    license: public domain
+  - id: commons-haer-kern-truss-bridge
+    title: The Kern Bridge, a wrought-iron bowstring truss of 1873 over the Le Sueur River, Minnesota, photographed by Jet Lowe for the Historic American Engineering Record, 1990
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Kern_Truss_Bridge,_HAER_MN-45-3.jpg
+    license: public domain (Library of Congress)
+  - id: commons-durer-melencolia-square
+    title: The magic square from Melencolia I, Albrecht Dürer, 1514 (detail)
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Albrecht_D%C3%BCrer_-_Melencolia_I_(detail).jpg
+    license: public domain
+  - id: met-durer-melencolia
+    title: Melencolia I, Albrecht Dürer, 1514
+    publisher: The Metropolitan Museum of Art, 43.106.1
+    url: https://www.metmuseum.org/art/collection/search/336228
+    license: CC0
+  - id: met-roman-ivory-die
+    title: Ivory die, Roman, about 1st-3rd century CE
+    publisher: The Metropolitan Museum of Art, 96.9.450
+    url: https://www.metmuseum.org/art/collection/search/246446
+    license: CC0
+  - id: commons-mobius-ring
+    title: A Möbius loop held on a gloved hand, 2021
+    publisher: Wikimedia Commons
+    url: https://commons.wikimedia.org/wiki/File:Mobius_ring.jpg
+    license: CC0
+  - id: met-ziegengeist-nested-weights
+    title: Set of nested weights, probably by Andreas Ziegengeist, late 17th to early 18th century
+    publisher: The Metropolitan Museum of Art, 19.147
+    url: https://www.metmuseum.org/art/collection/search/194564
+    license: CC0
 lessons:
   # --- look ---
   - key: great-wave
@@ -3362,3 +3554,633 @@ lessons:
         50 inches across rolled about 157 inches, about 13 feet, for every turn of the pedals, so the
         bigger the wheel, the faster the bicycle could go. Riders sat high up, and a fall was a long
         way down. This photograph was taken in California in 1886.
+
+  # ===== week 5 picked 23 Nov 2026 (plan/candidates/short-lessons-5.md) =====
+  # Week 5's thread is the Moon (plan/the-moon.yaml), one topic a day on look, wonder, then, listen, look, then,
+  # puzzle, so the week needs look 5, wonder 6, listen 6, then 5, puzzle 6, in this order within each slot. Saturday
+  # 21 Nov's pick was missed, so Sunday's build refused and the week was built by hand on Monday 23 Nov. The pick is
+  # week 4's seventeen left-overs less the phonautograph (week 4's phonograph told its story), and twelve new. Sarah
+  # Josepha Hale's Thanksgiving lands on Thursday 26 Nov, Thanksgiving; the flag of Hawaiʻi on Sunday 29 Nov, the day
+  # after Lā Kūʻokoʻa.
+
+  # --- look ---
+  - key: little-nemo
+    subject: art
+    slot: look
+    title: Panels, and a story told in pictures in order
+    sources: [commons-little-nemo-1905-10-15]
+    values_points: []
+    summary:
+      "2-3": >-
+        A comic tells a story in a row of boxes called panels. You read them in order, left to right
+        and top to bottom, like the words on a page, and each panel shows the next moment. In Little
+        Nemo in Slumberland a boy named Nemo has a new dream every week. On this first page he rides a
+        pony through the night sky in a race to Moontown; the pony stumbles on a star, Nemo falls, and
+        in the last panel he wakes up on his bedroom floor.
+      "4-5": >-
+        Winsor McCay drew Little Nemo in Slumberland for the New York Herald's Sunday paper, and this
+        is its first page, from 15 October 1905. Each panel is one moment, and the gap between two
+        panels is a jump in time that the reader fills in. McCay made his panels different sizes for
+        different jobs: wide ones for the sky full of stars and racing animals, small ones at the end
+        as Nemo tumbles over and over. A caption under each panel tells what happens, and the words in
+        the bubbles are what the characters say. Every page ended the same way, with Nemo waking up in
+        the last panel, so readers knew it had all been a dream.
+
+  - key: rousseau-jungle
+    subject: art
+    slot: look
+    title: Self-taught, and the jungles Henri Rousseau never saw
+    sources: [commons-rousseau-equatorial-jungle-nga]
+    values_points: []
+    summary:
+      "2-3": >-
+        Henri Rousseau collected taxes at a gate into the city of Paris, and he taught himself to
+        paint, with no art school and no teacher. When he showed his paintings, many people laughed at
+        them, but he kept on painting for the rest of his life. He painted jungles full of thick
+        leaves, flowers and hidden animals, yet he never left France: he looked at the plants in
+        Paris's gardens and glasshouses, and at pictures in books.
+      "4-5": >-
+        Rousseau (1844-1910) collected the tax on goods coming into Paris, so people called him "the
+        customs officer". Being self-taught means learning by yourself, by looking and practicing. He
+        began painting seriously in his forties, and in 1893 he left his job to paint full time.
+        Critics made fun of his flat-looking figures and bright colors, and he went on showing his work
+        year after year; later, painters such as Pablo Picasso came to admire him. For his jungles he
+        studied the tropical plants in the glasshouses of Paris's botanical garden and pictures of
+        animals, and imagined the rest. He painted The Equatorial Jungle in 1909, the year before he
+        died: look for the animals hiding in its leaves.
+
+  - key: ruysch-flowers
+    subject: art
+    slot: look
+    title: Still life, and the flowers that never bloomed together
+    sources: [commons-ruysch-flowers-marble-rijksmuseum]
+    values_points: []
+    summary:
+      "2-3": >-
+        A still life is a painting of things that do not move, like flowers, fruit or dishes. Rachel
+        Ruysch painted this vase of flowers on a marble table in 1716. The flowers in it bloom at
+        different times of the year, so they could never have been in one vase together: she painted
+        each one from life while it was in flower, and put them together in the picture. Tiny insects
+        hide among the petals and leaves.
+      "4-5": >-
+        Rachel Ruysch (1664-1750), from Amsterdam, was one of the best-paid painters of her time, and
+        for eight years she was court painter to a German prince, the Elector Palatine, in Düsseldorf.
+        A flower painter worked through the seasons, painting each kind as it bloomed, and then
+        arranged them in one picture as no real gardener could, flowers of spring beside flowers of
+        summer. Painters added insects and other small creatures to show their skill and to make the
+        picture feel alive, so a still life rewards looking closely. Ruysch kept painting into her
+        eighties.
+
+  - key: unicorn-tapestry
+    subject: art
+    slot: look
+    title: A tapestry, a picture woven thread by thread
+    sources: [met-unicorn-rests-in-a-garden]
+    values_points: []
+    summary:
+      "2-3": >-
+        A tapestry is a picture made by weaving, not painting. Weavers stretch long threads on a loom,
+        then pass colored threads over and under them, row after row, so every flower and leaf is
+        built up thread by thread. This one is more than 500 years old and about 12 feet tall. It shows
+        a white unicorn resting inside a little round fence under a pomegranate tree, in a field full
+        of flowers.
+      "4-5": >-
+        The Unicorn Tapestries were woven in the Southern Netherlands about 1495 to 1505, of wool and
+        silk, with some threads wrapped in silver and gold. The long threads stretched on the loom are
+        the warp, and the colored threads woven across them are the weft, packed so tightly that they
+        hide the warp completely; a weaver uses each color only where the picture needs it. This is one
+        of seven at the Met, and the calm one: the unicorn wears a collar chained to the tree, but the
+        fence is low enough to jump. The red drops on its side are juice from the ripe pomegranates
+        above it. Many of the plants in the field are real ones a gardener could name.
+
+  - key: sargent-plein-air
+    subject: art
+    slot: look
+    title: Plein air, and painting for a few minutes each evening
+    sources: [commons-sargent-carnation-lily-1885]
+    values_points: []
+    summary:
+      "2-3": >-
+        Painting outdoors, in front of the real thing, is called plein air, French for "open air".
+        John Singer Sargent painted two girls lighting paper lanterns in a garden at dusk. The light he
+        wanted lasted only a few minutes each evening, so he painted for those few minutes, then
+        stopped until the next evening, over two summers.
+      "4-5": >-
+        Sargent painted Carnation, Lily, Lily, Rose in 1885 and 1886 in an English village, Broadway,
+        with the two daughters of a friend as his models. Each evening he set up his easel in the
+        garden, waited, and painted only while the dusk light was right, a few minutes, then put
+        everything away. When the garden's flowers faded in the autumn he used artificial ones, and he
+        finished the painting the next summer. The title comes from the words of a song. Painting
+        outdoors lets a painter see true colors of light that change by the minute: the blue of the
+        dusk and the warm glow of the lanterns on the girls' faces.
+
+  # --- wonder ---
+  - key: tides
+    subject: science
+    slot: wonder
+    title: Tides, and the Bay of Fundy
+    sources: [commons-nasa-fundy-tides]
+    values_points: []
+    summary:
+      "2-3": >-
+        At the beach the sea creeps up the sand and back down again, twice a day: high tide and low
+        tide. The Moon pulls on the Earth's oceans and makes them heap up a little on the side facing
+        it, and on the far side too, and as the Earth turns, each coast passes through the heaps. Near
+        a full moon or a new moon the Sun's pull lines up with the Moon's, and the tides are at their
+        biggest.
+      "4-5": >-
+        Gravity pulls harder on what is nearer, so the Moon pulls the ocean on the near side of the
+        Earth more than the Earth's middle, and the middle more than the far side, and the water bulges
+        out on both sides. The Earth turns under the two bulges, so most coasts get two high tides and
+        two low tides, about 12 hours and 25 minutes apart, which is why high tide comes almost an hour
+        later each day. When the Sun and Moon are lined up, at full moon and new moon, their pulls add
+        up and the tides are biggest; these are called spring tides. In Canada's Bay of Fundy, a long
+        bay shaped like a funnel, the water can rise and fall more than 50 feet between low and high
+        tide. The two satellite pictures show the same part of the bay at high tide and at low tide.
+
+  - key: archimedes-lever
+    subject: science
+    slot: wonder
+    title: A lever, and Archimedes moving the Earth
+    sources: [commons-archimedes-lever-1824]
+    values_points: []
+    summary:
+      "2-3": >-
+        A lever is a stiff bar that turns on a point called the fulcrum, like a seesaw. If you push
+        down on the long side, far from the fulcrum, the short side lifts something heavy. A crowbar, a
+        bottle opener and a seesaw are all levers. Long ago a Greek thinker named Archimedes is said to
+        have boasted that with a long enough lever and a place to stand, he could move the whole
+        Earth.
+      "4-5": >-
+        The farther from the fulcrum you push, the less force you need, but the farther your end has to
+        move: push your end down 12 inches to lift a rock 1 inch, and you need only about a twelfth of
+        the force. That trade, less force over more distance, is how every lever works. Archimedes, who
+        lived in Syracuse, on the island of Sicily, more than 2,200 years ago, worked out the rule: a
+        lever balances when each weight times its distance from the fulcrum comes out the same on both
+        sides. A writer centuries later reported his boast, "Give me a place to stand and I will move
+        the Earth." This engraving from a London magazine of 1824 shows the joke: he would need
+        somewhere to stand off the Earth, and an impossibly long lever. On a seesaw, a lighter child can
+        balance a heavier one by sitting farther out.
+
+  - key: harvey-circulation
+    subject: science
+    slot: wonder
+    title: Circulation, and the blood that goes around
+    sources: [commons-harvey-arm-plates-1628]
+    values_points: []
+    summary:
+      "2-3": >-
+        Your heart is a pump about the size of your fist. Each beat pushes blood out through tubes
+        called arteries to every part of your body, and the blood comes back to the heart through
+        other tubes, called veins, and goes around again. That trip around is called circulation. You
+        can feel each push as your pulse, on the inside of your wrist or the side of your neck.
+      "4-5": >-
+        Before William Harvey, an English doctor, most doctors believed that blood was made fresh in
+        the liver and used up by the body. Harvey worked out how much blood the heart pushes out with
+        each beat, multiplied it by the beats in an hour, and found it far more than a body could ever
+        make, so the same blood must go around and around; he published it in 1628. His pictures of an
+        arm show a test anyone can see: tie a band around the upper arm and the veins below it swell,
+        with little knots along them. The knots are valves, tiny flaps that let blood flow only toward
+        the heart, so blood in a vein can be pushed toward the heart but never back the other way. A
+        child's heart beats about 70 to 110 times a minute at rest.
+
+  - key: bioluminescence
+    subject: science
+    slot: wonder
+    title: Bioluminescence, light made by living things
+    sources: [commons-widder-euplokamis-glow, commons-noaa-glowing-coral]
+    values_points: []
+    summary:
+      "2-3": >-
+        Some living things make their own light. Fireflies, glowing jellies, and many fish and squid in
+        the deep sea have a chemical in their bodies that gives off light when it joins with oxygen, and
+        the light is cold, not hot like a flame. In the dark sea animals use light to find food, to find
+        each other, and to hide from or startle hunters. A little squid that lives in Hawaiʻi's shallow,
+        sandy waters glows on its underside to match the moonlight above, so it casts no shadow.
+      "4-5": >-
+        Bioluminescence comes from a reaction: a chemical called luciferin joins with oxygen, helped by
+        an enzyme called luciferase, and the energy comes out almost all as light, with very little
+        heat. In the deep ocean, where sunlight never reaches, about three in four animals can make
+        light, and most of it is blue, the color that travels farthest through seawater. The Hawaiian
+        bobtail squid, about the length of a thumb, lives on shallow sandy reefs in the Hawaiian Islands
+        and hunts at night. It keeps glowing bacteria in a pocket on its underside, and turns their light
+        up or down to match the moonlight coming down from above, so a fish below sees no dark shape
+        against the sky; this is called counterillumination. The pictures show a comb jelly and a deep
+        coral glowing in the dark.
+
+  - key: muybridge-horse
+    subject: science
+    slot: wonder
+    title: Stop-motion photography, and the horse with all four hooves off the ground
+    sources: [commons-muybridge-horse-1878]
+    values_points: []
+    summary:
+      "2-3": >-
+        A horse's legs move too fast for our eyes to see what they do in a gallop. In 1878 Eadweard
+        Muybridge set up a row of cameras beside a track, and as a horse galloped past, each camera
+        took a picture, one after another. The pictures showed something people had argued about: at
+        one moment all four of the horse's hooves are off the ground.
+      "4-5": >-
+        Leland Stanford, a California railroad owner, wanted to know whether a galloping horse ever has
+        all four feet in the air. In June 1878, at his farm in Palo Alto, Muybridge lined up twelve
+        cameras; threads across the track opened each camera in turn as a horse named Sallie Gardner ran
+        through them, each picture taking a tiny fraction of a second. The photographs showed all four
+        hooves off the ground, but tucked up under the body, not stretched out front and back as
+        painters had always drawn them. Splitting a fast movement into still pictures taken one after
+        another is stop-motion photography, and such pictures shown quickly one after another make a
+        moving picture, which is how movies began.
+
+  - key: compass-north
+    subject: science
+    slot: wonder
+    title: A magnetic field, and why a compass points north
+    sources: [commons-gilbert-terrella, commons-gilbert-needles]
+    values_points: []
+    summary:
+      "2-3": >-
+        A compass needle is a tiny magnet that can spin. The whole Earth is a giant magnet too, and the
+        space around a magnet where it pushes and pulls is called its magnetic field. The needle turns
+        until it lines up with the Earth's field, so one end points north. In 1600 William Gilbert, an
+        English doctor, showed this with a round magnet he called a little Earth.
+      "4-5": >-
+        Gilbert's book On the Magnet, printed in 1600, described his experiments with a lodestone, a
+        rock that is naturally magnetic, shaped into a ball he called a terrella, Latin for "little
+        Earth". Small needles set around it swung to point toward its poles, just as compass needles on
+        the Earth point toward the Earth's, and near the poles they tipped downward, as real compasses
+        do in the far north. So, he said, the Earth itself is a magnet; before him, many people thought
+        compasses were pulled by the stars. The Earth's magnetic north pole is not exactly at the North
+        Pole, so in most places a compass points a little to one side of true north. The Earth's
+        magnetism comes from melted iron moving deep inside it.
+
+  # --- listen ---
+  - key: mozart-variations
+    subject: music
+    slot: listen
+    title: Theme and variations, and Twinkle, Twinkle
+    sources: [commons-mozart-k265-theme, commons-mozart-k265-var1]
+    values_points: []
+    summary:
+      "2-3": >-
+        A theme is a tune, and a variation is the same tune changed in some way: faster, slower, with
+        extra notes around it, or moved down to the low notes. Mozart wrote twelve variations on a
+        French tune that we know as Twinkle, Twinkle, Little Star. First comes the plain tune; then the
+        first variation, where the tune is still there, hidden among quick running notes.
+      "4-5": >-
+        Mozart wrote his Twelve Variations on "Ah vous dirai-je, maman" for the piano in Vienna around
+        1781 or 1782, when he was in his mid-twenties, not as a child, as is often said. The French
+        song was already well known; the same tune was later used for Twinkle, Twinkle, Little Star and
+        the ABC song. In the first variation the right hand plays fast runs that circle around each
+        note of the tune; in later ones the fast notes move to the left hand, the tune turns minor and
+        sad, and one is slow and decorated. Theme and variations is a way to build a long piece from
+        one short tune. These short recordings were made on a computer.
+
+  - key: pedal-harp
+    subject: music
+    slot: listen
+    title: The pedal harp, seven pedals for 47 strings
+    sources: [commons-lapitino-harp-1915, met-erard-pedal-harp-1895]
+    values_points: []
+    summary:
+      "2-3": >-
+        A harp has many strings, and the player plucks them with the fingers. A big concert harp has 47
+        strings, from very long low ones to short high ones, and seven pedals at its foot. Each pedal
+        changes one note all over the harp: one pedal for all the Cs, one for all the Ds, and so on, so
+        the harp can play in any key. The recording is a harp solo from 1915.
+      "4-5": >-
+        With its pedals in the middle, a concert harp's strings play like the white keys of a piano;
+        there are no strings for the black keys. To make a note sharp, the harpist presses its pedal
+        with a foot: a rod inside the harp's tall column turns small brass discs at the top of the
+        strings, which grip them and shorten them a little, so they sound a half step higher. Each
+        pedal has three notches, flat, natural and sharp, and changes every string of its letter at
+        once. Sébastien Érard, in Paris, built this double-action harp in 1810, and the Met's harp was
+        made by his company in 1895. Harpists find their place by the red strings, which are all Cs.
+        The recording is Francis J. Lapitino playing a fantasia on tunes from Bellini's opera Norma, in
+        1915.
+
+  - key: banjo
+    subject: music
+    slot: listen
+    title: The banjo, a drum with strings
+    sources: [commons-ossman-buffalo-rag-1906, met-banjo-1870]
+    values_points: []
+    summary:
+      "2-3": >-
+        A banjo has strings like a guitar, but its round body is a drum: a skin stretched tight over a
+        hoop. When the player plucks a string, it shakes the bridge, which stands on the skin, and the
+        skin shakes like a drumhead. That is why a banjo sounds loud, bright and plunky, and each note
+        dies away quickly. The recording is Vess Ossman, the best-known banjo player of his day, in
+        1906.
+      "4-5": >-
+        The banjo grew from instruments West Africans made by stretching an animal skin over a gourd
+        and adding a neck and strings. In America it was built with a wooden hoop instead of a gourd,
+        and later with metal hooks to tighten the skin, like a drum's, and many banjos have five strings,
+        one of them short and played with the thumb. A guitar's wooden top rings on for a long time, but
+        a tight skin stops shaking quickly, so banjo players play many fast notes to keep the sound
+        going. Vess Ossman (1868-1923) recorded The Buffalo Rag, a ragtime piece by Tom Turpin, on 26
+        January 1906, playing into a horn, before there were microphones. The Met's banjo was made in
+        the United States between about 1870 and 1910.
+
+  - key: nutcracker-ballet
+    subject: music
+    slot: listen
+    title: A ballet, a story told by dancers with no words, and The Nutcracker
+    sources: [commons-usaf-waltz-of-the-flowers, commons-nutcracker-1892-act1]
+    values_points: []
+    summary:
+      "2-3": >-
+        A ballet tells a story with dancing and music, and nobody speaks. In The Nutcracker, a girl
+        named Clara is given a wooden nutcracker at a Christmas Eve party; in the night it comes to
+        life, beats the Mouse King, turns into a prince and takes her to a land of sweets, where
+        everyone dances for her. Pyotr Tchaikovsky wrote the music. The Waltz of the Flowers is one of
+        the last dances.
+      "4-5": >-
+        The Nutcracker was first danced in St Petersburg, Russia, in December 1892; the photograph shows
+        that first production, with Sergei Legat as the Nutcracker and a young student, Stanislava
+        Belinskaya, as Clara. Because the dancers do not speak, the music has to tell the audience what
+        is happening: a march for toy soldiers, a twinkling sound for the Sugar Plum Fairy, a sweeping
+        waltz for the flowers. Tchaikovsky gave each dance its own instruments and its own beat. Today
+        many cities, Honolulu among them, put on The Nutcracker every December. This recording is the
+        Waltz of the Flowers arranged for band, played by the United States Air Force Band.
+
+  - key: fur-elise
+    subject: music
+    slot: listen
+    title: A rondo, the tune that keeps coming back
+    sources: [commons-fur-elise-1-4, commons-fur-elise-23-27]
+    values_points: []
+    summary:
+      "2-3": >-
+        In a rondo the first tune keeps coming back, with different music in between. Für Elise, a
+        piano piece by Ludwig van Beethoven, starts with a gentle rocking tune, A; then comes a
+        different part, B; then the first tune again; then another new part, C; and the first tune comes
+        back once more at the end: A, B, A, C, A. The two short recordings are the opening tune and the
+        start of the first middle part.
+      "4-5": >-
+        Beethoven wrote Für Elise ("For Elise") around 1810, but it was not printed until 1867, forty
+        years after he died, when a scholar found the music. Nobody knows for sure who Elise was; one
+        guess is that the name was misread from Therese, a pupil of his. The A tune rocks back and forth
+        between two neighboring notes, E and D sharp. B is brighter and happier, and C is stormier, with
+        a low note repeated over and over beneath it, so each time A returns it feels like coming home.
+        Listening for the tune that comes back is a way to follow a long piece. These short recordings
+        were made on a computer.
+
+  - key: five-beats
+    subject: music
+    slot: listen
+    title: Five beats to a bar, and the waltz that limps
+    sources: [commons-musopen-tchaikovsky-6-ii]
+    values_points: []
+    summary:
+      "2-3": >-
+        Most dance music counts in twos, threes or fours. A waltz has three beats in each bar:
+        ONE-two-three, ONE-two-three. Pyotr Tchaikovsky wrote a piece that swings like a waltz but has
+        five beats in each bar: ONE-two-THREE-four-five. Count along on one hand: it seems to limp, like
+        a dancer with a skip in the step.
+      "4-5": >-
+        The second movement of Tchaikovsky's Sixth Symphony, from 1893, is in 5/4 time: five beats in
+        every bar, felt as a two and a three, ONE-two, THREE-four-five. The tune flows like a waltz, so
+        the ear expects three, and the extra beats make it lurch, which is why it is often called the
+        limping waltz. Very little music before it had been written in five, and it sounded strange and
+        new. The cellos play the tune first, and then the whole orchestra takes it up. This recording
+        was made in 2012 by Musopen, which gave it to the public domain.
+
+  # --- then ---
+  - key: acronym
+    subject: literature
+    slot: then
+    title: An acronym, from scuba to NASA
+    sources: [commons-noaa-scuba-diver-guam]
+    values_points: []
+    summary:
+      "2-3": >-
+        An acronym is a word made from the first letters of other words. Scuba, the gear divers wear to
+        breathe underwater, comes from self-contained underwater breathing apparatus. NASA, the space
+        agency that sent astronauts to the Moon, comes from National Aeronautics and Space
+        Administration. An acronym is said as one word, like "NASA", not letter by letter.
+      "4-5": >-
+        Scuba was made up in 1952 for a diver's breathing gear, NASA was founded in 1958, and radar,
+        from radio detection and ranging, was named by the United States Navy in 1940. Laser comes from
+        light amplification by stimulated emission of radiation. Some acronyms are used so much that
+        people forget they were ever made of letters, and write them in small letters, like scuba,
+        radar and laser. Letters said one at a time, like TV or FBI, are called an initialism, not an
+        acronym. Making an acronym is a quick way to name a long thing, and to remember it.
+
+  - key: latitude
+    subject: geography
+    slot: then
+    title: Latitude, and James Wilson's globe
+    sources: [met-wilson-globe-1828]
+    values_points: []
+    summary:
+      "2-3": >-
+        A globe is a small round model of the Earth. Lines drawn around it from side to side, called
+        lines of latitude, tell how far north or south a place is. The equator, around the middle, is 0
+        degrees, and the North and South Poles are 90 degrees. Honolulu is about 21 degrees north of the
+        equator. James Wilson, a Vermont farmer, taught himself to make globes, and made the first ones
+        in America.
+      "4-5": >-
+        Lines of latitude are circles parallel to the equator, which is why they are also called
+        parallels, and they get smaller toward the poles. Each degree of latitude is about 69 miles, so
+        Honolulu, at about 21 degrees north, is about 1,450 miles north of the equator. Sailors found
+        their latitude by measuring how high the North Star stood above the horizon: at the equator it
+        sits on the horizon, at the North Pole it is straight overhead, and from Honolulu it is about 21
+        degrees up. James Wilson (1763-1855), a farmer and blacksmith, saw globes at a college, taught
+        himself geography, mapmaking and engraving, and around 1810 began selling the first globes made
+        in the United States. The Met's globe, made in 1828 by his family's business in Albany, New
+        York, is 18 inches across.
+
+  - key: hale-thanksgiving
+    subject: history
+    slot: then
+    title: A campaign, and Sarah Josepha Hale's Thanksgiving
+    sources: [commons-lambdin-sarah-hale-1831, commons-nara-thanksgiving-proclamation-1863]
+    values_points: []
+    summary:
+      "2-3": >-
+        A campaign is a long effort to get something done, by asking again and again. Sarah Josepha Hale
+        edited a magazine read all over the country, and she wanted one Thanksgiving Day for the whole
+        nation, on the same day. For years she wrote about it in her magazine and sent letters to
+        governors and presidents. In 1863 President Abraham Lincoln agreed, and named the last Thursday
+        in November. She also wrote the poem "Mary Had a Little Lamb".
+      "4-5": >-
+        Before 1863 each state chose its own day of thanksgiving, or had none. Hale, born in New
+        Hampshire in 1788, became the editor of Godey's Lady's Book in 1837, and from 1847 its pages asked
+        again and again for a national Thanksgiving; she also wrote to governors and presidents. On 28
+        September 1863 she wrote to Lincoln, and five days later, on 3 October, he proclaimed the last
+        Thursday of November a national day of Thanksgiving; the first fell on 26 November 1863. A
+        campaign like hers works by not giving up: the same clear request, made over and over, to the
+        people who can say yes. She published "Mary's Lamb", the poem we know as Mary Had a Little Lamb,
+        in 1830 in a book of poems for children; in 1877 its first line was the first thing Thomas Edison
+        recorded on his phonograph. Today Thanksgiving is the fourth Thursday of November.
+
+  - key: sequoyah
+    subject: history
+    slot: then
+    title: A syllabary, and Sequoyah writing down Cherokee
+    sources: [commons-king-sequoyah-1836]
+    values_points: []
+    summary:
+      "2-3": >-
+        Sequoyah was a Cherokee man who could not read or write English, but he saw that marks on paper
+        could hold words. He spent about twelve years making a sign for each sound, or syllable, of the
+        Cherokee language, about 85 signs in all. A set of signs for syllables is called a syllabary. It
+        was so easy to learn that within a few years thousands of Cherokee people could read and write.
+      "4-5": >-
+        In an alphabet like ours a letter usually stands for one sound, and letters join to make
+        syllables; in a syllabary each sign stands for a whole syllable, like "ka" or "lo". Sequoyah
+        first tried a sign for every word, found there were far too many, and turned to syllables. He
+        finished in 1821, and his young daughter helped him show that it worked by reading aloud what he
+        wrote. A Cherokee speaker who knew the sounds could learn to read it in days or weeks. By 1828
+        the Cherokee were printing their own newspaper, the Cherokee Phoenix, partly in his signs, and
+        the syllabary is still used today. Very few people in history have made a writing system for a
+        language by themselves.
+
+  - key: hawaii-flag
+    subject: history
+    slot: then
+    title: A symbol, and the eight stripes of Hawaiʻi's flag
+    sources: [commons-flag-of-hawaii]
+    values_points: []
+    summary:
+      "2-3": >-
+        A symbol is a picture or shape that stands for something else. Hawaiʻi's flag has eight
+        stripes, white, red and blue, one for each of the eight main islands. In its corner is the flag
+        of Great Britain, for the friendship between the Kingdom of Hawaiʻi and Britain long ago. It is
+        the only flag of a US state with another country's flag in it.
+      "4-5": >-
+        The flag was made for the Kingdom of Hawaiʻi in the time of Kamehameha I, in the early 1800s,
+        after British visitors such as Captain George Vancouver became his friends; the stories of
+        exactly who designed it differ. Its eight stripes stand for Hawaiʻi, Maui, Oʻahu, Kauaʻi,
+        Molokaʻi, Lānaʻi, Niʻihau and Kahoʻolawe. On 28 November 1843 Britain and France agreed to
+        recognize the Kingdom of Hawaiʻi as an independent country, and the day is remembered as Lā
+        Kūʻokoʻa, Independence Day. A flag works as a symbol because everyone agrees what it stands for:
+        its colors, stripes and pictures each carry a meaning, the way a word does.
+
+  # --- puzzle ---
+  - key: roman-numerals
+    subject: math
+    slot: puzzle
+    title: Roman numerals, and the clock that writes four as IIII
+    sources: [commons-knibb-dial]
+    values_points: []
+    summary:
+      "2-3": >-
+        The Romans wrote numbers with letters: I is 1, V is 5, X is 10, L is 50 and C is 100. You add
+        them up: VI is 5 and 1, so 6, and XII is 10 and 2, so 12. A smaller letter before a bigger one is
+        taken away: IV is 1 less than 5, so 4. Many clocks use Roman numerals, but most of them write
+        four as IIII instead of IV.
+      "4-5": >-
+        D is 500 and M is 1,000, so this year, 2026, is MMXXVI. The Romans themselves often wrote four
+        as IIII; the take-away rule, IV and IX, became the usual way later. Clockmakers kept IIII,
+        perhaps because it balances the VIII on the other side of the dial, and this dial, signed by
+        Joseph Knibb of London, a clockmaker of the 1600s, has IIII at four. There is no Roman numeral
+        for zero, and sums are hard to work in them, one reason the digits we use, which came from India
+        by way of Arab mathematicians, took over. Roman numerals are still used on clock faces, for kings
+        and queens such as Henry VIII, and for numbering chapters.
+
+  - key: truss-triangles
+    subject: math
+    slot: puzzle
+    title: A triangle keeps its shape, and the truss bridge
+    sources: [commons-haer-kern-truss-bridge]
+    values_points: []
+    parent_note: Straws or craft sticks and a little tape make the test at the table, a square and a triangle, each built and pushed.
+    summary:
+      "2-3": >-
+        Join four sticks at their corners into a square and push on one side: it leans over into a
+        diamond. Join three sticks into a triangle and push: it will not change shape unless a stick
+        bends or breaks. That is why bridges, roofs and towers are built from triangles. A frame made of
+        triangles is called a truss. Look for the triangles in this old iron bridge.
+      "4-5": >-
+        A triangle is rigid because three sides of fixed lengths fit together in only one way, so its
+        angles are locked; four sides can make many shapes, so a square's angles can change. Builders
+        add a diagonal across a rectangle to split it into two triangles, which is why there are X's
+        and slanting beams in bridges, cranes and the frames of houses. The Kern Bridge, built of
+        wrought iron in 1873 over the Le Sueur River in Minnesota, is a bowstring truss: a curved top
+        like the wood of a bow, a straight bottom like its string, and thin rods crossing between them
+        to make triangles. At about 189 feet, it is the longest bridge of its kind in the United States.
+
+  - key: magic-square
+    subject: math
+    slot: puzzle
+    title: A magic square, hidden in Dürer's print of 1514
+    sources: [commons-durer-melencolia-square, met-durer-melencolia]
+    values_points: []
+    summary:
+      "2-3": >-
+        A magic square is a grid of numbers in which every row, every column and both diagonals add up
+        to the same total. Albrecht Dürer put one in a picture he made in 1514. It holds the numbers 1
+        to 16 in four rows of four, and every row, column and diagonal adds up to 34. In the middle of
+        the bottom row he hid the year: 15, 14.
+      "4-5": >-
+        Dürer's square reads, row by row: 16, 3, 2, 13; 5, 10, 11, 8; 9, 6, 7, 12; 4, 15, 14, 1. It is
+        even more magic than it has to be: the four corners add to 34 (16 + 13 + 4 + 1), the four in the
+        middle add to 34 (10 + 11 + 6 + 7), and so does each corner block of four. Why 34? The numbers 1
+        to 16 add up to 136, and four rows share that equally, so each row must be 136 ÷ 4 = 34. The
+        square hangs on the wall behind a winged figure in his engraving Melencolia I, among tools for
+        measuring and building. Magic squares were known in China and India long before Dürer.
+
+  - key: cube-net
+    subject: math
+    slot: puzzle
+    title: A net, the flat shape that folds into a cube
+    sources: [met-roman-ivory-die]
+    values_points: []
+    parent_note: Paper or a cereal box, scissors and tape make a net to fold, a cross of six squares that becomes a cube, with its faces numbered like a die.
+    summary:
+      "2-3": >-
+        A cube, like a die or a sugar cube, has six faces, and every face is a square. If you cut a
+        paper cube along some of its edges and lay it flat, you get six squares joined together, often
+        in the shape of a cross. That flat shape is called a net, and folding it back up makes the cube
+        again. On almost every die made today, the dots on opposite faces add up to seven: 1 and 6, 2
+        and 5, 3 and 4.
+      "4-5": >-
+        There are exactly 11 different nets that fold into a cube, and some shapes made of six squares
+        do not fold into one at all, because two squares would land on the same face. In a net, two
+        faces that end up opposite each other can never share an edge, so on a die's net the 1 can
+        never touch the 6. People have played with cube-shaped dice for thousands of years: this Roman
+        die, carved from ivory about 2,000 years ago, is about the size of a fingernail, a little over
+        two thirds of an inch on each side, and its dots are small circles with a point in the middle.
+
+  - key: mobius-strip
+    subject: math
+    slot: puzzle
+    title: A Möbius strip, a loop with only one side
+    sources: [commons-mobius-ring]
+    values_points: []
+    parent_note: A strip of paper about a foot long, tape, a pencil and scissors make a Möbius strip; draw down its middle, then cut along the line.
+    summary:
+      "2-3": >-
+        Take a strip of paper, give it half a twist, and tape the two ends together. You have made a
+        Möbius strip, a loop with only one side and one edge. Draw a line down the middle without lifting
+        the pencil, and you come back to where you started, having drawn on both "sides". It is named
+        after August Möbius, a German mathematician, who described it in 1858.
+      "4-5": >-
+        An ordinary loop of paper, taped with no twist, has an inside and an outside and two edges, and
+        an ant walking on the outside can never reach the inside without crossing an edge. With half a
+        twist, the outside runs into the inside, so there is only one surface. Cut a Möbius strip along
+        its middle line and it does not come apart into two loops: it stays in one piece, a longer loop
+        with two full twists. Another German mathematician, Johann Listing, found the same loop in the
+        same year. Belts that drive machines have been made with this twist so that both sides wear
+        evenly. The mathematics of shapes that can be bent and stretched without tearing is called
+        topology.
+
+  - key: nested-weights
+    subject: math
+    slot: puzzle
+    title: Halves, and weights that fit inside each other
+    sources: [met-ziegengeist-nested-weights]
+    values_points: []
+    summary:
+      "2-3": >-
+        Before electronic scales, people weighed things on a balance, with the thing in one pan and
+        weights in the other. This set of brass weights fits together like nesting bowls, each cup
+        sitting inside a bigger one. In sets like this each cup weighs twice as much as the cup that
+        fits inside it, so each cup is half of the one around it.
+      "4-5": >-
+        Weights that double, 1, 2, 4, 8, 16, let a merchant make any whole-number total by choosing the
+        right cups: 11 is 8, 2 and 1, and 13 is 8, 4 and 1. Each weight is half of the next one up, so
+        halving and doubling are the same steps run in opposite directions. Weight makers in Nuremberg,
+        in Germany, were famous for nests of weights, and this set of blackened brass, about 300 years
+        old, is probably by Andreas Ziegengeist, who was working by 1681. The whole nest packs into the
+        biggest cup, so the whole set travels as one.
