@@ -7,7 +7,7 @@ import { clockTime } from "./live.ts";
 import { DAYS_IN_WEEK } from "./schedule.ts";
 import { todayIn } from "./week.ts";
 
-const ENDS = new Set(["built", "nothing", "refused", "failed"]);
+const ENDS = new Set(["built", "wrote", "nothing", "refused", "failed"]);
 const dayMs = 86_400_000;
 
 // A refusal's reason as a sentence in the middle of a line: without the instruction aimed at whoever runs Quark.
@@ -32,7 +32,13 @@ export function sundayLine(rows: CronRow[], timeZone: string, now: Date): string
   const week = firings.map((f) => f.start.target.week).find((w) => w !== null && w !== undefined) ?? null;
   const hour = (iso: string) => clockTime(iso, timeZone, false);
 
+  // Lessons a firing wrote for its day before building it, when the library lacked them (23 Nov 2026).
+  const lessons = firings.reduce((n, f) => n + Number(f.end?.target.lessons ?? 0), 0);
+  const wroteFirst = lessons ? `; it wrote ${lessons} short lesson${lessons === 1 ? "" : "s"} first` : "";
+
   if (built.length === 0) {
+    const wrote = ended("wrote").at(-1);
+    if (wrote) return `Sunday's build is writing short lessons before it builds: at ${clockTime(wrote.end.created_at, timeZone)}, ${tidy(String(wrote.end.target.reason ?? "it wrote some"))}.`;
     const refused = ended("refused")[0];
     if (refused) return `Sunday's build refused at ${clockTime(refused.end.created_at, timeZone)}: ${tidy(String(refused.end.target.reason ?? "no reason was recorded"))}. Nothing was spent.`;
     const failed = ended("failed")[0];
@@ -53,6 +59,7 @@ export function sundayLine(rows: CronRow[], timeZone: string, now: Date): string
     `Sunday's build: week ${week ?? "?"}, ${days.size} of ${DAYS_IN_WEEK} days` +
     (days.size === DAYS_IN_WEEK ? `, ready at ${clockTime(last, timeZone)}` : "") +
     (cost > 0 ? `, $${cost.toFixed(2)}` : "") +
+    wroteFirst +
     (issues.length ? `; ${issues.join("; ")}` : "") +
     "."
   );

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import type { CronRow } from "@/core/curation/cron";
+import { LESSONS_ACTION } from "@/core/curation/lessons";
+import { lessonsSummary } from "@/core/curation/lessons-line";
 import { longDay } from "@/core/curation/live";
 import { readyWeek, sundayLine } from "@/core/curation/sunday-line";
 import { todayIn } from "@/core/curation/week";
@@ -46,7 +48,7 @@ async function ParentHome() {
     .is("rejected_at", null);
   // The Sunday build's own rows (no guardian wrote them): the last nine days is enough to find this Sunday's.
   const since = new Date(Date.now() - 9 * 86_400_000).toISOString();
-  const [family, guardians, kids, devices, answers, content, themes, cron] = await Promise.all([
+  const [family, guardians, kids, devices, answers, content, themes, cron, lessonRows] = await Promise.all([
     supabase.from("families").select("name, timezone").single(),
     supabase.from("guardians").select("id, display_name").eq("active", true).order("created_at"),
     supabase.from("children").select("id, nickname, birth_month").order("birth_month"),
@@ -59,12 +61,18 @@ async function ParentHome() {
     waiting,
     supabase.from("themes").select("id, title, week_start, plan_week, status").order("week_start"),
     supabase.from("audit_log").select("id, created_at, target").eq("action", "week.cron").gte("created_at", since).order("created_at").returns<CronRow[]>(),
+    // The app's own lesson writer's rows (docs/week-without-hands-slice.md), the same nine days.
+    supabase.from("audit_log").select("id, created_at, target").eq("action", LESSONS_ACTION).gte("created_at", since).order("created_at").returns<CronRow[]>(),
   ]);
-  for (const result of [family, guardians, kids, devices, answers, content, themes, cron]) if (result.error) throw result.error;
+  for (const result of [family, guardians, kids, devices, answers, content, themes, cron, lessonRows]) if (result.error) throw result.error;
 
   const timeZone = family.data?.timezone ?? "Pacific/Honolulu";
   const ready = readyWeek(themes.data ?? [], todayIn(timeZone));
   const sunday = sundayLine(cron.data ?? [], timeZone, new Date());
+  const written = lessonsSummary(lessonRows.data ?? [], timeZone);
+  const dayOf = (date: string | null) =>
+    date ? new Date(`${date}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "short", month: "short", day: "numeric" }) : "";
+  const sourceOf = (url: string) => (url.includes("metmuseum.org") ? "the Met" : url.includes("artic.edu") ? "the Art Institute of Chicago" : "Wikimedia Commons");
   const statusOf = (t: { status: string; week_start: string }) =>
     t.status === "review" ? "ready for you to read" : t.status === "live" ? `live from ${longDay(t.week_start)}` : t.status === "generating" ? "being built" : t.status;
   const when = (iso: string | null) =>
@@ -139,7 +147,7 @@ async function ParentHome() {
         </p>
       </section>
 
-      {themes.data?.length || sunday ? (
+      {themes.data?.length || sunday || written ? (
         <section className={styles.section}>
           <h2>Weeks</h2>
           {ready ? (
@@ -148,6 +156,39 @@ async function ParentHome() {
             </p>
           ) : null}
           {sunday ? <p className={styles.muted}>{sunday}</p> : null}
+          {written ? (
+            <>
+              <p className={styles.muted}>{written.line}</p>
+              <details>
+                <summary className={styles.muted}>What the app wrote for week {written.week}, and each try</summary>
+                <ul className={styles.list}>
+                  {written.lessons.map((l) => (
+                    <li key={l.key}>
+                      {dayOf(l.date)} · {l.slot}: {l.title}
+                      {l.holiday ? ` (for ${l.holiday})` : ""}{" "}
+                      <span className={styles.muted}>
+                        {(l.items ?? []).map((u, i) => (
+                          <span key={u}>
+                            {i ? ", " : "from "}
+                            <a href={u}>{sourceOf(u)}</a>
+                          </span>
+                        ))}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <ul className={styles.list}>
+                  {written.tries.map((t, i) => (
+                    <li key={i} className={styles.muted}>
+                      {t.at}, {t.by}: {t.outcome === "wrote" ? `wrote ${t.written}, $${t.cost.toFixed(2)}` : t.outcome}
+                      {t.error ? ` (${t.error})` : ""}
+                      {t.missed.map((m) => `; ${m.slot} for day ${m.day} not written yet${m.tried.length ? ` (last idea: ${m.tried.at(-1)!.why})` : ""}`).join("")}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </>
+          ) : null}
           <ul className={styles.list}>
             {(themes.data ?? []).map((t) => (
               <li key={t.id}>

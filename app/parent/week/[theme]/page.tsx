@@ -163,6 +163,9 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
   const topicsWithMedia = new Set((cards.data ?? []).filter((c) => c.ideas?.content_item_id).map((c) => c.ideas!.topic_id));
 
   const days = [...new Set((cards.data ?? []).map((c) => c.day))].sort();
+  // A week built while the trading boat holds Puzzle's place has four tiles a day and no Puzzle cards (23 Nov 2026).
+  const tiles = new Set((cards.data ?? []).map((c) => c.slot));
+  const noPuzzle = tiles.size > 0 && !tiles.has("puzzle");
   const weekday = (d: string) => new Date(`${d}T00:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long", month: "short", day: "numeric" });
   const all = cards.data ?? [];
   const currentHash = nowHash;
@@ -185,7 +188,11 @@ async function Week({ params }: { params: Promise<{ theme: string }> }) {
         <p className={styles.lede}>
           The week starting {weekday(theme.data.week_start)}. Each card is shown with its four layers: what the child sees first, then each tap
           deeper. On the Wonder Wall the tiles change order each day.
-          {boatOn ? " While the trading boat is on the wall, it takes Puzzle's place, and the Puzzle cards below are not shown." : null}
+          {noPuzzle
+            ? ` Each day has ${tiles.size} tiles. There are no Puzzle cards this week: the trading boat takes Puzzle's place on the wall.`
+            : boatOn
+              ? " While the trading boat is on the wall, it takes Puzzle's place, and the Puzzle cards below are not shown."
+              : null}
         </p>
       </div>
 

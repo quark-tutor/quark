@@ -76,3 +76,14 @@ describe("the week that is ready", () => {
     expect(readyWeek(themes, "2026-11-03")).toBeNull();
   });
 });
+
+describe("Sunday's build when it wrote lessons first (23 Nov 2026)", () => {
+  it("says how many short lessons it wrote before building", () => {
+    const rows = [...firing(6, 1, { outcome: "built", cost: 1.5, lessons: 3, lessons_cost: 0.7 }), ...firing(7, 2, { outcome: "built", cost: 1.5 })];
+    expect(sundayLine(rows, TZ, now)).toBe("Sunday's build: week 2, 2 of 7 days, $3.00; it wrote 3 short lessons first.");
+  });
+  it("says it is writing when no day is built yet", () => {
+    const rows = firing(6, 1, { outcome: "wrote", lessons: 2, reason: "wrote 2 short lessons for day 1; the next firing builds it" }, 3);
+    expect(sundayLine(rows, TZ, now)).toBe("Sunday's build is writing short lessons before it builds: at 6:03 am, wrote 2 short lessons for day 1; the next firing builds it.");
+  });
+});

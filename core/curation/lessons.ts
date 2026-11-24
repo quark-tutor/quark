@@ -193,7 +193,16 @@ export async function writeRound<C extends Candidate>(
   const gaps = input.onlyDay === undefined ? input.gaps : input.gaps.filter((g) => g.day === input.onlyDay);
   const needs = nextNeeds(gaps, input.start, await deps.takenHolidays(input.familyId, input.week));
   const began = deps.now();
-  const started = await deps.audit(input.familyId, { outcome: "started", week: input.week, day: input.onlyDay ?? null, theme: null, by: input.by, tiles: needs.map((n) => `${n.slot} day ${n.day}`) });
+  const started = await deps.audit(input.familyId, {
+    outcome: "started",
+    week: input.week,
+    day: input.onlyDay ?? null,
+    theme: null,
+    by: input.by,
+    start: input.start, // the week's first day, so /parent can date each lesson
+    open: input.gaps.length, // the week's open day-slots when the round began
+    tiles: needs.map((n) => `${n.slot} day ${n.day}`),
+  });
   const end = (outcome: "wrote" | "refused" | "failed", extra: Record<string, unknown>) =>
     deps.audit(input.familyId, { outcome, started, week: input.week, day: input.onlyDay ?? null, theme: null, by: input.by, ...extra });
 

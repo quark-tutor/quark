@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { usPublicDomainRecording } from "../content/search";
 import type { CronRow, CronTarget, ThemeRow } from "./cron";
 import { hawaiiDaysOn, holidaysOn } from "./holidays";
+import { lessonsSummary } from "./lessons-line";
 import { lessonsFiring, nextNeeds, writeLesson, writeRound, type Candidate, type Check, type Draft, type FiringDeps, type LessonIdea, type Need, type WriterDeps } from "./lessons";
 import type { Gap } from "./schedule";
 
@@ -234,5 +235,35 @@ describe("a lesson the app wrote survives plan:import", () => {
     const importer = readFileSync(new URL("../../scripts/import-plan.mts", import.meta.url), "utf8");
     expect(importer).toMatch(/prefix: "short\/"/);
     expect(importer).toMatch(/\.like\("key", `\$\{unit\.prefix\}%`\)/);
+  });
+});
+
+describe("the line on /parent", () => {
+  const TZ = "Pacific/Honolulu";
+  let n = 0;
+  const row = (iso: string, target: Partial<CronTarget>): CronRow => ({ id: `l${++n}`, created_at: iso, target: { outcome: "started", week: 6, day: null, theme: null, ...target } });
+  const lesson = (slot: string, day: number, title: string, holiday: string | null = null) => ({ key: title, slot, day, title, holiday, items: ["https://www.metmuseum.org/art/collection/search/1"] });
+
+  it("says how many are written and how many are left, and that Sunday writes any still missing", () => {
+    const s1 = row("2026-11-24T11:00:00Z", { start: "2026-11-30", open: 28, by: "lessons" });
+    const e1 = row("2026-11-24T11:04:00Z", { outcome: "wrote", started: s1.id, lessons: [lesson("then", 1, "Fables"), lesson("look", 1, "Woodblock prints")], cost: 0.61 });
+    const summary = lessonsSummary([s1, e1], TZ)!;
+    expect(summary.line).toBe(
+      "Short lessons for week 6 (from Mon, Nov 30): 2 written by the app, 26 still to write; it tries again within four hours, and Sunday's build writes any still missing before it builds. $0.61 so far.",
+    );
+    expect(summary.lessons.map((l) => [l.slot, l.date])).toEqual([["look", "2026-11-30"], ["then", "2026-11-30"]]);
+  });
+
+  it("says nothing is needed once every lesson is written", () => {
+    const s1 = row("2026-11-24T11:00:00Z", { start: "2026-11-30", open: 2, by: "lessons" });
+    const e1 = row("2026-11-24T11:04:00Z", { outcome: "wrote", started: s1.id, lessons: [lesson("then", 4, "Hale", "Thanksgiving"), lesson("look", 4, "Prints")], cost: 0.6 });
+    expect(lessonsSummary([s1, e1], TZ)!.line).toBe("Short lessons for week 6 (from Mon, Nov 30): all 2 written by the app, the last on Tuesday at 1:04 am, $0.60. Nothing is needed from you.");
+  });
+
+  it("names a failed try, and is nothing with no rows", () => {
+    const s1 = row("2026-11-24T11:00:00Z", { start: "2026-11-30", open: 28, by: "lessons" });
+    const e1 = row("2026-11-24T11:01:00Z", { outcome: "failed", started: s1.id, error: "the model call failed", cost: 0.1 });
+    expect(lessonsSummary([s1, e1], TZ)!.line).toMatch(/The try on Tuesday at 1:01 am failed: the model call failed\.$/);
+    expect(lessonsSummary([], TZ)).toBeNull();
   });
 });
